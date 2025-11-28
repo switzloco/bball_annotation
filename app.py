@@ -258,15 +258,21 @@ def main():
             current_segment_text = st.empty()
 
             # Container for real-time logs
-            log_container = st.expander("📋 Real-Time Analysis Logs", expanded=True)
+            log_container = st.expander("📋 Analysis Logs (Technical)", expanded=False)
 
-            # Container for completed segments
-            segments_container = st.container()
+            # Container for live play-by-play
+            st.subheader("🏀 Live Play-by-Play Analysis")
+            playbyplay_container = st.container()
+
+            # Container for live highlights
+            highlights_header = st.empty()
+            highlights_container = st.container()
 
             try:
                 # Run the streaming analysis
                 result = None
                 completed_segments = []
+                live_highlights = []
 
                 with log_container:
                     log_placeholder = st.empty()
@@ -304,11 +310,39 @@ def main():
                         segment_data = update.get("segment_data", {})
                         completed_segments.append(segment_data)
 
-                        # Show real-time segment completion
-                        with segments_container:
-                            st.success(f"✅ Segment {segment_data.get('segment')} complete ({segment_data.get('start_time')}-{segment_data.get('end_time')}s)")
-                            if update.get("highlight_found"):
-                                st.warning(f"⭐ Highlight detected in this segment!")
+                        # Show live play-by-play analysis
+                        with playbyplay_container:
+                            seg_num = segment_data.get('segment')
+                            start_time = segment_data.get('start_time')
+                            end_time = segment_data.get('end_time')
+                            analysis_text = segment_data.get('analysis', '')
+
+                            # Format time range
+                            start_min = start_time // 60
+                            start_sec = start_time % 60
+                            end_min = end_time // 60
+                            end_sec = end_time % 60
+                            time_range = f"{start_min}:{start_sec:02d} - {end_min}:{end_sec:02d}"
+
+                            # Display as an expandable card
+                            with st.expander(f"📺 Segment {seg_num} ({time_range})", expanded=True):
+                                st.markdown(f"**Time Range:** {start_time}s - {end_time}s")
+                                st.markdown("---")
+                                st.markdown(analysis_text)
+
+                        # Handle highlights
+                        if update.get("highlight_found"):
+                            live_highlights.append({
+                                'segment': seg_num,
+                                'time_range': time_range,
+                                'description': analysis_text[:200] + "..."
+                            })
+
+                            # Update highlights section
+                            with highlights_container:
+                                highlights_header.subheader(f"⭐ Highlights Found ({len(live_highlights)})")
+                                for idx, hl in enumerate(live_highlights, 1):
+                                    st.warning(f"**Highlight #{idx}** - Segment {hl['segment']} ({hl['time_range']})\n\n{hl['description']}")
 
                     elif status == "compiling":
                         current_segment_text.info("🔄 Compiling final game summary...")
