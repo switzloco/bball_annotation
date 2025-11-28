@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class VideoAnalysisTool:
     """Custom tool for analyzing video segments using Gemini multimodal capabilities"""
 
-    def __init__(self, model_name: str = "gemini-2.0-flash-exp"):
+    def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
         """
         Initialize the video analysis tool
 
@@ -94,12 +94,12 @@ class CoachAI:
     into play-by-play analysis and identify highlight moments.
     """
 
-    def __init__(self, model_name: str = "gemini-2.0-flash-exp"):
+    def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
         """
         Initialize the CoachAI agent
 
         Args:
-            model_name: The Gemini model to use (default: gemini-2.0-flash-exp)
+            model_name: The Gemini model to use (default: gemini-2.5-flash-lite)
         """
         self.model_name = model_name
         self.video_tool = VideoAnalysisTool(model_name=model_name)
@@ -248,7 +248,7 @@ Provide:
             return f"Error: {str(e)}"
 
 
-def create_coach_agent(model_name: str = "gemini-2.0-flash-exp") -> CoachAI:
+def create_coach_agent(model_name: str = "gemini-2.5-flash-lite") -> CoachAI:
     """
     Factory function to create a CoachAI agent instance
 

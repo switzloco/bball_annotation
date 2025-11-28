@@ -118,7 +118,7 @@ def main():
 
     # Header
     st.markdown('<div class="main-header">🏀 Basketball Video Agent</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">Powered by Gemini 2.0 Flash & Google ADK</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Powered by Gemini 2.5 Flash Lite & Google ADK</div>', unsafe_allow_html=True)
 
     # Sidebar configuration
     with st.sidebar:
@@ -126,6 +126,7 @@ def main():
 
         # Model selector
         model_options = [
+            "gemini-2.5-flash-lite",
             "gemini-2.0-flash-exp",
             "gemini-1.5-pro",
             "gemini-1.5-flash",
@@ -353,7 +354,7 @@ def main():
     st.divider()
     st.markdown("""
     <div style='text-align: center; color: #718096; padding: 1rem;'>
-        Built with ❤️ using Streamlit, Google ADK, and Gemini 2.0 Flash
+        Built with ❤️ using Streamlit, Google ADK, and Gemini 2.5 Flash Lite
     </div>
     """, unsafe_allow_html=True)
 

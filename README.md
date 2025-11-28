@@ -2,7 +2,7 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/switzloco/bball_annotation)
 
-An intelligent basketball video analysis system powered by **Gemini 2.0 Flash**, **Google ADK (Agent Development Kit)**, and **Streamlit**.
+An intelligent basketball video analysis system powered by **Gemini 2.5 Flash Lite**, **Google ADK (Agent Development Kit)**, and **Streamlit**.
 
 **Repository**: https://github.com/switzloco/bball_annotation
 
@@ -140,8 +140,8 @@ gcloud run deploy bball-agent \
 ### Using the Web Interface
 
 1. **Select a Model**
-   - Choose from `gemini-2.0-flash-exp`, `gemini-1.5-pro`, or `gemini-1.5-flash`
-   - Default: `gemini-2.0-flash-exp` (recommended)
+   - Choose from `gemini-2.5-flash-lite`, `gemini-2.0-flash-exp`, `gemini-1.5-pro`, or `gemini-1.5-flash`
+   - Default: `gemini-2.5-flash-lite` (recommended)
 
 2. **Provide Video Input**
    - **Option A**: Enter a GCS URI (e.g., `gs://bball_project/vids/GX010043.mp4`)
@@ -171,7 +171,7 @@ os.environ["GCP_PROJECT_ID"] = "qwiklabs-gcp-04-b5171aa68bec"
 os.environ["GCP_LOCATION"] = "us-central1"
 
 # Create agent
-agent = create_coach_agent(model_name="gemini-2.0-flash-exp")
+agent = create_coach_agent(model_name="gemini-2.5-flash-lite")
 
 # Analyze video
 result = agent.analyze_full_video(
@@ -211,7 +211,8 @@ bball_annotation/
 
 ### Model Options
 
-- **gemini-2.0-flash-exp** (Recommended) - Latest, fastest, most capable
+- **gemini-2.5-flash-lite** (Recommended) - Latest, fastest, most efficient
+- **gemini-2.0-flash-exp** - Experimental version with advanced features
 - **gemini-1.5-pro** - More detailed analysis, slower
 - **gemini-1.5-flash** - Faster, less detailed
 
@@ -317,7 +318,7 @@ MIT License - see LICENSE file for details
 ## 🙏 Acknowledgments
 
 - **Google ADK** - Agent Development Kit
-- **Gemini 2.0 Flash** - Multimodal AI model
+- **Gemini 2.5 Flash Lite** - Multimodal AI model
 - **Streamlit** - Web framework
 - **uv** - Fast Python package installer
 
