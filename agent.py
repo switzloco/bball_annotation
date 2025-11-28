@@ -124,22 +124,22 @@ When analyzing a video:
 Always be thorough, systematic, and professional in your analysis.
 Focus on actionable insights that coaches and players can use to improve."""
 
-    def analyze_full_video(
+    def analyze_full_video_stream(
         self,
         video_uri: str,
         duration_seconds: Optional[int] = None,
         chunk_size: int = 120
-    ) -> Dict[str, Any]:
+    ):
         """
-        Analyze a full basketball game video
+        Analyze a full basketball game video with streaming progress updates
 
         Args:
             video_uri: GCS URI of the video
             duration_seconds: Total video duration (if None, assumes 10 minutes)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
 
-        Returns:
-            Dictionary containing play-by-play analysis, highlights, and stats
+        Yields:
+            Progress dictionaries with status updates and results
         """
         logger.info(f"Starting full video analysis of {video_uri}")
 
@@ -150,6 +150,13 @@ Focus on actionable insights that coaches and players can use to improve."""
         # Calculate number of chunks
         num_chunks = (duration_seconds + chunk_size - 1) // chunk_size
 
+        yield {
+            "status": "initialized",
+            "message": f"Starting analysis of {num_chunks} segments",
+            "num_chunks": num_chunks,
+            "duration_seconds": duration_seconds
+        }
+
         analyses = []
         highlights = []
 
@@ -157,6 +164,14 @@ Focus on actionable insights that coaches and players can use to improve."""
         for i in range(num_chunks):
             start_sec = i * chunk_size
             end_sec = min((i + 1) * chunk_size, duration_seconds)
+
+            yield {
+                "status": "processing",
+                "message": f"Analyzing segment {i + 1}/{num_chunks} ({start_sec}-{end_sec}s)",
+                "segment": i + 1,
+                "total_segments": num_chunks,
+                "progress": (i / num_chunks) * 100
+            }
 
             chunk_analysis = self.video_tool.analyze_video_segment(
                 video_uri=video_uri,
@@ -172,14 +187,32 @@ Focus on actionable insights that coaches and players can use to improve."""
             })
 
             # Extract highlights (simplified - could use LLM to identify)
-            if any(keyword in chunk_analysis.lower() for keyword in
-                   ["dunk", "three-pointer", "block", "steal", "highlight"]):
+            is_highlight = any(keyword in chunk_analysis.lower() for keyword in
+                   ["dunk", "three-pointer", "block", "steal", "highlight"])
+
+            if is_highlight:
                 highlights.append({
                     "time": f"{start_sec}-{end_sec}s",
                     "description": chunk_analysis[:200] + "..."
                 })
 
+            yield {
+                "status": "segment_complete",
+                "message": f"Completed segment {i + 1}/{num_chunks}",
+                "segment": i + 1,
+                "total_segments": num_chunks,
+                "progress": ((i + 1) / num_chunks) * 90,  # Save 10% for summary
+                "segment_data": analyses[-1],
+                "highlight_found": is_highlight
+            }
+
         # Compile final report using LLM
+        yield {
+            "status": "compiling",
+            "message": "Generating comprehensive game summary...",
+            "progress": 95
+        }
+
         compilation_prompt = f"""Based on these segment analyses, create a comprehensive game summary:
 
 {chr(10).join([f"Segment {a['segment']} ({a['start_time']}-{a['end_time']}s): {a['analysis']}" for a in analyses])}
@@ -204,7 +237,8 @@ Provide:
         except Exception as e:
             game_summary = f"Error generating summary: {str(e)}"
 
-        return {
+        # Final result
+        final_result = {
             "video_uri": video_uri,
             "duration_seconds": duration_seconds,
             "num_segments": num_chunks,
@@ -212,6 +246,37 @@ Provide:
             "highlights": highlights,
             "game_summary": game_summary
         }
+
+        yield {
+            "status": "complete",
+            "message": "Analysis complete!",
+            "progress": 100,
+            "result": final_result
+        }
+
+    def analyze_full_video(
+        self,
+        video_uri: str,
+        duration_seconds: Optional[int] = None,
+        chunk_size: int = 120
+    ) -> Dict[str, Any]:
+        """
+        Analyze a full basketball game video (non-streaming version)
+
+        Args:
+            video_uri: GCS URI of the video
+            duration_seconds: Total video duration (if None, assumes 10 minutes)
+            chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
+
+        Returns:
+            Dictionary containing play-by-play analysis, highlights, and stats
+        """
+        # Use the streaming version and collect the final result
+        result = None
+        for update in self.analyze_full_video_stream(video_uri, duration_seconds, chunk_size):
+            if update.get("status") == "complete":
+                result = update.get("result")
+        return result
 
     def chat(self, message: str, video_uri: Optional[str] = None) -> str:
         """

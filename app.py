@@ -255,26 +255,80 @@ def main():
             # Create progress tracking
             progress_bar = st.progress(0)
             status_text = st.empty()
+            current_segment_text = st.empty()
 
-            # Container for logs
-            log_container = st.expander("📋 Analysis Logs", expanded=True)
+            # Container for real-time logs
+            log_container = st.expander("📋 Real-Time Analysis Logs", expanded=True)
+
+            # Container for completed segments
+            segments_container = st.container()
 
             try:
-                # Run the analysis
-                status_text.text("Starting video analysis...")
+                # Run the streaming analysis
+                result = None
+                completed_segments = []
 
-                with st.spinner("Analyzing video segments..."):
-                    result = agent.analyze_full_video(
-                        video_uri=video_uri,
-                        duration_seconds=video_duration,
-                        chunk_size=chunk_size
-                    )
+                with log_container:
+                    log_placeholder = st.empty()
+                    logs = []
+
+                # Stream the analysis
+                for update in agent.analyze_full_video_stream(
+                    video_uri=video_uri,
+                    duration_seconds=video_duration,
+                    chunk_size=chunk_size
+                ):
+                    status = update.get("status")
+                    message = update.get("message", "")
+                    progress = update.get("progress", 0)
+
+                    # Update progress bar
+                    progress_bar.progress(int(progress))
+
+                    # Update status text
+                    status_text.text(f"🔄 {message}")
+
+                    # Log the update
+                    logs.append(f"[{status.upper()}] {message}")
+                    with log_container:
+                        log_placeholder.text("\n".join(logs[-20:]))  # Show last 20 logs
+
+                    if status == "processing":
+                        # Show which segment is being analyzed
+                        seg_num = update.get("segment", 0)
+                        total_segs = update.get("total_segments", 0)
+                        current_segment_text.info(f"🎥 Currently analyzing: Segment {seg_num}/{total_segs}")
+
+                    elif status == "segment_complete":
+                        # Add completed segment to display
+                        segment_data = update.get("segment_data", {})
+                        completed_segments.append(segment_data)
+
+                        # Show real-time segment completion
+                        with segments_container:
+                            st.success(f"✅ Segment {segment_data.get('segment')} complete ({segment_data.get('start_time')}-{segment_data.get('end_time')}s)")
+                            if update.get("highlight_found"):
+                                st.warning(f"⭐ Highlight detected in this segment!")
+
+                    elif status == "compiling":
+                        current_segment_text.info("🔄 Compiling final game summary...")
+
+                    elif status == "complete":
+                        result = update.get("result")
+                        current_segment_text.success("✅ Analysis complete!")
 
                 progress_bar.progress(100)
                 status_text.text("✅ Analysis complete!")
 
+                # Check if we got a result
+                if result is None:
+                    st.error("❌ Analysis completed but no result was returned")
+                    return
+
                 # Display results
                 st.success("🎉 Analysis completed successfully!")
+
+                st.divider()
 
                 # Game Summary
                 st.subheader("📝 Game Summary")
