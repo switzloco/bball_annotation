@@ -10,10 +10,11 @@ An intelligent basketball video analysis system powered by **Gemini 2.5 Flash Li
 
 This agent analyzes basketball game footage systematically, breaking down videos into 2-minute chunks to provide:
 
-- **Play-by-play transcripts** - Detailed breakdown of every significant moment
-- **Highlight reel identification** - Automatic detection of dunks, three-pointers, blocks, and steals
+- **Live play-by-play analysis** - Watch the analysis unfold in real-time as each segment completes
+- **Detailed transcripts** - Comprehensive breakdown of every significant moment
+- **Real-time highlight detection** - Automatic identification of dunks, three-pointers, blocks, and steals as they're discovered
 - **Strategic insights** - Analysis of offensive/defensive patterns and team performance
-- **Interactive GUI** - Easy-to-use Streamlit interface for video selection and analysis
+- **Interactive streaming GUI** - Watch the AI analyze your game live with progress updates
 
 ## 🏗️ Architecture
 
@@ -153,11 +154,14 @@ gcloud run deploy bball-agent \
 
 4. **Run Analysis**
    - Click "Start Analysis"
-   - Monitor real-time progress and logs
-   - View comprehensive results:
+   - Watch live play-by-play analysis as each segment completes
+   - See highlights detected in real-time with ⭐ markers
+   - Monitor progress bar and current segment being analyzed
+   - Read full analysis text for each 2-minute segment as it finishes
+   - View final comprehensive results:
      - Game summary
-     - Segment-by-segment breakdown
-     - Highlight moments
+     - Complete segment-by-segment breakdown
+     - All highlight moments
      - Performance statistics
 
 ### Using the Agent Programmatically
