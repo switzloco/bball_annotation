@@ -1,6 +1,10 @@
 # 🏀 Basketball Video Agent
 
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/switzloco/bball_annotation)
+
 An intelligent basketball video analysis system powered by **Gemini 2.0 Flash**, **Google ADK (Agent Development Kit)**, and **Streamlit**.
+
+**Repository**: https://github.com/switzloco/bball_annotation
 
 ## 🎯 Overview
 
@@ -50,7 +54,7 @@ This agent analyzes basketball game footage systematically, breaking down videos
 1. **Clone the repository**
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/switzloco/bball_annotation.git
 cd bball_annotation
 ```
 
