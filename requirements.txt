@@ -1,0 +1,11 @@
+# Basketball Video Agent - Dependencies
+# Generated from pyproject.toml for pip compatibility
+# Recommended: Use 'uv pip install -r pyproject.toml' instead
+
+streamlit>=1.31.0
+google-genai>=0.3.0
+google-cloud-aiplatform>=1.60.0
+google-cloud-storage>=2.14.0
+pandas>=2.2.0
+python-dotenv>=1.0.0
+pillow>=10.2.0

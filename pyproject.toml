@@ -1,0 +1,22 @@
+[project]
+name = "bball-agent"
+version = "0.1.0"
+description = "Basketball Video Analysis Agent using Gemini 2.0 Flash and Google ADK"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "streamlit>=1.31.0",
+    "google-genai>=0.3.0",
+    "google-cloud-aiplatform>=1.60.0",
+    "google-cloud-storage>=2.14.0",
+    "pandas>=2.2.0",
+    "python-dotenv>=1.0.0",
+    "pillow>=10.2.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
