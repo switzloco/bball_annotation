@@ -369,8 +369,8 @@ if __name__ == "__main__":
 
         Please create a `.env` file with:
         ```
-        GCP_PROJECT_ID=your-project-id
-        GCP_BUCKET_NAME=your-bucket-name
+        GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec
+        GCP_BUCKET_NAME=bball_project
         ```
         """)
     else:

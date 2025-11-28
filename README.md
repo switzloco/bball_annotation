@@ -77,7 +77,7 @@ cp .env.example .env
 Edit `.env` with your GCP settings:
 
 ```env
-GCP_PROJECT_ID=your-gcp-project-id
+GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec
 GCP_BUCKET_NAME=bball_project
 GCP_LOCATION=us-central1
 ```
@@ -112,8 +112,8 @@ docker build -t bball-agent .
 
 ```bash
 docker run -p 8080:8080 \
-  -e GCP_PROJECT_ID=your-project-id \
-  -e GCP_BUCKET_NAME=your-bucket \
+  -e GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec \
+  -e GCP_BUCKET_NAME=bball_project \
   -v ~/.config/gcloud:/root/.config/gcloud \
   bball-agent
 ```
@@ -122,15 +122,15 @@ docker run -p 8080:8080 \
 
 ```bash
 # Build and push to Google Container Registry
-gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/bball-agent
+gcloud builds submit --tag gcr.io/qwiklabs-gcp-04-b5171aa68bec/bball-agent
 
 # Deploy to Cloud Run
 gcloud run deploy bball-agent \
-  --image gcr.io/YOUR_PROJECT_ID/bball-agent \
+  --image gcr.io/qwiklabs-gcp-04-b5171aa68bec/bball-agent \
   --platform managed \
   --region us-central1 \
   --allow-unauthenticated \
-  --set-env-vars GCP_PROJECT_ID=YOUR_PROJECT_ID,GCP_BUCKET_NAME=bball_project \
+  --set-env-vars GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec,GCP_BUCKET_NAME=bball_project \
   --memory 4Gi \
   --timeout 3600
 ```
@@ -167,7 +167,7 @@ from agent import create_coach_agent
 import os
 
 # Set environment variables
-os.environ["GCP_PROJECT_ID"] = "your-project-id"
+os.environ["GCP_PROJECT_ID"] = "qwiklabs-gcp-04-b5171aa68bec"
 os.environ["GCP_LOCATION"] = "us-central1"
 
 # Create agent
