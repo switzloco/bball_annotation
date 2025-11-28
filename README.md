@@ -186,6 +186,40 @@ for segment in result["segment_analyses"]:
     print(f"Segment {segment['segment']}: {segment['analysis']}")
 ```
 
+### Using Streaming API (with real-time progress)
+
+```python
+from agent import create_coach_agent
+import os
+
+os.environ["GCP_PROJECT_ID"] = "qwiklabs-gcp-04-b5171aa68bec"
+os.environ["GCP_LOCATION"] = "us-central1"
+
+agent = create_coach_agent(model_name="gemini-2.5-flash-lite")
+
+# Stream analysis with real-time updates
+for update in agent.analyze_full_video_stream(
+    video_uri="gs://bball_project/vids/GX010043.mp4",
+    duration_seconds=600,
+    chunk_size=120
+):
+    status = update.get("status")
+    message = update.get("message")
+    progress = update.get("progress", 0)
+
+    if status == "processing":
+        print(f"[{progress:.1f}%] {message}")
+
+    elif status == "segment_complete":
+        segment = update.get("segment_data")
+        print(f"✓ Completed: Segment {segment['segment']}")
+
+    elif status == "complete":
+        result = update.get("result")
+        print("Analysis finished!")
+        print(result["game_summary"])
+```
+
 ## 🧩 Project Structure
 
 ```
@@ -220,11 +254,13 @@ bball_annotation/
 
 ### CoachAI Agent Capabilities
 
+- **Real-Time Progress Streaming**: Watch analysis progress live with segment-by-segment updates
 - **Systematic Video Analysis**: Breaks down videos into manageable chunks
 - **Play-by-Play Generation**: Identifies and describes key plays
-- **Highlight Detection**: Finds exciting moments (dunks, blocks, steals)
+- **Highlight Detection**: Finds exciting moments (dunks, blocks, steals) as they're discovered
 - **Strategic Insights**: Analyzes team patterns and performance
 - **Interactive Chat**: Ask questions about specific plays or strategies
+- **Live Status Updates**: See exactly which segment is being analyzed and overall progress percentage
 
 ### Video Analysis Tool
 
