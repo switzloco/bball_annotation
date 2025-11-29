@@ -23,6 +23,6 @@ gcloud run deploy $SERVICE_NAME \
   --max-instances 4 \
   --memory 2Gi \
   --cpu 1 \
-  --set-env-vars GCP_PROJECT_ID=$PROJECT_ID,GCP_REGION=$REGION
+  --set-env-vars GCP_PROJECT_ID=$PROJECT_ID,GCP_REGION=$REGION,GCP_BUCKET_NAME=bball_project
 
 echo "✅ Deployment complete! Check the URL above."
