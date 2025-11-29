@@ -456,11 +456,45 @@ if __name__ == "__main__":
         st.error(f"""
         ❌ Missing required environment variables: {', '.join(missing_vars)}
 
-        Please create a `.env` file with:
+        ## Quick Fix:
+
+        The `.env` file is missing or incomplete. Follow these steps:
+
+        ### Option 1: Copy from example (Recommended)
+        ```bash
+        cp .env.example .env
+        ```
+
+        ### Option 2: Create manually
+        Create a file named `.env` in the project root with:
         ```
         GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec
         GCP_BUCKET_NAME=bball_project
+        GCP_LOCATION=us-central1
         ```
+
+        ### Option 3: Quick command
+        ```bash
+        cat > .env << 'EOF'
+GCP_PROJECT_ID=qwiklabs-gcp-04-b5171aa68bec
+GCP_BUCKET_NAME=bball_project
+GCP_LOCATION=us-central1
+EOF
+        ```
+
+        After creating the `.env` file, restart the Streamlit app:
+        ```bash
+        streamlit run app.py
+        ```
+        """)
+
+        # Show helpful debug info
+        st.info(f"""
+        📁 **Current Directory:** `{os.getcwd()}`
+
+        Looking for `.env` file at: `{os.path.join(os.getcwd(), '.env')}`
+
+        **File exists?** {os.path.exists('.env')}
         """)
     else:
         main()
