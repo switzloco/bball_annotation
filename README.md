@@ -93,6 +93,27 @@ gcloud auth application-default login
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
 ```
 
+### Updating from GitHub
+
+If you're working in Google Cloud Shell or any environment where you've cloned the repo, pull the latest updates regularly:
+
+```bash
+# Navigate to your project directory
+cd ~/bball_annotation
+
+# Pull latest changes from GitHub
+git pull origin claude/basketball-video-agent-01Dz99fphzLDGH8XU2rB7FiX
+
+# Or if you're on the main branch
+git pull origin main
+```
+
+**Note:** Git does NOT automatically sync! You need to manually pull updates when:
+- New features are added to the repository
+- Bug fixes are deployed
+- Configuration changes are made
+- Before deploying to Cloud Run
+
 ### Running Locally
 
 ```bash
