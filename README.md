@@ -172,6 +172,10 @@ gcloud run deploy bball-agent \
 3. **Configure Analysis Parameters**
    - **Video Duration**: Total length in seconds
    - **Chunk Size**: Segment length for analysis (default: 120s = 2 minutes)
+   - **Limit number of segments** (Optional): Enable to analyze only first N segments
+     - Great for testing without analyzing entire video
+     - Saves API costs during development
+     - Default: 3 segments when enabled
 
 4. **Run Analysis**
    - Click "Start Analysis"
