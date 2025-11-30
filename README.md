@@ -288,11 +288,16 @@ bball_annotation/
 
 ### CoachAI Agent Capabilities
 
+- **Dual-Temperature Analysis**:
+  - **Low creativity (temp 0.2)** for factual play-by-play descriptions
+  - **High creativity (temp 0.8)** for strategic insights and coaching takeaways
+  - Filters out warmups, shootarounds, and dead ball situations
+  - Focuses only on actual game play
 - **Real-Time Progress Streaming**: Watch analysis progress live with segment-by-segment updates
 - **Systematic Video Analysis**: Breaks down videos into manageable chunks
-- **Play-by-Play Generation**: Identifies and describes key plays
+- **Play-by-Play Generation**: Objective, factual descriptions of key plays
 - **Highlight Detection**: Finds exciting moments (dunks, blocks, steals) as they're discovered
-- **Strategic Insights**: Analyzes team patterns and performance
+- **Strategic Insights**: Creative analysis of team patterns, coaching decisions, and tactical adjustments
 - **Interactive Chat**: Ask questions about specific plays or strategies
 - **Live Status Updates**: See exactly which segment is being analyzed and overall progress percentage
 - **Multiple Export Options**: Download as JSON or TXT, or save directly to GCS with timestamps
