@@ -13,6 +13,9 @@ import time
 import json
 from datetime import datetime
 
+# Version
+__version__ = "1.0.0"
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -275,6 +278,9 @@ def main():
         **GCP Bucket:** {os.getenv('GCP_BUCKET_NAME', 'Not set')}
         **Location:** {os.getenv('GCP_LOCATION', 'us-central1')}
         """)
+
+        # Version info
+        st.caption(f"v{__version__}")
 
     # Main content area
     col1, col2 = st.columns([2, 1])
