@@ -10,6 +10,8 @@ from google.cloud import storage
 from agent import create_coach_agent
 import logging
 import time
+import json
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -111,6 +113,92 @@ def verify_gcs_file(gcs_uri: str) -> bool:
     except Exception as e:
         logger.error(f"Error verifying GCS file: {str(e)}")
         return False
+
+
+def save_analysis_to_gcs(result: dict, bucket_name: str, video_name: str) -> str:
+    """
+    Save analysis results to Google Cloud Storage
+
+    Args:
+        result: Analysis result dictionary
+        bucket_name: GCS bucket name
+        video_name: Name of the analyzed video (for filename)
+
+    Returns:
+        GCS URI of the saved file
+    """
+    try:
+        storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+        bucket = storage_client.bucket(bucket_name)
+
+        # Generate filename with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        blob_name = f"analysis/{video_name}_{timestamp}.json"
+        blob = bucket.blob(blob_name)
+
+        # Upload JSON data
+        blob.upload_from_string(
+            json.dumps(result, indent=2),
+            content_type="application/json"
+        )
+
+        gcs_uri = f"gs://{bucket_name}/{blob_name}"
+        logger.info(f"Analysis saved to {gcs_uri}")
+        return gcs_uri
+
+    except Exception as e:
+        logger.error(f"Error saving to GCS: {str(e)}")
+        raise e
+
+
+def format_analysis_as_text(result: dict) -> str:
+    """
+    Format analysis results as human-readable text
+
+    Args:
+        result: Analysis result dictionary
+
+    Returns:
+        Formatted text string
+    """
+    lines = []
+    lines.append("=" * 80)
+    lines.append("BASKETBALL VIDEO ANALYSIS REPORT")
+    lines.append("=" * 80)
+    lines.append(f"\nGenerated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    lines.append(f"Video: {result.get('video_uri', 'Unknown')}")
+    lines.append(f"Duration: {result.get('duration_seconds', 0)} seconds")
+    lines.append(f"Segments Analyzed: {result.get('num_segments', 0)}")
+    lines.append("\n" + "=" * 80)
+    lines.append("GAME SUMMARY")
+    lines.append("=" * 80)
+    lines.append(result.get('game_summary', 'No summary available'))
+
+    lines.append("\n" + "=" * 80)
+    lines.append("SEGMENT-BY-SEGMENT ANALYSIS")
+    lines.append("=" * 80)
+
+    for segment in result.get('segment_analyses', []):
+        lines.append(f"\n--- Segment {segment['segment']} ({segment['start_time']}-{segment['end_time']}s) ---")
+        lines.append(segment['analysis'])
+
+    lines.append("\n" + "=" * 80)
+    lines.append("HIGHLIGHTS")
+    lines.append("=" * 80)
+
+    highlights = result.get('highlights', [])
+    if highlights:
+        for i, hl in enumerate(highlights, 1):
+            lines.append(f"\n{i}. {hl['time']}")
+            lines.append(f"   {hl['description']}")
+    else:
+        lines.append("\nNo highlights identified")
+
+    lines.append("\n" + "=" * 80)
+    lines.append("END OF REPORT")
+    lines.append("=" * 80)
+
+    return "\n".join(lines)
 
 
 def main():
@@ -420,6 +508,51 @@ def main():
                 }
                 df_stats = pd.DataFrame(stats_data)
                 st.dataframe(df_stats, use_container_width=True, hide_index=True)
+
+                # Export Results Section
+                st.divider()
+                st.subheader("💾 Export Results")
+
+                col_export1, col_export2, col_export3 = st.columns(3)
+
+                with col_export1:
+                    # Download as JSON
+                    json_data = json.dumps(result, indent=2)
+                    st.download_button(
+                        label="📥 Download JSON",
+                        data=json_data,
+                        file_name=f"analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                        mime="application/json",
+                        use_container_width=True
+                    )
+
+                with col_export2:
+                    # Download as Text
+                    text_data = format_analysis_as_text(result)
+                    st.download_button(
+                        label="📄 Download Report (TXT)",
+                        data=text_data,
+                        file_name=f"analysis_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                        mime="text/plain",
+                        use_container_width=True
+                    )
+
+                with col_export3:
+                    # Save to GCS
+                    if st.button("☁️ Save to GCS", use_container_width=True):
+                        try:
+                            # Extract video name from URI
+                            video_name = video_uri.split("/")[-1].replace(".mp4", "")
+                            bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
+
+                            with st.spinner("Saving to GCS..."):
+                                gcs_uri = save_analysis_to_gcs(result, bucket_name, video_name)
+
+                            st.success(f"✅ Saved to GCS!")
+                            st.code(gcs_uri, language="text")
+
+                        except Exception as e:
+                            st.error(f"❌ Error saving to GCS: {str(e)}")
 
                 # Logs
                 with log_container:
