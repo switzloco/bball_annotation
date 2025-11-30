@@ -54,24 +54,42 @@ class VideoAnalysisTool:
                 mime_type="video/mp4"
             )
 
-            # Create the prompt
+            # Create the prompt - focus on real game action only
             prompt = f"""Analyze this basketball game segment from {start_sec} to {end_sec} seconds.
 
-Provide a detailed play-by-play analysis including:
-1. Key plays and scoring moments
-2. Player movements and positioning
-3. Defensive and offensive strategies
-4. Notable events (fouls, turnovers, substitutions)
-5. Highlight-worthy moments
+IMPORTANT: Only analyze actual game play. Ignore warmups, shootarounds, dead ball situations, timeouts, and between-play activities.
 
-Format your response as a structured breakdown."""
+Provide a factual, objective play-by-play description:
 
-            # Generate content
+1. **Live Game Action Only**:
+   - Scoring plays (shots, layups, dunks, free throws)
+   - Defensive plays (blocks, steals, rebounds)
+   - Turnovers and fouls during active play
+   - Fast breaks and transitions
+
+2. **What to SKIP**:
+   - Pre-game warmups or shootarounds
+   - Players standing around during stoppages
+   - Timeouts or huddles
+   - Between-quarter breaks
+   - Ball out of bounds (unless part of active play)
+
+3. **Format**:
+   - Be concise and factual
+   - Focus on what actually happened, not speculation
+   - Use objective language
+   - Timestamp key events when possible
+
+If this segment contains no actual game play, simply state: "No active game play in this segment."
+
+Format your response as a clear play-by-play log."""
+
+            # Generate content with LOW temperature for factual accuracy
             response = self.client.models.generate_content(
                 model=self.model_name,
                 contents=[prompt, video_part],
                 config=types.GenerateContentConfig(
-                    temperature=0.4,
+                    temperature=0.2,  # Low creativity - factual play-by-play
                     max_output_tokens=2048,
                 )
             )
@@ -213,15 +231,37 @@ Focus on actionable insights that coaches and players can use to improve."""
             "progress": 95
         }
 
-        compilation_prompt = f"""Based on these segment analyses, create a comprehensive game summary:
+        compilation_prompt = f"""Based on these play-by-play segment analyses, provide a comprehensive strategic game summary with creative insights:
 
 {chr(10).join([f"Segment {a['segment']} ({a['start_time']}-{a['end_time']}s): {a['analysis']}" for a in analyses])}
 
-Provide:
-1. Overall game summary
-2. Key turning points
-3. Top 5 highlights
-4. Performance insights"""
+Your task is to provide HIGH-LEVEL STRATEGIC ANALYSIS with creativity and insight:
+
+1. **Overall Game Narrative**:
+   - What was the story of this game?
+   - How did momentum shift?
+   - What defined each team's approach?
+
+2. **Strategic Insights** (be creative and analytical):
+   - Offensive patterns and effectiveness
+   - Defensive schemes and adjustments
+   - Coaching decisions and their impact
+   - Player matchups and advantages
+
+3. **Key Turning Points**:
+   - Identify 2-3 moments that changed the game
+   - Explain WHY they mattered strategically
+
+4. **Top 5 Highlights**:
+   - Most impactful plays from a game perspective
+   - Not just flashy, but game-changing
+
+5. **Actionable Takeaways**:
+   - What could coaches learn from this?
+   - Areas for improvement
+   - Successful strategies to replicate
+
+Be insightful, creative, and provide depth beyond just describing what happened. Focus on the "why" and "how" of the game."""
 
         try:
             summary_response = self.client.models.generate_content(
@@ -229,7 +269,7 @@ Provide:
                 contents=compilation_prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=self.system_instruction,
-                    temperature=0.5,
+                    temperature=0.8,  # High creativity - strategic insights
                     max_output_tokens=3072,
                 )
             )
