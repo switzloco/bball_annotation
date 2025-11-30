@@ -248,6 +248,25 @@ def main():
             help="Size of each video segment to analyze (default: 2 minutes)"
         )
 
+        # Segment limit option
+        limit_segments = st.checkbox(
+            "Limit number of segments",
+            value=False,
+            help="Analyze only the first N segments (useful for testing)"
+        )
+
+        max_segments = None
+        if limit_segments:
+            max_segments = st.number_input(
+                "Max segments to analyze",
+                min_value=1,
+                max_value=50,
+                value=3,
+                step=1,
+                help="Only analyze this many segments from the beginning"
+            )
+            st.info(f"Will analyze first {max_segments} segment(s) = {max_segments * chunk_size} seconds")
+
         st.divider()
 
         # Environment info
@@ -318,8 +337,15 @@ def main():
     with col2:
         st.subheader("📊 Quick Stats")
         st.metric("Model", selected_model.replace("gemini-", ""))
-        st.metric("Duration", f"{video_duration // 60} min")
-        st.metric("Chunks", f"{(video_duration + chunk_size - 1) // chunk_size}")
+
+        # Show actual duration/chunks to be analyzed
+        if max_segments is not None:
+            actual_duration = max_segments * chunk_size
+            st.metric("Duration", f"{actual_duration // 60} min", delta=f"Limited to {max_segments} segments")
+            st.metric("Chunks", f"{max_segments}", delta=f"of {(video_duration + chunk_size - 1) // chunk_size} total")
+        else:
+            st.metric("Duration", f"{video_duration // 60} min")
+            st.metric("Chunks", f"{(video_duration + chunk_size - 1) // chunk_size}")
 
     st.divider()
 
@@ -366,10 +392,16 @@ def main():
                     log_placeholder = st.empty()
                     logs = []
 
+                # Calculate effective duration based on segment limit
+                effective_duration = video_duration
+                if max_segments is not None:
+                    effective_duration = max_segments * chunk_size
+                    st.info(f"🎯 Analyzing first {max_segments} segments ({effective_duration} seconds) instead of full video")
+
                 # Stream the analysis
                 for update in agent.analyze_full_video_stream(
                     video_uri=video_uri,
-                    duration_seconds=video_duration,
+                    duration_seconds=effective_duration,
                     chunk_size=chunk_size
                 ):
                     status = update.get("status")
