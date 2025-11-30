@@ -359,9 +359,30 @@ def main():
     if video_uri:
         st.subheader("🎬 Video Analysis")
 
-        analyze_button = st.button("🚀 Start Analysis", type="primary", use_container_width=True)
+        # Check if we have existing results in session state
+        has_existing_results = 'analysis_result' in st.session_state and st.session_state.analysis_result is not None
+
+        # Show different buttons based on state
+        if has_existing_results:
+            col_action1, col_action2 = st.columns([1, 1])
+            with col_action1:
+                analyze_button = st.button("🔄 Run New Analysis", type="secondary", use_container_width=True)
+            with col_action2:
+                clear_button = st.button("🗑️ Clear Results", type="secondary", use_container_width=True)
+
+            # Handle clear button
+            if clear_button:
+                st.session_state.analysis_result = None
+                st.session_state.video_uri = None
+                st.rerun()
+        else:
+            analyze_button = st.button("🚀 Start Analysis", type="primary", use_container_width=True)
 
         if analyze_button:
+            # Clear any existing results when starting new analysis
+            st.session_state.analysis_result = None
+            st.session_state.video_uri = None
+
             # Initialize the agent
             with st.spinner("Initializing CoachAI agent..."):
                 try:
@@ -475,6 +496,9 @@ def main():
 
                     elif status == "complete":
                         result = update.get("result")
+                        # Store in session state to persist across reruns
+                        st.session_state.analysis_result = result
+                        st.session_state.video_uri = video_uri
                         current_segment_text.success("✅ Analysis complete!")
 
                 progress_bar.progress(100)
@@ -605,6 +629,116 @@ def main():
 
                 with log_container:
                     st.error(str(e))
+
+        # Display results from session state if they exist (and we didn't just run a new analysis)
+        if not analyze_button and has_existing_results:
+            result = st.session_state.analysis_result
+            saved_video_uri = st.session_state.get('video_uri', video_uri)
+
+            st.success("🎉 Showing saved analysis results")
+            st.divider()
+
+            # Game Summary
+            st.subheader("📝 Game Summary")
+            st.markdown(result.get("game_summary", "No summary available"))
+
+            # Segment Analysis
+            st.subheader("🔍 Detailed Segment Analysis")
+
+            segments_data = []
+            for segment in result.get("segment_analyses", []):
+                segments_data.append({
+                    "Segment": segment["segment"],
+                    "Time Range": f"{segment['start_time']}-{segment['end_time']}s",
+                    "Analysis": segment["analysis"][:150] + "..."
+                })
+
+            if segments_data:
+                df_segments = pd.DataFrame(segments_data)
+                st.dataframe(df_segments, use_container_width=True)
+
+                # Display full analyses in expandable sections
+                for segment in result.get("segment_analyses", []):
+                    with st.expander(f"Segment {segment['segment']} ({segment['start_time']}-{segment['end_time']}s)"):
+                        st.write(segment["analysis"])
+
+            # Highlights
+            st.subheader("⭐ Highlight Moments")
+            highlights = result.get("highlights", [])
+
+            if highlights:
+                for i, highlight in enumerate(highlights, 1):
+                    st.info(f"**{highlight['time']}**: {highlight['description']}")
+            else:
+                st.info("No specific highlights identified in this analysis")
+
+            # Statistics DataFrame
+            st.subheader("📊 Analysis Statistics")
+            stats_data = {
+                "Metric": [
+                    "Video URI",
+                    "Total Duration",
+                    "Number of Segments",
+                    "Chunk Size",
+                    "Model Used",
+                    "Highlights Found"
+                ],
+                "Value": [
+                    result.get("video_uri", "N/A"),
+                    f"{result.get('duration_seconds', 0)} seconds ({result.get('duration_seconds', 0) // 60} minutes)",
+                    result.get("num_segments", 0),
+                    f"{chunk_size} seconds",
+                    selected_model,
+                    len(highlights)
+                ]
+            }
+            df_stats = pd.DataFrame(stats_data)
+            st.dataframe(df_stats, use_container_width=True, hide_index=True)
+
+            # Export Results Section
+            st.divider()
+            st.subheader("💾 Export Results")
+
+            col_export1, col_export2, col_export3 = st.columns(3)
+
+            with col_export1:
+                # Download as JSON
+                json_data = json.dumps(result, indent=2)
+                st.download_button(
+                    label="📥 Download JSON",
+                    data=json_data,
+                    file_name=f"analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    mime="application/json",
+                    use_container_width=True
+                )
+
+            with col_export2:
+                # Download as Text
+                text_data = format_analysis_as_text(result)
+                st.download_button(
+                    label="📄 Download Report (TXT)",
+                    data=text_data,
+                    file_name=f"analysis_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+                    mime="text/plain",
+                    use_container_width=True
+                )
+
+            with col_export3:
+                # Save to GCS
+                if st.button("☁️ Save to GCS", use_container_width=True, key="save_to_gcs_persisted"):
+                    try:
+                        # Extract video name from URI
+                        video_name = saved_video_uri.split("/")[-1].replace(".mp4", "")
+                        bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
+
+                        with st.spinner("Saving to GCS..."):
+                            gcs_uri = save_analysis_to_gcs(result, bucket_name, video_name)
+
+                        st.success(f"✅ Saved to GCS!")
+                        st.code(gcs_uri, language="text")
+
+                    except Exception as e:
+                        st.error(f"❌ Error saving to GCS: {str(e)}")
 
     else:
         st.info("👈 Please provide a video URI or upload a file to begin analysis")
