@@ -185,6 +185,11 @@ gcloud run deploy bball-agent \
      - All highlight moments
      - Performance statistics
 
+5. **Export Results** (New!)
+   - **📥 Download JSON**: Raw analysis data in JSON format
+   - **📄 Download Report (TXT)**: Formatted text report with all details
+   - **☁️ Save to GCS**: Store analysis in `gs://bball_project/analysis/` with timestamp
+
 ### Using the Agent Programmatically
 
 ```python
@@ -286,6 +291,7 @@ bball_annotation/
 - **Strategic Insights**: Analyzes team patterns and performance
 - **Interactive Chat**: Ask questions about specific plays or strategies
 - **Live Status Updates**: See exactly which segment is being analyzed and overall progress percentage
+- **Multiple Export Options**: Download as JSON or TXT, or save directly to GCS with timestamps
 
 ### Video Analysis Tool
 
