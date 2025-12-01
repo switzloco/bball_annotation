@@ -234,20 +234,20 @@ def main():
         # Video duration input
         video_duration = st.number_input(
             "Video Duration (seconds)",
-            min_value=60,
+            min_value=10,
             max_value=3600,
             value=600,
-            step=60,
+            step=10,
             help="Estimated total duration of the video"
         )
 
         # Chunk size input
         chunk_size = st.number_input(
             "Analysis Chunk Size (seconds)",
-            min_value=30,
+            min_value=10,
             max_value=300,
             value=120,
-            step=30,
+            step=10,
             help="Size of each video segment to analyze (default: 2 minutes)"
         )
 
