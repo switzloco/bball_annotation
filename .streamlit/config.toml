@@ -1,0 +1,9 @@
+[server]
+maxUploadSize = 500
+headless = true
+port = 8080
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false

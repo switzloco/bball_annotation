@@ -318,27 +318,45 @@ def main():
 
         else:
             # File upload
+            st.info("💡 **Tip:** For large videos (>500MB), use GCS URI input instead of file upload.")
             uploaded_file = st.file_uploader(
                 "Upload a video file",
                 type=["mp4", "mov", "avi"],
-                help="Upload a local video file (will be uploaded to GCS)"
+                help="Upload a local video file (max 500MB). For larger files, upload to GCS first and use GCS URI mode."
             )
 
             if uploaded_file:
-                # Save uploaded file temporarily
-                temp_dir = Path("/tmp/bball_uploads")
-                temp_dir.mkdir(exist_ok=True)
-                temp_file_path = temp_dir / uploaded_file.name
+                # Check file size (500MB limit)
+                file_size_mb = uploaded_file.size / (1024 * 1024)
 
-                with open(temp_file_path, "wb") as f:
-                    f.write(uploaded_file.getbuffer())
+                if file_size_mb > 500:
+                    st.error(f"❌ File too large: {file_size_mb:.1f}MB (max 500MB)")
+                    st.warning("Please upload your video to GCS manually and use 'GCS URI' input mode instead.")
+                    st.code(f"""
+# Upload to GCS using gcloud:
+gcloud storage cp {uploaded_file.name} gs://bball_project/vids/
 
-                # Upload to GCS
-                bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
-                video_uri = upload_to_gcs(str(temp_file_path), bucket_name)
+# Then use GCS URI mode with:
+gs://bball_project/vids/{uploaded_file.name}
+                    """, language="bash")
+                    video_uri = None
+                else:
+                    st.info(f"📊 File size: {file_size_mb:.1f}MB")
 
-                # Clean up temp file
-                temp_file_path.unlink()
+                    # Save uploaded file temporarily
+                    temp_dir = Path("/tmp/bball_uploads")
+                    temp_dir.mkdir(exist_ok=True)
+                    temp_file_path = temp_dir / uploaded_file.name
+
+                    with open(temp_file_path, "wb") as f:
+                        f.write(uploaded_file.getbuffer())
+
+                    # Upload to GCS
+                    bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
+                    video_uri = upload_to_gcs(str(temp_file_path), bucket_name)
+
+                    # Clean up temp file
+                    temp_file_path.unlink()
 
     with col2:
         st.subheader("📊 Quick Stats")
