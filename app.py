@@ -318,25 +318,27 @@ def main():
 
         else:
             # File upload
-            st.info("💡 **Tip:** For large videos (>500MB), use GCS URI input instead of file upload.")
+            st.warning("⚠️ **Cloud Run Limitation:** File uploads are limited to 32MB due to Cloud Run's request size limit.")
+            st.info("💡 **For files >32MB:** Upload to GCS first, then use 'GCS URI' input mode.")
+
             uploaded_file = st.file_uploader(
-                "Upload a video file",
+                "Upload a video file (max 32MB)",
                 type=["mp4", "mov", "avi"],
-                help="Upload a local video file (max 500MB). For larger files, upload to GCS first and use GCS URI mode."
+                help="Cloud Run limits HTTP uploads to 32MB. For larger files, upload to GCS manually and use GCS URI mode."
             )
 
             if uploaded_file:
-                # Check file size (500MB limit)
+                # Check file size (32MB Cloud Run limit)
                 file_size_mb = uploaded_file.size / (1024 * 1024)
 
-                if file_size_mb > 500:
-                    st.error(f"❌ File too large: {file_size_mb:.1f}MB (max 500MB)")
-                    st.warning("Please upload your video to GCS manually and use 'GCS URI' input mode instead.")
+                if file_size_mb > 32:
+                    st.error(f"❌ File too large: {file_size_mb:.1f}MB (Cloud Run max: 32MB)")
+                    st.warning("**Required:** Upload your video to GCS and use 'GCS URI' input mode.")
                     st.code(f"""
 # Upload to GCS using gcloud:
 gcloud storage cp {uploaded_file.name} gs://bball_project/vids/
 
-# Then use GCS URI mode with:
+# Then switch to 'GCS URI' mode above and use:
 gs://bball_project/vids/{uploaded_file.name}
                     """, language="bash")
                     video_uri = None
