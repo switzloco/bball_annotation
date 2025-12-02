@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -52,6 +52,47 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+
+def generate_signed_upload_url(file_name: str, bucket_name: str, content_type: str = "video/mp4") -> dict:
+    """
+    Generate a signed URL for direct browser upload to GCS
+
+    Args:
+        file_name: Name of the file to upload
+        bucket_name: GCS bucket name
+        content_type: MIME type of the file
+
+    Returns:
+        Dictionary with signed_url and gcs_uri
+    """
+    try:
+        storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+        bucket = storage_client.bucket(bucket_name)
+
+        # Generate unique blob name
+        blob_name = f"uploads/{int(time.time())}_{file_name}"
+        blob = bucket.blob(blob_name)
+
+        # Generate signed URL valid for 1 hour
+        signed_url = blob.generate_signed_url(
+            version="v4",
+            expiration=3600,  # 1 hour
+            method="PUT",
+            content_type=content_type
+        )
+
+        gcs_uri = f"gs://{bucket_name}/{blob_name}"
+
+        return {
+            "signed_url": signed_url,
+            "gcs_uri": gcs_uri,
+            "blob_name": blob_name
+        }
+
+    except Exception as e:
+        logger.error(f"Error generating signed URL: {str(e)}")
+        raise e
 
 
 def upload_to_gcs(local_file_path: str, bucket_name: str) -> str:
@@ -317,48 +358,82 @@ def main():
                         video_uri = gcs_input
 
         else:
-            # File upload
-            st.warning("⚠️ **Cloud Run Limitation:** File uploads are limited to 32MB due to Cloud Run's request size limit.")
-            st.info("💡 **For files >32MB:** Upload to GCS first, then use 'GCS URI' input mode.")
+            # Direct-to-GCS file upload with signed URLs
+            st.info("💡 **Direct Upload to GCS:** Files are uploaded directly to Cloud Storage (no size limit!)")
 
             uploaded_file = st.file_uploader(
-                "Upload a video file (max 32MB)",
+                "Select a video file to upload",
                 type=["mp4", "mov", "avi"],
-                help="Cloud Run limits HTTP uploads to 32MB. For larger files, upload to GCS manually and use GCS URI mode."
+                help="Files are uploaded directly to GCS - no size limits!"
             )
 
             if uploaded_file:
-                # Check file size (32MB Cloud Run limit)
                 file_size_mb = uploaded_file.size / (1024 * 1024)
+                st.info(f"📊 Selected file: {uploaded_file.name} ({file_size_mb:.1f}MB)")
 
-                if file_size_mb > 32:
-                    st.error(f"❌ File too large: {file_size_mb:.1f}MB (Cloud Run max: 32MB)")
-                    st.warning("**Required:** Upload your video to GCS and use 'GCS URI' input mode.")
-                    st.code(f"""
-# Upload to GCS using gcloud:
-gcloud storage cp {uploaded_file.name} gs://bball_project/vids/
+                # Button to initiate direct upload
+                if st.button("📤 Upload to GCS", type="primary", key="direct_upload_btn"):
+                    try:
+                        bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
 
-# Then switch to 'GCS URI' mode above and use:
-gs://bball_project/vids/{uploaded_file.name}
-                    """, language="bash")
-                    video_uri = None
-                else:
-                    st.info(f"📊 File size: {file_size_mb:.1f}MB")
+                        # Determine content type
+                        content_type = "video/mp4"
+                        if uploaded_file.name.endswith(".mov"):
+                            content_type = "video/quicktime"
+                        elif uploaded_file.name.endswith(".avi"):
+                            content_type = "video/x-msvideo"
 
-                    # Save uploaded file temporarily
-                    temp_dir = Path("/tmp/bball_uploads")
-                    temp_dir.mkdir(exist_ok=True)
-                    temp_file_path = temp_dir / uploaded_file.name
+                        with st.spinner("Generating signed URL..."):
+                            # Generate signed URL
+                            url_data = generate_signed_upload_url(
+                                uploaded_file.name,
+                                bucket_name,
+                                content_type
+                            )
 
-                    with open(temp_file_path, "wb") as f:
-                        f.write(uploaded_file.getbuffer())
+                        st.success("✅ Upload URL generated! Uploading to GCS...")
 
-                    # Upload to GCS
-                    bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
-                    video_uri = upload_to_gcs(str(temp_file_path), bucket_name)
+                        # Create progress bar
+                        upload_progress = st.progress(0)
+                        upload_status = st.empty()
 
-                    # Clean up temp file
-                    temp_file_path.unlink()
+                        # Upload directly using signed URL
+                        import requests
+
+                        # Read file in chunks and upload
+                        headers = {'Content-Type': content_type}
+                        file_data = uploaded_file.read()
+
+                        upload_status.text(f"Uploading {file_size_mb:.1f}MB to Cloud Storage...")
+
+                        response = requests.put(
+                            url_data["signed_url"],
+                            data=file_data,
+                            headers=headers
+                        )
+
+                        if response.status_code == 200:
+                            video_uri = url_data["gcs_uri"]
+                            upload_progress.progress(100)
+                            upload_status.success(f"✅ Upload complete!")
+                            st.success(f"Video uploaded successfully!")
+                            st.code(video_uri, language="text")
+
+                            # Store in session state for analysis
+                            st.session_state.uploaded_video_uri = video_uri
+                        else:
+                            upload_status.error(f"❌ Upload failed: {response.status_code}")
+                            st.error(f"Upload error: {response.text}")
+
+                    except Exception as e:
+                        st.error(f"❌ Error during upload: {str(e)}")
+                        logger.error(f"Direct upload error: {str(e)}")
+
+                # Check if we have a completed upload in session state
+                if 'uploaded_video_uri' in st.session_state:
+                    video_uri = st.session_state.uploaded_video_uri
+                    st.success("✅ Video ready for analysis!")
+                    st.code(video_uri, language="text")
 
     with col2:
         st.subheader("📊 Quick Stats")
