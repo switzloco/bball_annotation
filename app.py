@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
