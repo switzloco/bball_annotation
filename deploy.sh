@@ -15,11 +15,13 @@ gcloud services enable run.googleapis.com cloudbuild.googleapis.com aiplatform.g
 
 # Deploy from source with STRICT QUOTA LIMITS
 # We limit max-instances to 4 to stay under the 16 CPU limit
+# min-instances 1 keeps service warm (no cold starts)
 gcloud run deploy $SERVICE_NAME \
   --source . \
   --project $PROJECT_ID \
   --region $REGION \
   --allow-unauthenticated \
+  --min-instances 1 \
   --max-instances 4 \
   --memory 2Gi \
   --cpu 1 \
