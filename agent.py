@@ -54,7 +54,8 @@ class VideoAnalysisTool:
         self,
         video_uri: str,
         start_sec: float,
-        end_sec: float
+        end_sec: float,
+        previous_context: Optional[str] = None
     ) -> str:
         """
         Analyze a specific segment of the basketball video
@@ -63,6 +64,7 @@ class VideoAnalysisTool:
             video_uri: GCS URI of the video (gs://bucket/path)
             start_sec: Start time in seconds
             end_sec: End time in seconds
+            previous_context: Analysis from the previous segment (for continuity)
 
         Returns:
             Analysis text from Gemini
@@ -76,8 +78,22 @@ class VideoAnalysisTool:
                 mime_type="video/mp4"
             )
 
+            # Build context section if we have previous segment
+            context_section = ""
+            if previous_context:
+                # Truncate to avoid token bloat
+                context_summary = previous_context[:500] + "..." if len(previous_context) > 500 else previous_context
+                context_section = f"""
+**Previous Segment Context:**
+{context_summary}
+
+Use this context to maintain continuity (e.g., if previous was warmup and you see tip-off, note "Game begins").
+---
+
+"""
+
             # Create the prompt - focus on real game action only
-            prompt = f"""Analyze this basketball game segment from {start_sec} to {end_sec} seconds.
+            prompt = f"""{context_section}Analyze this basketball game segment from {start_sec} to {end_sec} seconds.
 
 CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
 
@@ -87,8 +103,10 @@ CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
    - Check if the game clock is running/visible
    - Referees are actively officiating (not just standing around)
    - Players are in organized offensive and defensive formations
+   - **ONLY ONE basketball visible** in active play
 
-2. **NOT Game Play (Warmups/Practice)**:
+2. **NOT Game Play (Warmups/Practice/Halftime)**:
+   - **MULTIPLE BASKETBALLS visible on court** (dead giveaway for warmups!)
    - Random shooting drills or layup lines
    - Players casually shooting around
    - No defensive positioning or guarding
@@ -131,7 +149,7 @@ CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
    - Timestamp key events
    - Focus on what actually happened
 
-If you're unsure whether it's game play or warmup, look for: active defense, running game clock, and organized team play."""
+If you're unsure whether it's game play or warmup, look for: active defense, running game clock, organized team play, and **ONLY ONE basketball in play**."""
 
             # Generate content with LOW temperature for factual accuracy
             response = self.client.models.generate_content(
@@ -252,10 +270,14 @@ Focus on actionable insights that coaches and players can use to improve."""
                 "progress": (i / num_chunks) * 100
             }
 
+            # Get previous segment analysis for context (if exists)
+            previous_context = analyses[-1]["analysis"] if analyses else None
+
             chunk_analysis = self.video_tool.analyze_video_segment(
                 video_uri=video_uri,
                 start_sec=start_sec,
-                end_sec=end_sec
+                end_sec=end_sec,
+                previous_context=previous_context
             )
 
             analyses.append({
