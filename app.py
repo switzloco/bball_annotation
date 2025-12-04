@@ -325,8 +325,6 @@ def main():
             "gemini-2.5-flash",
             "gemini-2.0-flash-exp",
             "gemini-2.5-pro",
-            "gemini-1.5-pro",
-            "gemini-1.5-flash",
         ]
 
         # Model descriptions for help text
@@ -335,8 +333,6 @@ def main():
             "gemini-2.5-flash": "Better accuracy than lite, good balance",
             "gemini-2.0-flash-exp": "Experimental, higher accuracy",
             "gemini-2.5-pro": "Best accuracy & reasoning (slower, higher cost)",
-            "gemini-1.5-pro": "Stable, high quality",
-            "gemini-1.5-flash": "Fast, lower quality"
         }
 
         selected_model = st.selectbox(
