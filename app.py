@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -92,6 +92,69 @@ def generate_signed_upload_url(file_name: str, bucket_name: str, content_type: s
 
     except Exception as e:
         logger.error(f"Error generating signed URL: {str(e)}")
+        raise e
+
+
+def download_youtube_video(youtube_url: str, bucket_name: str) -> tuple[str, str]:
+    """
+    Download a YouTube video and upload to GCS
+
+    Args:
+        youtube_url: YouTube video URL
+        bucket_name: GCS bucket name
+
+    Returns:
+        Tuple of (GCS URI, video title)
+    """
+    try:
+        import yt_dlp
+
+        # Create temp directory
+        temp_dir = Path("/tmp/youtube_downloads")
+        temp_dir.mkdir(exist_ok=True)
+
+        # Configure yt-dlp options
+        ydl_opts = {
+            'format': 'best[ext=mp4]',  # Get best quality MP4
+            'outtmpl': str(temp_dir / '%(id)s.%(ext)s'),
+            'quiet': True,
+            'no_warnings': True,
+        }
+
+        st.info("📥 Downloading video from YouTube...")
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            # Get video info
+            info = ydl.extract_info(youtube_url, download=True)
+            video_title = info.get('title', 'youtube_video')
+            video_id = info.get('id', 'unknown')
+            downloaded_file = temp_dir / f"{video_id}.mp4"
+
+            st.success(f"✅ Downloaded: {video_title}")
+
+            # Upload to GCS
+            st.info("☁️ Uploading to Cloud Storage...")
+            storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+            bucket = storage_client.bucket(bucket_name)
+
+            # Generate unique blob name
+            blob_name = f"youtube/{int(time.time())}_{video_id}.mp4"
+            blob = bucket.blob(blob_name)
+
+            # Upload the file
+            blob.upload_from_filename(str(downloaded_file))
+
+            gcs_uri = f"gs://{bucket_name}/{blob_name}"
+
+            # Clean up temp file
+            downloaded_file.unlink()
+
+            st.success(f"✅ Uploaded to GCS!")
+            return gcs_uri, video_title
+
+    except Exception as e:
+        st.error(f"❌ Error processing YouTube video: {str(e)}")
+        logger.error(f"YouTube download error: {str(e)}")
         raise e
 
 
@@ -346,7 +409,7 @@ def main():
         # File input mode selector
         input_mode = st.radio(
             "Select input mode:",
-            options=["GCS URI", "Upload File"],
+            options=["GCS URI", "YouTube URL", "Upload File"],
             horizontal=True
         )
 
@@ -370,6 +433,48 @@ def main():
                     else:
                         st.warning("⚠️ Could not verify GCS file. Proceeding anyway...")
                         video_uri = gcs_input
+
+        elif input_mode == "YouTube URL":
+            # YouTube URL input
+            st.info("💡 **YouTube Support:** Enter any YouTube URL to download and analyze")
+
+            youtube_input = st.text_input(
+                "YouTube Video URL",
+                value="",
+                placeholder="https://www.youtube.com/watch?v=...",
+                help="Enter a YouTube video URL - it will be downloaded and uploaded to GCS automatically"
+            )
+
+            if youtube_input:
+                # Validate basic YouTube URL format
+                if "youtube.com" in youtube_input or "youtu.be" in youtube_input:
+                    if st.button("📥 Download from YouTube", type="primary", key="youtube_download_btn"):
+                        try:
+                            bucket_name = os.getenv("GCP_BUCKET_NAME", "bball_project")
+
+                            with st.spinner("Processing YouTube video..."):
+                                gcs_uri, video_title = download_youtube_video(youtube_input, bucket_name)
+
+                            video_uri = gcs_uri
+                            st.success(f"✅ Ready to analyze: {video_title}")
+                            st.code(gcs_uri, language="text")
+
+                            # Store in session state
+                            st.session_state.youtube_video_uri = gcs_uri
+                            st.session_state.youtube_video_title = video_title
+
+                        except Exception as e:
+                            st.error(f"❌ Failed to process YouTube video: {str(e)}")
+                            logger.error(f"YouTube processing error: {str(e)}")
+
+                    # Check if we have a completed YouTube download in session state
+                    if 'youtube_video_uri' in st.session_state:
+                        video_uri = st.session_state.youtube_video_uri
+                        video_title = st.session_state.get('youtube_video_title', 'YouTube video')
+                        st.success(f"✅ Video ready for analysis: {video_title}")
+                        st.code(video_uri, language="text")
+                else:
+                    st.warning("⚠️ Please enter a valid YouTube URL")
 
         else:
             # Direct-to-GCS file upload with signed URLs
