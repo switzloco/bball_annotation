@@ -57,32 +57,49 @@ class VideoAnalysisTool:
             # Create the prompt - focus on real game action only
             prompt = f"""Analyze this basketball game segment from {start_sec} to {end_sec} seconds.
 
-IMPORTANT: Only analyze actual game play. Ignore warmups, shootarounds, dead ball situations, timeouts, and between-play activities.
+CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
 
-Provide a factual, objective play-by-play description:
+**How to Identify ACTUAL GAME PLAY:**
+1. **Official Game Start Indicators**:
+   - Look for the official tip-off / jump ball
+   - Check if the game clock is running/visible
+   - Referees are actively officiating (not just standing around)
+   - Players are in organized offensive and defensive formations
 
-1. **Live Game Action Only**:
-   - Scoring plays (shots, layups, dunks, free throws)
-   - Defensive plays (blocks, steals, rebounds)
-   - Turnovers and fouls during active play
+2. **NOT Game Play (Warmups/Practice)**:
+   - Random shooting drills or layup lines
+   - Players casually shooting around
+   - No defensive positioning or guarding
+   - Clock shows 0:00 or is not running
+   - No referees actively involved in play
+   - Between-quarter breaks or timeouts
+   - Pre-game shootaround
+
+**If this is WARMUP/SHOOTAROUND:** Simply state "This segment shows warmup/shootaround activity, not actual game play."
+
+**If this IS actual game play, provide play-by-play:**
+
+1. **Scoring Plays**:
+   - Shots made/missed (layups, dunks, jump shots, three-pointers)
+   - Free throws
+   - Note which team scored
+
+2. **Defensive Actions**:
+   - Blocks, steals, rebounds
+   - Defensive stops
+
+3. **Game Flow**:
+   - Turnovers and fouls
    - Fast breaks and transitions
+   - Notable player movements
 
-2. **What to SKIP**:
-   - Pre-game warmups or shootarounds
-   - Players standing around during stoppages
-   - Timeouts or huddles
-   - Between-quarter breaks
-   - Ball out of bounds (unless part of active play)
-
-3. **Format**:
+4. **Format Requirements**:
    - Be concise and factual
-   - Focus on what actually happened, not speculation
-   - Use objective language
-   - Timestamp key events when possible
+   - Use objective language (low creativity)
+   - Timestamp key events
+   - Focus on what actually happened
 
-If this segment contains no actual game play, simply state: "No active game play in this segment."
-
-Format your response as a clear play-by-play log."""
+If you're unsure whether it's game play or warmup, look for: active defense, running game clock, and organized team play."""
 
             # Generate content with LOW temperature for factual accuracy
             response = self.client.models.generate_content(
