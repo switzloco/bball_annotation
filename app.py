@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -363,10 +363,10 @@ def main():
         chunk_size = st.number_input(
             "Analysis Chunk Size (seconds)",
             min_value=10,
-            max_value=300,
-            value=120,
+            max_value=180,
+            value=60,
             step=10,
-            help="Size of each video segment to analyze (default: 2 minutes)"
+            help="Shorter chunks (30-60s) produce better quality analysis. Longer chunks may cause incomplete output."
         )
 
         # Segment limit option

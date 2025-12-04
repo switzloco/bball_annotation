@@ -28,6 +28,28 @@ class VideoAnalysisTool:
             location=os.getenv("GCP_LOCATION", "us-central1")
         )
 
+    def _is_output_incomplete(self, text: str) -> bool:
+        """
+        Check if the output appears to be truncated or incomplete
+
+        Args:
+            text: The analysis text to check
+
+        Returns:
+            True if output appears incomplete
+        """
+        # Check for common signs of truncation
+        truncation_indicators = [
+            text.endswith('#'),  # Cut off mid-number reference
+            text.endswith('*'),  # Cut off mid-markdown
+            text.count('*') % 2 != 0,  # Odd number of asterisks (unclosed markdown)
+            len(text) < 50,  # Suspiciously short
+            text.strip().endswith(':'),  # Ends with colon (incomplete list)
+            '**' in text and text.rfind('**') > len(text) - 20,  # Unclosed bold near end
+        ]
+
+        return any(truncation_indicators)
+
     def analyze_video_segment(
         self,
         video_uri: str,
@@ -117,11 +139,18 @@ If you're unsure whether it's game play or warmup, look for: active defense, run
                 contents=[prompt, video_part],
                 config=types.GenerateContentConfig(
                     temperature=0.2,  # Low creativity - factual play-by-play
-                    max_output_tokens=2048,
+                    max_output_tokens=4096,  # Increased from 2048 for complete coverage
                 )
             )
 
             result = response.text
+
+            # Validate output quality
+            if self._is_output_incomplete(result):
+                logger.warning(f"Segment {start_sec}-{end_sec}s appears to have incomplete output")
+                # Add warning to result
+                result = f"{result}\n\n⚠️ [Note: This segment analysis may be incomplete. Consider using shorter chunk sizes.]"
+
             logger.info(f"Successfully analyzed segment {start_sec}-{end_sec}s")
             return result
 
@@ -160,11 +189,13 @@ class CoachAI:
 Your mission is to analyze basketball game videos systematically and provide comprehensive insights.
 
 When analyzing a video:
-1. Break down the video into 2-minute segments (120 seconds)
-2. Use the analyze_video_segment tool to examine each segment
-3. Create a play-by-play log of key events
-4. Identify highlight-worthy moments (dunks, three-pointers, blocks, steals, etc.)
+1. Break down the video into manageable segments (typically 60 seconds for optimal quality)
+2. Use the analyze_video_segment tool to examine each segment thoroughly
+3. Create a detailed play-by-play log of key events
+4. Identify highlight-worthy moments (dunks, three-pointers, blocks, steals, spectacular plays)
 5. Provide strategic insights about team performance
+
+IMPORTANT: Provide complete, thorough analysis for each segment. Don't cut off mid-sentence or leave analysis incomplete.
 
 Always be thorough, systematic, and professional in your analysis.
 Focus on actionable insights that coaches and players can use to improve."""
@@ -298,7 +329,7 @@ Be insightful, creative, and provide depth beyond just describing what happened.
                 config=types.GenerateContentConfig(
                     system_instruction=self.system_instruction,
                     temperature=0.8,  # High creativity - strategic insights
-                    max_output_tokens=3072,
+                    max_output_tokens=6144,  # Increased from 3072 for comprehensive summaries
                 )
             )
             game_summary = summary_response.text
