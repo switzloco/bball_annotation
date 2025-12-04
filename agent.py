@@ -204,20 +204,22 @@ Focus on actionable insights that coaches and players can use to improve."""
         self,
         video_uri: str,
         duration_seconds: Optional[int] = None,
-        chunk_size: int = 120
+        chunk_size: int = 120,
+        start_offset: int = 0
     ):
         """
         Analyze a full basketball game video with streaming progress updates
 
         Args:
             video_uri: GCS URI of the video
-            duration_seconds: Total video duration (if None, assumes 10 minutes)
+            duration_seconds: Total video duration to analyze (if None, assumes 10 minutes)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
+            start_offset: Start time in seconds (skip this much from beginning)
 
         Yields:
             Progress dictionaries with status updates and results
         """
-        logger.info(f"Starting full video analysis of {video_uri}")
+        logger.info(f"Starting full video analysis of {video_uri} from {start_offset}s")
 
         # Default to 10 minutes if not specified
         if duration_seconds is None:
@@ -238,8 +240,9 @@ Focus on actionable insights that coaches and players can use to improve."""
 
         # Analyze each chunk
         for i in range(num_chunks):
-            start_sec = i * chunk_size
-            end_sec = min((i + 1) * chunk_size, duration_seconds)
+            # Add start_offset to all times
+            start_sec = start_offset + (i * chunk_size)
+            end_sec = start_offset + min((i + 1) * chunk_size, duration_seconds)
 
             yield {
                 "status": "processing",
@@ -357,7 +360,8 @@ Be insightful, creative, and provide depth beyond just describing what happened.
         self,
         video_uri: str,
         duration_seconds: Optional[int] = None,
-        chunk_size: int = 120
+        chunk_size: int = 120,
+        start_offset: int = 0
     ) -> Dict[str, Any]:
         """
         Analyze a full basketball game video (non-streaming version)
@@ -366,13 +370,14 @@ Be insightful, creative, and provide depth beyond just describing what happened.
             video_uri: GCS URI of the video
             duration_seconds: Total video duration (if None, assumes 10 minutes)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
+            start_offset: Start time in seconds (skip this much from beginning)
 
         Returns:
             Dictionary containing play-by-play analysis, highlights, and stats
         """
         # Use the streaming version and collect the final result
         result = None
-        for update in self.analyze_full_video_stream(video_uri, duration_seconds, chunk_size):
+        for update in self.analyze_full_video_stream(video_uri, duration_seconds, chunk_size, start_offset):
             if update.get("status") == "complete":
                 result = update.get("result")
         return result

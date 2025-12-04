@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.6.0"
+__version__ = "1.7.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -359,6 +359,22 @@ def main():
             help="Estimated total duration of the video"
         )
 
+        # Start time / skip option
+        start_time = st.number_input(
+            "Start Analysis At (seconds)",
+            min_value=0,
+            max_value=3600,
+            value=0,
+            step=10,
+            help="Skip to this time in the video (useful for skipping warmups or jumping to specific quarters)"
+        )
+
+        # Show info if skipping
+        if start_time > 0:
+            skip_minutes = start_time // 60
+            skip_seconds = start_time % 60
+            st.info(f"⏩ Will skip first {skip_minutes}m {skip_seconds}s")
+
         # Chunk size input
         chunk_size = st.number_input(
             "Analysis Chunk Size (seconds)",
@@ -633,17 +649,20 @@ def main():
                     log_placeholder = st.empty()
                     logs = []
 
-                # Calculate effective duration based on segment limit
-                effective_duration = video_duration
+                # Calculate effective duration based on segment limit and start time
+                effective_duration = video_duration - start_time  # Adjust for start time
                 if max_segments is not None:
                     effective_duration = max_segments * chunk_size
-                    st.info(f"🎯 Analyzing first {max_segments} segments ({effective_duration} seconds) instead of full video")
+                    st.info(f"🎯 Analyzing first {max_segments} segments ({effective_duration} seconds) starting from {start_time}s")
+                elif start_time > 0:
+                    st.info(f"⏩ Starting analysis at {start_time}s, analyzing {effective_duration}s of video")
 
                 # Stream the analysis
                 for update in agent.analyze_full_video_stream(
                     video_uri=video_uri,
                     duration_seconds=effective_duration,
-                    chunk_size=chunk_size
+                    chunk_size=chunk_size,
+                    start_offset=start_time
                 ):
                     status = update.get("status")
                     message = update.get("message", "")
