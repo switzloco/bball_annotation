@@ -75,7 +75,12 @@ CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
    - Between-quarter breaks or timeouts
    - Pre-game shootaround
 
-**If this is WARMUP/SHOOTAROUND:** Simply state "This segment shows warmup/shootaround activity, not actual game play."
+**If this is WARMUP/SHOOTAROUND:** State "This segment shows warmup/shootaround activity, not actual game play."
+   - HOWEVER, still note any spectacular moments:
+     - **Half-court shots made** (always noteworthy!)
+     - **Dunks** (even in warmups, crowd loves them)
+     - Any other impressive athletic plays
+   - Format: "WARMUP - [time]: Player makes half-court shot" or "WARMUP - [time]: Impressive dunk during warmup"
 
 **If this IS actual game play, provide play-by-play:**
 
@@ -93,7 +98,12 @@ CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
    - Fast breaks and transitions
    - Notable player movements
 
-4. **Format Requirements**:
+4. **Spectacular Plays During Dead Balls/Timeouts**:
+   - Half-court shots made
+   - Dunks during stoppages
+   - Tag these as "DEAD BALL - [description]"
+
+5. **Format Requirements**:
    - Be concise and factual
    - Use objective language (low creativity)
    - Timestamp key events
@@ -221,9 +231,10 @@ Focus on actionable insights that coaches and players can use to improve."""
                 "analysis": chunk_analysis
             })
 
-            # Extract highlights (simplified - could use LLM to identify)
+            # Extract highlights (including warmup spectacular moments)
             is_highlight = any(keyword in chunk_analysis.lower() for keyword in
-                   ["dunk", "three-pointer", "block", "steal", "highlight"])
+                   ["dunk", "three-pointer", "block", "steal", "highlight",
+                    "half-court", "warmup -", "dead ball -", "spectacular", "impressive"])
 
             if is_highlight:
                 highlights.append({
