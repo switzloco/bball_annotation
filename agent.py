@@ -92,64 +92,56 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 
 """
 
-            # Create the prompt - focus on real game action only
-            prompt = f"""{context_section}Analyze this basketball game segment from {start_sec} to {end_sec} seconds.
+            # Create the prompt - use POSITIVE indicators the model can actually see
+            prompt = f"""{context_section}Analyze this basketball segment from {start_sec} to {end_sec} seconds.
 
-CRITICAL: Distinguish between WARMUPS and ACTUAL GAME PLAY.
+CRITICAL: First determine if this is WARMUP or ACTUAL GAME PLAY.
 
-**How to Identify ACTUAL GAME PLAY:**
-1. **Official Game Start Indicators**:
-   - Look for the official tip-off / jump ball
-   - Check if the game clock is running/visible
-   - Referees are actively officiating (not just standing around)
-   - Players are in organized offensive and defensive formations
-   - **ONLY ONE basketball visible** in active play
+**Step 1 - GAME vs WARMUP Classification:**
 
-2. **NOT Game Play (Warmups/Practice/Halftime)**:
-   - **MULTIPLE BASKETBALLS visible on court** (dead giveaway for warmups!)
-   - Random shooting drills or layup lines
-   - Players casually shooting around
-   - No defensive positioning or guarding
-   - Clock shows 0:00 or is not running
-   - No referees actively involved in play
-   - Between-quarter breaks or timeouts
-   - Pre-game shootaround
+Look for these POSITIVE indicators:
 
-**If this is WARMUP/SHOOTAROUND:** State "This segment shows warmup/shootaround activity, not actual game play."
-   - HOWEVER, still note any spectacular moments:
-     - **Half-court shots made** (always noteworthy!)
-     - **Dunks** (even in warmups, crowd loves them)
-     - Any other impressive athletic plays
-   - Format: "WARMUP - [time]: Player makes half-court shot" or "WARMUP - [time]: Impressive dunk during warmup"
+**ACTUAL GAME PLAY** - Check for ANY of these:
+✅ **Jump ball / tip-off happening**: Two players jumping for the ball at center court
+✅ **Organized 5v5 action**: One team actively defending while other team has possession
+✅ **Continuous competitive play**: Ball possession changing, players guarding opponents
+✅ **Referee signals**: Refs making calls, pointing, signaling fouls/violations
+✅ **Fast break action**: Team running coordinated offense after getting the ball
 
-**If this IS actual game play, provide play-by-play:**
+**WARMUP / SHOOTAROUND** - Check for ANY of these:
+✅ **Layup lines**: Players in line taking turns shooting layups
+✅ **Multiple simultaneous shooters**: Several players shooting at once from different spots
+✅ **Solo shooting practice**: Individual players taking shots with nobody guarding them
+✅ **Drill patterns**: Repetitive practice movements (passing drills, shooting drills)
+✅ **Casual movement**: Players walking, standing around between shots
 
-1. **Scoring Plays**:
-   - Shots made/missed (layups, dunks, jump shots, three-pointers)
-   - Free throws
-   - Note which team scored
+**Classification Decision:**
+- If you see ANY "Actual Game" indicators → Tag as **[GAME]**
+- If you see ANY "Warmup" indicators AND zero "Actual Game" indicators → Tag as **[WARMUP]**
+- If unclear, default to **[WARMUP]** to be safe
 
-2. **Defensive Actions**:
-   - Blocks, steals, rebounds
-   - Defensive stops
+**Step 2 - Analysis:**
 
-3. **Game Flow**:
-   - Turnovers and fouls
-   - Fast breaks and transitions
-   - Notable player movements
+**If [WARMUP]:**
+- State clearly: "This segment shows warmup/practice activity."
+- BUT still note spectacular moments:
+  - Half-court shots made
+  - Impressive dunks
+  - Format: "WARMUP - [time]: [description]"
 
-4. **Spectacular Plays During Dead Balls/Timeouts**:
-   - Half-court shots made
-   - Dunks during stoppages
-   - Tag these as "DEAD BALL - [description]"
+**If [GAME]:**
+Provide factual play-by-play:
 
-5. **Format Requirements**:
-   - Be concise and factual
-   - Use objective language (low creativity)
-   - Timestamp key events
-   - Focus on what actually happened
+1. **Scoring Plays**: Shots made/missed (type: layup/dunk/jumper/3-pointer), which team
+2. **Defensive Actions**: Blocks, steals, rebounds
+3. **Game Flow**: Turnovers, fouls, fast breaks
+4. **Key Moments**: Game-changing plays
 
-If you're unsure whether it's game play or warmup, look for: active defense, running game clock, organized team play, and **ONLY ONE basketball in play**."""
+**Format Requirements:**
+- Start with classification tag: [GAME] or [WARMUP]
+- Be concise and factual
+- Timestamp key events
+- Focus on observable actions, not inferences"""
 
             # Generate content with LOW temperature for factual accuracy
             response = self.client.models.generate_content(
@@ -303,7 +295,7 @@ Focus on actionable insights that coaches and players can use to improve."""
             # Extract highlights (including warmup spectacular moments)
             is_highlight = any(keyword in chunk_analysis.lower() for keyword in
                    ["dunk", "three-pointer", "block", "steal", "highlight",
-                    "half-court", "warmup -", "dead ball -", "spectacular", "impressive"])
+                    "half-court", "warmup -", "spectacular", "impressive", "[game]"])
 
             if is_highlight:
                 highlights.append({
