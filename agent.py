@@ -163,6 +163,17 @@ If you're unsure whether it's game play or warmup, look for: active defense, run
 
             result = response.text
 
+            # Log token usage for debugging
+            if hasattr(response, 'usage_metadata'):
+                usage = response.usage_metadata
+                logger.info(f"Segment {start_sec}-{end_sec}s token usage:")
+                logger.info(f"  - Prompt tokens: {usage.prompt_token_count if hasattr(usage, 'prompt_token_count') else 'N/A'}")
+                logger.info(f"  - Video tokens: Included in prompt tokens")
+                logger.info(f"  - Output tokens: {usage.candidates_token_count if hasattr(usage, 'candidates_token_count') else 'N/A'}")
+                logger.info(f"  - Total tokens: {usage.total_token_count if hasattr(usage, 'total_token_count') else 'N/A'}")
+            else:
+                logger.warning(f"No usage metadata available for segment {start_sec}-{end_sec}s")
+
             # Validate output quality
             if self._is_output_incomplete(result):
                 logger.warning(f"Segment {start_sec}-{end_sec}s appears to have incomplete output")
@@ -279,6 +290,8 @@ Focus on actionable insights that coaches and players can use to improve."""
                 end_sec=end_sec,
                 previous_context=previous_context
             )
+
+            # Note: Token usage is logged in the segment analysis method
 
             analyses.append({
                 "segment": i + 1,
