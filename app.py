@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.11.0"
+__version__ = "2.0.0"  # Major version bump - multi-sport support!
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -311,13 +311,35 @@ def format_analysis_as_text(result: dict) -> str:
 def main():
     """Main Streamlit application"""
 
-    # Header
-    st.markdown('<div class="main-header">🏀 Basketball Video Agent</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">Powered by Gemini 2.5 Flash Lite & Google ADK</div>', unsafe_allow_html=True)
-
-    # Sidebar configuration
+    # Sidebar configuration (render first to get sport selection)
     with st.sidebar:
         st.header("⚙️ Configuration")
+
+        # Sport selector
+        sport_options = {
+            "basketball": "🏀 Basketball",
+            "ultimate": "🥏 Ultimate Frisbee"
+        }
+
+        selected_sport = st.selectbox(
+            "Select Sport",
+            options=list(sport_options.keys()),
+            index=0,
+            format_func=lambda x: sport_options[x],
+            help="Choose which sport you're analyzing"
+        )
+
+    # Dynamic header based on selected sport
+    sport_emoji = "🏀" if selected_sport == "basketball" else "🥏"
+    sport_name = "Basketball" if selected_sport == "basketball" else "Ultimate Frisbee"
+
+    st.markdown(f'<div class="main-header">{sport_emoji} {sport_name} Video Agent</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Powered by Gemini 2.5 Flash Lite & Google ADK</div>', unsafe_allow_html=True)
+
+    # Continue sidebar configuration
+    with st.sidebar:
+
+        st.divider()
 
         # Model selector
         model_options = [
@@ -620,10 +642,11 @@ def main():
             st.session_state.video_uri = None
 
             # Initialize the agent
-            with st.spinner("Initializing CoachAI agent..."):
+            agent_name = "CoachAI" if selected_sport == "basketball" else "UltimateAI"
+            with st.spinner(f"Initializing {agent_name} agent..."):
                 try:
-                    agent = create_coach_agent(model_name=selected_model)
-                    st.success("✅ Agent initialized successfully")
+                    agent = create_coach_agent(model_name=selected_model, sport=selected_sport)
+                    st.success(f"✅ {agent_name} agent initialized successfully")
                 except Exception as e:
                     st.error(f"❌ Error initializing agent: {str(e)}")
                     logger.error(f"Agent initialization error: {str(e)}")
@@ -725,36 +748,72 @@ def main():
                             time_range = f"{start_min}:{start_sec:02d} - {end_min}:{end_sec:02d}"
 
                             # Display as an expandable card
-                            shots_per_min = segment_data.get('shots_per_minute', 0)
+                            # Support both old (shots) and new (events) data structures
+                            events = segment_data.get('events', segment_data.get('shots', []))
+                            events_per_min = segment_data.get('events_per_minute', segment_data.get('shots_per_minute', 0))
                             final_class = segment_data.get('final_classification', 'UNKNOWN')
                             initial_class = segment_data.get('initial_classification', 'UNKNOWN')
-                            shots = segment_data.get('shots', [])
+
+                            # Sport-specific labels
+                            if selected_sport == "basketball":
+                                events_label = "Shots/Minute"
+                                events_total_label = "Total Shots"
+                                events_log_label = "Shot Log"
+                            else:  # ultimate
+                                events_label = "Events/Minute"
+                                events_total_label = "Total Events"
+                                events_log_label = "Event Log"
 
                             # Determine emoji based on classification
                             class_emoji = "🏀" if final_class == "GAME" else "🔥" if final_class == "WARMUP" else "❓"
 
                             with st.expander(f"{class_emoji} Segment {seg_num} ({time_range}) - {final_class}", expanded=True):
-                                # Show classification and shot stats
+                                # Show classification and event stats
                                 col1, col2, col3 = st.columns(3)
                                 with col1:
                                     st.metric("Classification", final_class)
                                 with col2:
-                                    st.metric("Shots/Minute", f"{shots_per_min}")
+                                    st.metric(events_label, f"{events_per_min}")
                                 with col3:
-                                    st.metric("Total Shots", len(shots))
+                                    st.metric(events_total_label, len(events))
 
                                 # Show classification override if applicable
                                 if initial_class != final_class:
-                                    st.warning(f"⚠️ Classification overridden: {initial_class} → {final_class} (based on shot frequency)")
+                                    st.warning(f"⚠️ Classification overridden: {initial_class} → {final_class} (based on event frequency)")
 
                                 st.markdown("---")
 
-                                # Show detailed shot log if shots exist
-                                if shots:
-                                    with st.expander(f"📊 Shot Log ({len(shots)} shots)", expanded=False):
-                                        for shot in shots:
-                                            result_icon = "✅" if shot.get('made') else "❌"
-                                            st.text(f"{result_icon} {shot.get('timestamp')}s - {shot.get('player')} - {shot.get('shot_type')} - {'MADE' if shot.get('made') else 'MISSED'}")
+                                # Show detailed event log if events exist
+                                if events:
+                                    with st.expander(f"📊 {events_log_label} ({len(events)} events)", expanded=False):
+                                        for event in events:
+                                            # Basketball-specific shot display
+                                            if selected_sport == "basketball" and event.get('shot_type'):
+                                                result_icon = "✅" if event.get('made') else "❌"
+                                                st.text(f"{result_icon} {event.get('timestamp')}s - {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}")
+                                            # Ultimate-specific event display
+                                            elif selected_sport == "ultimate":
+                                                event_type = event.get('type', 'event').upper()
+                                                timestamp = event.get('timestamp', 0)
+                                                player = event.get('player', 'Unknown')
+
+                                                if event_type == "GOAL":
+                                                    st.text(f"⚽ {timestamp}s - GOAL - {player}")
+                                                elif event_type == "TURNOVER":
+                                                    turnover_type = event.get('turnover_type', 'unknown')
+                                                    st.text(f"🔄 {timestamp}s - TURNOVER - {turnover_type} - {event.get('team', '')}")
+                                                elif event_type == "LAYOUT":
+                                                    success = "✅" if event.get('success') else "❌"
+                                                    st.text(f"🤸 {timestamp}s - LAYOUT - {player} - {success}")
+                                                elif event_type == "HUCK":
+                                                    st.text(f"🎯 {timestamp}s - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
+                                                elif event_type == "BLOCK":
+                                                    st.text(f"🛡️ {timestamp}s - BLOCK - {player} - {event.get('block_type', '')}")
+                                                else:
+                                                    st.text(f"• {timestamp}s - {event_type} - {player}")
+                                            # Generic display
+                                            else:
+                                                st.text(f"• {event.get('timestamp', 0)}s - {event.get('type', 'event')}")
 
                                 st.markdown("**Analysis:**")
                                 st.markdown(analysis_text)
