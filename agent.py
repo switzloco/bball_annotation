@@ -3,9 +3,11 @@ Basketball Video Analysis Agent using Google ADK (google-genai)
 """
 import os
 import re
+import subprocess
 from typing import Optional, Dict, Any, List
 from google import genai
 from google.genai import types
+from google.cloud import storage
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -255,6 +257,62 @@ IMPORTANT: Provide complete, thorough analysis for each segment. Don't cut off m
 Always be thorough, systematic, and professional in your analysis.
 Focus on actionable insights that coaches and players can use to improve."""
 
+    def get_video_duration(self, video_uri: str) -> Optional[int]:
+        """
+        Get video duration in seconds from GCS URI using ffprobe
+
+        Args:
+            video_uri: GCS URI (gs://bucket/path/to/video.mp4)
+
+        Returns:
+            Duration in seconds, or None if unable to determine
+        """
+        try:
+            # Parse GCS URI
+            if not video_uri.startswith("gs://"):
+                logger.error(f"Invalid GCS URI: {video_uri}")
+                return None
+
+            # Extract bucket and blob path
+            uri_parts = video_uri[5:].split("/", 1)
+            bucket_name = uri_parts[0]
+            blob_path = uri_parts[1] if len(uri_parts) > 1 else ""
+
+            # Create signed URL for temporary access
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(bucket_name)
+            blob = bucket.blob(blob_path)
+
+            # Generate signed URL (valid for 5 minutes)
+            signed_url = blob.generate_signed_url(
+                version="v4",
+                expiration=300,  # 5 minutes
+                method="GET"
+            )
+
+            # Use ffprobe to get duration
+            cmd = [
+                'ffprobe',
+                '-v', 'error',
+                '-show_entries', 'format=duration',
+                '-of', 'default=noprint_wrappers=1:nokey=1',
+                signed_url
+            ]
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+
+            if result.returncode == 0:
+                duration = float(result.stdout.strip())
+                logger.info(f"Detected video duration: {duration:.1f} seconds")
+                return int(duration)
+            else:
+                logger.error(f"ffprobe error: {result.stderr}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Error getting video duration: {e}")
+            return None
+
     def analyze_full_video_stream(
         self,
         video_uri: str,
@@ -267,7 +325,7 @@ Focus on actionable insights that coaches and players can use to improve."""
 
         Args:
             video_uri: GCS URI of the video
-            duration_seconds: Total video duration to analyze (if None, assumes 10 minutes)
+            duration_seconds: Total video duration to analyze (if None, auto-detects from video)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
             start_offset: Start time in seconds (skip this much from beginning)
 
@@ -276,12 +334,25 @@ Focus on actionable insights that coaches and players can use to improve."""
         """
         logger.info(f"Starting full video analysis of {video_uri} from {start_offset}s")
 
-        # Default to 10 minutes if not specified
+        # Auto-detect duration if not specified
         if duration_seconds is None:
-            duration_seconds = 600
+            yield {
+                "status": "detecting_duration",
+                "message": "Detecting video duration..."
+            }
+            duration_seconds = self.get_video_duration(video_uri)
+
+            if duration_seconds is None:
+                # Fallback to 10 minutes if detection fails
+                logger.warning("Could not detect video duration, defaulting to 600 seconds")
+                duration_seconds = 600
+            else:
+                logger.info(f"Auto-detected video duration: {duration_seconds}s")
 
         # Calculate number of chunks
-        num_chunks = (duration_seconds + chunk_size - 1) // chunk_size
+        # If video is shorter than chunk_size, use video length as chunk size
+        effective_chunk_size = min(chunk_size, duration_seconds)
+        num_chunks = (duration_seconds + effective_chunk_size - 1) // effective_chunk_size
 
         yield {
             "status": "initialized",
@@ -296,8 +367,8 @@ Focus on actionable insights that coaches and players can use to improve."""
         # Analyze each chunk
         for i in range(num_chunks):
             # Add start_offset to all times
-            start_sec = start_offset + (i * chunk_size)
-            end_sec = start_offset + min((i + 1) * chunk_size, duration_seconds)
+            start_sec = start_offset + (i * effective_chunk_size)
+            end_sec = start_offset + min((i + 1) * effective_chunk_size, duration_seconds)
 
             yield {
                 "status": "processing",

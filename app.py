@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.10.1"
+__version__ = "1.11.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -345,15 +345,25 @@ def main():
 
         st.divider()
 
-        # Video duration input
-        video_duration = st.number_input(
-            "Video Duration (seconds)",
-            min_value=10,
-            max_value=3600,
-            value=600,
-            step=10,
-            help="Estimated total duration of the video"
+        # Video duration - auto-detect by default
+        manual_duration = st.checkbox(
+            "Manually specify video duration",
+            value=False,
+            help="By default, duration is auto-detected from the video. Enable to override."
         )
+
+        video_duration = None
+        if manual_duration:
+            video_duration = st.number_input(
+                "Video Duration (seconds)",
+                min_value=10,
+                max_value=3600,
+                value=600,
+                step=10,
+                help="Manually specify video duration (will override auto-detection)"
+            )
+        else:
+            st.info("📏 Video duration will be auto-detected from the uploaded file")
 
         # Start time / skip option
         start_time = st.number_input(
@@ -646,12 +656,23 @@ def main():
                     logs = []
 
                 # Calculate effective duration based on segment limit and start time
-                effective_duration = video_duration - start_time  # Adjust for start time
+                effective_duration = None  # Will auto-detect if None
+
                 if max_segments is not None:
+                    # If limiting segments, calculate duration from segment count
                     effective_duration = max_segments * chunk_size
                     st.info(f"🎯 Analyzing first {max_segments} segments ({effective_duration} seconds) starting from {start_time}s")
-                elif start_time > 0:
-                    st.info(f"⏩ Starting analysis at {start_time}s, analyzing {effective_duration}s of video")
+                elif video_duration is not None:
+                    # If manual duration specified, adjust for start time
+                    effective_duration = video_duration - start_time
+                    if start_time > 0:
+                        st.info(f"⏩ Starting analysis at {start_time}s, analyzing {effective_duration}s of video")
+                else:
+                    # Auto-detect mode
+                    if start_time > 0:
+                        st.info(f"⏩ Starting analysis at {start_time}s (duration will be auto-detected)")
+                    else:
+                        st.info(f"🎬 Full video will be analyzed (duration will be auto-detected)")
 
                 # Stream the analysis
                 for update in agent.analyze_full_video_stream(
@@ -675,7 +696,10 @@ def main():
                     with log_container:
                         log_placeholder.text("\n".join(logs[-20:]))  # Show last 20 logs
 
-                    if status == "processing":
+                    if status == "detecting_duration":
+                        current_segment_text.info(f"📏 {message}")
+
+                    elif status == "processing":
                         # Show which segment is being analyzed
                         seg_num = update.get("segment", 0)
                         total_segs = update.get("total_segments", 0)
