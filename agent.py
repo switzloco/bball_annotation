@@ -155,13 +155,16 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 ✅ Continuous competitive play, ball possession changing
 ✅ Referee signals and active officiating
 ✅ Fast break action
+✅ Game clock running (visible clock counting down)
 
-**WARMUP / SHOOTAROUND** - Check for ANY of these:
+**WARMUP / SHOOTAROUND / DEAD BALL** - Check for ANY of these:
 ✅ Layup lines
 ✅ Multiple simultaneous shooters
 ✅ Solo shooting practice (no defenders)
 ✅ Drill patterns
 ✅ Casual movement between shots
+✅ **Game clock stopped at 0:00 or not visible**
+✅ **Clock visible but not running** (dead ball, timeout, halftime)
 
 **OTHER NOTABLE EVENTS:**
 - Defensive plays: blocks, steals, rebounds
