@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "1.9.0"
+__version__ = "1.10.0"
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -701,9 +701,38 @@ def main():
                             time_range = f"{start_min}:{start_sec:02d} - {end_min}:{end_sec:02d}"
 
                             # Display as an expandable card
-                            with st.expander(f"📺 Segment {seg_num} ({time_range})", expanded=True):
-                                st.markdown(f"**Time Range:** {start_time}s - {end_time}s")
+                            shots_per_min = segment_data.get('shots_per_minute', 0)
+                            final_class = segment_data.get('final_classification', 'UNKNOWN')
+                            initial_class = segment_data.get('initial_classification', 'UNKNOWN')
+                            shots = segment_data.get('shots', [])
+
+                            # Determine emoji based on classification
+                            class_emoji = "🏀" if final_class == "GAME" else "🔥" if final_class == "WARMUP" else "❓"
+
+                            with st.expander(f"{class_emoji} Segment {seg_num} ({time_range}) - {final_class}", expanded=True):
+                                # Show classification and shot stats
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("Classification", final_class)
+                                with col2:
+                                    st.metric("Shots/Minute", f"{shots_per_min}")
+                                with col3:
+                                    st.metric("Total Shots", len(shots))
+
+                                # Show classification override if applicable
+                                if initial_class != final_class:
+                                    st.warning(f"⚠️ Classification overridden: {initial_class} → {final_class} (based on shot frequency)")
+
                                 st.markdown("---")
+
+                                # Show detailed shot log if shots exist
+                                if shots:
+                                    with st.expander(f"📊 Shot Log ({len(shots)} shots)", expanded=False):
+                                        for shot in shots:
+                                            result_icon = "✅" if shot.get('made') else "❌"
+                                            st.text(f"{result_icon} {shot.get('timestamp')}s - {shot.get('player')} - {shot.get('shot_type')} - {'MADE' if shot.get('made') else 'MISSED'}")
+
+                                st.markdown("**Analysis:**")
                                 st.markdown(analysis_text)
 
                         # Handle highlights

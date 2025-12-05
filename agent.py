@@ -2,6 +2,7 @@
 Basketball Video Analysis Agent using Google ADK (google-genai)
 """
 import os
+import re
 from typing import Optional, Dict, Any, List
 from google import genai
 from google.genai import types
@@ -50,6 +51,36 @@ class VideoAnalysisTool:
 
         return any(truncation_indicators)
 
+    def _parse_shots(self, analysis_text: str) -> List[Dict[str, Any]]:
+        """
+        Parse shot data from analysis text
+
+        Args:
+            analysis_text: The analysis text containing SHOT: entries
+
+        Returns:
+            List of shot dictionaries with timestamp, player, type, result
+        """
+        shots = []
+
+        # Pattern: SHOT: 5s - Tall player white jersey #23 - layup - MADE
+        pattern = r'SHOT:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(MADE|MISSED)'
+
+        for match in re.finditer(pattern, analysis_text, re.IGNORECASE):
+            timestamp = int(match.group(1))
+            player_desc = match.group(2).strip()
+            shot_type = match.group(3).strip().lower()
+            result = match.group(4).strip().upper()
+
+            shots.append({
+                "timestamp": timestamp,
+                "player": player_desc,
+                "shot_type": shot_type,
+                "made": result == "MADE"
+            })
+
+        return shots
+
     def analyze_video_segment(
         self,
         video_uri: str,
@@ -92,56 +123,56 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 
 """
 
-            # Create the prompt - use POSITIVE indicators the model can actually see
+            # Create the prompt - focus on shot enumeration for shots/min analysis
             prompt = f"""{context_section}Analyze this basketball segment from {start_sec} to {end_sec} seconds.
 
-CRITICAL: First determine if this is WARMUP or ACTUAL GAME PLAY.
+**PRIMARY TASK: Enumerate EVERY shot attempt you observe.**
 
-**Step 1 - GAME vs WARMUP Classification:**
+**SHOT FORMAT (use this exact format for EVERY shot):**
+SHOT: [timestamp]s - [Player description] - [shot_type] - [MADE/MISSED]
 
-Look for these POSITIVE indicators:
+Where:
+- timestamp: Seconds into the video when shot was released
+- Player description: Brief visual (jersey color, number if visible, height, identifying features)
+- shot_type: One of: layup, dunk, floater, mid-range, three-pointer, free-throw
+- MADE/MISSED: Whether the shot went in
+
+**Examples:**
+SHOT: 5s - Tall player white jersey #23 - layup - MADE
+SHOT: 12s - Short player red jersey - three-pointer - MISSED
+SHOT: 18s - Player blue jersey dark skin - mid-range - MADE
+
+**CRITICAL: List ALL shots, even in warmups/shootarounds!**
+
+After listing all shots, provide:
+
+**GAME CONTEXT:**
+Indicate if this is [GAME] or [WARMUP] based on these indicators:
 
 **ACTUAL GAME PLAY** - Check for ANY of these:
-✅ **Jump ball / tip-off happening**: Two players jumping for the ball at center court
-✅ **Organized 5v5 action**: One team actively defending while other team has possession
-✅ **Continuous competitive play**: Ball possession changing, players guarding opponents
-✅ **Referee signals**: Refs making calls, pointing, signaling fouls/violations
-✅ **Fast break action**: Team running coordinated offense after getting the ball
+✅ Jump ball / tip-off happening
+✅ Organized 5v5 action with active defense
+✅ Continuous competitive play, ball possession changing
+✅ Referee signals and active officiating
+✅ Fast break action
 
 **WARMUP / SHOOTAROUND** - Check for ANY of these:
-✅ **Layup lines**: Players in line taking turns shooting layups
-✅ **Multiple simultaneous shooters**: Several players shooting at once from different spots
-✅ **Solo shooting practice**: Individual players taking shots with nobody guarding them
-✅ **Drill patterns**: Repetitive practice movements (passing drills, shooting drills)
-✅ **Casual movement**: Players walking, standing around between shots
+✅ Layup lines
+✅ Multiple simultaneous shooters
+✅ Solo shooting practice (no defenders)
+✅ Drill patterns
+✅ Casual movement between shots
 
-**Classification Decision:**
-- If you see ANY "Actual Game" indicators → Tag as **[GAME]**
-- If you see ANY "Warmup" indicators AND zero "Actual Game" indicators → Tag as **[WARMUP]**
-- If unclear, default to **[WARMUP]** to be safe
+**OTHER NOTABLE EVENTS:**
+- Defensive plays: blocks, steals, rebounds
+- Turnovers, fouls
+- Spectacular plays (dunks, half-court shots)
 
-**Step 2 - Analysis:**
-
-**If [WARMUP]:**
-- State clearly: "This segment shows warmup/practice activity."
-- BUT still note spectacular moments:
-  - Half-court shots made
-  - Impressive dunks
-  - Format: "WARMUP - [time]: [description]"
-
-**If [GAME]:**
-Provide factual play-by-play:
-
-1. **Scoring Plays**: Shots made/missed (type: layup/dunk/jumper/3-pointer), which team
-2. **Defensive Actions**: Blocks, steals, rebounds
-3. **Game Flow**: Turnovers, fouls, fast breaks
-4. **Key Moments**: Game-changing plays
-
-**Format Requirements:**
-- Start with classification tag: [GAME] or [WARMUP]
-- Be concise and factual
-- Timestamp key events
-- Focus on observable actions, not inferences"""
+**OUTPUT FORMAT:**
+1. Classification tag: [GAME] or [WARMUP]
+2. List ALL shots using SHOT: format above
+3. Brief context/notable events
+4. Be factual, timestamp everything"""
 
             # Generate content with LOW temperature for factual accuracy
             response = self.client.models.generate_content(
@@ -285,11 +316,29 @@ Focus on actionable insights that coaches and players can use to improve."""
 
             # Note: Token usage is logged in the segment analysis method
 
+            # Parse shots from the analysis
+            shots = self.video_tool._parse_shots(chunk_analysis)
+
+            # Calculate shots per minute
+            segment_duration_min = (end_sec - start_sec) / 60.0
+            shots_per_minute = len(shots) / segment_duration_min if segment_duration_min > 0 else 0
+
+            # Extract initial classification from analysis
+            initial_classification = "WARMUP"  # default
+            if "[GAME]" in chunk_analysis.upper():
+                initial_classification = "GAME"
+            elif "[WARMUP]" in chunk_analysis.upper():
+                initial_classification = "WARMUP"
+
             analyses.append({
                 "segment": i + 1,
                 "start_time": start_sec,
                 "end_time": end_sec,
-                "analysis": chunk_analysis
+                "analysis": chunk_analysis,
+                "shots": shots,
+                "shots_per_minute": round(shots_per_minute, 1),
+                "initial_classification": initial_classification,
+                "final_classification": initial_classification  # Will be updated later
             })
 
             # Extract highlights (including warmup spectacular moments)
@@ -312,6 +361,43 @@ Focus on actionable insights that coaches and players can use to improve."""
                 "segment_data": analyses[-1],
                 "highlight_found": is_highlight
             }
+
+        # Apply retroactive classification based on shots/minute heuristic
+        logger.info("Applying retroactive classification based on shots per minute...")
+        for analysis in analyses:
+            spm = analysis["shots_per_minute"]
+            initial = analysis["initial_classification"]
+
+            # Heuristic thresholds
+            # Warmup: High shot frequency (10+ shots/min) - everyone shooting casually
+            # Game: Lower shot frequency (2-8 shots/min) - possession-based play
+            if spm >= 10:
+                # Very high shot rate = definitely warmup
+                analysis["final_classification"] = "WARMUP"
+                if initial != "WARMUP":
+                    logger.info(f"Segment {analysis['segment']}: Overriding {initial} → WARMUP (shots/min={spm})")
+            elif spm <= 2 and spm > 0:
+                # Very low shot rate = likely game (slow, defensive play)
+                analysis["final_classification"] = "GAME"
+                if initial != "GAME":
+                    logger.info(f"Segment {analysis['segment']}: Overriding {initial} → GAME (shots/min={spm})")
+            elif 2 < spm < 6:
+                # Moderate-low rate = likely game (normal game pace)
+                analysis["final_classification"] = "GAME"
+                if initial != "GAME":
+                    logger.info(f"Segment {analysis['segment']}: Overriding {initial} → GAME (shots/min={spm})")
+            elif 6 <= spm < 10:
+                # Moderate-high rate = could be either, trust model
+                analysis["final_classification"] = initial
+                logger.info(f"Segment {analysis['segment']}: Keeping {initial} (shots/min={spm} - ambiguous)")
+            else:
+                # Keep original classification
+                analysis["final_classification"] = initial
+
+            # Update the analysis text with classification override if changed
+            if analysis["final_classification"] != analysis["initial_classification"]:
+                override_note = f"\n\n**[RETROACTIVE CLASSIFICATION: {analysis['final_classification']} based on {spm} shots/min]**"
+                analysis["analysis"] = analysis["analysis"] + override_note
 
         # Compile final report using LLM
         yield {
