@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.1"  # Fix: Handle None video_duration in stats display
+__version__ = "2.0.2"  # Fix: types.Duration API error in video segment analysis
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
