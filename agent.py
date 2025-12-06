@@ -217,7 +217,8 @@ class BaseSportAgent:
                 method="GET"
             )
 
-            # Use ffprobe to get duration
+            # Use ffprobe to get duration (increased timeout for large videos)
+            logger.info(f"Running ffprobe on video: {blob_path}")
             cmd = [
                 'ffprobe',
                 '-v', 'error',
@@ -226,18 +227,30 @@ class BaseSportAgent:
                 signed_url
             ]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
             if result.returncode == 0:
-                duration = float(result.stdout.strip())
-                logger.info(f"Detected video duration: {duration:.1f} seconds")
-                return int(duration)
+                duration_str = result.stdout.strip()
+                if duration_str:
+                    duration = float(duration_str)
+                    logger.info(f"✅ Detected video duration: {duration:.1f} seconds ({duration/60:.1f} minutes)")
+                    return int(duration)
+                else:
+                    logger.error("ffprobe returned empty duration")
+                    return None
             else:
-                logger.error(f"ffprobe error: {result.stderr}")
+                logger.error(f"❌ ffprobe failed with return code {result.returncode}")
+                logger.error(f"ffprobe stderr: {result.stderr}")
+                logger.error(f"ffprobe stdout: {result.stdout}")
                 return None
 
+        except subprocess.TimeoutExpired:
+            logger.error(f"❌ ffprobe timed out after 60 seconds for video: {blob_path}")
+            return None
         except Exception as e:
-            logger.error(f"Error getting video duration: {e}")
+            logger.error(f"❌ Error getting video duration: {type(e).__name__}: {e}")
+            import traceback
+            logger.error(f"Traceback:\n{traceback.format_exc()}")
             return None
 
     def analyze_full_video_stream(

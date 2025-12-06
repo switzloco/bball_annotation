@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.4"  # Debug: Add detailed error logging for API failures
+__version__ = "2.0.5"  # Fix: Improve duration detection logging and timeout
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
