@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.0"  # Major version bump - multi-sport support!
+__version__ = "2.0.1"  # Fix: Handle None video_duration in stats display
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -606,10 +606,15 @@ def main():
         if max_segments is not None:
             actual_duration = max_segments * chunk_size
             st.metric("Duration", f"{actual_duration // 60} min", delta=f"Limited to {max_segments} segments")
-            st.metric("Chunks", f"{max_segments}", delta=f"of {(video_duration + chunk_size - 1) // chunk_size} total")
-        else:
+            if video_duration is not None:
+                st.metric("Chunks", f"{max_segments}", delta=f"of {(video_duration + chunk_size - 1) // chunk_size} total")
+            else:
+                st.metric("Chunks", f"{max_segments}", delta="Auto-detecting total")
+        elif video_duration is not None:
             st.metric("Duration", f"{video_duration // 60} min")
             st.metric("Chunks", f"{(video_duration + chunk_size - 1) // chunk_size}")
+        else:
+            st.info("📏 Duration will be auto-detected from video")
 
     st.divider()
 
