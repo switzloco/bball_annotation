@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.5"  # Fix: Improve duration detection logging and timeout
+__version__ = "2.0.6"  # Fix: Add line breaks between events for readability
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -791,11 +791,12 @@ def main():
                                 # Show detailed event log if events exist
                                 if events:
                                     with st.expander(f"📊 {events_log_label} ({len(events)} events)", expanded=False):
+                                        event_lines = []
                                         for event in events:
                                             # Basketball-specific shot display
                                             if selected_sport == "basketball" and event.get('shot_type'):
                                                 result_icon = "✅" if event.get('made') else "❌"
-                                                st.text(f"{result_icon} {event.get('timestamp')}s - {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}")
+                                                event_lines.append(f"{result_icon} {event.get('timestamp')}s - {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}")
                                             # Ultimate-specific event display
                                             elif selected_sport == "ultimate":
                                                 event_type = event.get('type', 'event').upper()
@@ -803,22 +804,25 @@ def main():
                                                 player = event.get('player', 'Unknown')
 
                                                 if event_type == "GOAL":
-                                                    st.text(f"⚽ {timestamp}s - GOAL - {player}")
+                                                    event_lines.append(f"⚽ {timestamp}s - GOAL - {player}")
                                                 elif event_type == "TURNOVER":
                                                     turnover_type = event.get('turnover_type', 'unknown')
-                                                    st.text(f"🔄 {timestamp}s - TURNOVER - {turnover_type} - {event.get('team', '')}")
+                                                    event_lines.append(f"🔄 {timestamp}s - TURNOVER - {turnover_type} - {event.get('team', '')}")
                                                 elif event_type == "LAYOUT":
                                                     success = "✅" if event.get('success') else "❌"
-                                                    st.text(f"🤸 {timestamp}s - LAYOUT - {player} - {success}")
+                                                    event_lines.append(f"🤸 {timestamp}s - LAYOUT - {player} - {success}")
                                                 elif event_type == "HUCK":
-                                                    st.text(f"🎯 {timestamp}s - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
+                                                    event_lines.append(f"🎯 {timestamp}s - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
                                                 elif event_type == "BLOCK":
-                                                    st.text(f"🛡️ {timestamp}s - BLOCK - {player} - {event.get('block_type', '')}")
+                                                    event_lines.append(f"🛡️ {timestamp}s - BLOCK - {player} - {event.get('block_type', '')}")
                                                 else:
-                                                    st.text(f"• {timestamp}s - {event_type} - {player}")
+                                                    event_lines.append(f"• {timestamp}s - {event_type} - {player}")
                                             # Generic display
                                             else:
-                                                st.text(f"• {event.get('timestamp', 0)}s - {event.get('type', 'event')}")
+                                                event_lines.append(f"• {event.get('timestamp', 0)}s - {event.get('type', 'event')}")
+
+                                        # Display all events with line breaks for readability
+                                        st.markdown("\n\n".join(event_lines))
 
                                 st.markdown("**Analysis:**")
                                 st.markdown(analysis_text)
