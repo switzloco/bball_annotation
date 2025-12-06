@@ -78,12 +78,16 @@ class VideoAnalysisTool:
         """
         try:
             # Create video part with time range
-            # Note: start_offset and end_offset expect integer seconds directly
+            # Note: VideoMetadata offsets are strings with 's' suffix (e.g., "60s")
             video_part = types.Part.from_uri(
                 file_uri=video_uri,
-                mime_type="video/mp4",
-                start_offset=int(start_sec),
-                end_offset=int(end_sec)
+                mime_type="video/mp4"
+            )
+
+            # Add time range metadata
+            video_part.video_metadata = types.VideoMetadata(
+                start_offset=f"{int(start_sec)}s",
+                end_offset=f"{int(end_sec)}s"
             )
 
             # Generate content with LOW temperature for factual accuracy
