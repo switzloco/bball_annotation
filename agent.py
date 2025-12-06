@@ -125,6 +125,14 @@ class VideoAnalysisTool:
         except Exception as e:
             error_msg = f"Error analyzing segment {start_sec}-{end_sec}s: {str(e)}"
             logger.error(error_msg)
+            logger.error(f"Video URI: {video_uri}")
+            logger.error(f"Time range: {start_sec}s - {end_sec}s")
+            logger.error(f"Prompt length: {len(prompt)} characters")
+
+            # Log the full exception for debugging
+            import traceback
+            logger.error(f"Full traceback:\n{traceback.format_exc()}")
+
             return error_msg
 
 

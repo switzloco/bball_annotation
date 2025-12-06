@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.3"  # Fix: Use VideoMetadata for time offsets
+__version__ = "2.0.4"  # Debug: Add detailed error logging for API failures
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
