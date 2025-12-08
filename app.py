@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.7"  # Feature: Add browser notification on completion
+__version__ = "2.0.8"  # Feature: Human-readable timestamps (MM:SS format)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,6 +22,13 @@ logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
+
+# Utility functions
+def format_timestamp(seconds):
+    """Convert seconds to MM:SS format for human-readable timestamps"""
+    minutes = int(seconds) // 60
+    secs = int(seconds) % 60
+    return f"{minutes}:{secs:02d}"
 
 # Page configuration
 st.set_page_config(
@@ -815,30 +822,32 @@ def main():
                                             # Basketball-specific shot display
                                             if selected_sport == "basketball" and event.get('shot_type'):
                                                 result_icon = "✅" if event.get('made') else "❌"
-                                                event_lines.append(f"{result_icon} {event.get('timestamp')}s - {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}")
+                                                timestamp = format_timestamp(event.get('timestamp', 0))
+                                                event_lines.append(f"{result_icon} {timestamp} - {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}")
                                             # Ultimate-specific event display
                                             elif selected_sport == "ultimate":
                                                 event_type = event.get('type', 'event').upper()
-                                                timestamp = event.get('timestamp', 0)
+                                                timestamp = format_timestamp(event.get('timestamp', 0))
                                                 player = event.get('player', 'Unknown')
 
                                                 if event_type == "GOAL":
-                                                    event_lines.append(f"⚽ {timestamp}s - GOAL - {player}")
+                                                    event_lines.append(f"⚽ {timestamp} - GOAL - {player}")
                                                 elif event_type == "TURNOVER":
                                                     turnover_type = event.get('turnover_type', 'unknown')
-                                                    event_lines.append(f"🔄 {timestamp}s - TURNOVER - {turnover_type} - {event.get('team', '')}")
+                                                    event_lines.append(f"🔄 {timestamp} - TURNOVER - {turnover_type} - {event.get('team', '')}")
                                                 elif event_type == "LAYOUT":
                                                     success = "✅" if event.get('success') else "❌"
-                                                    event_lines.append(f"🤸 {timestamp}s - LAYOUT - {player} - {success}")
+                                                    event_lines.append(f"🤸 {timestamp} - LAYOUT - {player} - {success}")
                                                 elif event_type == "HUCK":
-                                                    event_lines.append(f"🎯 {timestamp}s - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
+                                                    event_lines.append(f"🎯 {timestamp} - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
                                                 elif event_type == "BLOCK":
-                                                    event_lines.append(f"🛡️ {timestamp}s - BLOCK - {player} - {event.get('block_type', '')}")
+                                                    event_lines.append(f"🛡️ {timestamp} - BLOCK - {player} - {event.get('block_type', '')}")
                                                 else:
-                                                    event_lines.append(f"• {timestamp}s - {event_type} - {player}")
+                                                    event_lines.append(f"• {timestamp} - {event_type} - {player}")
                                             # Generic display
                                             else:
-                                                event_lines.append(f"• {event.get('timestamp', 0)}s - {event.get('type', 'event')}")
+                                                timestamp = format_timestamp(event.get('timestamp', 0))
+                                                event_lines.append(f"• {timestamp} - {event.get('type', 'event')}")
 
                                         # Display all events with line breaks for readability
                                         st.markdown("\n\n".join(event_lines))
