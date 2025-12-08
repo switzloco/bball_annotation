@@ -896,6 +896,30 @@ def main():
                 st.subheader("📝 Game Summary")
                 st.markdown(result.get("game_summary", "No summary available"))
 
+                # Player Roster (if available)
+                roster = result.get("roster", [])
+                if roster and len(roster) > 0:
+                    st.divider()
+                    st.subheader("👥 Player Roster")
+                    st.caption(f"Identified {len(roster)} players during warmup segments")
+
+                    # Display roster as cards
+                    cols = st.columns(3)
+                    for idx, player in enumerate(roster):
+                        with cols[idx % 3]:
+                            with st.container():
+                                st.markdown(f"**{player.get('jersey_number', 'Unknown')}** - {player.get('team_color', '')}")
+                                st.text(f"Height: {player.get('height', 'N/A')}")
+                                st.text(f"Build: {player.get('build', 'N/A')}")
+                                st.text(f"Skin: {player.get('skin_tone', 'N/A')}")
+                                st.text(f"Hair: {player.get('hair', 'N/A')}")
+                                st.text(f"Shoes: {player.get('shoes', 'N/A')}")
+                                if player.get('other'):
+                                    st.text(f"Notes: {player.get('other')}")
+                                st.markdown("---")
+
+                st.divider()
+
                 # Segment Analysis
                 st.subheader("🔍 Detailed Segment Analysis")
 
@@ -1019,6 +1043,30 @@ def main():
             # Game Summary
             st.subheader("📝 Game Summary")
             st.markdown(result.get("game_summary", "No summary available"))
+
+            # Player Roster (if available)
+            roster = result.get("roster", [])
+            if roster and len(roster) > 0:
+                st.divider()
+                st.subheader("👥 Player Roster")
+                st.caption(f"Identified {len(roster)} players during warmup segments")
+
+                # Display roster as cards
+                cols = st.columns(3)
+                for idx, player in enumerate(roster):
+                    with cols[idx % 3]:
+                        with st.container():
+                            st.markdown(f"**{player.get('jersey_number', 'Unknown')}** - {player.get('team_color', '')}")
+                            st.text(f"Height: {player.get('height', 'N/A')}")
+                            st.text(f"Build: {player.get('build', 'N/A')}")
+                            st.text(f"Skin: {player.get('skin_tone', 'N/A')}")
+                            st.text(f"Hair: {player.get('hair', 'N/A')}")
+                            st.text(f"Shoes: {player.get('shoes', 'N/A')}")
+                            if player.get('other'):
+                                st.text(f"Notes: {player.get('other')}")
+                            st.markdown("---")
+
+            st.divider()
 
             # Segment Analysis
             st.subheader("🔍 Detailed Segment Analysis")
