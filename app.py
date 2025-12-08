@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.6"  # Fix: Add line breaks between events for readability
+__version__ = "2.0.7"  # Feature: Add browser notification on completion
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -51,6 +51,25 @@ st.markdown("""
         margin-top: 1rem;
     }
 </style>
+
+<script>
+// Request notification permission on page load
+if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+}
+
+// Function to show browser notification
+window.showAnalysisCompleteNotification = function() {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Analysis Complete', {
+            body: 'Video analysis finished. Return to see results.',
+            icon: '🏀',
+            requireInteraction: false,
+            tag: 'analysis-complete'
+        });
+    }
+};
+</script>
 """, unsafe_allow_html=True)
 
 
@@ -850,6 +869,15 @@ def main():
                         st.session_state.analysis_result = result
                         st.session_state.video_uri = video_uri
                         current_segment_text.success("✅ Analysis complete!")
+
+                        # Trigger browser notification
+                        st.components.v1.html("""
+                            <script>
+                            if (window.showAnalysisCompleteNotification) {
+                                window.showAnalysisCompleteNotification();
+                            }
+                            </script>
+                        """, height=0)
 
                 progress_bar.progress(100)
                 status_text.text("✅ Analysis complete!")
