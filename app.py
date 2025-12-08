@@ -832,16 +832,23 @@ def main():
 
                                                 if event_type == "GOAL":
                                                     event_lines.append(f"⚽ {timestamp} - GOAL - {player}")
+                                                elif event_type == "CATCH":
+                                                    catch_type = event.get('catch_type', 'catch')
+                                                    success = "✅" if event.get('success') else "❌"
+                                                    event_lines.append(f"🙌 {timestamp} - CATCH - {player} - {catch_type} - {success}")
+                                                elif event_type == "LAYOUT":
+                                                    success = "✅" if event.get('success') else "❌"
+                                                    event_lines.append(f"🤸 {timestamp} - LAYOUT - {player} - {event.get('action', '')} - {success}")
+                                                elif event_type == "DEFLECTION":
+                                                    deflection_type = event.get('deflection_type', 'deflection')
+                                                    event_lines.append(f"✋ {timestamp} - DEFLECTION - {player} - {deflection_type}")
+                                                elif event_type == "BLOCK":
+                                                    event_lines.append(f"🛡️ {timestamp} - BLOCK - {player} - {event.get('block_type', '')}")
                                                 elif event_type == "TURNOVER":
                                                     turnover_type = event.get('turnover_type', 'unknown')
                                                     event_lines.append(f"🔄 {timestamp} - TURNOVER - {turnover_type} - {event.get('team', '')}")
-                                                elif event_type == "LAYOUT":
-                                                    success = "✅" if event.get('success') else "❌"
-                                                    event_lines.append(f"🤸 {timestamp} - LAYOUT - {player} - {success}")
                                                 elif event_type == "HUCK":
                                                     event_lines.append(f"🎯 {timestamp} - HUCK - {player} - {event.get('result', '')} - {event.get('distance', '')}")
-                                                elif event_type == "BLOCK":
-                                                    event_lines.append(f"🛡️ {timestamp} - BLOCK - {player} - {event.get('block_type', '')}")
                                                 else:
                                                     event_lines.append(f"• {timestamp} - {event_type} - {player}")
                                             # Generic display

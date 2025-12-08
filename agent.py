@@ -751,19 +751,28 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 **EVENT FORMATS (use these exact formats):**
 
 GOAL: [timestamp]s - [Player/team description] - SCORED
-TURNOVER: [timestamp]s - [type: drop/throwaway/block/stall] - [team description]
+CATCH: [timestamp]s - [Player description] - [type: jump/one-handed/diving/contested] - [SUCCESS/FAILED]
 LAYOUT: [timestamp]s - [Player description] - [catch/block] - [SUCCESS/FAILED]
+DEFLECTION: [timestamp]s - [Player description] - [type: hand-block/knock-down/tipped]
+BLOCK: [timestamp]s - [Player description] - [type: layout/poach/mark/clean]
+TURNOVER: [timestamp]s - [type: drop/throwaway/block/stall] - [team description]
 HUCK: [timestamp]s - [Player description] - [completed/incomplete] - [distance: short/medium/deep]
-BLOCK: [timestamp]s - [Player description] - [type: layout/poach/mark]
 
 **Examples:**
 GOAL: 15s - Red jersey #7 - SCORED
-TURNOVER: 23s - drop - White team
-LAYOUT: 45s - Tall player dark jersey - catch - SUCCESS
-HUCK: 67s - Player white #23 - completed - deep
-BLOCK: 89s - Short player red team - layout
+CATCH: 23s - White #12 - jump catch - SUCCESS
+CATCH: 45s - Tall dark jersey - one-handed - SUCCESS
+LAYOUT: 67s - Red team player - catch - SUCCESS
+DEFLECTION: 89s - White #5 - hand-block - caused turnover
+BLOCK: 112s - Short player red team - layout
+TURNOVER: 134s - drop - White team
+HUCK: 156s - Player white #23 - completed - deep
 
-**CRITICAL: List ALL events, even in warmups!**
+**CRITICAL: Track ALL highlight-worthy plays!**
+- EVERY jump catch, diving catch, or difficult reception
+- EVERY defensive deflection, hand block, or tipped disc
+- ALL goals, layouts, blocks, turnovers
+- This is for HIGHLIGHT DETECTION, not just strategy
 
 After listing all events, provide:
 
@@ -805,10 +814,12 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
         # Patterns for different event types
         patterns = {
             "goal": r'GOAL:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*SCORED',
-            "turnover": r'TURNOVER:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "catch": r'CATCH:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
             "layout": r'LAYOUT:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
-            "huck": r'HUCK:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "deflection": r'DEFLECTION:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
             "block": r'BLOCK:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "turnover": r'TURNOVER:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "huck": r'HUCK:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(.+)',
         }
 
         for event_type, pattern in patterns.items():
@@ -822,20 +833,27 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 
                 if event_type == "goal":
                     event["player"] = match.group(2).strip()
-                elif event_type == "turnover":
-                    event["turnover_type"] = match.group(2).strip()
-                    event["team"] = match.group(3).strip()
+                elif event_type == "catch":
+                    event["player"] = match.group(2).strip()
+                    event["catch_type"] = match.group(3).strip()
+                    event["success"] = match.group(4).strip().upper() == "SUCCESS"
                 elif event_type == "layout":
                     event["player"] = match.group(2).strip()
                     event["action"] = match.group(3).strip()
                     event["success"] = match.group(4).strip().upper() == "SUCCESS"
+                elif event_type == "deflection":
+                    event["player"] = match.group(2).strip()
+                    event["deflection_type"] = match.group(3).strip()
+                elif event_type == "block":
+                    event["player"] = match.group(2).strip()
+                    event["block_type"] = match.group(3).strip()
+                elif event_type == "turnover":
+                    event["turnover_type"] = match.group(2).strip()
+                    event["team"] = match.group(3).strip()
                 elif event_type == "huck":
                     event["player"] = match.group(2).strip()
                     event["result"] = match.group(3).strip()
                     event["distance"] = match.group(4).strip()
-                elif event_type == "block":
-                    event["player"] = match.group(2).strip()
-                    event["block_type"] = match.group(3).strip()
 
                 events.append(event)
 
