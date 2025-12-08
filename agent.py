@@ -183,6 +183,15 @@ class BaseSportAgent:
         """Return sport-specific prompt for final game summary"""
         raise NotImplementedError("Subclasses must implement get_compilation_prompt()")
 
+    def parse_roster(self, analysis_text: str) -> List[Dict[str, Any]]:
+        """
+        Parse player roster from analysis text (optional - override in subclasses)
+
+        Returns:
+            List of player profile dictionaries
+        """
+        return []  # Default: no roster parsing
+
     # Shared infrastructure methods
     def get_video_duration(self, video_uri: str) -> Optional[int]:
         """
@@ -336,6 +345,9 @@ class BaseSportAgent:
             # Parse events from the analysis
             events = self.parse_events(chunk_analysis)
 
+            # Parse roster profiles (warmup segments only, for sports that support it)
+            roster_profiles = self.parse_roster(chunk_analysis)
+
             # Calculate events per minute
             segment_duration_min = (end_sec - start_sec) / 60.0
             events_per_minute = len(events) / segment_duration_min if segment_duration_min > 0 else 0
@@ -353,6 +365,7 @@ class BaseSportAgent:
                 "end_time": end_sec,
                 "analysis": chunk_analysis,
                 "events": events,
+                "roster_profiles": roster_profiles,  # Player profiles from this segment
                 "events_per_minute": round(events_per_minute, 1),
                 "initial_classification": initial_classification,
                 "final_classification": initial_classification  # Will be updated later
@@ -423,6 +436,18 @@ class BaseSportAgent:
         except Exception as e:
             game_summary = f"Error generating summary: {str(e)}"
 
+        # Aggregate roster from all segments (deduplicate by jersey number)
+        full_roster = {}
+        for analysis in analyses:
+            for profile in analysis.get("roster_profiles", []):
+                jersey_num = profile.get("jersey_number", "Unknown")
+                # Keep first sighting of each jersey number (warmup gives best view)
+                if jersey_num not in full_roster:
+                    full_roster[jersey_num] = profile
+
+        roster_list = list(full_roster.values())
+        logger.info(f"Built roster with {len(roster_list)} players identified")
+
         # Final result
         final_result = {
             "video_uri": video_uri,
@@ -430,7 +455,8 @@ class BaseSportAgent:
             "num_segments": num_chunks,
             "segment_analyses": analyses,
             "highlights": highlights,
-            "game_summary": game_summary
+            "game_summary": game_summary,
+            "roster": roster_list  # Aggregated player roster
         }
 
         yield {
@@ -546,6 +572,22 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 ✅ **Game clock stopped at 0:00 or not visible**
 ✅ **Clock visible but not running** (dead ball, timeout, halftime)
 
+**IF [WARMUP]: BUILD PLAYER ROSTER**
+
+When you identify warmup/shootaround, describe players to build a roster:
+
+**PLAYER FORMAT (use this exact format):**
+PLAYER: [Jersey #] - [Team/Jersey color] - [Height: tall/medium/short] - [Build: slim/athletic/stocky] - [Skin tone] - [Hair: style/color] - [Shoes: color/notable features] - [Other: accessories, tattoos, etc.]
+
+**Examples:**
+PLAYER: #23 - White jersey - tall - athletic - light skin - short dark hair - white/red sneakers - arm sleeve on right arm
+PLAYER: #7 - Blue jersey - medium height - stocky - dark skin - bald - black shoes - headband
+PLAYER: #15 - White jersey - short - slim - medium skin - long braided hair - orange sneakers - wristbands
+
+**Note:** Outfits may change (halftime, different games), so focus on:
+- Permanent features: height, build, skin tone, hair
+- Current outfit: jersey color/number, shoes, accessories
+
 **OTHER NOTABLE EVENTS:**
 - Defensive plays: blocks, steals, rebounds
 - Turnovers, fouls
@@ -554,8 +596,9 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 **OUTPUT FORMAT:**
 1. Classification tag: [GAME] or [WARMUP]
 2. List ALL shots using SHOT: format above
-3. Brief context/notable events
-4. Be factual, timestamp everything"""
+3. IF [WARMUP]: List visible PLAYER profiles (focus on clear views)
+4. Brief context/notable events
+5. Be factual, timestamp everything"""
 
     def parse_events(self, analysis_text: str) -> List[Dict[str, Any]]:
         """Parse shots from basketball analysis"""
@@ -578,6 +621,36 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
             })
 
         return shots
+
+    def parse_roster(self, analysis_text: str) -> List[Dict[str, Any]]:
+        """Parse player roster profiles from warmup analysis"""
+        roster = []
+
+        # Pattern: PLAYER: #23 - White jersey - tall - athletic - light skin - short dark hair - white/red sneakers - arm sleeve
+        pattern = r'PLAYER:\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*([^-]+?)(?:\s*-\s*(.+))?$'
+
+        for match in re.finditer(pattern, analysis_text, re.IGNORECASE | re.MULTILINE):
+            jersey_num = match.group(1).strip()
+            team_color = match.group(2).strip()
+            height = match.group(3).strip()
+            build = match.group(4).strip()
+            skin_tone = match.group(5).strip()
+            hair = match.group(6).strip()
+            shoes = match.group(7).strip()
+            other = match.group(8).strip() if match.group(8) else ""
+
+            roster.append({
+                "jersey_number": jersey_num,
+                "team_color": team_color,
+                "height": height,
+                "build": build,
+                "skin_tone": skin_tone,
+                "hair": hair,
+                "shoes": shoes,
+                "other": other
+            })
+
+        return roster
 
     def apply_classification_heuristic(self, events: List[Dict], segment_duration_min: float, initial_classification: str) -> str:
         """Apply shots-per-minute heuristic for basketball"""
