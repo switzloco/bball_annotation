@@ -30,6 +30,105 @@ def format_timestamp(seconds):
     secs = int(seconds) % 60
     return f"{minutes}:{secs:02d}"
 
+def render_video_player_with_events(video_uri, result, selected_sport):
+    """
+    Render video player with clickable event timestamps (fault-tolerant)
+
+    Args:
+        video_uri: GCS URI for the video
+        result: Analysis result dictionary with events
+        selected_sport: Sport type (basketball/ultimate)
+    """
+    try:
+        st.divider()
+        with st.expander("🎥 Video Player with Event Navigation", expanded=False):
+            st.caption("Click any timestamp below to jump to that moment in the video")
+
+            # Try to render video player
+            try:
+                st.video(video_uri)
+            except Exception as video_error:
+                st.warning(f"⚠️ Could not load video player: {str(video_error)}")
+                st.info("💡 Video playback unavailable, but event timestamps are still listed below")
+
+            # Collect all events from all segments
+            all_events = []
+            for segment in result.get("segment_analyses", []):
+                events = segment.get("events", [])
+                all_events.extend(events)
+
+            # Sort events by timestamp
+            all_events.sort(key=lambda e: e.get('timestamp', 0))
+
+            if all_events:
+                st.markdown("### 🎯 Quick Jump to Events")
+
+                # Create unique ID for this video player
+                player_id = "video_player_" + str(hash(video_uri))[:8]
+
+                # Render clickable event list
+                event_lines = []
+                for event in all_events:
+                    timestamp_sec = event.get('timestamp', 0)
+                    timestamp_str = format_timestamp(timestamp_sec)
+
+                    # Create event description based on sport
+                    if selected_sport == "basketball":
+                        if event.get('shot_type'):
+                            result_icon = "✅" if event.get('made') else "❌"
+                            desc = f"{result_icon} {event.get('player')} - {event.get('shot_type')} - {'MADE' if event.get('made') else 'MISSED'}"
+                            event_lines.append(f'<a href="#" onclick="seekToTime({timestamp_sec}); return false;" style="text-decoration: none; color: inherit;">{timestamp_str} - {desc}</a>')
+                    elif selected_sport == "ultimate":
+                        event_type = event.get('type', '').upper()
+                        player = event.get('player', 'Unknown')
+
+                        if event_type == "GOAL":
+                            desc = f"⚽ GOAL - {player}"
+                        elif event_type == "CATCH":
+                            catch_type = event.get('catch_type', 'catch')
+                            success = "✅" if event.get('success') else "❌"
+                            desc = f"🙌 CATCH - {player} - {catch_type} - {success}"
+                        elif event_type == "LAYOUT":
+                            success = "✅" if event.get('success') else "❌"
+                            desc = f"🤸 LAYOUT - {player} - {success}"
+                        elif event_type == "DEFLECTION":
+                            desc = f"✋ DEFLECTION - {player}"
+                        elif event_type == "BLOCK":
+                            desc = f"🛡️ BLOCK - {player}"
+                        elif event_type == "TURNOVER":
+                            desc = f"🔄 TURNOVER - {event.get('turnover_type', '')}"
+                        elif event_type == "HUCK":
+                            desc = f"🎯 HUCK - {player}"
+                        else:
+                            desc = f"• {event_type} - {player}"
+
+                        event_lines.append(f'<a href="#" onclick="seekToTime({timestamp_sec}); return false;" style="text-decoration: none; color: inherit;">{timestamp_str} - {desc}</a>')
+
+                # JavaScript for video seeking
+                js_code = """
+                <script>
+                function seekToTime(seconds) {
+                    // Find the video element on the page
+                    var videos = document.getElementsByTagName('video');
+                    if (videos.length > 0) {
+                        videos[0].currentTime = seconds;
+                        videos[0].play();
+                    }
+                }
+                </script>
+                """
+
+                # Render events with JavaScript
+                st.components.v1.html(js_code + "<div style='line-height: 2.0;'>" + "<br>".join(event_lines) + "</div>", height=min(len(event_lines) * 40, 600), scrolling=True)
+            else:
+                st.info("No events detected in this analysis")
+
+    except Exception as e:
+        # Silently fail - don't break the main analysis display
+        logger.warning(f"Video player component failed: {str(e)}")
+        # Optionally show a minimal error message
+        st.info("📹 Video player unavailable - analysis results shown below")
+
 # Page configuration
 st.set_page_config(
     page_title="Basketball Video Agent",
@@ -912,6 +1011,9 @@ def main():
                 st.subheader("📝 Game Summary")
                 st.markdown(result.get("game_summary", "No summary available"))
 
+                # Video Player with Event Navigation (fault-tolerant)
+                render_video_player_with_events(video_uri, result, selected_sport)
+
                 # Player Roster (if available)
                 roster = result.get("roster", [])
                 if roster and len(roster) > 0:
@@ -1059,6 +1161,9 @@ def main():
             # Game Summary
             st.subheader("📝 Game Summary")
             st.markdown(result.get("game_summary", "No summary available"))
+
+            # Video Player with Event Navigation (fault-tolerant)
+            render_video_player_with_events(saved_video_uri, result, selected_sport)
 
             # Player Roster (if available)
             roster = result.get("roster", [])
