@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.2.0"  # Feature: Segment retry with Gemini 3 models
+__version__ = "2.3.0"  # Feature: AI-powered player name updates via chat
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -1243,6 +1243,112 @@ def main():
                 if total_tokens > 0:
                     st.caption(f"💰 Token breakdown: {token_usage.get('prompt_tokens', 0):,} prompt + {token_usage.get('output_tokens', 0):,} output = {total_tokens:,} total")
 
+                # Player Name Chat Interface
+                st.divider()
+                st.subheader("💬 Update Player Names with AI")
+                st.caption("Tell the AI which player is which (e.g., 'White #23 is LeBron James') and it will rewrite the entire analysis with real names")
+
+                # Initialize chat history in session state
+                if 'player_name_chat_history' not in st.session_state:
+                    st.session_state.player_name_chat_history = []
+
+                # Display chat history
+                if st.session_state.player_name_chat_history:
+                    with st.expander("📜 Chat History", expanded=False):
+                        for msg in st.session_state.player_name_chat_history:
+                            if msg['role'] == 'user':
+                                st.markdown(f"**You:** {msg['content']}")
+                            else:
+                                st.markdown(f"**AI:** {msg['content']}")
+
+                # Chat input
+                chat_col1, chat_col2 = st.columns([5, 1])
+                with chat_col1:
+                    player_input = st.text_input(
+                        "Tell me about a player:",
+                        placeholder="e.g., 'Tall player white #23 is LeBron James' or 'Update blue #7 to Stephen Curry'",
+                        key="player_name_input_live"
+                    )
+                with chat_col2:
+                    update_names = st.button("Update", use_container_width=True, key="update_names_live")
+
+                if update_names and player_input:
+                    with st.spinner("AI is updating player names throughout the analysis..."):
+                        try:
+                            # Create agent for name replacement
+                            if selected_sport == "basketball":
+                                from agent import BasketballAgent
+                                chat_agent = BasketballAgent(model_name=selected_model)
+                            else:
+                                from agent import UltimateAgent
+                                chat_agent = UltimateAgent(model_name=selected_model)
+
+                            # Build prompt for Gemini to update names
+                            update_prompt = f"""You are helping update a sports video analysis by replacing player descriptions with actual names.
+
+User instruction: {player_input}
+
+Current analysis data (JSON):
+{json.dumps(result, indent=2)}
+
+Task:
+1. Identify which player description the user is referring to (jersey number, team color, physical description)
+2. Replace ALL occurrences of that player description with the actual name throughout:
+   - segment_analyses (all analysis text and events)
+   - roster (player profiles)
+   - game_summary
+   - highlights
+3. Be consistent - replace the description everywhere it appears
+4. Preserve all other data (timestamps, token counts, classifications, etc.)
+5. Return ONLY the updated JSON data, nothing else
+
+Return the complete updated result JSON."""
+
+                            # Call Gemini to update names
+                            response = chat_agent.client.models.generate_content(
+                                model=selected_model,
+                                contents=update_prompt,
+                                config=types.GenerateContentConfig(
+                                    temperature=0.1,  # Low temperature for accuracy
+                                    max_output_tokens=8192
+                                )
+                            )
+
+                            # Parse the updated JSON
+                            updated_result_text = response.text.strip()
+                            # Remove markdown code blocks if present
+                            if updated_result_text.startswith("```"):
+                                updated_result_text = updated_result_text.split("```")[1]
+                                if updated_result_text.startswith("json"):
+                                    updated_result_text = updated_result_text[4:]
+
+                            updated_result = json.loads(updated_result_text)
+
+                            # Update session state with new result
+                            st.session_state.analysis_result = updated_result
+                            result = updated_result  # Update local variable
+
+                            # Add to chat history
+                            st.session_state.player_name_chat_history.append({
+                                'role': 'user',
+                                'content': player_input
+                            })
+                            st.session_state.player_name_chat_history.append({
+                                'role': 'assistant',
+                                'content': f"✅ Updated! I've replaced that player description with the name throughout the entire analysis."
+                            })
+
+                            st.success("✅ Player names updated throughout the analysis!")
+                            st.rerun()
+
+                        except json.JSONDecodeError as e:
+                            st.error(f"❌ Failed to parse AI response: {str(e)}")
+                            st.code(response.text[:500])
+                        except Exception as e:
+                            st.error(f"❌ Error updating names: {str(e)}")
+                            import traceback
+                            st.code(traceback.format_exc())
+
                 # Export Results Section
                 st.divider()
                 st.subheader("💾 Export Results")
@@ -1464,6 +1570,112 @@ def main():
             # Show detailed token breakdown if available
             if total_tokens > 0:
                 st.caption(f"💰 Token breakdown: {token_usage.get('prompt_tokens', 0):,} prompt + {token_usage.get('output_tokens', 0):,} output = {total_tokens:,} total")
+
+            # Player Name Chat Interface
+            st.divider()
+            st.subheader("💬 Update Player Names with AI")
+            st.caption("Tell the AI which player is which (e.g., 'White #23 is LeBron James') and it will rewrite the entire analysis with real names")
+
+            # Initialize chat history in session state
+            if 'player_name_chat_history' not in st.session_state:
+                st.session_state.player_name_chat_history = []
+
+            # Display chat history
+            if st.session_state.player_name_chat_history:
+                with st.expander("📜 Chat History", expanded=False):
+                    for msg in st.session_state.player_name_chat_history:
+                        if msg['role'] == 'user':
+                            st.markdown(f"**You:** {msg['content']}")
+                        else:
+                            st.markdown(f"**AI:** {msg['content']}")
+
+            # Chat input
+            chat_col1, chat_col2 = st.columns([5, 1])
+            with chat_col1:
+                player_input = st.text_input(
+                    "Tell me about a player:",
+                    placeholder="e.g., 'Tall player white #23 is LeBron James' or 'Update blue #7 to Stephen Curry'",
+                    key="player_name_input_saved"
+                )
+            with chat_col2:
+                update_names = st.button("Update", use_container_width=True, key="update_names_saved")
+
+            if update_names and player_input:
+                with st.spinner("AI is updating player names throughout the analysis..."):
+                    try:
+                        # Create agent for name replacement
+                        if selected_sport == "basketball":
+                            from agent import BasketballAgent
+                            chat_agent = BasketballAgent(model_name=selected_model)
+                        else:
+                            from agent import UltimateAgent
+                            chat_agent = UltimateAgent(model_name=selected_model)
+
+                        # Build prompt for Gemini to update names
+                        update_prompt = f"""You are helping update a sports video analysis by replacing player descriptions with actual names.
+
+User instruction: {player_input}
+
+Current analysis data (JSON):
+{json.dumps(result, indent=2)}
+
+Task:
+1. Identify which player description the user is referring to (jersey number, team color, physical description)
+2. Replace ALL occurrences of that player description with the actual name throughout:
+   - segment_analyses (all analysis text and events)
+   - roster (player profiles)
+   - game_summary
+   - highlights
+3. Be consistent - replace the description everywhere it appears
+4. Preserve all other data (timestamps, token counts, classifications, etc.)
+5. Return ONLY the updated JSON data, nothing else
+
+Return the complete updated result JSON."""
+
+                        # Call Gemini to update names
+                        response = chat_agent.client.models.generate_content(
+                            model=selected_model,
+                            contents=update_prompt,
+                            config=types.GenerateContentConfig(
+                                temperature=0.1,  # Low temperature for accuracy
+                                max_output_tokens=8192
+                            )
+                        )
+
+                        # Parse the updated JSON
+                        updated_result_text = response.text.strip()
+                        # Remove markdown code blocks if present
+                        if updated_result_text.startswith("```"):
+                            updated_result_text = updated_result_text.split("```")[1]
+                            if updated_result_text.startswith("json"):
+                                updated_result_text = updated_result_text[4:]
+
+                        updated_result = json.loads(updated_result_text)
+
+                        # Update session state with new result
+                        st.session_state.analysis_result = updated_result
+                        result = updated_result  # Update local variable
+
+                        # Add to chat history
+                        st.session_state.player_name_chat_history.append({
+                            'role': 'user',
+                            'content': player_input
+                        })
+                        st.session_state.player_name_chat_history.append({
+                            'role': 'assistant',
+                            'content': f"✅ Updated! I've replaced that player description with the name throughout the entire analysis."
+                        })
+
+                        st.success("✅ Player names updated throughout the analysis!")
+                        st.rerun()
+
+                    except json.JSONDecodeError as e:
+                        st.error(f"❌ Failed to parse AI response: {str(e)}")
+                        st.code(response.text[:500])
+                    except Exception as e:
+                        st.error(f"❌ Error updating names: {str(e)}")
+                        import traceback
+                        st.code(traceback.format_exc())
 
             # Export Results Section
             st.divider()
