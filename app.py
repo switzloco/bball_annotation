@@ -954,17 +954,30 @@ def main():
 
                             with st.expander(f"{class_emoji} Segment {seg_num} ({time_range}) - {final_class}", expanded=True):
                                 # Show classification and event stats
-                                col1, col2, col3 = st.columns(3)
+                                col1, col2, col3, col4 = st.columns(4)
                                 with col1:
                                     st.metric("Classification", final_class)
                                 with col2:
                                     st.metric(events_label, f"{events_per_min}")
                                 with col3:
                                     st.metric(events_total_label, len(events))
+                                with col4:
+                                    # Token usage
+                                    token_usage = segment_data.get('token_usage', {})
+                                    total_tokens = token_usage.get('total_tokens', 0)
+                                    if total_tokens > 0:
+                                        st.metric("Tokens", f"{total_tokens:,}")
+                                    else:
+                                        st.metric("Tokens", "N/A")
 
                                 # Show classification override if applicable
                                 if initial_class != final_class:
                                     st.warning(f"⚠️ Classification overridden: {initial_class} → {final_class} (based on event frequency)")
+
+                                # Show detailed token breakdown
+                                token_usage = segment_data.get('token_usage', {})
+                                if token_usage.get('total_tokens', 0) > 0:
+                                    st.caption(f"📊 Token breakdown: {token_usage.get('prompt_tokens', 0):,} prompt (inc. video) + {token_usage.get('output_tokens', 0):,} output = {token_usage.get('total_tokens', 0):,} total")
 
                                 st.markdown("---")
 
@@ -1125,6 +1138,12 @@ def main():
 
                 # Statistics DataFrame
                 st.subheader("📊 Analysis Statistics")
+
+                # Get token usage
+                token_usage = result.get("total_token_usage", {})
+                total_tokens = token_usage.get("total_tokens", 0)
+                token_display = f"{total_tokens:,}" if total_tokens > 0 else "N/A"
+
                 stats_data = {
                     "Metric": [
                         "Video URI",
@@ -1132,7 +1151,8 @@ def main():
                         "Number of Segments",
                         "Chunk Size",
                         "Model Used",
-                        "Highlights Found"
+                        "Highlights Found",
+                        "Total Tokens Used"
                     ],
                     "Value": [
                         result.get("video_uri", "N/A"),
@@ -1140,11 +1160,16 @@ def main():
                         result.get("num_segments", 0),
                         f"{chunk_size} seconds",
                         selected_model,
-                        len(highlights)
+                        len(highlights),
+                        token_display
                     ]
                 }
                 df_stats = pd.DataFrame(stats_data)
                 st.dataframe(df_stats, use_container_width=True, hide_index=True)
+
+                # Show detailed token breakdown if available
+                if total_tokens > 0:
+                    st.caption(f"💰 Token breakdown: {token_usage.get('prompt_tokens', 0):,} prompt + {token_usage.get('output_tokens', 0):,} output = {total_tokens:,} total")
 
                 # Export Results Section
                 st.divider()
@@ -1276,6 +1301,12 @@ def main():
 
             # Statistics DataFrame
             st.subheader("📊 Analysis Statistics")
+
+            # Get token usage
+            token_usage = result.get("total_token_usage", {})
+            total_tokens = token_usage.get("total_tokens", 0)
+            token_display = f"{total_tokens:,}" if total_tokens > 0 else "N/A"
+
             stats_data = {
                 "Metric": [
                     "Video URI",
@@ -1283,7 +1314,8 @@ def main():
                     "Number of Segments",
                     "Chunk Size",
                     "Model Used",
-                    "Highlights Found"
+                    "Highlights Found",
+                    "Total Tokens Used"
                 ],
                 "Value": [
                     result.get("video_uri", "N/A"),
@@ -1291,11 +1323,16 @@ def main():
                     result.get("num_segments", 0),
                     f"{chunk_size} seconds",
                     selected_model,
-                    len(highlights)
+                    len(highlights),
+                    token_display
                 ]
             }
             df_stats = pd.DataFrame(stats_data)
             st.dataframe(df_stats, use_container_width=True, hide_index=True)
+
+            # Show detailed token breakdown if available
+            if total_tokens > 0:
+                st.caption(f"💰 Token breakdown: {token_usage.get('prompt_tokens', 0):,} prompt + {token_usage.get('output_tokens', 0):,} output = {total_tokens:,} total")
 
             # Export Results Section
             st.divider()

@@ -62,7 +62,7 @@ class VideoAnalysisTool:
         end_sec: float,
         prompt: str,
         previous_context: Optional[str] = None
-    ) -> str:
+    ) -> tuple[str, dict]:
         """
         Analyze a specific segment of video using provided sport-specific prompt
 
@@ -74,7 +74,7 @@ class VideoAnalysisTool:
             previous_context: Context from previous segment for continuity
 
         Returns:
-            Analysis text from the model
+            Tuple of (analysis_text, token_usage_dict)
         """
         try:
             # Create video part with time range
@@ -102,16 +102,22 @@ class VideoAnalysisTool:
 
             result = response.text
 
-            # Log token usage for debugging
+            # Extract token usage metadata
+            token_usage = {}
             if hasattr(response, 'usage_metadata'):
                 usage = response.usage_metadata
+                token_usage = {
+                    "prompt_tokens": getattr(usage, 'prompt_token_count', 0),
+                    "output_tokens": getattr(usage, 'candidates_token_count', 0),
+                    "total_tokens": getattr(usage, 'total_token_count', 0)
+                }
                 logger.info(f"Segment {start_sec}-{end_sec}s token usage:")
-                logger.info(f"  - Prompt tokens: {usage.prompt_token_count if hasattr(usage, 'prompt_token_count') else 'N/A'}")
-                logger.info(f"  - Video tokens: Included in prompt tokens")
-                logger.info(f"  - Output tokens: {usage.candidates_token_count if hasattr(usage, 'candidates_token_count') else 'N/A'}")
-                logger.info(f"  - Total tokens: {usage.total_token_count if hasattr(usage, 'total_token_count') else 'N/A'}")
+                logger.info(f"  - Prompt tokens: {token_usage['prompt_tokens']} (includes video)")
+                logger.info(f"  - Output tokens: {token_usage['output_tokens']}")
+                logger.info(f"  - Total tokens: {token_usage['total_tokens']}")
             else:
                 logger.warning(f"No usage metadata available for segment {start_sec}-{end_sec}s")
+                token_usage = {"prompt_tokens": 0, "output_tokens": 0, "total_tokens": 0}
 
             # Validate output quality
             if self._is_output_incomplete(result):
@@ -120,7 +126,7 @@ class VideoAnalysisTool:
                 result = f"{result}\n\n⚠️ [Note: This segment analysis may be incomplete. Consider using shorter chunk sizes.]"
 
             logger.info(f"Successfully analyzed segment {start_sec}-{end_sec}s")
-            return result
+            return result, token_usage
 
         except Exception as e:
             error_msg = f"Error analyzing segment {start_sec}-{end_sec}s: {str(e)}"
@@ -133,7 +139,7 @@ class VideoAnalysisTool:
             import traceback
             logger.error(f"Full traceback:\n{traceback.format_exc()}")
 
-            return error_msg
+            return error_msg, {"prompt_tokens": 0, "output_tokens": 0, "total_tokens": 0}
 
 
 class BaseSportAgent:
@@ -334,7 +340,7 @@ class BaseSportAgent:
             prompt = self.get_analysis_prompt(start_sec, end_sec, previous_context)
 
             # Analyze segment
-            chunk_analysis = self.video_tool.analyze_video_segment(
+            chunk_analysis, token_usage = self.video_tool.analyze_video_segment(
                 video_uri=video_uri,
                 start_sec=start_sec,
                 end_sec=end_sec,
@@ -368,7 +374,8 @@ class BaseSportAgent:
                 "roster_profiles": roster_profiles,  # Player profiles from this segment
                 "events_per_minute": round(events_per_minute, 1),
                 "initial_classification": initial_classification,
-                "final_classification": initial_classification  # Will be updated later
+                "final_classification": initial_classification,  # Will be updated later
+                "token_usage": token_usage  # Token counts for this segment
             })
 
             # Extract highlights (sport-agnostic keywords + [game] tag)
@@ -448,6 +455,13 @@ class BaseSportAgent:
         roster_list = list(full_roster.values())
         logger.info(f"Built roster with {len(roster_list)} players identified")
 
+        # Calculate total token usage across all segments
+        total_prompt_tokens = sum(a.get("token_usage", {}).get("prompt_tokens", 0) for a in analyses)
+        total_output_tokens = sum(a.get("token_usage", {}).get("output_tokens", 0) for a in analyses)
+        total_tokens = sum(a.get("token_usage", {}).get("total_tokens", 0) for a in analyses)
+
+        logger.info(f"Total token usage: {total_tokens:,} ({total_prompt_tokens:,} prompt + {total_output_tokens:,} output)")
+
         # Final result
         final_result = {
             "video_uri": video_uri,
@@ -456,7 +470,12 @@ class BaseSportAgent:
             "segment_analyses": analyses,
             "highlights": highlights,
             "game_summary": game_summary,
-            "roster": roster_list  # Aggregated player roster
+            "roster": roster_list,  # Aggregated player roster
+            "total_token_usage": {
+                "prompt_tokens": total_prompt_tokens,
+                "output_tokens": total_output_tokens,
+                "total_tokens": total_tokens
+            }
         }
 
         yield {
