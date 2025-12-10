@@ -551,7 +551,13 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 
         return f"""{context_section}Analyze this basketball segment from {start_sec} to {end_sec} seconds.
 
-**PRIMARY TASK: Enumerate EVERY shot attempt you observe.**
+**🚨 CRITICAL: FOCUS ON PRIMARY GAME ONLY**
+- Ignore any background courts, distant games, or TV screens visible in the background
+- Only analyze the main/foreground basketball action being filmed
+- Background movement (other courts, warm-ups in distance, screens) should NOT be counted
+- Focus on the closest/primary court that the camera is focused on
+
+**PRIMARY TASK: Enumerate EVERY shot attempt you observe in the PRIMARY game.**
 
 **SHOT FORMAT (use this exact format for EVERY shot):**
 SHOT: [timestamp]s - [Player description] - [shot_type] - [MADE/MISSED]
@@ -765,7 +771,13 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 
         return f"""{context_section}Analyze this ultimate frisbee segment from {start_sec} to {end_sec} seconds.
 
-**PRIMARY TASK: Enumerate EVERY significant event you observe.**
+**🚨 CRITICAL: FOCUS ON PRIMARY GAME ONLY**
+- Ignore any background fields, distant games, or screens visible in the background
+- Only analyze the main/foreground ultimate frisbee action being filmed
+- Background activity (other fields, warm-ups in distance, spectators) should NOT be counted
+- Focus on the closest/primary field that the camera is focused on
+
+**PRIMARY TASK: Enumerate EVERY significant event you observe in the PRIMARY game.**
 
 **EVENT FORMATS (use these exact formats):**
 
