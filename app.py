@@ -531,6 +531,7 @@ def main():
             "gemini-2.5-flash",
             "gemini-2.0-flash-exp",
             "gemini-2.5-pro",
+            "gemini-3-pro-preview",
         ]
 
         # Model descriptions for help text
@@ -539,6 +540,7 @@ def main():
             "gemini-2.5-flash": "Better accuracy than lite, good balance",
             "gemini-2.0-flash-exp": "Experimental, higher accuracy",
             "gemini-2.5-pro": "Best accuracy & reasoning (default)",
+            "gemini-3-pro-preview": "Gemini 3 - Latest preview (best for video)",
         }
 
         selected_model = st.selectbox(
@@ -1146,7 +1148,7 @@ def main():
                                 retry_model = st.selectbox(
                                     "Model:",
                                     options=model_options,
-                                    index=3,  # Default to gemini-2.5-pro for retries
+                                    index=4,  # Default to gemini-3-pro-preview for retries
                                     format_func=lambda x: model_descriptions[x],
                                     key=f"retry_model_live_{seg_num}"
                                 )
@@ -1474,7 +1476,7 @@ Return the complete updated result JSON."""
                             retry_model = st.selectbox(
                                 "Model:",
                                 options=model_options,
-                                index=3,  # Default to gemini-2.5-pro for retries
+                                index=4,  # Default to gemini-3-pro-preview for retries
                                 format_func=lambda x: model_descriptions[x],
                                 key=f"retry_model_saved_{seg_num}"
                             )
