@@ -145,12 +145,12 @@ class BaseSportAgent:
     implement prompts, event parsing, and heuristics.
     """
 
-    def __init__(self, model_name: str = "gemini-2.5-flash-lite", sport_name: str = "Generic Sport"):
+    def __init__(self, model_name: str = "gemini-2.5-pro", sport_name: str = "Generic Sport"):
         """
         Initialize the base sport agent
 
         Args:
-            model_name: The Gemini model to use (default: gemini-2.5-flash-lite)
+            model_name: The Gemini model to use (default: gemini-2.5-pro)
             sport_name: Display name for the sport
         """
         self.model_name = model_name
@@ -496,7 +496,7 @@ class BaseSportAgent:
 class BasketballAgent(BaseSportAgent):
     """Basketball-specific video analysis agent"""
 
-    def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
+    def __init__(self, model_name: str = "gemini-2.5-pro"):
         super().__init__(model_name=model_name, sport_name="Basketball")
 
     def get_system_instruction(self) -> str:
@@ -710,7 +710,7 @@ Be insightful, creative, and provide depth beyond just describing what happened.
 class UltimateAgent(BaseSportAgent):
     """Ultimate Frisbee-specific video analysis agent"""
 
-    def __init__(self, model_name: str = "gemini-2.5-flash-lite"):
+    def __init__(self, model_name: str = "gemini-2.5-pro"):
         super().__init__(model_name=model_name, sport_name="Ultimate Frisbee")
 
     def get_system_instruction(self) -> str:

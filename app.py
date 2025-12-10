@@ -476,16 +476,16 @@ def main():
 
         # Model descriptions for help text
         model_descriptions = {
-            "gemini-2.5-flash-lite": "Fast & cost-effective (default)",
+            "gemini-2.5-flash-lite": "Fast & cost-effective",
             "gemini-2.5-flash": "Better accuracy than lite, good balance",
             "gemini-2.0-flash-exp": "Experimental, higher accuracy",
-            "gemini-2.5-pro": "Best accuracy & reasoning (slower, higher cost)",
+            "gemini-2.5-pro": "Best accuracy & reasoning (default)",
         }
 
         selected_model = st.selectbox(
             "Select Model",
             options=model_options,
-            index=0,
+            index=3,  # Default to gemini-2.5-pro
             format_func=lambda x: f"{x.replace('gemini-', '')} - {model_descriptions[x]}",
             help="Higher-tier models (2.0-flash-exp, 2.5-pro) are better at distinguishing warmups from game play"
         )
