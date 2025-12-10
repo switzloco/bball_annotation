@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.0.8"  # Feature: Human-readable timestamps (MM:SS format)
+__version__ = "2.1.0"  # Feature: Video player with clickable timestamp navigation
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
