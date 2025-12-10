@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.1.0"  # Feature: Video player with clickable timestamp navigation
+__version__ = "2.1.1"  # Feature: Auto gs:// prefix + signed URLs for video playback
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -46,7 +46,13 @@ def render_video_player_with_events(video_uri, result, selected_sport):
 
             # Try to render video player
             try:
-                st.video(video_uri)
+                # Generate signed URL for playback (st.video doesn't support gs:// URIs)
+                if video_uri.startswith("gs://"):
+                    playback_url = generate_signed_playback_url(video_uri)
+                    st.video(playback_url)
+                else:
+                    # Already an HTTPS URL
+                    st.video(video_uri)
             except Exception as video_error:
                 st.warning(f"⚠️ Could not load video player: {str(video_error)}")
                 st.info("💡 Video playback unavailable, but event timestamps are still listed below")
@@ -177,6 +183,50 @@ window.showAnalysisCompleteNotification = function() {
 };
 </script>
 """, unsafe_allow_html=True)
+
+
+def generate_signed_playback_url(gcs_uri: str, expiration_hours: int = 168) -> str:
+    """
+    Generate a signed URL for video playback from GCS
+
+    Args:
+        gcs_uri: GCS URI (gs://bucket/path/to/file.mp4)
+        expiration_hours: Hours until URL expires (default: 168 = 7 days)
+
+    Returns:
+        Signed HTTPS URL for playback
+    """
+    try:
+        # Parse GCS URI
+        if not gcs_uri.startswith("gs://"):
+            raise ValueError("Invalid GCS URI - must start with gs://")
+
+        # Remove gs:// prefix and split bucket/blob
+        path = gcs_uri[5:]  # Remove "gs://"
+        parts = path.split("/", 1)
+        if len(parts) != 2:
+            raise ValueError("Invalid GCS URI format")
+
+        bucket_name = parts[0]
+        blob_name = parts[1]
+
+        # Create storage client and get blob
+        storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(blob_name)
+
+        # Generate signed URL valid for specified hours
+        signed_url = blob.generate_signed_url(
+            version="v4",
+            expiration=expiration_hours * 3600,  # Convert hours to seconds
+            method="GET"
+        )
+
+        return signed_url
+
+    except Exception as e:
+        logger.error(f"Error generating playback URL for {gcs_uri}: {str(e)}")
+        raise e
 
 
 def generate_signed_upload_url(file_name: str, bucket_name: str, content_type: str = "video/mp4") -> dict:
@@ -594,6 +644,11 @@ def main():
             )
 
             if gcs_input:
+                # Auto-add gs:// prefix if missing
+                if not gcs_input.startswith("gs://"):
+                    gcs_input = "gs://" + gcs_input
+                    st.info(f"ℹ️ Auto-added gs:// prefix: {gcs_input}")
+
                 # Verify GCS file
                 with st.spinner("Verifying GCS file..."):
                     if verify_gcs_file(gcs_input):
