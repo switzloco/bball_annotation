@@ -54,8 +54,17 @@ def render_video_player_with_events(video_uri, result, selected_sport):
                     # Already an HTTPS URL
                     st.video(video_uri)
             except Exception as video_error:
-                st.warning(f"⚠️ Could not load video player: {str(video_error)}")
-                st.info("💡 Video playback unavailable, but event timestamps are still listed below")
+                error_str = str(video_error)
+                st.warning(f"⚠️ Could not load video player")
+
+                # Provide helpful context for common errors
+                if "private key" in error_str or "credentials" in error_str:
+                    st.info("💡 **Note:** Video playback requires service account credentials with signing permissions. " +
+                           "Compute Engine credentials don't support URL signing. The clickable event timestamps below still work!")
+                else:
+                    st.info(f"💡 Video playback unavailable: {error_str}")
+
+                st.caption("You can still use the clickable timestamps below to navigate - just copy the time and jump manually in your video player.")
 
             # Collect all events from all segments
             all_events = []
@@ -1079,12 +1088,14 @@ def main():
 
                 st.divider()
 
+                # Video Player with Event Navigation (fault-tolerant) - FIRST for easy navigation
+                render_video_player_with_events(video_uri, result, selected_sport)
+
+                st.divider()
+
                 # Game Summary
                 st.subheader("📝 Game Summary")
                 st.markdown(result.get("game_summary", "No summary available"))
-
-                # Video Player with Event Navigation (fault-tolerant)
-                render_video_player_with_events(video_uri, result, selected_sport)
 
                 # Player Roster (if available)
                 roster = result.get("roster", [])
@@ -1299,12 +1310,14 @@ def main():
             st.success("🎉 Showing saved analysis results")
             st.divider()
 
+            # Video Player with Event Navigation (fault-tolerant) - FIRST for easy navigation
+            render_video_player_with_events(saved_video_uri, result, selected_sport)
+
+            st.divider()
+
             # Game Summary
             st.subheader("📝 Game Summary")
             st.markdown(result.get("game_summary", "No summary available"))
-
-            # Video Player with Event Navigation (fault-tolerant)
-            render_video_player_with_events(saved_video_uri, result, selected_sport)
 
             # Player Roster (if available)
             roster = result.get("roster", [])
