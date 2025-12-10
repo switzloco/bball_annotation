@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.1.1"  # Feature: Auto gs:// prefix + signed URLs for video playback
+__version__ = "2.2.0"  # Feature: Segment retry with Gemini 3 models
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -522,6 +522,8 @@ def main():
             "gemini-2.5-flash",
             "gemini-2.0-flash-exp",
             "gemini-2.5-pro",
+            "gemini-3-pro-image-preview",
+            "gemini-3-pro-preview",
         ]
 
         # Model descriptions for help text
@@ -530,6 +532,8 @@ def main():
             "gemini-2.5-flash": "Better accuracy than lite, good balance",
             "gemini-2.0-flash-exp": "Experimental, higher accuracy",
             "gemini-2.5-pro": "Best accuracy & reasoning (default)",
+            "gemini-3-pro-image-preview": "Gemini 3 - Best video/image understanding",
+            "gemini-3-pro-preview": "Gemini 3 - Latest experimental model",
         }
 
         selected_model = st.selectbox(
@@ -1123,8 +1127,65 @@ def main():
 
                     # Display full analyses in expandable sections
                     for segment in result.get("segment_analyses", []):
-                        with st.expander(f"Segment {segment['segment']} ({segment['start_time']}-{segment['end_time']}s)"):
+                        seg_num = segment['segment']
+                        with st.expander(f"Segment {seg_num} ({segment['start_time']}-{segment['end_time']}s)"):
                             st.write(segment["analysis"])
+
+                            # Retry section
+                            st.markdown("---")
+                            st.caption("🔄 Not satisfied with this segment? Re-analyze with a better model:")
+                            retry_col1, retry_col2 = st.columns([3, 1])
+                            with retry_col1:
+                                retry_model = st.selectbox(
+                                    "Model:",
+                                    options=model_options,
+                                    index=model_options.index("gemini-3-pro-image-preview") if "gemini-3-pro-image-preview" in model_options else 4,
+                                    format_func=lambda x: model_descriptions[x],
+                                    key=f"retry_model_live_{seg_num}"
+                                )
+                            with retry_col2:
+                                if st.button("Re-analyze", key=f"retry_live_{seg_num}", use_container_width=True):
+                                    # Re-analyze this segment
+                                    with st.spinner(f"Re-analyzing segment {seg_num} with {retry_model}..."):
+                                        try:
+                                            # Create agent with new model
+                                            if selected_sport == "basketball":
+                                                from agent import BasketballAgent
+                                                retry_agent = BasketballAgent(model_name=retry_model)
+                                            else:
+                                                from agent import UltimateAgent
+                                                retry_agent = UltimateAgent(model_name=retry_model)
+
+                                            # Get the analysis prompt
+                                            prompt = retry_agent.get_analysis_prompt(
+                                                segment['start_time'],
+                                                segment['end_time'],
+                                                None  # No previous context for retry
+                                            )
+
+                                            # Re-analyze the segment
+                                            new_analysis, new_tokens = retry_agent.video_tool.analyze_video_segment(
+                                                video_uri=video_uri,
+                                                start_sec=segment['start_time'],
+                                                end_sec=segment['end_time'],
+                                                prompt=prompt
+                                            )
+
+                                            # Parse events from new analysis
+                                            new_events = retry_agent.parse_events(new_analysis)
+
+                                            # Update segment in result
+                                            segment['analysis'] = new_analysis
+                                            segment['events'] = new_events
+                                            segment['token_usage'] = new_tokens
+
+                                            # Update session state
+                                            st.session_state.analysis_result = result
+
+                                            st.success(f"✅ Segment {seg_num} re-analyzed with {retry_model}!")
+                                            st.rerun()
+                                        except Exception as e:
+                                            st.error(f"❌ Retry failed: {str(e)}")
 
                 # Highlights
                 st.subheader("⭐ Highlight Moments")
@@ -1286,8 +1347,65 @@ def main():
 
                 # Display full analyses in expandable sections
                 for segment in result.get("segment_analyses", []):
-                    with st.expander(f"Segment {segment['segment']} ({segment['start_time']}-{segment['end_time']}s)"):
+                    seg_num = segment['segment']
+                    with st.expander(f"Segment {seg_num} ({segment['start_time']}-{segment['end_time']}s)"):
                         st.write(segment["analysis"])
+
+                        # Retry section
+                        st.markdown("---")
+                        st.caption("🔄 Not satisfied with this segment? Re-analyze with a better model:")
+                        retry_col1, retry_col2 = st.columns([3, 1])
+                        with retry_col1:
+                            retry_model = st.selectbox(
+                                "Model:",
+                                options=model_options,
+                                index=model_options.index("gemini-3-pro-image-preview") if "gemini-3-pro-image-preview" in model_options else 4,
+                                format_func=lambda x: model_descriptions[x],
+                                key=f"retry_model_saved_{seg_num}"
+                            )
+                        with retry_col2:
+                            if st.button("Re-analyze", key=f"retry_saved_{seg_num}", use_container_width=True):
+                                # Re-analyze this segment
+                                with st.spinner(f"Re-analyzing segment {seg_num} with {retry_model}..."):
+                                    try:
+                                        # Create agent with new model
+                                        if selected_sport == "basketball":
+                                            from agent import BasketballAgent
+                                            retry_agent = BasketballAgent(model_name=retry_model)
+                                        else:
+                                            from agent import UltimateAgent
+                                            retry_agent = UltimateAgent(model_name=retry_model)
+
+                                        # Get the analysis prompt
+                                        prompt = retry_agent.get_analysis_prompt(
+                                            segment['start_time'],
+                                            segment['end_time'],
+                                            None  # No previous context for retry
+                                        )
+
+                                        # Re-analyze the segment
+                                        new_analysis, new_tokens = retry_agent.video_tool.analyze_video_segment(
+                                            video_uri=saved_video_uri,
+                                            start_sec=segment['start_time'],
+                                            end_sec=segment['end_time'],
+                                            prompt=prompt
+                                        )
+
+                                        # Parse events from new analysis
+                                        new_events = retry_agent.parse_events(new_analysis)
+
+                                        # Update segment in result
+                                        segment['analysis'] = new_analysis
+                                        segment['events'] = new_events
+                                        segment['token_usage'] = new_tokens
+
+                                        # Update session state
+                                        st.session_state.analysis_result = result
+
+                                        st.success(f"✅ Segment {seg_num} re-analyzed with {retry_model}!")
+                                        st.rerun()
+                                    except Exception as e:
+                                        st.error(f"❌ Retry failed: {str(e)}")
 
             # Highlights
             st.subheader("⭐ Highlight Moments")
