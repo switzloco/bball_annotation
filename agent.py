@@ -28,8 +28,15 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
-# Helper Functions for Tiled Vision Pipeline
+# Helper Functions
 # ============================================================================
+
+def format_timestamp(seconds: int) -> str:
+    """Convert seconds to MM:SS format for human-readable timestamps"""
+    minutes = int(seconds) // 60
+    secs = int(seconds) % 60
+    return f"{minutes}:{secs:02d}"
+
 
 def check_ffmpeg_available() -> bool:
     """Check if ffmpeg is available on the system"""
@@ -797,7 +804,7 @@ class BaseSportAgent:
 
             if is_highlight:
                 highlights.append({
-                    "time": f"{start_sec}-{end_sec}s",
+                    "time": f"{format_timestamp(start_sec)} - {format_timestamp(end_sec)}",
                     "description": chunk_analysis[:200] + "..."
                 })
 
