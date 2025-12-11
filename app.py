@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.4.0"  # Feature: Gemini 3 models + background game filtering
+__version__ = "3.0.0"  # Feature: Hybrid Tiled-Vision Pipeline (Two-Pass Architecture)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -622,6 +622,56 @@ def main():
 
         st.divider()
 
+        # High Fidelity Mode controls
+        st.subheader("🎨 Analysis Quality")
+
+        high_fidelity = st.checkbox(
+            "High Fidelity Mode (Tiled Vision)",
+            value=False,
+            help="Enable for 4K/wide-angle footage. Uses Two-Pass Architecture: (1) Temporal Filter (fast), (2) Tiled Vision (slow but prevents Visual Erasure of small players)."
+        )
+
+        hf_threshold = 2.0
+        hf_fps = 3
+
+        if high_fidelity:
+            st.info("""
+            🔬 **High Fidelity Mode Enabled**
+
+            **Pass 1:** Temporal filtering (Native Video)
+            - Fast analysis to find active play
+
+            **Pass 2:** Tiled vision on active segments
+            - 3 FPS frame extraction
+            - 3 vertical tiles per frame (20% overlap)
+            - ~3,360 tokens per timestamp
+            - Biomechanical fidelity for small players
+
+            ⚠️ **~10x slower, ~4x more accurate**
+            """)
+
+            hf_threshold = st.slider(
+                "Activity Threshold (events/min)",
+                min_value=1.0,
+                max_value=10.0,
+                value=2.0,
+                step=0.5,
+                help="Only apply Tiled Vision to segments with events/min above this threshold. Lower = more segments analyzed with high fidelity."
+            )
+
+            hf_fps = st.slider(
+                "Tiled Vision FPS",
+                min_value=1,
+                max_value=5,
+                value=3,
+                step=1,
+                help="Frame extraction rate for Tiled Vision. Higher = more frames but slower. 3 FPS is recommended."
+            )
+
+            st.caption(f"💡 Tip: Lower threshold ({hf_threshold}) = more segments analyzed with Tiled Vision")
+
+        st.divider()
+
         # Environment info
         st.info(f"""
         **GCP Project:** {os.getenv('GCP_PROJECT_ID', 'Not set')}
@@ -900,7 +950,10 @@ def main():
                     video_uri=video_uri,
                     duration_seconds=effective_duration,
                     chunk_size=chunk_size,
-                    start_offset=start_time
+                    start_offset=start_time,
+                    high_fidelity=high_fidelity,
+                    hf_threshold=hf_threshold,
+                    hf_fps=hf_fps
                 ):
                     status = update.get("status")
                     message = update.get("message", "")
@@ -965,7 +1018,10 @@ def main():
                             # Determine emoji based on classification
                             class_emoji = "🏀" if final_class == "GAME" else "🔥" if final_class == "WARMUP" else "❓"
 
-                            with st.expander(f"{class_emoji} Segment {seg_num} ({time_range}) - {final_class}", expanded=True):
+                            # Check if Pass 2 was applied
+                            pass2_badge = " 🎨" if segment_data.get("pass2_applied", False) else ""
+
+                            with st.expander(f"{class_emoji} Segment {seg_num} ({time_range}) - {final_class}{pass2_badge}", expanded=True):
                                 # Show classification and event stats
                                 col1, col2, col3, col4 = st.columns(4)
                                 with col1:
@@ -986,6 +1042,12 @@ def main():
                                 # Show classification override if applicable
                                 if initial_class != final_class:
                                     st.warning(f"⚠️ Classification overridden: {initial_class} → {final_class} (based on event frequency)")
+
+                                # Show Pass 2 indicator if applicable
+                                if segment_data.get("pass2_applied", False):
+                                    pass1_events_count = len(segment_data.get("pass1_events", []))
+                                    pass2_events_count = len(events)
+                                    st.success(f"🎨 **High Fidelity Mode Applied** - Tiled Vision used for this segment (Pass 1: {pass1_events_count} events → Pass 2: {pass2_events_count} events)")
 
                                 # Show detailed token breakdown
                                 token_usage = segment_data.get('token_usage', {})
@@ -1055,6 +1117,13 @@ def main():
                                 highlights_header.subheader(f"⭐ Highlights Found ({len(live_highlights)})")
                                 for idx, hl in enumerate(live_highlights, 1):
                                     st.warning(f"**Highlight #{idx}** - Segment {hl['segment']} ({hl['time_range']})\n\n{hl['description']}")
+
+                    elif status == "tiling_frames":
+                        # High Fidelity Mode: Pass 2 - Tiled Vision
+                        pass2_current = update.get("pass2_current", 0)
+                        pass2_total = update.get("pass2_total", 0)
+                        seg_num = update.get("segment", 0)
+                        current_segment_text.warning(f"🎬 High Fidelity Pass 2: Extracting & Tiling Frames (Segment {seg_num}, {pass2_current}/{pass2_total})")
 
                     elif status == "compiling":
                         current_segment_text.info("🔄 Compiling final game summary...")

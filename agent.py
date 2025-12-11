@@ -6,14 +6,213 @@ Supports: Basketball, Ultimate Frisbee
 import os
 import re
 import subprocess
-from typing import Optional, Dict, Any, List
+import tempfile
+import base64
+from pathlib import Path
+from typing import Optional, Dict, Any, List, Tuple
 from google import genai
 from google.genai import types
 from google.cloud import storage
 import logging
 
+# Image processing imports (for tiled vision)
+try:
+    from PIL import Image
+    PILLOW_AVAILABLE = True
+except ImportError:
+    PILLOW_AVAILABLE = False
+    logging.warning("Pillow not available - High Fidelity mode will not work")
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+# ============================================================================
+# Helper Functions for Tiled Vision Pipeline
+# ============================================================================
+
+def check_ffmpeg_available() -> bool:
+    """Check if ffmpeg is available on the system"""
+    try:
+        subprocess.run(
+            ['ffmpeg', '-version'],
+            capture_output=True,
+            check=True,
+            timeout=5
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+        return False
+
+
+def calculate_tile_geometry(
+    frame_width: int,
+    num_tiles: int = 3,
+    overlap_ratio: float = 0.20
+) -> List[Tuple[int, int]]:
+    """
+    Calculate tile positions for vertical strips with overlap
+
+    Args:
+        frame_width: Total width of the frame in pixels
+        num_tiles: Number of vertical tiles (default: 3)
+        overlap_ratio: Overlap ratio between adjacent tiles (default: 0.20 = 20%)
+
+    Returns:
+        List of (x_start, tile_width) tuples for each tile
+
+    Example for 3840px width:
+        Returns: [(0, 1477), (1182, 1477), (2363, 1477)]
+        This provides 20% overlap between adjacent tiles
+    """
+    # Calculate strip width: W_strip = W_total / (N - r×(N-1))
+    strip_width = int(frame_width / (num_tiles - overlap_ratio * (num_tiles - 1)))
+
+    # Calculate overlap in pixels
+    overlap_pixels = int(strip_width * overlap_ratio)
+
+    # Calculate starting positions for each tile
+    tiles = []
+    for i in range(num_tiles):
+        if i == 0:
+            # First tile starts at 0
+            x_start = 0
+        else:
+            # Subsequent tiles start at previous_start + strip_width - overlap
+            x_start = tiles[-1][0] + strip_width - overlap_pixels
+
+        # Last tile: adjust width to reach exactly to frame_width
+        if i == num_tiles - 1:
+            actual_width = frame_width - x_start
+        else:
+            actual_width = strip_width
+
+        tiles.append((x_start, actual_width))
+
+    logger.info(f"Tile geometry for {frame_width}px: {tiles}")
+    return tiles
+
+
+def extract_and_tile_frames(
+    video_path: str,
+    start_sec: float,
+    end_sec: float,
+    fps: int = 3,
+    num_tiles: int = 3,
+    overlap_ratio: float = 0.20,
+    output_dir: Optional[str] = None
+) -> List[List[str]]:
+    """
+    Extract frames from video and tile them into vertical strips
+
+    Args:
+        video_path: Path to video file (local or signed URL)
+        start_sec: Start time in seconds
+        end_sec: End time in seconds
+        fps: Frames per second to extract (default: 3)
+        num_tiles: Number of vertical tiles per frame (default: 3)
+        overlap_ratio: Overlap ratio between tiles (default: 0.20)
+        output_dir: Directory to save tiled frames (if None, uses temp dir)
+
+    Returns:
+        List of lists - outer list is frames, inner list is tile paths for each frame
+        Example: [['frame0_tile0.jpg', 'frame0_tile1.jpg', 'frame0_tile2.jpg'],
+                  ['frame1_tile0.jpg', 'frame1_tile1.jpg', 'frame1_tile2.jpg'], ...]
+    """
+    if not PILLOW_AVAILABLE:
+        raise RuntimeError("Pillow is required for tiled vision but not available")
+
+    if not check_ffmpeg_available():
+        raise RuntimeError("ffmpeg is required for tiled vision but not available")
+
+    # Create output directory
+    if output_dir is None:
+        output_dir = tempfile.mkdtemp(prefix="tiled_frames_")
+    else:
+        os.makedirs(output_dir, exist_ok=True)
+
+    output_dir_path = Path(output_dir)
+
+    logger.info(f"Extracting frames from {start_sec}s to {end_sec}s at {fps} FPS")
+
+    # Step 1: Extract frames using ffmpeg
+    # Output pattern: frame_%04d.png
+    frame_pattern = str(output_dir_path / "frame_%04d.png")
+
+    duration = end_sec - start_sec
+
+    ffmpeg_cmd = [
+        'ffmpeg',
+        '-ss', str(start_sec),  # Start time
+        '-i', video_path,  # Input file
+        '-t', str(duration),  # Duration
+        '-vf', f'fps={fps}',  # Frame rate
+        '-q:v', '2',  # High quality (1-31, lower is better)
+        '-y',  # Overwrite output files
+        frame_pattern
+    ]
+
+    try:
+        result = subprocess.run(
+            ffmpeg_cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5 minute timeout
+            check=True
+        )
+        logger.info(f"ffmpeg extraction completed")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"ffmpeg extraction failed: {e.stderr}")
+        raise RuntimeError(f"Frame extraction failed: {e.stderr}")
+    except subprocess.TimeoutExpired:
+        logger.error("ffmpeg extraction timed out after 5 minutes")
+        raise RuntimeError("Frame extraction timed out")
+
+    # Step 2: Find all extracted frames
+    extracted_frames = sorted(output_dir_path.glob("frame_*.png"))
+
+    if not extracted_frames:
+        raise RuntimeError(f"No frames extracted from {video_path}")
+
+    logger.info(f"Extracted {len(extracted_frames)} frames")
+
+    # Step 3: Tile each frame
+    all_tiled_frames = []
+
+    for frame_idx, frame_path in enumerate(extracted_frames):
+        try:
+            # Load frame
+            img = Image.open(frame_path)
+            frame_width, frame_height = img.size
+
+            # Calculate tile geometry (only need to do this once)
+            if frame_idx == 0:
+                tile_geometry = calculate_tile_geometry(
+                    frame_width, num_tiles, overlap_ratio
+                )
+
+            # Crop tiles
+            frame_tiles = []
+            for tile_idx, (x_start, tile_width) in enumerate(tile_geometry):
+                # Crop: (left, top, right, bottom)
+                tile = img.crop((x_start, 0, x_start + tile_width, frame_height))
+
+                # Save tile
+                tile_path = output_dir_path / f"frame_{frame_idx:04d}_tile_{tile_idx}.jpg"
+                tile.save(tile_path, quality=95)
+                frame_tiles.append(str(tile_path))
+
+            all_tiled_frames.append(frame_tiles)
+
+            # Clean up original frame to save space
+            frame_path.unlink()
+
+        except Exception as e:
+            logger.error(f"Error tiling frame {frame_path}: {e}")
+            raise
+
+    logger.info(f"Created {len(all_tiled_frames)} frames with {num_tiles} tiles each")
+    return all_tiled_frames
 
 
 class VideoAnalysisTool:
@@ -155,6 +354,191 @@ class VideoAnalysisTool:
 
             return error_msg, {"prompt_tokens": 0, "output_tokens": 0, "total_tokens": 0}
 
+    def analyze_tiled_sequence(
+        self,
+        video_uri: str,
+        start_sec: float,
+        end_sec: float,
+        prompt: str,
+        fps: int = 3,
+        num_tiles: int = 3,
+        overlap_ratio: float = 0.20
+    ) -> tuple[str, dict]:
+        """
+        Analyze video segment using tiled high-resolution frames (Tiled Vision Pipeline)
+
+        This method implements the "Tiled Vision" approach to overcome the Wide-Angle Paradox.
+        Instead of sending the video URI directly to Gemini (which causes visual erasure due to
+        token compression), we extract frames, tile them into vertical strips, and send them as
+        a sequence of high-resolution images.
+
+        Token allocation:
+        - Native Video: ~258 tokens per 4K frame → Visual Erasure
+        - Tiled Vision: ~1,120 tokens per tile × 3 tiles = ~3,360 tokens per timestamp → Biomechanical fidelity
+
+        Args:
+            video_uri: GCS URI of the video (gs://bucket/path/to/video.mp4)
+            start_sec: Start time in seconds
+            end_sec: End time in seconds
+            prompt: Sport-specific analysis prompt
+            fps: Frames per second to extract (default: 3)
+            num_tiles: Number of vertical tiles per frame (default: 3)
+            overlap_ratio: Horizontal overlap between tiles (default: 0.20)
+
+        Returns:
+            Tuple of (analysis_text, token_usage_dict)
+        """
+        try:
+            # Check dependencies
+            if not PILLOW_AVAILABLE:
+                logger.warning("Pillow not available, falling back to Native Video mode")
+                return self.analyze_video_segment(video_uri, start_sec, end_sec, prompt)
+
+            if not check_ffmpeg_available():
+                logger.warning("ffmpeg not available, falling back to Native Video mode")
+                return self.analyze_video_segment(video_uri, start_sec, end_sec, prompt)
+
+            logger.info(f"🎬 Starting Tiled Vision analysis: {start_sec}-{end_sec}s")
+            logger.info(f"   FPS: {fps}, Tiles: {num_tiles}, Overlap: {overlap_ratio*100}%")
+
+            # Step 1: Generate signed URL for video access
+            logger.info("Generating signed URL for video access...")
+            if not video_uri.startswith("gs://"):
+                raise ValueError("Video URI must be a GCS URI (gs://...)")
+
+            # Parse GCS URI
+            uri_parts = video_uri[5:].split("/", 1)
+            bucket_name = uri_parts[0]
+            blob_path = uri_parts[1] if len(uri_parts) > 1 else ""
+
+            # Create signed URL
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(bucket_name)
+            blob = bucket.blob(blob_path)
+
+            signed_url = blob.generate_signed_url(
+                version="v4",
+                expiration=3600,  # 1 hour
+                method="GET"
+            )
+
+            logger.info("✅ Signed URL generated")
+
+            # Step 2: Extract and tile frames
+            logger.info("Extracting and tiling frames...")
+            tiled_frames = extract_and_tile_frames(
+                video_path=signed_url,
+                start_sec=start_sec,
+                end_sec=end_sec,
+                fps=fps,
+                num_tiles=num_tiles,
+                overlap_ratio=overlap_ratio
+            )
+
+            logger.info(f"✅ Extracted {len(tiled_frames)} frames with {num_tiles} tiles each")
+
+            # Step 3: Create image parts for API
+            # We'll send all tiles in sequence: [frame0_tile0, frame0_tile1, frame0_tile2, frame1_tile0, ...]
+            image_parts = []
+
+            for frame_idx, frame_tiles in enumerate(tiled_frames):
+                for tile_idx, tile_path in enumerate(frame_tiles):
+                    # Read and encode image
+                    with open(tile_path, 'rb') as f:
+                        image_data = f.read()
+
+                    # Create image part
+                    image_part = types.Part.from_bytes(
+                        data=image_data,
+                        mime_type="image/jpeg"
+                    )
+                    image_parts.append(image_part)
+
+            logger.info(f"Created {len(image_parts)} image parts for API")
+
+            # Step 4: Construct enhanced prompt for tiled analysis
+            enhanced_prompt = f"""{prompt}
+
+**TILED VISION MODE ACTIVE**
+
+You are viewing this video segment as a sequence of high-resolution tiled images.
+- Total frames: {len(tiled_frames)}
+- Tiles per frame: {num_tiles} (vertical strips with {overlap_ratio*100}% overlap)
+- Frame rate: {fps} FPS
+- Time range: {start_sec}s to {end_sec}s
+
+The images are ordered as:
+Frame 1: [Left tile, Center tile, Right tile]
+Frame 2: [Left tile, Center tile, Right tile]
+... and so on.
+
+Use the high resolution to detect:
+- Small player movements (cuts, off-ball motion)
+- Biomechanical details (shooting form, defensive stance)
+- Fine-grained spatial relationships
+- Precise ball location and trajectory
+
+Provide your analysis with the same format and structure as requested above."""
+
+            # Step 5: Call Gemini with image sequence
+            logger.info(f"Calling Gemini {self.model_name} with {len(image_parts)} image tiles...")
+
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=[enhanced_prompt] + image_parts,
+                config=types.GenerateContentConfig(
+                    temperature=0.2,
+                    max_output_tokens=4096,
+                )
+            )
+
+            result = response.text
+
+            # Extract token usage
+            token_usage = {}
+            if hasattr(response, 'usage_metadata'):
+                usage = response.usage_metadata
+                token_usage = {
+                    "prompt_tokens": getattr(usage, 'prompt_token_count', 0),
+                    "output_tokens": getattr(usage, 'candidates_token_count', 0),
+                    "total_tokens": getattr(usage, 'total_token_count', 0)
+                }
+                logger.info(f"🎯 Tiled Vision token usage:")
+                logger.info(f"   - Prompt tokens: {token_usage['prompt_tokens']:,} (includes {len(image_parts)} image tiles)")
+                logger.info(f"   - Output tokens: {token_usage['output_tokens']:,}")
+                logger.info(f"   - Total tokens: {token_usage['total_tokens']:,}")
+                logger.info(f"   - Tokens per tile: ~{token_usage['prompt_tokens'] // len(image_parts):,}")
+            else:
+                logger.warning("No usage metadata available")
+                token_usage = {"prompt_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+
+            # Step 6: Cleanup tiled frames
+            logger.info("Cleaning up temporary files...")
+            if tiled_frames:
+                # Get the directory from first tile
+                first_tile_dir = Path(tiled_frames[0][0]).parent
+                try:
+                    import shutil
+                    shutil.rmtree(first_tile_dir)
+                    logger.info("✅ Temporary files cleaned up")
+                except Exception as e:
+                    logger.warning(f"Could not clean up temp directory: {e}")
+
+            logger.info(f"✅ Tiled Vision analysis complete for segment {start_sec}-{end_sec}s")
+            return result, token_usage
+
+        except Exception as e:
+            error_msg = f"Error in Tiled Vision analysis {start_sec}-{end_sec}s: {str(e)}"
+            logger.error(error_msg)
+            logger.error(f"Falling back to Native Video mode")
+
+            # Fallback to native video mode
+            try:
+                return self.analyze_video_segment(video_uri, start_sec, end_sec, prompt)
+            except Exception as fallback_error:
+                logger.error(f"Fallback also failed: {fallback_error}")
+                return error_msg, {"prompt_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+
 
 class BaseSportAgent:
     """
@@ -287,7 +671,10 @@ class BaseSportAgent:
         video_uri: str,
         duration_seconds: Optional[int] = None,
         chunk_size: int = 120,
-        start_offset: int = 0
+        start_offset: int = 0,
+        high_fidelity: bool = False,
+        hf_threshold: float = 2.0,
+        hf_fps: int = 3
     ):
         """
         Analyze a full video with streaming progress updates
@@ -297,6 +684,18 @@ class BaseSportAgent:
             duration_seconds: Total video duration to analyze (if None, auto-detects from video)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
             start_offset: Start time in seconds (skip this much from beginning)
+            high_fidelity: Enable High Fidelity Mode (Tiled Vision Pipeline) (default: False)
+            hf_threshold: Activity threshold for Pass 2 - events per minute (default: 2.0)
+            hf_fps: Frame rate for tiled extraction in FPS (default: 3)
+
+        High Fidelity Mode (Two-Pass Architecture):
+            Pass 1: Temporal Filter using Native Video (fast, cheap)
+            Pass 2: Tiled Vision on active segments (slow, high accuracy)
+
+            When high_fidelity=True:
+            - All segments analyzed with Pass 1 first
+            - Segments with events_per_minute >= hf_threshold re-analyzed with Pass 2
+            - Pass 2 extracts frames at hf_fps and tiles them for biomechanical fidelity
 
         Yields:
             Progress dictionaries with status updates and results
@@ -412,6 +811,79 @@ class BaseSportAgent:
                 "highlight_found": is_highlight
             }
 
+        # HIGH FIDELITY MODE: Pass 2 - Tiled Vision on active segments
+        if high_fidelity:
+            logger.info("=" * 60)
+            logger.info("🎨 HIGH FIDELITY MODE: Starting Pass 2 (Tiled Vision)")
+            logger.info("=" * 60)
+
+            # Identify segments that exceed the activity threshold
+            active_segments = [
+                seg for seg in analyses
+                if seg["events_per_minute"] >= hf_threshold
+            ]
+
+            logger.info(f"Found {len(active_segments)}/{len(analyses)} active segments (≥{hf_threshold} events/min)")
+
+            if active_segments:
+                for idx, segment in enumerate(active_segments, 1):
+                    seg_num = segment["segment"]
+                    start_sec = segment["start_time"]
+                    end_sec = segment["end_time"]
+                    events_pm = segment["events_per_minute"]
+
+                    yield {
+                        "status": "tiling_frames",
+                        "message": f"Pass 2: Tiling segment {idx}/{len(active_segments)} (Seg #{seg_num}, {events_pm} events/min)",
+                        "segment": seg_num,
+                        "pass2_current": idx,
+                        "pass2_total": len(active_segments),
+                        "progress": 90 + (idx / len(active_segments) * 5)  # 90-95%
+                    }
+
+                    logger.info(f"🎬 Pass 2: Re-analyzing segment {seg_num} ({start_sec}-{end_sec}s) with Tiled Vision")
+
+                    try:
+                        # Get sport-specific prompt
+                        prompt = self.get_analysis_prompt(start_sec, end_sec, None)
+
+                        # Analyze with Tiled Vision
+                        tiled_analysis, tiled_tokens = self.video_tool.analyze_tiled_sequence(
+                            video_uri=video_uri,
+                            start_sec=start_sec,
+                            end_sec=end_sec,
+                            prompt=prompt,
+                            fps=hf_fps,
+                            num_tiles=3,
+                            overlap_ratio=0.20
+                        )
+
+                        # Parse events from tiled analysis
+                        tiled_events = self.parse_events(tiled_analysis)
+
+                        # Update segment with Pass 2 results
+                        segment["analysis"] = tiled_analysis
+                        segment["events"] = tiled_events
+                        segment["token_usage"] = tiled_tokens
+                        segment["events_per_minute"] = len(tiled_events) / ((end_sec - start_sec) / 60.0)
+                        segment["pass2_applied"] = True
+
+                        logger.info(f"✅ Pass 2 complete: {len(tiled_events)} events detected (was {len(segment.get('pass1_events', []))})")
+
+                        # Store Pass 1 events for comparison
+                        if "pass1_events" not in segment:
+                            segment["pass1_events"] = segment.get("events", [])
+
+                    except Exception as e:
+                        logger.error(f"❌ Pass 2 failed for segment {seg_num}: {e}")
+                        logger.error("Keeping Pass 1 results for this segment")
+                        segment["pass2_applied"] = False
+                        segment["pass2_error"] = str(e)
+
+                logger.info("✅ Pass 2 (Tiled Vision) complete")
+            else:
+                logger.info("No segments exceeded activity threshold - skipping Pass 2")
+
         # Apply retroactive classification based on sport-specific heuristics
         logger.info("Applying retroactive classification based on event frequency...")
         for analysis in analyses:
@@ -504,7 +976,10 @@ class BaseSportAgent:
         video_uri: str,
         duration_seconds: Optional[int] = None,
         chunk_size: int = 120,
-        start_offset: int = 0
+        start_offset: int = 0,
+        high_fidelity: bool = False,
+        hf_threshold: float = 2.0,
+        hf_fps: int = 3
     ) -> Dict[str, Any]:
         """
         Analyze a full video (non-streaming version)
@@ -514,13 +989,24 @@ class BaseSportAgent:
             duration_seconds: Total video duration (if None, auto-detects)
             chunk_size: Size of each analysis chunk in seconds (default: 120 = 2 minutes)
             start_offset: Start time in seconds (skip this much from beginning)
+            high_fidelity: Enable High Fidelity Mode (Tiled Vision Pipeline) (default: False)
+            hf_threshold: Activity threshold for Pass 2 - events per minute (default: 2.0)
+            hf_fps: Frame rate for tiled extraction in FPS (default: 3)
 
         Returns:
             Dictionary containing play-by-play analysis, highlights, and stats
         """
         # Use the streaming version and collect the final result
         result = None
-        for update in self.analyze_full_video_stream(video_uri, duration_seconds, chunk_size, start_offset):
+        for update in self.analyze_full_video_stream(
+            video_uri,
+            duration_seconds,
+            chunk_size,
+            start_offset,
+            high_fidelity,
+            hf_threshold,
+            hf_fps
+        ):
             if update.get("status") == "complete":
                 result = update.get("result")
         return result
