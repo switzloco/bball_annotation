@@ -1060,18 +1060,18 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 **PRIMARY TASK: Enumerate EVERY shot attempt you observe in the PRIMARY game.**
 
 **SHOT FORMAT (use this exact format for EVERY shot):**
-SHOT: [timestamp]s - [Player description] - [shot_type] - [MADE/MISSED]
+SHOT: [MM:SS] - [Player description] - [shot_type] - [MADE/MISSED]
 
 Where:
-- timestamp: Seconds into the video when shot was released
+- MM:SS: Timestamp in minutes:seconds format (e.g., 0:05, 1:23, 10:45)
 - Player description: Brief visual (jersey color, number if visible, height, identifying features)
 - shot_type: One of: layup, dunk, floater, mid-range, three-pointer, free-throw
 - MADE/MISSED: Whether the shot went in
 
 **Examples:**
-SHOT: 5s - Tall player white jersey #23 - layup - MADE
-SHOT: 12s - Short player red jersey - three-pointer - MISSED
-SHOT: 18s - Player blue jersey dark skin - mid-range - MADE
+SHOT: 0:05 - Tall player white jersey #23 - layup - MADE
+SHOT: 0:12 - Short player red jersey - three-pointer - MISSED
+SHOT: 1:23 - Player blue jersey dark skin - mid-range - MADE
 
 **CRITICAL: List ALL shots, even in warmups/shootarounds!**
 
@@ -1129,14 +1129,24 @@ PLAYER: #15 - White jersey - short - slim - medium skin - long braided hair - or
         """Parse shots from basketball analysis"""
         shots = []
 
-        # Pattern: SHOT: 5s - Tall player white jersey #23 - layup - MADE
-        pattern = r'SHOT:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(MADE|MISSED)'
+        # Pattern: SHOT: 0:05 - Tall player white jersey #23 - layup - MADE
+        # Also supports old format: SHOT: 5s - ...
+        pattern = r'SHOT:\s*(?:(\d+):(\d+)|(\d+)s)\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(MADE|MISSED)'
 
         for match in re.finditer(pattern, analysis_text, re.IGNORECASE):
-            timestamp = int(match.group(1))
-            player_desc = match.group(2).strip()
-            shot_type = match.group(3).strip().lower()
-            result = match.group(4).strip().upper()
+            # Parse timestamp (MM:SS format or legacy seconds format)
+            if match.group(1) is not None:  # MM:SS format
+                minutes = int(match.group(1))
+                seconds = int(match.group(2))
+                timestamp = minutes * 60 + seconds
+                player_desc = match.group(4).strip()
+                shot_type = match.group(5).strip().lower()
+                result = match.group(6).strip().upper()
+            else:  # Legacy seconds format
+                timestamp = int(match.group(3))
+                player_desc = match.group(4).strip()
+                shot_type = match.group(5).strip().lower()
+                result = match.group(6).strip().upper()
 
             shots.append({
                 "timestamp": timestamp,
@@ -1281,23 +1291,23 @@ Use this context to maintain continuity (e.g., if previous was warmup and you se
 
 **EVENT FORMATS (use these exact formats):**
 
-GOAL: [timestamp]s - [Player/team description] - SCORED
-CATCH: [timestamp]s - [Player description] - [type: jump/one-handed/diving/contested] - [SUCCESS/FAILED]
-LAYOUT: [timestamp]s - [Player description] - [catch/block] - [SUCCESS/FAILED]
-DEFLECTION: [timestamp]s - [Player description] - [type: hand-block/knock-down/tipped]
-BLOCK: [timestamp]s - [Player description] - [type: layout/poach/mark/clean]
-TURNOVER: [timestamp]s - [type: drop/throwaway/block/stall] - [team description]
-HUCK: [timestamp]s - [Player description] - [completed/incomplete] - [distance: short/medium/deep]
+GOAL: [MM:SS] - [Player/team description] - SCORED
+CATCH: [MM:SS] - [Player description] - [type: jump/one-handed/diving/contested] - [SUCCESS/FAILED]
+LAYOUT: [MM:SS] - [Player description] - [catch/block] - [SUCCESS/FAILED]
+DEFLECTION: [MM:SS] - [Player description] - [type: hand-block/knock-down/tipped]
+BLOCK: [MM:SS] - [Player description] - [type: layout/poach/mark/clean]
+TURNOVER: [MM:SS] - [type: drop/throwaway/block/stall] - [team description]
+HUCK: [MM:SS] - [Player description] - [completed/incomplete] - [distance: short/medium/deep]
 
 **Examples:**
-GOAL: 15s - Red jersey #7 - SCORED
-CATCH: 23s - White #12 - jump catch - SUCCESS
-CATCH: 45s - Tall dark jersey - one-handed - SUCCESS
-LAYOUT: 67s - Red team player - catch - SUCCESS
-DEFLECTION: 89s - White #5 - hand-block - caused turnover
-BLOCK: 112s - Short player red team - layout
-TURNOVER: 134s - drop - White team
-HUCK: 156s - Player white #23 - completed - deep
+GOAL: 0:15 - Red jersey #7 - SCORED
+CATCH: 0:23 - White #12 - jump catch - SUCCESS
+CATCH: 0:45 - Tall dark jersey - one-handed - SUCCESS
+LAYOUT: 1:07 - Red team player - catch - SUCCESS
+DEFLECTION: 1:29 - White #5 - hand-block - caused turnover
+BLOCK: 1:52 - Short player red team - layout
+TURNOVER: 2:14 - drop - White team
+HUCK: 6:30 - Player white #23 - completed - deep
 
 **CRITICAL: Track ALL highlight-worthy plays!**
 - EVERY jump catch, diving catch, or difficult reception
@@ -1342,20 +1352,29 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
         """Parse events from ultimate frisbee analysis"""
         events = []
 
-        # Patterns for different event types
+        # Helper function to parse timestamp (MM:SS or legacy seconds format)
+        def parse_timestamp(time_str: str) -> int:
+            """Convert MM:SS or seconds format to total seconds"""
+            if ':' in time_str:
+                parts = time_str.split(':')
+                return int(parts[0]) * 60 + int(parts[1])
+            else:
+                return int(time_str.rstrip('s'))
+
+        # Patterns for different event types (support both MM:SS and legacy Xs formats)
         patterns = {
-            "goal": r'GOAL:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*SCORED',
-            "catch": r'CATCH:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
-            "layout": r'LAYOUT:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
-            "deflection": r'DEFLECTION:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
-            "block": r'BLOCK:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
-            "turnover": r'TURNOVER:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*(.+)',
-            "huck": r'HUCK:\s*(\d+)s\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "goal": r'GOAL:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*SCORED',
+            "catch": r'CATCH:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
+            "layout": r'LAYOUT:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(SUCCESS|FAILED)',
+            "deflection": r'DEFLECTION:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "block": r'BLOCK:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "turnover": r'TURNOVER:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*(.+)',
+            "huck": r'HUCK:\s*(\d+(?::\d+|s))\s*-\s*([^-]+?)\s*-\s*([^-]+?)\s*-\s*(.+)',
         }
 
         for event_type, pattern in patterns.items():
             for match in re.finditer(pattern, analysis_text, re.IGNORECASE):
-                timestamp = int(match.group(1))
+                timestamp = parse_timestamp(match.group(1))
 
                 event = {
                     "timestamp": timestamp,
