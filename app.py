@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "2.3.0"  # Feature: AI-powered player name updates via chat
+__version__ = "2.4.0"  # Feature: Gemini 3 models + background game filtering
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
