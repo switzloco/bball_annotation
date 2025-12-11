@@ -91,6 +91,8 @@ class VideoAnalysisTool:
             )
 
             # Generate content with LOW temperature for factual accuracy
+            logger.info(f"Analyzing segment {start_sec}-{end_sec}s with model: {self.model_name}")
+
             response = self.client.models.generate_content(
                 model=self.model_name,
                 contents=[prompt, video_part],
@@ -131,9 +133,21 @@ class VideoAnalysisTool:
         except Exception as e:
             error_msg = f"Error analyzing segment {start_sec}-{end_sec}s: {str(e)}"
             logger.error(error_msg)
+            logger.error(f"Model: {self.model_name}")
             logger.error(f"Video URI: {video_uri}")
             logger.error(f"Time range: {start_sec}s - {end_sec}s")
             logger.error(f"Prompt length: {len(prompt)} characters")
+
+            # Check for specific error types
+            error_str = str(e).lower()
+            if "404" in error_str or "not found" in error_str:
+                if "gemini-3" in self.model_name:
+                    logger.error("⚠️ Gemini 3 model not available. Try:")
+                    logger.error("  1. Use gemini-2.5-pro instead (fully available)")
+                    logger.error("  2. Check if your project has Gemini 3 access")
+                    logger.error("  3. Gemini 3 may require allowlist or newer API version")
+                else:
+                    logger.error(f"⚠️ Model {self.model_name} not found in your project")
 
             # Log the full exception for debugging
             import traceback
