@@ -27,6 +27,12 @@ fi
 echo "📋 Loading environment variables..."
 export $(cat .env | grep -v '^#' | xargs)
 
+# Set service account credentials if key file exists
+if [ -f "key.json" ]; then
+    export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/key.json"
+    echo "🔑 Using service account credentials: key.json"
+fi
+
 # Check required environment variables
 if [ -z "$GCP_PROJECT_ID" ]; then
     echo "❌ Error: GCP_PROJECT_ID not set in .env"
