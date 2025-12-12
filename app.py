@@ -1112,11 +1112,13 @@ def main():
                                 'description': analysis_text[:200] + "..."
                             })
 
-                            # Update highlights section
+                            # Update highlights section - only display the new highlight
+                            highlights_header.subheader(f"⭐ Highlights Found ({len(live_highlights)})")
                             with highlights_container:
-                                highlights_header.subheader(f"⭐ Highlights Found ({len(live_highlights)})")
-                                for idx, hl in enumerate(live_highlights, 1):
-                                    st.warning(f"**Highlight #{idx}** - Segment {hl['segment']} ({hl['time_range']})\n\n{hl['description']}")
+                                # Display only the newly added highlight (the last one)
+                                hl = live_highlights[-1]
+                                idx = len(live_highlights)
+                                st.warning(f"**Highlight #{idx}** - Segment {hl['segment']} ({hl['time_range']})\n\n{hl['description']}")
 
                     elif status == "tiling_frames":
                         # High Fidelity Mode: Pass 2 - Tiled Vision
