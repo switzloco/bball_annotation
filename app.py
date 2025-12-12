@@ -1109,7 +1109,7 @@ def main():
                             live_highlights.append({
                                 'segment': seg_num,
                                 'time_range': time_range,
-                                'description': analysis_text[:200] + "..."
+                                'description': analysis_text
                             })
 
                             # Update highlights section - only display the new highlight
