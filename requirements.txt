@@ -9,3 +9,9 @@ google-cloud-storage>=2.14.0
 pandas>=2.2.0
 python-dotenv>=1.0.0
 pillow>=10.2.0
+
+numpy
+scipy
+torch
+opencv-python-headless
+segment-anything
