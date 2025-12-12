@@ -1089,7 +1089,7 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 
 **ACTUAL GAME PLAY** - Check for ANY of these:
 ✅ Jump ball / tip-off happening
-✅ Organized 5v5 action with active defense
+✅ Organized team play with active defense (any team size: 2v2, 3v3, 4v4, 5v5, etc.)
 ✅ Continuous competitive play, ball possession changing
 ✅ Referee signals and active officiating
 ✅ Fast break action
@@ -1329,11 +1329,13 @@ Indicate if this is [GAME] or [WARMUP] based on these indicators:
 
 **ACTUAL GAME PLAY** - Check for ANY of these:
 ✅ Pull (kickoff) to start point
-✅ Organized 7v7 action with active marking/defense
+✅ Organized team play with active marking/defense (any team size: 4v4, 5v5, 6v6, 7v7, etc. - non-regulation sizes are common!)
 ✅ Continuous competitive play, disc possession changing
 ✅ Stall counts audible
 ✅ Turnovers occurring during play
 ✅ Fast break / transition offense
+
+**NOTE:** Pickup ultimate games often have fewer than regulation 7v7 players. This is totally normal! Focus on whether there's organized competitive play, not the exact player count.
 
 **WARMUP / DRILLS** - Check for ANY of these:
 ✅ Casual throwing back and forth
