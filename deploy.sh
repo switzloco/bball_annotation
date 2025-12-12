@@ -23,7 +23,7 @@ gcloud run deploy $SERVICE_NAME \
   --allow-unauthenticated \
   --min-instances 1 \
   --max-instances 4 \
-  --memory 2Gi \
+  --memory 8Gi \
   --cpu 1 \
   --set-env-vars GCP_PROJECT_ID=$PROJECT_ID,GCP_REGION=$REGION,GCP_BUCKET_NAME=bball_project
 
