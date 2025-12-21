@@ -146,8 +146,8 @@ def render_video_player_with_events(video_uri, result, selected_sport):
 
 # Page configuration
 st.set_page_config(
-    page_title="Basketball Video Agent",
-    page_icon="🏀",
+    page_title="Video Analysis - Deep Dive",
+    page_icon="🎥",
     layout="wide",
     initial_sidebar_state="expanded"
 )

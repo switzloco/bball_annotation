@@ -1018,6 +1018,109 @@ class BaseSportAgent:
                 result = update.get("result")
         return result
 
+    def get_quick_description_prompt(self) -> str:
+        """
+        Return sport-specific prompt for quick video description (for filename generation)
+        Default implementation - can be overridden by subclasses
+        """
+        return f"""Analyze this {self.sport_name} video clip and provide a very concise description suitable for a filename.
+
+Focus on:
+1. The main action or event (e.g., "layup drill", "3v3 scrimmage", "warmup shots", "game highlights")
+2. Key identifying features (player numbers, teams if visible, notable plays)
+3. Keep it SHORT - 3-6 words maximum
+
+Provide ONLY the description, nothing else. No punctuation except hyphens.
+Examples: "red-team-layup-practice", "player-23-three-point-drill", "blue-vs-white-scrimmage"
+
+Description:"""
+
+    def describe_for_filename(
+        self,
+        video_uri: str,
+        max_duration: int = 30
+    ) -> tuple[str, str]:
+        """
+        Generate a brief description of video content suitable for filename
+
+        Args:
+            video_uri: GCS URI of the video
+            max_duration: Maximum seconds to analyze (default: 30 - keeps it quick)
+
+        Returns:
+            Tuple of (description, suggested_filename)
+        """
+        try:
+            # Auto-detect duration if needed
+            duration = self.get_video_duration(video_uri)
+            if duration is None:
+                logger.warning("Could not detect duration, using 30s")
+                duration = 30
+
+            # Limit to max_duration
+            analyze_duration = min(duration, max_duration)
+
+            # Get sport-specific prompt
+            prompt = self.get_quick_description_prompt()
+
+            # Analyze the video (first N seconds only)
+            description, _ = self.video_tool.analyze_video_segment(
+                video_uri=video_uri,
+                start_sec=0,
+                end_sec=analyze_duration,
+                prompt=prompt
+            )
+
+            # Clean up the description
+            description = description.strip()
+
+            # Remove any markdown or extra formatting
+            description = re.sub(r'[*#`]', '', description)
+
+            # Generate filename from description
+            filename = self._generate_filename_from_description(description)
+
+            return description, filename
+
+        except Exception as e:
+            logger.error(f"Error generating description: {e}")
+            return "unknown-video", "unknown-video.mp4"
+
+    def _generate_filename_from_description(self, description: str) -> str:
+        """
+        Convert a description into a safe filename
+
+        Args:
+            description: Text description
+
+        Returns:
+            Safe filename (without extension)
+        """
+        # Convert to lowercase
+        filename = description.lower()
+
+        # Remove special characters, keep only alphanumeric, hyphens, underscores
+        filename = re.sub(r'[^a-z0-9\s\-_]', '', filename)
+
+        # Replace spaces with hyphens
+        filename = re.sub(r'\s+', '-', filename)
+
+        # Remove multiple consecutive hyphens
+        filename = re.sub(r'-+', '-', filename)
+
+        # Trim hyphens from start/end
+        filename = filename.strip('-')
+
+        # Limit length (max 50 chars for filename)
+        if len(filename) > 50:
+            filename = filename[:50].rstrip('-')
+
+        # Ensure it's not empty
+        if not filename:
+            filename = "video"
+
+        return filename
+
 
 class BasketballAgent(BaseSportAgent):
     """Basketball-specific video analysis agent"""
