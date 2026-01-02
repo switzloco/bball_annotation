@@ -8,7 +8,7 @@ An intelligent sports video analysis system powered by **Gemini 2.5 Flash Lite**
 
 ## 🎯 Overview
 
-This multi-page application provides comprehensive sports video analysis with two main modes:
+This multi-page application provides comprehensive sports video analysis with three main modes:
 
 ### 🎥 Deep Analysis (Main Page)
 Analyzes full game footage systematically, breaking down videos into configurable chunks to provide:
@@ -19,13 +19,21 @@ Analyzes full game footage systematically, breaking down videos into configurabl
 - **Strategic insights** - Analysis of offensive/defensive patterns and team performance
 - **Interactive streaming GUI** - Watch the AI analyze your game live with progress updates
 
-### 📦 Batch Rename (NEW!)
+### 📦 Batch Rename
 Process multiple short video clips and generate descriptive filenames:
 
 - **Bulk processing** - Analyze multiple videos at once
 - **AI-generated descriptions** - Smart, content-based naming
 - **GCS integration** - Load from folders, upload multiple files
 - **Flexible export** - CSV mapping or direct file renaming
+
+### 🔍 Video Debug & Q&A (NEW!)
+Interactive debugging to understand and improve model accuracy:
+
+- **Ask questions** - Query the model about specific moments
+- **Visual reasoning** - Get explanations for classifications
+- **Frame extraction** - Analyze individual frames
+- **Model comparison** - Test different Gemini models
 
 ## 🏗️ Architecture
 
@@ -336,6 +344,29 @@ Process multiple short video clips and generate descriptive filenames:
 - **Sport-Aware**: Analyzes based on selected sport (basketball/ultimate frisbee)
 
 Perfect for organizing collections of drill clips, highlight reels, or game segments!
+
+### 🔍 Video Debug & Q&A (NEW!)
+
+Interactive debugging tool to understand what the model sees and improve accuracy:
+- **Ask Questions**: Interactive Q&A about specific video moments
+- **Visual Reasoning**: Request step-by-step explanations of classifications
+- **Frame Extraction**: Extract and analyze specific frames at any timestamp
+- **Model Comparison**: Test the same video with different Gemini models
+- **Shot Investigation**: Understand why a shot was classified as made/missed
+- **Conversation History**: Track all questions and answers for reference
+
+**Perfect for:**
+- Debugging misclassified shots
+- Understanding model limitations
+- Refining prompts and instructions
+- Investigating accuracy issues
+- Testing different model capabilities
+
+**Example Questions:**
+- "What happens at 0:23? Did that shot go in? Explain your reasoning."
+- "Why was the shot at 0:45 marked as missed?"
+- "Describe the ball's trajectory from 0:30 to 0:35"
+- "List all shots with your confidence level for each"
 
 ## 🎨 Customization
 
