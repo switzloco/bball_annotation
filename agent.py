@@ -1183,6 +1183,41 @@ SHOT: 0:05 - Tall player white jersey #23 - layup - MADE
 SHOT: 0:12 - Short player red jersey - three-pointer - MISSED
 SHOT: 1:23 - Player blue jersey dark skin - mid-range - MADE
 
+**🎯 SHOT CLASSIFICATION RULES - CRITICAL FOR ACCURACY:**
+
+Watch the ball's trajectory AFTER the shot is released. Focus on these visual cues:
+
+**MADE SHOT** = Ball goes through hoop from above + you see ANY of these:
+  ✅ Ball passes through the hoop opening (not bouncing on rim)
+  ✅ Net moves/distorts after ball passes through
+  ✅ Ball is visible BELOW the hoop/backboard after going through
+  ✅ Downward trajectory through hoop center
+  ✅ Player who shot stops tracking the ball (knows it went in)
+  ✅ Defensive players transition to offense immediately
+  ✅ "Swish" motion - ball goes straight through without rim contact
+
+**MISSED SHOT** = Ball does NOT go through hoop + you see ANY of these:
+  ✅ Ball bounces OFF the rim (front, back, or side)
+  ✅ Ball hits backboard and bounces away without entering hoop
+  ✅ Ball is visible ABOVE or TO THE SIDE of hoop after shot
+  ✅ Ball hits rim and bounces out
+  ✅ Airball - ball misses rim and backboard entirely
+  ✅ Players jump for rebound immediately after shot
+  ✅ Ball possession remains with same team near the hoop
+  ✅ Shooter reacts with disappointment or frustration
+
+**KEY VISUAL INDICATORS:**
+1. **Net movement** is the BEST indicator of a made shot
+2. **Ball location after shot**: Below hoop = made, Above/Side of hoop = missed
+3. **Player reactions**: Immediate transition = made, Rebound attempt = missed
+4. **Trajectory continuity**: Smooth downward through hoop = made, Bounce/deflection = missed
+
+**IF UNCERTAIN:**
+- Watch for 1-2 seconds AFTER the shot to see ball location
+- Look for net disturbance (even slight movement confirms MADE)
+- Check player body language (do they run back on defense or go for rebound?)
+- In warmup: shots are usually uncontested, watch ball more carefully
+
 **CRITICAL: List ALL shots, even in warmups/shootarounds!**
 
 After listing all shots, provide:
