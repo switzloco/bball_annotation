@@ -606,7 +606,8 @@ class BaseSportAgent:
     # Shared infrastructure methods
     def get_video_duration(self, video_uri: str) -> Optional[int]:
         """
-        Get video duration in seconds from GCS URI using ffprobe
+        Get video duration in seconds from GCS URI
+        Tries multiple methods: ffprobe (if available), then Gemini API fallback
 
         Args:
             video_uri: GCS URI (gs://bucket/path/to/video.mp4)
@@ -614,7 +615,36 @@ class BaseSportAgent:
         Returns:
             Duration in seconds, or None if unable to determine
         """
+        # Method 1: Try ffprobe (fast and accurate)
+        duration = self._get_duration_ffprobe(video_uri)
+        if duration is not None:
+            return duration
+
+        # Method 2: Fallback to Gemini API (slower but works without ffprobe)
+        logger.warning("ffprobe not available or failed, using Gemini API fallback for duration detection")
+        duration = self._get_duration_gemini_fallback(video_uri)
+        if duration is not None:
+            return duration
+
+        # All methods failed
+        logger.error("All duration detection methods failed")
+        return None
+
+    def _get_duration_ffprobe(self, video_uri: str) -> Optional[int]:
+        """
+        Try to get duration using ffprobe (requires ffmpeg installation)
+
+        Returns:
+            Duration in seconds, or None if ffprobe not available or fails
+        """
         try:
+            # Check if ffprobe is available
+            try:
+                subprocess.run(['ffprobe', '-version'], capture_output=True, timeout=5, check=True)
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                logger.info("ffprobe not available, will use fallback method")
+                return None
+
             # Parse GCS URI
             if not video_uri.startswith("gs://"):
                 logger.error(f"Invalid GCS URI: {video_uri}")
@@ -637,8 +667,8 @@ class BaseSportAgent:
                 method="GET"
             )
 
-            # Use ffprobe to get duration (increased timeout for large videos)
-            logger.info(f"Running ffprobe on video: {blob_path}")
+            # Use ffprobe to get duration
+            logger.info(f"Using ffprobe to detect duration: {blob_path}")
             cmd = [
                 'ffprobe',
                 '-v', 'error',
@@ -653,24 +683,70 @@ class BaseSportAgent:
                 duration_str = result.stdout.strip()
                 if duration_str:
                     duration = float(duration_str)
-                    logger.info(f"✅ Detected video duration: {duration:.1f} seconds ({duration/60:.1f} minutes)")
+                    logger.info(f"✅ ffprobe detected duration: {duration:.1f}s ({duration/60:.1f} min)")
                     return int(duration)
                 else:
-                    logger.error("ffprobe returned empty duration")
+                    logger.warning("ffprobe returned empty duration")
                     return None
             else:
-                logger.error(f"❌ ffprobe failed with return code {result.returncode}")
-                logger.error(f"ffprobe stderr: {result.stderr}")
-                logger.error(f"ffprobe stdout: {result.stdout}")
+                logger.warning(f"ffprobe failed: {result.stderr}")
                 return None
 
         except subprocess.TimeoutExpired:
-            logger.error(f"❌ ffprobe timed out after 60 seconds for video: {blob_path}")
+            logger.warning(f"ffprobe timed out")
             return None
         except Exception as e:
-            logger.error(f"❌ Error getting video duration: {type(e).__name__}: {e}")
-            import traceback
-            logger.error(f"Traceback:\n{traceback.format_exc()}")
+            logger.warning(f"ffprobe error: {e}")
+            return None
+
+    def _get_duration_gemini_fallback(self, video_uri: str) -> Optional[int]:
+        """
+        Fallback method: Use Gemini API to detect video duration
+        Works without ffprobe but requires an API call
+
+        Returns:
+            Duration in seconds, or None if fails
+        """
+        try:
+            logger.info("Using Gemini API fallback for duration detection...")
+
+            # Create video part
+            video_part = types.Part.from_uri(
+                file_uri=video_uri,
+                mime_type="video/mp4"
+            )
+
+            # Ask Gemini for duration
+            prompt = """Analyze this video and tell me ONLY the total duration in seconds.
+
+Respond with ONLY a number (the duration in seconds). Nothing else.
+Example: If the video is 45 seconds, respond: 45
+Example: If the video is 2 minutes 30 seconds, respond: 150"""
+
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=[prompt, video_part],
+                config=types.GenerateContentConfig(
+                    temperature=0.0,  # Deterministic
+                    max_output_tokens=10
+                )
+            )
+
+            duration_text = response.text.strip()
+
+            # Try to parse the number
+            import re
+            numbers = re.findall(r'\d+', duration_text)
+            if numbers:
+                duration = int(numbers[0])
+                logger.info(f"✅ Gemini API detected duration: {duration}s ({duration/60:.1f} min)")
+                return duration
+            else:
+                logger.warning(f"Could not parse duration from Gemini response: {duration_text}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Gemini fallback duration detection failed: {e}")
             return None
 
     def analyze_full_video_stream(
