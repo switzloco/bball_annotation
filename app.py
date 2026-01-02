@@ -14,7 +14,7 @@ import json
 from datetime import datetime
 
 # Version
-__version__ = "3.0.0"  # Feature: Hybrid Tiled-Vision Pipeline (Two-Pass Architecture)
+__version__ = "4.0.0"  # Multi-page app: Batch Rename, Video Debug, Improved Shot Classification
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
