@@ -68,6 +68,15 @@ Interactive debugging to understand and improve model accuracy:
 - [uv](https://github.com/astral-sh/uv) package manager
 - Google Cloud Project with Vertex AI API enabled
 - GCS bucket for video storage
+- **FFmpeg** (optional but recommended for fast video duration detection)
+  ```bash
+  # Ubuntu/Debian
+  sudo apt-get install -y ffmpeg
+
+  # macOS
+  brew install ffmpeg
+  ```
+  *Note: Without FFmpeg, the system will use Gemini API for duration detection (slower but works)*
 
 ### Installation
 
