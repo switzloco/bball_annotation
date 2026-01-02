@@ -2,19 +2,30 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/switzloco/bball_annotation)
 
-An intelligent basketball video analysis system powered by **Gemini 2.5 Flash Lite**, **Google ADK (Agent Development Kit)**, and **Streamlit**.
+An intelligent sports video analysis system powered by **Gemini 2.5 Flash Lite**, **Google ADK (Agent Development Kit)**, and **Streamlit**. Supports basketball and ultimate frisbee.
 
 **Repository**: https://github.com/switzloco/bball_annotation
 
 ## 🎯 Overview
 
-This agent analyzes basketball game footage systematically, breaking down videos into 2-minute chunks to provide:
+This multi-page application provides comprehensive sports video analysis with two main modes:
+
+### 🎥 Deep Analysis (Main Page)
+Analyzes full game footage systematically, breaking down videos into configurable chunks to provide:
 
 - **Live play-by-play analysis** - Watch the analysis unfold in real-time as each segment completes
 - **Detailed transcripts** - Comprehensive breakdown of every significant moment
-- **Real-time highlight detection** - Automatic identification of dunks, three-pointers, blocks, and steals as they're discovered
+- **Real-time highlight detection** - Automatic identification of key plays as they're discovered
 - **Strategic insights** - Analysis of offensive/defensive patterns and team performance
 - **Interactive streaming GUI** - Watch the AI analyze your game live with progress updates
+
+### 📦 Batch Rename (NEW!)
+Process multiple short video clips and generate descriptive filenames:
+
+- **Bulk processing** - Analyze multiple videos at once
+- **AI-generated descriptions** - Smart, content-based naming
+- **GCS integration** - Load from folders, upload multiple files
+- **Flexible export** - CSV mapping or direct file renaming
 
 ## 🏗️ Architecture
 
@@ -309,6 +320,22 @@ The `analyze_video_segment` tool:
 - Processes specific time ranges
 - Uses multimodal Gemini capabilities
 - Returns structured analysis
+
+### Batch Video Rename (NEW!)
+
+Process multiple short video clips and generate descriptive filenames:
+- **Multi-page Interface**: Separate page for batch operations
+- **GCS Folder Scanning**: Load all videos from a GCS folder
+- **Bulk Upload**: Upload multiple local files at once
+- **AI-Generated Descriptions**: Concise, content-based descriptions for each video
+- **Smart Filename Generation**: Clean, descriptive filenames based on video content
+- **Flexible Operations**:
+  - Download CSV mapping (original → suggested names)
+  - Copy files with new names (preserves originals)
+- **Progress Tracking**: Real-time progress for batch operations
+- **Sport-Aware**: Analyzes based on selected sport (basketball/ultimate frisbee)
+
+Perfect for organizing collections of drill clips, highlight reels, or game segments!
 
 ## 🎨 Customization
 
