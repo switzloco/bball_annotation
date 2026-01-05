@@ -1261,9 +1261,11 @@ SHOT: 1:23 - Player blue jersey dark skin - mid-range - MADE
 
 **🎯 SHOT CLASSIFICATION RULES - CRITICAL FOR ACCURACY:**
 
-Watch the ball's trajectory AFTER the shot is released. Focus on these visual cues:
+Watch the ball's trajectory AFTER the shot is released. Focus on BOTH visual AND audio cues:
 
-**MADE SHOT** = Ball goes through hoop from above + you see ANY of these:
+**MADE SHOT** = Ball goes through hoop + ANY of these cues:
+
+VISUAL:
   ✅ Ball passes through the hoop opening (not bouncing on rim)
   ✅ Net moves/distorts after ball passes through
   ✅ Ball is visible BELOW the hoop/backboard after going through
@@ -1272,7 +1274,15 @@ Watch the ball's trajectory AFTER the shot is released. Focus on these visual cu
   ✅ Defensive players transition to offense immediately
   ✅ "Swish" motion - ball goes straight through without rim contact
 
-**MISSED SHOT** = Ball does NOT go through hoop + you see ANY of these:
+AUDIO (VERY RELIABLE):
+  🔊 Clean "swish" or "swoosh" sound of net
+  🔊 Light "ding" + swish (ball touches rim lightly then goes through)
+  🔊 Quiet after shot (no loud clang or multiple bounces)
+  🔊 Net rustling/fluttering sound
+
+**MISSED SHOT** = Ball does NOT go through hoop + ANY of these cues:
+
+VISUAL:
   ✅ Ball bounces OFF the rim (front, back, or side)
   ✅ Ball hits backboard and bounces away without entering hoop
   ✅ Ball is visible ABOVE or TO THE SIDE of hoop after shot
@@ -1282,13 +1292,22 @@ Watch the ball's trajectory AFTER the shot is released. Focus on these visual cu
   ✅ Ball possession remains with same team near the hoop
   ✅ Shooter reacts with disappointment or frustration
 
-**KEY VISUAL INDICATORS:**
-1. **Net movement** is the BEST indicator of a made shot
-2. **Ball location after shot**: Below hoop = made, Above/Side of hoop = missed
-3. **Player reactions**: Immediate transition = made, Rebound attempt = missed
-4. **Trajectory continuity**: Smooth downward through hoop = made, Bounce/deflection = missed
+AUDIO (VERY RELIABLE):
+  🔊 Loud "CLANG" or "CLUNK" sound (rim)
+  🔊 Heavy "THUD" (backboard)
+  🔊 Multiple bouncing sounds (ball on ground)
+  🔊 Scrambling sounds (players fighting for rebound)
+  🔊 Sharp metallic ring (ball hitting rim hard)
+
+**KEY INDICATORS (IN ORDER OF RELIABILITY):**
+1. **AUDIO CUES** - Most reliable! Swish = made, Clang = missed
+2. **Net movement** - Very reliable visual indicator of made shot
+3. **Ball location after shot** - Below hoop = made, Above/Side = missed
+4. **Player reactions** - Immediate transition = made, Rebound attempt = missed
+5. **Trajectory continuity** - Smooth downward = made, Bounce/deflection = missed
 
 **IF UNCERTAIN:**
+- LISTEN CAREFULLY to the audio - this is often clearer than visual
 - Watch for 1-2 seconds AFTER the shot to see ball location
 - Look for net disturbance (even slight movement confirms MADE)
 - Check player body language (do they run back on defense or go for rebound?)
