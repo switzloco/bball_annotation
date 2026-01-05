@@ -28,6 +28,7 @@ RUN uv pip install --system --no-cache -r pyproject.toml
 # Copy application code
 COPY agent.py app.py ./
 COPY .streamlit/ .streamlit/
+COPY pages/ pages/
 
 # Create a non-root user
 RUN useradd -m -u 1000 streamlit && \
