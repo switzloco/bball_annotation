@@ -99,15 +99,20 @@ def extract_frame_thumbnail(video_uri: str, timestamp_sec: int) -> str:
             bucket_name = path_parts[0]
             blob_path = path_parts[1]
 
-            storage_client = storage.Client()
-            bucket = storage_client.bucket(bucket_name)
-            blob = bucket.blob(blob_path)
+            try:
+                storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+                bucket = storage_client.bucket(bucket_name)
+                blob = bucket.blob(blob_path)
 
-            signed_url = blob.generate_signed_url(
-                version="v4",
-                expiration=3600,
-                method="GET"
-            )
+                signed_url = blob.generate_signed_url(
+                    version="v4",
+                    expiration=3600,
+                    method="GET"
+                )
+            except Exception:
+                # Fallback to public URL
+                from urllib.parse import quote
+                signed_url = f"https://storage.googleapis.com/{bucket_name}/{quote(blob_path)}"
         else:
             signed_url = video_uri
 
@@ -176,20 +181,36 @@ def get_signed_url(video_uri: str) -> str:
             bucket_name = path_parts[0]
             blob_path = path_parts[1]
 
-            storage_client = storage.Client()
-            bucket = storage_client.bucket(bucket_name)
-            blob = bucket.blob(blob_path)
+            logger.info(f"Generating signed URL for bucket: {bucket_name}, path: {blob_path}")
 
-            signed_url = blob.generate_signed_url(
-                version="v4",
-                expiration=7200,  # 2 hours for longer review sessions
-                method="GET"
-            )
-            return signed_url
+            # Try to generate signed URL (requires service account credentials)
+            try:
+                storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+                bucket = storage_client.bucket(bucket_name)
+                blob = bucket.blob(blob_path)
+
+                signed_url = blob.generate_signed_url(
+                    version="v4",
+                    expiration=7200,  # 2 hours for longer review sessions
+                    method="GET"
+                )
+                logger.info("Signed URL generated successfully")
+                return signed_url
+            except Exception as sign_error:
+                logger.warning(f"Signed URL generation failed: {sign_error}")
+                logger.info("Falling back to public URL format")
+
+                # Fallback: Try public URL format (only works if bucket/object is public)
+                from urllib.parse import quote
+                public_url = f"https://storage.googleapis.com/{bucket_name}/{quote(blob_path)}"
+                logger.info(f"Using public URL: {public_url}")
+                return public_url
         else:
             return video_uri
     except Exception as e:
-        logger.error(f"Error generating signed URL: {e}")
+        logger.error(f"Error processing video URI {video_uri}: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return video_uri
 
 
@@ -273,7 +294,7 @@ def main():
     if input_mode == "GCS URI":
         gcs_input = st.text_input(
             "GCS Video URI",
-            value="",
+            value="gs://bball_project/vids/Miss dunk graham .mp4",
             placeholder="gs://bucket-name/path/to/video.mp4"
         )
 
@@ -443,25 +464,60 @@ def main():
 
             # Get signed URL for video playback
             try:
+                logger.info(f"Attempting to get signed URL for: {video_uri}")
                 signed_url = get_signed_url(video_uri)
-                current_time = st.session_state.current_timestamp
+                logger.info(f"Got URL: {signed_url[:100]}...")  # Log first 100 chars
 
-                # Display video player with start_time
-                # Note: Due to Streamlit limitations, changing start_time may not
-                # always work smoothly. The video will attempt to start at the specified time.
-                st.video(signed_url, start_time=current_time)
+                # Check if we got a valid URL
+                if signed_url.startswith("gs://"):
+                    logger.error("Signed URL generation failed - still have gs:// URI")
+                    st.error("⚠️ Failed to convert GCS URI to playable URL.")
+                    st.info(f"**Original URI:** {video_uri}")
+                    st.warning("**Returned URL:** Still a GCS URI (not playable in browser)")
 
-                # Show current timestamp
-                minutes = current_time // 60
-                seconds = current_time % 60
-                if current_time > 0:
-                    st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d} (may require page reload to update)")
+                    # Check credentials
+                    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                    if creds_path:
+                        if os.path.exists(creds_path):
+                            st.info(f"✅ Credentials file exists: {creds_path}")
+                        else:
+                            st.error(f"❌ Credentials file NOT found: {creds_path}")
+                    else:
+                        st.error("❌ GOOGLE_APPLICATION_CREDENTIALS not set in .env")
+
+                    st.info("💡 **To fix:**\n- Add service account JSON key to project\n- Set GOOGLE_APPLICATION_CREDENTIALS in .env\n- Or make bucket/video publicly accessible")
                 else:
-                    st.caption("⏱️ Video ready to play")
+                    logger.info(f"Successfully converted to playable URL")
+                    current_time = st.session_state.current_timestamp
+
+                    # Display video player with start_time
+                    # Note: Due to Streamlit limitations, changing start_time may not
+                    # always work smoothly. The video will attempt to start at the specified time.
+                    st.video(signed_url, start_time=current_time)
+
+                    # Show current timestamp
+                    minutes = current_time // 60
+                    seconds = current_time % 60
+                    if current_time > 0:
+                        st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d}")
+                    else:
+                        st.caption("⏱️ Video ready to play")
 
             except Exception as e:
-                st.error(f"Error loading video: {str(e)}")
+                st.error(f"❌ Error loading video: {str(e)}")
                 logger.error(f"Video player error: {e}")
+                logger.error(f"Error type: {type(e).__name__}")
+                import traceback
+                logger.error(f"Traceback: {traceback.format_exc()}")
+
+                # Show helpful debug info
+                with st.expander("🔍 Debug Information"):
+                    st.code(f"Error: {str(e)}\nType: {type(e).__name__}")
+                    st.code(f"Video URI: {video_uri}")
+                    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                    st.code(f"Credentials: {creds_path}")
+                    if creds_path:
+                        st.code(f"Credentials exist: {os.path.exists(creds_path)}")
 
             st.divider()
 
@@ -577,21 +633,21 @@ def main():
                     col_btn1, col_btn2, col_btn3 = st.columns(3)
 
                     with col_btn1:
-                        if st.button("✅ Correct (MADE)", key=f"made_{shot_id}", use_container_width=True):
+                        if st.button("✅ Human Feedback - Made", key=f"made_{shot_id}", use_container_width=True):
                             shot["user_classification"] = "MADE"
                             shot["corrected"] = True
                             st.session_state.shot_list = shot_list
                             st.rerun()
 
                     with col_btn2:
-                        if st.button("❌ Correct (MISSED)", key=f"missed_{shot_id}", use_container_width=True):
+                        if st.button("❌ Human Feedback - Missed", key=f"missed_{shot_id}", use_container_width=True):
                             shot["user_classification"] = "MISSED"
                             shot["corrected"] = True
                             st.session_state.shot_list = shot_list
                             st.rerun()
 
                     with col_btn3:
-                        if st.button("✓ AI is Correct", key=f"confirm_{shot_id}", use_container_width=True):
+                        if st.button("✓ Agree with AI", key=f"confirm_{shot_id}", use_container_width=True):
                             shot["user_classification"] = shot["ai_classification"]
                             shot["corrected"] = True
                             st.session_state.shot_list = shot_list

@@ -627,7 +627,7 @@ def main():
 
         high_fidelity = st.checkbox(
             "High Fidelity Mode (Tiled Vision)",
-            value=False,
+            value=True,
             help="Enable for 4K/wide-angle footage. Uses Two-Pass Architecture: (1) Temporal Filter (fast), (2) Tiled Vision (slow but prevents Visual Erasure of small players)."
         )
 
