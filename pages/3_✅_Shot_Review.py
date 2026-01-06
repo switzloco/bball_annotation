@@ -176,7 +176,9 @@ def get_signed_url(video_uri: str) -> str:
             bucket_name = path_parts[0]
             blob_path = path_parts[1]
 
-            storage_client = storage.Client()
+            logger.info(f"Generating signed URL for bucket: {bucket_name}, path: {blob_path}")
+
+            storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
             bucket = storage_client.bucket(bucket_name)
             blob = bucket.blob(blob_path)
 
@@ -185,11 +187,15 @@ def get_signed_url(video_uri: str) -> str:
                 expiration=7200,  # 2 hours for longer review sessions
                 method="GET"
             )
+            logger.info("Signed URL generated successfully")
             return signed_url
         else:
             return video_uri
     except Exception as e:
-        logger.error(f"Error generating signed URL: {e}")
+        logger.error(f"Error generating signed URL for {video_uri}: {e}")
+        logger.error(f"Error type: {type(e).__name__}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return video_uri
 
 
@@ -444,20 +450,26 @@ def main():
             # Get signed URL for video playback
             try:
                 signed_url = get_signed_url(video_uri)
-                current_time = st.session_state.current_timestamp
 
-                # Display video player with start_time
-                # Note: Due to Streamlit limitations, changing start_time may not
-                # always work smoothly. The video will attempt to start at the specified time.
-                st.video(signed_url, start_time=current_time)
-
-                # Show current timestamp
-                minutes = current_time // 60
-                seconds = current_time % 60
-                if current_time > 0:
-                    st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d} (may require page reload to update)")
+                # Check if we got a valid signed URL
+                if signed_url.startswith("gs://"):
+                    st.error("⚠️ Failed to generate signed URL. Check GCP credentials and permissions.")
+                    st.info(f"GCS URI: {video_uri}")
                 else:
-                    st.caption("⏱️ Video ready to play")
+                    current_time = st.session_state.current_timestamp
+
+                    # Display video player with start_time
+                    # Note: Due to Streamlit limitations, changing start_time may not
+                    # always work smoothly. The video will attempt to start at the specified time.
+                    st.video(signed_url, start_time=current_time)
+
+                    # Show current timestamp
+                    minutes = current_time // 60
+                    seconds = current_time % 60
+                    if current_time > 0:
+                        st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d} (may require page reload to update)")
+                    else:
+                        st.caption("⏱️ Video ready to play")
 
             except Exception as e:
                 st.error(f"Error loading video: {str(e)}")
