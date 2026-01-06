@@ -99,15 +99,20 @@ def extract_frame_thumbnail(video_uri: str, timestamp_sec: int) -> str:
             bucket_name = path_parts[0]
             blob_path = path_parts[1]
 
-            storage_client = storage.Client()
-            bucket = storage_client.bucket(bucket_name)
-            blob = bucket.blob(blob_path)
+            try:
+                storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+                bucket = storage_client.bucket(bucket_name)
+                blob = bucket.blob(blob_path)
 
-            signed_url = blob.generate_signed_url(
-                version="v4",
-                expiration=3600,
-                method="GET"
-            )
+                signed_url = blob.generate_signed_url(
+                    version="v4",
+                    expiration=3600,
+                    method="GET"
+                )
+            except Exception:
+                # Fallback to public URL
+                from urllib.parse import quote
+                signed_url = f"https://storage.googleapis.com/{bucket_name}/{quote(blob_path)}"
         else:
             signed_url = video_uri
 
@@ -178,22 +183,32 @@ def get_signed_url(video_uri: str) -> str:
 
             logger.info(f"Generating signed URL for bucket: {bucket_name}, path: {blob_path}")
 
-            storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
-            bucket = storage_client.bucket(bucket_name)
-            blob = bucket.blob(blob_path)
+            # Try to generate signed URL (requires service account credentials)
+            try:
+                storage_client = storage.Client(project=os.getenv("GCP_PROJECT_ID"))
+                bucket = storage_client.bucket(bucket_name)
+                blob = bucket.blob(blob_path)
 
-            signed_url = blob.generate_signed_url(
-                version="v4",
-                expiration=7200,  # 2 hours for longer review sessions
-                method="GET"
-            )
-            logger.info("Signed URL generated successfully")
-            return signed_url
+                signed_url = blob.generate_signed_url(
+                    version="v4",
+                    expiration=7200,  # 2 hours for longer review sessions
+                    method="GET"
+                )
+                logger.info("Signed URL generated successfully")
+                return signed_url
+            except Exception as sign_error:
+                logger.warning(f"Signed URL generation failed: {sign_error}")
+                logger.info("Falling back to public URL format")
+
+                # Fallback: Try public URL format (only works if bucket/object is public)
+                from urllib.parse import quote
+                public_url = f"https://storage.googleapis.com/{bucket_name}/{quote(blob_path)}"
+                logger.info(f"Using public URL: {public_url}")
+                return public_url
         else:
             return video_uri
     except Exception as e:
-        logger.error(f"Error generating signed URL for {video_uri}: {e}")
-        logger.error(f"Error type: {type(e).__name__}")
+        logger.error(f"Error processing video URI {video_uri}: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
         return video_uri
@@ -451,10 +466,11 @@ def main():
             try:
                 signed_url = get_signed_url(video_uri)
 
-                # Check if we got a valid signed URL
+                # Check if we got a valid URL
                 if signed_url.startswith("gs://"):
-                    st.error("⚠️ Failed to generate signed URL. Check GCP credentials and permissions.")
+                    st.error("⚠️ Failed to convert GCS URI to playable URL.")
                     st.info(f"GCS URI: {video_uri}")
+                    st.info("💡 To fix: Add service account credentials or make video publicly accessible")
                 else:
                     current_time = st.session_state.current_timestamp
 
@@ -467,7 +483,7 @@ def main():
                     minutes = current_time // 60
                     seconds = current_time % 60
                     if current_time > 0:
-                        st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d} (may require page reload to update)")
+                        st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d}")
                     else:
                         st.caption("⏱️ Video ready to play")
 
