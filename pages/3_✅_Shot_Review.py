@@ -160,6 +160,39 @@ def upload_to_gcs(local_file_path: str, bucket_name: str) -> str:
         return None
 
 
+def get_signed_url(video_uri: str) -> str:
+    """
+    Convert GCS URI to signed URL for video playback
+
+    Args:
+        video_uri: GCS URI (gs://bucket/path) or regular URL
+
+    Returns:
+        Signed URL or original URL
+    """
+    try:
+        if video_uri.startswith("gs://"):
+            path_parts = video_uri[5:].split("/", 1)
+            bucket_name = path_parts[0]
+            blob_path = path_parts[1]
+
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(bucket_name)
+            blob = bucket.blob(blob_path)
+
+            signed_url = blob.generate_signed_url(
+                version="v4",
+                expiration=7200,  # 2 hours for longer review sessions
+                method="GET"
+            )
+            return signed_url
+        else:
+            return video_uri
+    except Exception as e:
+        logger.error(f"Error generating signed URL: {e}")
+        return video_uri
+
+
 def main():
     """Main Shot Review application"""
 
@@ -401,6 +434,39 @@ def main():
 
             st.divider()
 
+            # Video Player Section
+            st.subheader("📺 Video Player")
+
+            # Initialize current timestamp in session state
+            if 'current_timestamp' not in st.session_state:
+                st.session_state.current_timestamp = 0
+
+            # Get signed URL for video playback
+            try:
+                signed_url = get_signed_url(video_uri)
+
+                # Add timestamp fragment to URL if specified
+                if st.session_state.current_timestamp > 0:
+                    video_url = f"{signed_url}#t={st.session_state.current_timestamp}"
+                else:
+                    video_url = signed_url
+
+                # Display video player
+                st.video(video_url)
+
+                # Show current timestamp
+                current_time = st.session_state.current_timestamp
+                minutes = current_time // 60
+                seconds = current_time % 60
+                if current_time > 0:
+                    st.caption(f"⏱️ Currently at: {minutes}:{seconds:02d}")
+
+            except Exception as e:
+                st.error(f"Error loading video: {str(e)}")
+                logger.error(f"Video player error: {e}")
+
+            st.divider()
+
             # Bulk actions
             st.markdown("**🛠️ Bulk Actions:**")
             col_bulk1, col_bulk2, col_bulk3 = st.columns(3)
@@ -468,7 +534,7 @@ def main():
                     st.markdown(f'<div class="{card_class}">', unsafe_allow_html=True)
 
                     # Header row
-                    col_header1, col_header2, col_header3, col_header4 = st.columns([2, 2, 2, 2])
+                    col_header1, col_header2, col_header3, col_header4, col_header5 = st.columns([2, 2, 2, 2, 1])
 
                     with col_header1:
                         st.markdown(f"**Shot #{shot_id + 1}** | ⏱️ {time_str}")
@@ -480,6 +546,13 @@ def main():
                         st.markdown(f"AI says: **{icon} {ai_class}**")
                     with col_header4:
                         st.markdown(f"<span class='{conf_class}'>Confidence: {conf}%</span>", unsafe_allow_html=True)
+                    with col_header5:
+                        # Watch button to jump to timestamp
+                        if st.button("▶️ Watch", key=f"watch_{shot_id}", use_container_width=True):
+                            # Update session state to jump to this timestamp
+                            # Go back 3 seconds for context
+                            st.session_state.current_timestamp = max(0, timestamp - 3)
+                            st.rerun()
 
                     # Thumbnail (if enabled)
                     if extract_thumbnails and shot["thumbnail"] is None:
