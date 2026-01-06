@@ -464,14 +464,30 @@ def main():
 
             # Get signed URL for video playback
             try:
+                logger.info(f"Attempting to get signed URL for: {video_uri}")
                 signed_url = get_signed_url(video_uri)
+                logger.info(f"Got URL: {signed_url[:100]}...")  # Log first 100 chars
 
                 # Check if we got a valid URL
                 if signed_url.startswith("gs://"):
+                    logger.error("Signed URL generation failed - still have gs:// URI")
                     st.error("⚠️ Failed to convert GCS URI to playable URL.")
-                    st.info(f"GCS URI: {video_uri}")
-                    st.info("💡 To fix: Add service account credentials or make video publicly accessible")
+                    st.info(f"**Original URI:** {video_uri}")
+                    st.warning("**Returned URL:** Still a GCS URI (not playable in browser)")
+
+                    # Check credentials
+                    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                    if creds_path:
+                        if os.path.exists(creds_path):
+                            st.info(f"✅ Credentials file exists: {creds_path}")
+                        else:
+                            st.error(f"❌ Credentials file NOT found: {creds_path}")
+                    else:
+                        st.error("❌ GOOGLE_APPLICATION_CREDENTIALS not set in .env")
+
+                    st.info("💡 **To fix:**\n- Add service account JSON key to project\n- Set GOOGLE_APPLICATION_CREDENTIALS in .env\n- Or make bucket/video publicly accessible")
                 else:
+                    logger.info(f"Successfully converted to playable URL")
                     current_time = st.session_state.current_timestamp
 
                     # Display video player with start_time
@@ -488,8 +504,20 @@ def main():
                         st.caption("⏱️ Video ready to play")
 
             except Exception as e:
-                st.error(f"Error loading video: {str(e)}")
+                st.error(f"❌ Error loading video: {str(e)}")
                 logger.error(f"Video player error: {e}")
+                logger.error(f"Error type: {type(e).__name__}")
+                import traceback
+                logger.error(f"Traceback: {traceback.format_exc()}")
+
+                # Show helpful debug info
+                with st.expander("🔍 Debug Information"):
+                    st.code(f"Error: {str(e)}\nType: {type(e).__name__}")
+                    st.code(f"Video URI: {video_uri}")
+                    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                    st.code(f"Credentials: {creds_path}")
+                    if creds_path:
+                        st.code(f"Credentials exist: {os.path.exists(creds_path)}")
 
             st.divider()
 
