@@ -441,28 +441,21 @@ def main():
             if 'current_timestamp' not in st.session_state:
                 st.session_state.current_timestamp = 0
 
-            # Initialize video key for forcing recreation
-            if 'video_key' not in st.session_state:
-                st.session_state.video_key = 0
-
             # Get signed URL for video playback
             try:
                 signed_url = get_signed_url(video_uri)
+                current_time = st.session_state.current_timestamp
 
                 # Display video player with start_time
-                # Use unique key to force recreation when timestamp changes
-                current_time = st.session_state.current_timestamp
-                st.video(
-                    signed_url,
-                    start_time=current_time,
-                    key=f"video_player_{st.session_state.video_key}"
-                )
+                # Note: Due to Streamlit limitations, changing start_time may not
+                # always work smoothly. The video will attempt to start at the specified time.
+                st.video(signed_url, start_time=current_time)
 
                 # Show current timestamp
                 minutes = current_time // 60
                 seconds = current_time % 60
                 if current_time > 0:
-                    st.caption(f"⏱️ Starting at: {minutes}:{seconds:02d}")
+                    st.caption(f"⏱️ Seeking to: {minutes}:{seconds:02d} (may require page reload to update)")
                 else:
                     st.caption("⏱️ Video ready to play")
 
@@ -557,8 +550,6 @@ def main():
                             # Update session state to jump to this timestamp
                             # Go back 3 seconds for context
                             st.session_state.current_timestamp = max(0, timestamp - 3)
-                            # Increment video key to force recreation of video widget
-                            st.session_state.video_key += 1
                             st.rerun()
 
                     # Thumbnail (if enabled)
