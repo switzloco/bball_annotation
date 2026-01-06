@@ -273,7 +273,7 @@ def main():
     if input_mode == "GCS URI":
         gcs_input = st.text_input(
             "GCS Video URI",
-            value="",
+            value="gs://bball_project/vids/Miss dunk graham .mp4",
             placeholder="gs://bucket-name/path/to/video.mp4"
         )
 
