@@ -441,25 +441,30 @@ def main():
             if 'current_timestamp' not in st.session_state:
                 st.session_state.current_timestamp = 0
 
+            # Initialize video key for forcing recreation
+            if 'video_key' not in st.session_state:
+                st.session_state.video_key = 0
+
             # Get signed URL for video playback
             try:
                 signed_url = get_signed_url(video_uri)
 
-                # Add timestamp fragment to URL if specified
-                if st.session_state.current_timestamp > 0:
-                    video_url = f"{signed_url}#t={st.session_state.current_timestamp}"
-                else:
-                    video_url = signed_url
-
-                # Display video player
-                st.video(video_url)
+                # Display video player with start_time
+                # Use unique key to force recreation when timestamp changes
+                current_time = st.session_state.current_timestamp
+                st.video(
+                    signed_url,
+                    start_time=current_time,
+                    key=f"video_player_{st.session_state.video_key}"
+                )
 
                 # Show current timestamp
-                current_time = st.session_state.current_timestamp
                 minutes = current_time // 60
                 seconds = current_time % 60
                 if current_time > 0:
-                    st.caption(f"⏱️ Currently at: {minutes}:{seconds:02d}")
+                    st.caption(f"⏱️ Starting at: {minutes}:{seconds:02d}")
+                else:
+                    st.caption("⏱️ Video ready to play")
 
             except Exception as e:
                 st.error(f"Error loading video: {str(e)}")
@@ -552,6 +557,8 @@ def main():
                             # Update session state to jump to this timestamp
                             # Go back 3 seconds for context
                             st.session_state.current_timestamp = max(0, timestamp - 3)
+                            # Increment video key to force recreation of video widget
+                            st.session_state.video_key += 1
                             st.rerun()
 
                     # Thumbnail (if enabled)
