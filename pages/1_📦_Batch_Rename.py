@@ -190,6 +190,7 @@ def main():
             "gemini-2.5-flash",
             "gemini-2.0-flash-exp",
             "gemini-2.5-pro",
+            "gemini-3-pro-preview",
         ]
 
         selected_model = st.selectbox(
