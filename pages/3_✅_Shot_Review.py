@@ -490,6 +490,11 @@ def main():
                     logger.info(f"Successfully converted to playable URL")
                     current_time = st.session_state.current_timestamp
 
+                    # Show the URL being used (for debugging)
+                    with st.expander("🔍 Video URL Debug Info"):
+                        st.code(f"Using URL: {signed_url}")
+                        st.caption("If video doesn't load, check if this URL works in a new browser tab")
+
                     # Display video player with start_time
                     # Note: Due to Streamlit limitations, changing start_time may not
                     # always work smoothly. The video will attempt to start at the specified time.
