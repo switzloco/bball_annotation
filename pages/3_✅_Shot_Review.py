@@ -197,8 +197,13 @@ def get_signed_url(video_uri: str) -> str:
                 logger.info("Signed URL generated successfully")
                 return signed_url
             except Exception as sign_error:
-                logger.warning(f"Signed URL generation failed: {sign_error}")
+                error_msg = f"Signed URL generation failed: {sign_error}"
+                logger.warning(error_msg)
                 logger.info("Falling back to public URL format")
+
+                # Log full traceback
+                import traceback
+                logger.error(f"Full error:\n{traceback.format_exc()}")
 
                 # Fallback: Try public URL format (only works if bucket/object is public)
                 from urllib.parse import quote
@@ -486,6 +491,24 @@ def main():
                         st.error("❌ GOOGLE_APPLICATION_CREDENTIALS not set in .env")
 
                     st.info("💡 **To fix:**\n- Add service account JSON key to project\n- Set GOOGLE_APPLICATION_CREDENTIALS in .env\n- Or make bucket/video publicly accessible")
+
+                elif "storage.googleapis.com" in signed_url and "X-Goog-Algorithm" not in signed_url:
+                    # This is a public URL fallback (not a signed URL with auth parameters)
+                    st.warning("⚠️ Using public URL fallback - Signed URL generation failed")
+                    st.error("**Issue:** Service account credentials are not working properly")
+
+                    # Check credentials
+                    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+                    if creds_path:
+                        if os.path.exists(creds_path):
+                            st.info(f"✅ Credentials file exists: `{creds_path}`")
+                            st.warning("**Next steps:**\n1. Check terminal logs for the exact error message\n2. Verify service account has 'Service Account Token Creator' role\n3. Ensure the JSON key is valid")
+                        else:
+                            st.error(f"❌ Credentials file NOT found: `{creds_path}`")
+                    else:
+                        st.error("❌ GOOGLE_APPLICATION_CREDENTIALS not set in .env")
+
+                    st.info("**Check your terminal/console output** for lines like:\n`WARNING: Signed URL generation failed: [error details]`")
                 else:
                     logger.info(f"Successfully converted to playable URL")
                     current_time = st.session_state.current_timestamp
