@@ -15,3 +15,7 @@ scipy
 torch
 opencv-python-headless
 segment-anything
+
+# Spatial pipeline (YOLO front-end). On AMD/ROCm install the ROCm torch build
+# first (see docker rocm/pytorch), then ultralytics on top of it.
+ultralytics>=8.1.0
