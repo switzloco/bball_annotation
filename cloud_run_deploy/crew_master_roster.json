@@ -1,0 +1,130 @@
+{
+  "Josh": {
+    "player_id": "crew_josh",
+    "name": "Josh",
+    "permanent_traits": "Curly brown hair, stocky/muscular build, high-volume wing 3PT shooter & primary ball-handler",
+    "biometric_anchors": {
+      "hair_and_face": "Curly brown hair, medium-fair complexion",
+      "height_build": "Tall, stocky/muscular guard-forward",
+      "footwear_and_gear": "Black/white basketball shoes, white crew socks",
+      "court_signature": "High-arc wing 3PT pull-ups, primary top-of-key facilitator"
+    },
+    "default_team_role": "Far Hoop Squad Captain",
+    "outfit_history": {
+      "2026-10-31": ["White \"Luigi's\" Tee"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Damien": {
+    "player_id": "crew_damien",
+    "name": "Damien",
+    "permanent_traits": "Very tall post/forward, bald head, full beard, dominant rebounder & interior shot-blocker",
+    "biometric_anchors": {
+      "hair_and_face": "Bald head, full dark beard",
+      "height_build": "Tallest post/forward on court, broad shoulders",
+      "footwear_and_gear": "White/black basketball shoes, dark athletic shorts",
+      "court_signature": "Interior post anchor, weak-side blocks, offensive glass & transition finishes"
+    },
+    "default_team_role": "Near Hoop Anchor",
+    "outfit_history": {
+      "2026-10-31": ["Maroon Tee"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Kenny": {
+    "player_id": "crew_kenny",
+    "name": "Kenny",
+    "permanent_traits": "Tall, lean athletic wing, closely cropped/bald hair, bright teal/mint shoes, clutch wing 3PT shooter",
+    "biometric_anchors": {
+      "hair_and_face": "Closely cropped hair / bald",
+      "height_build": "Tall, lean, long-wingspan wing",
+      "footwear_and_gear": "Bright Teal/Mint basketball shoes, black track pants with white thigh logo",
+      "court_signature": "Left-wing catch-and-shoot 3PT, transition coast-to-coast runners"
+    },
+    "default_team_role": "Wing Sharpshooter",
+    "outfit_history": {
+      "2026-10-31": ["Black Tee / Black Pants (Teal Shoes)"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Brian": {
+    "player_id": "crew_brian",
+    "name": "Brian",
+    "permanent_traits": "Short blonde/light-brown hair, tall lean wing, left-wing slasher & high-arc runner finisher",
+    "biometric_anchors": {
+      "hair_and_face": "Short blonde / light-brown hair",
+      "height_build": "Tall, lean athletic wing",
+      "footwear_and_gear": "Dark/teal basketball shoes, black shorts",
+      "court_signature": "Left-wing drives into lane, high-bounce runners & baseline pull-ups"
+    },
+    "default_team_role": "Slasher / Wing",
+    "outfit_history": {
+      "2026-10-31": ["Black Tee (Blonde Hair)"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Donnie": {
+    "player_id": "crew_donnie",
+    "name": "Donnie",
+    "permanent_traits": "Wears glasses, dark hair, crafty baseline driver & reverse layup finisher",
+    "biometric_anchors": {
+      "hair_and_face": "Dark hair, wears athletic glasses/goggles",
+      "height_build": "Medium-build guard/wing",
+      "footwear_and_gear": "Athletic glasses, light-blue/grey shorts",
+      "court_signature": "Right-baseline drives, reverse layups, perimeter passing"
+    },
+    "default_team_role": "Guard / Wing",
+    "outfit_history": {
+      "2026-10-31": ["Dark Blue \"Warriors\" Tee"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Timor": {
+    "player_id": "crew_timor",
+    "name": "Timor",
+    "permanent_traits": "Quick two-way guard, dark hair, medium/compact build, smooth mid-range jumper & active on-ball steals",
+    "biometric_anchors": {
+      "hair_and_face": "Short dark hair",
+      "height_build": "Medium/compact quick guard",
+      "footwear_and_gear": "Black/white shoes, often layers long-sleeve under/over tee",
+      "court_signature": "Right-wing/elbow 15-ft pull-up jumper, midcourt on-ball steals"
+    },
+    "default_team_role": "Two-Way Guard",
+    "outfit_history": {
+      "2026-10-31": ["Black Tee / Mint Green Shorts", "Black Long-Sleeve / Mint Green Shorts"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Rock": {
+    "player_id": "crew_rock",
+    "name": "Rock",
+    "permanent_traits": "Bald, stocky strong build, interior defender, active hands & clutch perimeter/post passer",
+    "biometric_anchors": {
+      "hair_and_face": "Bald head, veteran stocky build",
+      "height_build": "Stocky, strong forward/guard",
+      "footwear_and_gear": "Often swaps shirts mid-run (e.g. Black Tee -> Neon Yellow Tee)",
+      "court_signature": "Interior strips/blocks, offensive boards, clutch extra-pass dishes"
+    },
+    "default_team_role": "Point Forward / Defender",
+    "outfit_history": {
+      "2026-10-31": ["Black Tee (Bald, Stocky) / Neon Yellow", "Black Tee (Bald, Stocky)", "Neon Yellow Tee"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "Spider": {
+    "player_id": "crew_spider",
+    "name": "Spider",
+    "permanent_traits": "Lean, high-motor rebounder, white shoes, relentless offensive glass putback specialist",
+    "biometric_anchors": {
+      "hair_and_face": "Lean athletic build",
+      "height_build": "Tall, lean high-motor forward/center",
+      "footwear_and_gear": "White basketball shoes, sleeveless cutoff tanks",
+      "court_signature": "Relentless offensive rebounds & immediate putback layups"
+    },
+    "default_team_role": "Glass Cleaner / Forward",
+    "outfit_history": {
+      "2026-10-31": ["Grey Sleeveless Tank"]
+    },
+    "updated_at": "2026-11-01T00:40:00Z"
+  }
+}

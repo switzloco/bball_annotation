@@ -1,0 +1,31 @@
+# Heavy local video files (backed up in gs://basketball-highlights-store)
+*.mp4
+*.MP4
+*.mov
+*.MOV
+*.avi
+*.mkv
+*.webm
+
+# Python & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+concat_list.txt
+espn_film_room_qa.png
+
+# Secrets / credentials (if any added locally)
+*.pem
+*.key
+service-account*.json
+.env

@@ -1,0 +1,195 @@
+{
+  "session_metadata": {
+    "session_id": "2026-10-31",
+    "game_format": "5v5_full_court",
+    "supported_formats": [
+      "5v5_full_court",
+      "3v3_half_court",
+      "4v4_full_court",
+      "2v2_half_court"
+    ],
+    "camera_angle": "corner_elevated",
+    "hoop_rois_4k": [
+      {
+        "hoop_id": "Single (3v3)",
+        "label": "Single Hoop",
+        "x_norm": 0.3495,
+        "y_norm": 0.415,
+        "rim_x_4k": 1342,
+        "rim_y_4k": 896
+      }
+    ],
+    "updated_at": "2026-11-01T00:17:08Z"
+  },
+  "crew_master_roster": {
+    "Josh": {
+      "name": "Josh",
+      "permanent_traits": "Curly brown hair, stocky build, high-volume 3PT shooter & primary ball-handler",
+      "default_team_role": "Far Hoop Squad Captain",
+      "outfit_history": {
+        "2026-10-31": "White \"Luigi's\" Tee"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Damien": {
+      "name": "Damien",
+      "permanent_traits": "Stocky/tall build, bald head, beard, dominant rebounder & interior shot-blocker",
+      "default_team_role": "Near Hoop Anchor",
+      "outfit_history": {
+        "2026-10-31": "Maroon Tee"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Kenny": {
+      "name": "Kenny",
+      "permanent_traits": "Tall, lean wing, wears black track pants & bright teal shoes, clutch wing 3PT shooter",
+      "default_team_role": "Wing Sharpshooter",
+      "outfit_history": {
+        "2026-10-31": "Black Tee / Black Pants (Teal Shoes)"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Brian": {
+      "name": "Brian",
+      "permanent_traits": "Blonde hair, athletic wing, left-wing slasher & high-arc runner finisher",
+      "default_team_role": "Slasher / Wing",
+      "outfit_history": {
+        "2026-10-31": "Black Tee (Blonde Hair)"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Donnie": {
+      "name": "Donnie",
+      "permanent_traits": "Wears glasses, crafty baseline driver & reverse layup finisher",
+      "default_team_role": "Guard / Wing",
+      "outfit_history": {
+        "2026-10-31": "Dark Blue \"Warriors\" Tee"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Timor": {
+      "name": "Timor",
+      "permanent_traits": "Quick two-way guard, smooth mid-range pull-up jumper & active on-ball steals",
+      "default_team_role": "Two-Way Guard",
+      "outfit_history": {
+        "2026-10-31": "Black Tee / Mint Green Shorts"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Rock": {
+      "name": "Rock",
+      "permanent_traits": "Bald, stocky build, strong interior defender, active hands & clutch passer",
+      "default_team_role": "Point Forward / Defender",
+      "outfit_history": {
+        "2026-10-31": "Black Tee (Bald, Stocky) / Neon Yellow"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    },
+    "Spider": {
+      "name": "Spider",
+      "permanent_traits": "Lean, high-motor rebounder, white shoes, relentless offensive glass putback specialist",
+      "default_team_role": "Glass Cleaner / Forward",
+      "outfit_history": {
+        "2026-10-31": "Grey Sleeveless Tank"
+      },
+      "updated_at": "2026-10-31T23:55:00Z"
+    }
+  },
+  "plays": {
+    "1355": {
+      "accurate_votes": 2,
+      "wrong_votes": 0,
+      "fire_votes": 2,
+      "notes": [
+        {
+          "id": "note_seed_2235",
+          "author": "Nick (Admin)",
+          "issue_type": "Verified Play",
+          "claimed_player": "Black Tee / Mint Green Shorts",
+          "comment": "Verified: Pass from Rock (black tee) at 22:33 to Timor (mint green shorts) for the clutch right-wing jumper at 22:36.25 to tie the game 14\u201314!",
+          "facts_votes": 2,
+          "cap_votes": 0,
+          "created_at": "2026-10-31T23:25:00Z"
+        }
+      ]
+    },
+    "1385": {
+      "accurate_votes": 3,
+      "wrong_votes": 0,
+      "fire_votes": 5,
+      "notes": [
+        {
+          "id": "note_seed_2305",
+          "author": "Nick (Admin)",
+          "issue_type": "Verified Game-Winner",
+          "claimed_player": "Black Tee / Black Pants (Teal Shoes)",
+          "comment": "Verified via 4K full-court zoom (22:59-23:06): Josh (Luigi's Tee) skies for the DREB at the Near Hoop (23:00) and fires a full-court fast-break outlet pass (23:02.5) to Kenny (Black Tee / Black Pants) leaking out for the walk-off Game-Winning Layup (15\u201314 Final)!",
+          "facts_votes": 3,
+          "cap_votes": 0,
+          "created_at": "2026-10-31T23:25:00Z"
+        }
+      ]
+    },
+    "1335": {
+      "accurate_votes": 0,
+      "wrong_votes": 1,
+      "fire_votes": 0,
+      "notes": [
+        {
+          "id": "note_seed_2215",
+          "author": "AI Audit (Verified via 4K Zoom)",
+          "issue_type": "Wrong Player ID",
+          "claimed_player": "Grey Long-Sleeve / White Beard",
+          "comment": "False positive game bucket: All 10 active players are at the Far Hoop while Grey Long-Sleeve shoots a warmup jumper alone at the Near Hoop at 22:13.75.",
+          "facts_votes": 1,
+          "cap_votes": 0,
+          "created_at": "2026-10-31T23:21:00Z"
+        }
+      ]
+    }
+  },
+  "crew_roster_map": {
+    "White \"Luigi's\" Tee": {
+      "real_name": "Josh",
+      "traits": "White Luigi's tee, curly brown hair, stocky build (Far Hoop Team)",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Maroon Tee": {
+      "real_name": "Damien",
+      "traits": "Maroon tee, stocky/tall build, bald head, beard",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Black Tee / Black Pants (Teal Shoes)": {
+      "real_name": "Kenny",
+      "traits": "Tall, black shirt and black track pants, bright teal shoes (hits game-winner @ 23:05)",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Black Tee (Blonde Hair)": {
+      "real_name": "Brian",
+      "traits": "Blonde hair, black tee, black shorts",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Dark Blue \"Warriors\" Tee": {
+      "real_name": "Donnie",
+      "traits": "Dark blue Warriors shirt, light blue shorts, glasses",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Black Tee / Mint Green Shorts": {
+      "real_name": "Timor",
+      "traits": "Light mint-green shorts, black tee (black long-sleeve in Next Game)",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Black Tee (Bald, Stocky) / Neon Yellow": {
+      "real_name": "Rock",
+      "traits": "Black tee & black shorts in Full Game; Neon Yellow tee in Next Game",
+      "updated_at": "2026-10-31T23:50:00Z"
+    },
+    "Grey Sleeveless Tank": {
+      "real_name": "Spider",
+      "traits": "Grey sleeveless tank, black shorts, white shoes (plays in Next Game @ 29:01+)",
+      "updated_at": "2026-10-31T23:50:00Z"
+    }
+  },
+  "custom_plays": [],
+  "segment_corrections": []
+}

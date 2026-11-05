@@ -1,0 +1,2282 @@
+{
+  "slug": "2026-03-01_CU_vs_Treez_Playoffs",
+  "title": "Campbell United vs. Treez [Playoffs] (Mar 1, 2026)",
+  "yt_id": "5r6pXK_nKx8",
+  "yt_url": "https://www.youtube.com/watch?v=5r6pXK_nKx8",
+  "recleague_url": "https://www.recleague.net/leagues/91937/games/142724420",
+  "season": "Winter '26 Semifinal",
+  "box_score_tables": [
+    [
+      [
+        "Treez (6-2-0)"
+      ]
+    ],
+    [
+      [
+        "Player",
+        "Pts",
+        "FTM",
+        "FGM",
+        "2PM",
+        "3PM",
+        "Reb",
+        "Ast",
+        "Stl",
+        "Blk",
+        "Fls",
+        "T-Fls",
+        "TOs",
+        "PPR"
+      ],
+      [
+        "Charles",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "-0.5"
+      ],
+      [
+        "Josh Bermea Jr.",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "2",
+        "0",
+        "0",
+        "0.0"
+      ],
+      [
+        "Joshua Bermea Sr.",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "1.5"
+      ],
+      [
+        "Juan Meija",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "2",
+        "0",
+        "0",
+        "0.0"
+      ],
+      [
+        "Kevin",
+        "14",
+        "7",
+        "3",
+        "2",
+        "1",
+        "2",
+        "0",
+        "3",
+        "0",
+        "2",
+        "0",
+        "1",
+        "22.0"
+      ],
+      [
+        "Marcus",
+        "4",
+        "0",
+        "2",
+        "2",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "3",
+        "0",
+        "0",
+        "5.3"
+      ],
+      [
+        "Omar Cross",
+        "16",
+        "5",
+        "5",
+        "4",
+        "1",
+        "3",
+        "0",
+        "0",
+        "0",
+        "6",
+        "0",
+        "1",
+        "19.3"
+      ],
+      [
+        "Raul",
+        "9",
+        "4",
+        "2",
+        "1",
+        "1",
+        "10",
+        "2",
+        "1",
+        "0",
+        "3",
+        "0",
+        "1",
+        "26.0"
+      ],
+      [
+        "Yousef",
+        "16",
+        "1",
+        "6",
+        "3",
+        "3",
+        "8",
+        "0",
+        "0",
+        "0",
+        "2",
+        "0",
+        "1",
+        "25.5"
+      ],
+      [
+        "Aaron (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "James (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "Team Totals",
+        "59",
+        "17",
+        "18",
+        "12",
+        "6",
+        "24",
+        "3",
+        "4",
+        "0",
+        "21",
+        "0",
+        "5",
+        "--"
+      ]
+    ],
+    [
+      [
+        "Campbell United (6-3-0)"
+      ]
+    ],
+    [
+      [
+        "Player",
+        "Pts",
+        "FTM",
+        "FGM",
+        "2PM",
+        "3PM",
+        "Reb",
+        "Ast",
+        "Stl",
+        "Blk",
+        "Fls",
+        "T-Fls",
+        "TOs",
+        "PPR"
+      ],
+      [
+        "Christian Raslowsky",
+        "15",
+        "3",
+        "5",
+        "3",
+        "2",
+        "9",
+        "6",
+        "1",
+        "1",
+        "3",
+        "0",
+        "1",
+        "38.8"
+      ],
+      [
+        "Corey Randolph",
+        "7",
+        "2",
+        "2",
+        "1",
+        "1",
+        "2",
+        "1",
+        "0",
+        "0",
+        "1",
+        "1",
+        "0",
+        "11.0"
+      ],
+      [
+        "Eugene",
+        "17",
+        "1",
+        "6",
+        "2",
+        "4",
+        "2",
+        "2",
+        "1",
+        "1",
+        "0",
+        "0",
+        "0",
+        "26.5"
+      ],
+      [
+        "George",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "3",
+        "0",
+        "0",
+        "1",
+        "2",
+        "0",
+        "1",
+        "5.3"
+      ],
+      [
+        "Jeff Dunnam",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "1.0"
+      ],
+      [
+        "Matt Mocherman",
+        "18",
+        "6",
+        "5",
+        "3",
+        "2",
+        "6",
+        "1",
+        "0",
+        "0",
+        "6",
+        "0",
+        "0",
+        "27.0"
+      ],
+      [
+        "Nick Switzer",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "2",
+        "1",
+        "1",
+        "0",
+        "2",
+        "0",
+        "0",
+        "6.0"
+      ],
+      [
+        "Shane Hoffman",
+        "9",
+        "0",
+        "3",
+        "0",
+        "3",
+        "4",
+        "1",
+        "0",
+        "0",
+        "2",
+        "0",
+        "0",
+        "15.5"
+      ],
+      [
+        "Wes",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1",
+        "0",
+        "1",
+        "0",
+        "0",
+        "1",
+        "3.0"
+      ],
+      [
+        "Adam Fecteau (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "Evan Kovarik (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "James (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "Josh (DNP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "Temp (TEMP)",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-",
+        "-"
+      ],
+      [
+        "Team Totals",
+        "66",
+        "12",
+        "21",
+        "9",
+        "12",
+        "28",
+        "14",
+        "3",
+        "4",
+        "16",
+        "1",
+        "4",
+        "--"
+      ]
+    ]
+  ],
+  "pbp_count": 199,
+  "pbp_entries": [
+    {
+      "wall_clock": "4:53:07 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "4:53:21 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:53:32 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:53:48 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "4:53:54 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "4:54:03 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:54:17 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "4:54:19 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "4:54:37 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "4:54:50 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "4:54:52 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "4:55:27 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:55:36 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "4:56:13 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "4:56:33 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "4:56:46 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "4:57:03 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:57:11 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "4:57:35 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "4:58:08 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:58:15 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Block"
+    },
+    {
+      "wall_clock": "4:58:18 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:58:24 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:58:35 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:58:49 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:59:20 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "4:59:27 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#30 Wes",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "4:59:29 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "4:59:34 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#30 Wes",
+      "action": "Block"
+    },
+    {
+      "wall_clock": "5:00:06 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:00:25 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:00:32 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:00:40 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:00:52 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:00:58 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:01:01 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:01:14 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:01:33 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:01:35 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:01:53 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/920615/picture_medium.jpeg?1768177711",
+      "player": "#9 Charles",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:02:02 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:02:09 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:02:17 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:02:32 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:03:43 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:04:06 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:04:26 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:04:32 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:04:38 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:04:53 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:04:56 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:05:09 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:05:27 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:05:53 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:06:12 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:06:21 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:06:36 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:06:43 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:06:50 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:06:52 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:06:56 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:06:58 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:07:12 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911525/picture_medium.jpg?1767477668",
+      "player": "#55 Joshua Bermea Sr.",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:07:31 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:08:11 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:08:20 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:08:55 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:09:11 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:09:13 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911525/picture_medium.jpg?1767477668",
+      "player": "#55 Joshua Bermea Sr.",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:09:14 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "",
+      "player": "Campbell United",
+      "action": "Timeout"
+    },
+    {
+      "wall_clock": "5:10:36 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:10:40 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:10:42 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:10:52 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:11:06 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:11:23 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:12:00 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:12:10 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:12:11 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:12:33 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:12:48 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911477/picture_medium.jpeg?1767477647",
+      "player": "#11 Jeff Dunnam",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:12:52 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:12:53 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:13:13 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:13:26 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:13:52 PM",
+      "period": "H1",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:14:31 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:14:53 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:15:36 PM",
+      "period": "H1",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "",
+      "player": "Treez",
+      "action": "Timeout"
+    },
+    {
+      "wall_clock": "5:19:30 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:19:58 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:20:11 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:20:22 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:20:23 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911466/picture_medium.jpg?1767477638",
+      "player": "#77 Juan Meija",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:20:56 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:20:59 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:21:45 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:22:14 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:22:31 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:22:33 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:22:44 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:23:09 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:23:23 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:23:37 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:23:49 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:23:50 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#30 Wes",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:24:07 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:24:26 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:24:39 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:24:55 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:24:58 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:25:05 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:25:14 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:25:19 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:25:53 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:26:23 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#1 Josh Bermea Jr.",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:27:08 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:27:23 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:27:36 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:27:56 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#1 Josh Bermea Jr.",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:28:07 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:28:22 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:28:34 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:28:48 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:28:49 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:29:09 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:29:42 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:29:52 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911477/picture_medium.jpeg?1767477647",
+      "player": "#11 Jeff Dunnam",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:29:53 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:30:27 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:30:28 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:31:11 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:31:25 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:31:45 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:31:58 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:32:10 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:32:11 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:32:20 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:32:32 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:33:33 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911475/picture_medium.jpeg?1767477645",
+      "player": "#24 George",
+      "action": "Block"
+    },
+    {
+      "wall_clock": "5:33:35 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Block"
+    },
+    {
+      "wall_clock": "5:34:10 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:34:35 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:34:36 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "",
+      "player": "Treez",
+      "action": "Timeout"
+    },
+    {
+      "wall_clock": "5:36:20 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:36:37 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:36:39 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:36:42 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#3 Marcus",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:36:54 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:37:01 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:37:03 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:37:33 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:37:37 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "",
+      "player": "Treez",
+      "action": "Timeout"
+    },
+    {
+      "wall_clock": "5:38:44 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:38:56 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911498/picture_medium.jpeg?1767477658",
+      "player": "#1 Eugene",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:39:07 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#20 Shane Hoffman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:39:16 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:39:27 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:39:43 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:39:53 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:40:10 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:40:46 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:41:16 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Turnover"
+    },
+    {
+      "wall_clock": "5:41:26 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:41:42 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:42:19 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:42:23 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:42:37 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:42:49 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:42:51 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:43:02 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "2-pt FG Made"
+    },
+    {
+      "wall_clock": "5:43:04 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:43:43 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911463/picture_medium.jpeg?1767477635",
+      "player": "#7 Nick Switzer",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:43:45 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Steal"
+    },
+    {
+      "wall_clock": "5:44:13 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:44:55 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:47:34 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "T-Foul"
+    },
+    {
+      "wall_clock": "5:48:05 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:48:10 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:48:15 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:48:56 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:48:59 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:49:13 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:49:20 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:49:35 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:49:45 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:49:57 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#12 Corey Randolph",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:50:09 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#5 Omar Cross",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:50:26 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:50:51 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "3-pt FG Made"
+    },
+    {
+      "wall_clock": "5:50:53 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#10 Raul",
+      "action": "Assist"
+    },
+    {
+      "wall_clock": "5:51:00 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911466/picture_medium.jpg?1767477638",
+      "player": "#77 Juan Meija",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:51:19 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911474/picture_medium.jpeg?1767477644",
+      "player": "#44 Christian Raslowsky",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:51:22 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:51:29 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "FT Made"
+    },
+    {
+      "wall_clock": "5:51:39 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911795/picture_medium.png?1767477706",
+      "player": "#11 Kevin",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:51:54 PM",
+      "period": "H2",
+      "team": "Campbell United",
+      "swatch_style": "background-color: ",
+      "avatar": "https://recleague-prod.s3.amazonaws.com/site-assets/91937/players/911488/picture_medium.jpeg?1767477655",
+      "player": "#22 Matt Mocherman",
+      "action": "Foul"
+    },
+    {
+      "wall_clock": "5:51:56 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "Rebound"
+    },
+    {
+      "wall_clock": "5:51:57 PM",
+      "period": "H2",
+      "team": "Treez",
+      "swatch_style": "background-color: ",
+      "avatar": "https://www.recleague.net/assets/player_silhouette-06e0319e8903f6be0b21dcda8673e86306c341b4f6ef767fa1ffce550e31743d.png",
+      "player": "#8 Yousef",
+      "action": "2-pt FG Made"
+    }
+  ]
+}
