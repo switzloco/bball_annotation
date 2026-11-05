@@ -1,5 +1,8 @@
 # 🏀 CPSN × Campbell United — AI Basketball Film Room & Scouting Hub
 
+[![Live Film Room](https://img.shields.io/badge/🏀_Live_Film_Room-Cloud_Run-ff5722?style=for-the-badge)](https://bball-film-room-615717094211.us-central1.run.app)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/switzloco/bball_annotation/blob/main/campbell_united_colab_pipeline.ipynb)
+
 Live production deployment: **[bball-film-room-615717094211.us-central1.run.app](https://bball-film-room-615717094211.us-central1.run.app)**
 
 An ESPN-style interactive game film, play-by-play synchronization, highlight reel, and opponent scouting platform built for **Campbell United** (Majestic Hoops / CPSN).
