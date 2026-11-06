@@ -1,46 +1,49 @@
 {
-  "#44 Christian Raslowsky": {
-    "player_id": "cu_44_christian",
-    "name": "#44 Christian Raslowsky",
-    "cu_jersey": "#44",
+  "#31 Evan Kovarik": {
+    "player_id": "cu_31_evan",
+    "name": "#31 Evan Kovarik",
+    "cu_jersey": "#31",
     "cu_team": "Campbell United",
-    "biometric_confidence": "98% Biometric & Gear Match (Identical Black White-Stripe Shorts + Bright Orange Shoes in Oct 18 G1 vs. Halal Hoopers)",
-    "permanent_traits": "Primary ball-handler & transition floor general, wears black shorts with white side stripe & bright orange basketball shoes",
+    "biometric_confidence": "99% Ground-Truth Match (Verified in Oct 25 TMT s=991s wearing Red #31 with reddish-blonde hair, beard & identical Bright Orange Shoes + Black Nike White-Swoosh Shorts)",
+    "permanent_traits": "Primary ball-handler & transition floor general in pickup, sharpshooter & slasher, wears bright orange basketball shoes & black Nike shorts",
     "biometric_anchors": {
-      "hair_and_face": "Short dark hair, athletic guard build",
-      "height_build": "6'0\" athletic point/combo guard",
-      "footwear_and_gear": "Bright Orange basketball shoes, black shorts with vertical white side stripe, black crew socks",
-      "court_signature": "High-pace transition pushes, drive-and-kick 3PT creation, active perimeter steals"
+      "hair_and_face": "Reddish-blonde / light-brown hair with beard",
+      "height_build": "6'2\" athletic guard/forward",
+      "footwear_and_gear": "Bright Orange basketball shoes, black Nike shorts with white swoosh, blue graphic tee in Oct 15 pickup",
+      "court_signature": "High-pace transition pushes, drive-and-kick 3PT creation, active perimeter rebounds"
     },
-    "default_team_role": "Campbell United #44 / Point Guard",
+    "default_team_role": "Campbell United #31 / Guard-Forward",
     "outfit_history": {
+      "2026-10-04_CU_vs_Mustangs_Champ": [
+        "#31 Evan Kovarik (CU Red #31)"
+      ],
       "2026-10-15_Pickup_G1": [
-        "#44 Christian Raslowsky (Blue Tee / Orange Shoes)"
+        "#31 Evan Kovarik (Blue Tee / Orange Shoes)"
       ],
       "2026-10-18_CU_vs_HalalHoopers_G1": [
-        "#44 Christian Raslowsky (CU Red #44 / Orange Shoes)"
+        "#31 Evan Kovarik (CU Red #31 / Orange Shoes)"
       ],
       "2026-10-25_CU_vs_TMT_G2": [
-        "#44 Christian Raslowsky (CU Red #44)"
+        "#31 Evan Kovarik (CU Red #31 / Orange Shoes)"
       ],
       "2026-11-01_CU_vs_Misfits2_G3": [
-        "#44 Christian Raslowsky (CU Red #44)"
+        "#31 Evan Kovarik (CU Red #31)"
       ]
     },
-    "updated_at": "2026-11-06T00:45:00Z"
+    "updated_at": "2026-11-06T01:45:00Z"
   },
   "#4 Adam Fecteau": {
     "player_id": "cu_4_adam",
     "name": "#4 Adam Fecteau",
     "cu_jersey": "#4",
     "cu_team": "Campbell United",
-    "biometric_confidence": "95% Biometric Match (Explosive wing scorer, single white left-leg compression sleeve, pull-up 3PT & rim blocks)",
-    "permanent_traits": "Explosive athletic wing/forward, pull-up 3PT shooter, transition finisher & weak-side shot blocker",
+    "biometric_confidence": "98% Ground-Truth Match (Verified in Nov 1 Misfits 2 s=861s & Oct 25 TMT s=991s wearing Red #4; explosive 6'3\" wing with medium-brown hair/beard, pull-up 3PT & weak-side rim blocks)",
+    "permanent_traits": "Explosive athletic wing/forward, pull-up 3PT shooter, above-the-rim finisher & weak-side shot blocker",
     "biometric_anchors": {
-      "hair_and_face": "Medium brown hair, lean explosive wing build",
+      "hair_and_face": "Medium brown hair and beard, lean explosive wing build",
       "height_build": "6'3\" explosive wing/forward",
-      "footwear_and_gear": "Single white left-leg compression sleeve/tights, black shorts, white basketball shoes",
-      "court_signature": "Transition pull-up 3-pointers, baseline help blocks, above-the-rim finishes"
+      "footwear_and_gear": "Blue pinnie over black tee, single white left-leg compression sleeve/tights, black shorts, white basketball shoes",
+      "court_signature": "Transition pull-up 3-pointers, right-wing jumpers, baseline help blocks & above-the-rim dunks"
     },
     "default_team_role": "Campbell United #4 / Wing Scorer",
     "outfit_history": {
@@ -48,7 +51,7 @@
         "#4 Adam Fecteau (CU Red #4)"
       ],
       "2026-10-15_Pickup_G1": [
-        "#4 Adam Fecteau (Blue Tee / White L-Leg Sleeve)"
+        "#4 Adam Fecteau (Blue Pinnie / White L-Leg Sleeve)"
       ],
       "2026-10-18_CU_vs_HalalHoopers_G1": [
         "#4 Adam Fecteau (CU Red #4)"
@@ -60,145 +63,19 @@
         "#4 Adam Fecteau (CU Red #4)"
       ]
     },
-    "updated_at": "2026-11-06T00:45:00Z"
-  },
-  "#31 Evan Kovarik": {
-    "player_id": "cu_31_evan",
-    "name": "#31 Evan Kovarik",
-    "cu_jersey": "#31",
-    "cu_team": "Campbell United",
-    "biometric_confidence": "96% Biometric & Gear Match (Blonde/light-brown hair, grey athletic shorts, black socks, high-efficiency paint & post finisher)",
-    "permanent_traits": "High-efficiency forward/wing, elite cutter, right-block post-up & bank-shot finisher",
-    "biometric_anchors": {
-      "hair_and_face": "Short blonde / light-brown hair",
-      "height_build": "6'2\" strong athletic forward/wing",
-      "footwear_and_gear": "Grey athletic shorts, black crew socks, black/white basketball shoes",
-      "court_signature": "Middle lane cuts, right-block turnaround jumpers, soft-touch bank runners"
-    },
-    "default_team_role": "Campbell United #31 / Forward",
-    "outfit_history": {
-      "2026-10-04_CU_vs_Mustangs_Champ": [
-        "#31 Evan Kovarik (CU Red #31)"
-      ],
-      "2026-10-15_Pickup_G1": [
-        "#31 Evan Kovarik (White/Black Raglan Tee)"
-      ],
-      "2026-10-18_CU_vs_HalalHoopers_G1": [
-        "#31 Evan Kovarik (CU Red #31 / Grey Shorts)"
-      ],
-      "2026-10-25_CU_vs_TMT_G2": [
-        "#31 Evan Kovarik (CU Red #31)"
-      ],
-      "2026-11-01_CU_vs_Misfits2_G3": [
-        "#31 Evan Kovarik (CU Red #31)"
-      ]
-    },
-    "updated_at": "2026-11-06T00:45:00Z"
-  },
-  "#16 Chris": {
-    "player_id": "cu_16_chris",
-    "name": "#16 Chris",
-    "cu_jersey": "#16",
-    "cu_team": "Campbell United",
-    "biometric_confidence": "96% Biometric Match (Tall bearded interior anchor, grey shorts, black socks, white shoes \u2014 matches Oct 18 & Nov 1 CU #16)",
-    "permanent_traits": "Tall bearded forward/center, physical screen-setter, dominant defensive rebounder & interior wall",
-    "biometric_anchors": {
-      "hair_and_face": "Dark hair with full dark beard",
-      "height_build": "6'4\" strong interior forward/center",
-      "footwear_and_gear": "Grey athletic shorts, black crew socks, white basketball shoes",
-      "court_signature": "Vertical rim protection, offensive rebound kick-outs, high-post screens"
-    },
-    "default_team_role": "Campbell United #16 / Center-Forward",
-    "outfit_history": {
-      "2026-10-15_Pickup_G1": [
-        "#16 Chris (Black Tee / Beard)"
-      ],
-      "2026-10-18_CU_vs_HalalHoopers_G1": [
-        "#16 Chris (CU Red #16)"
-      ],
-      "2026-10-25_CU_vs_TMT_G2": [
-        "#16 Chris (CU Red #16)"
-      ],
-      "2026-11-01_CU_vs_Misfits2_G3": [
-        "#16 Chris (CU Red #16)"
-      ]
-    },
-    "updated_at": "2026-11-06T00:45:00Z"
-  },
-  "#7 Nick Switzer": {
-    "player_id": "cu_7_nick",
-    "name": "#7 Nick Switzer",
-    "cu_jersey": "#7",
-    "cu_team": "Campbell United",
-    "biometric_confidence": "94% Biometric Match (Strong guard/forward build, navy shorts with white side panel, baseline runner & high-post passing)",
-    "permanent_traits": "Sharpshooting wing/forward & high-IQ passer, baseline runner & catch-and-shoot 3PT threat",
-    "biometric_anchors": {
-      "hair_and_face": "Short brown hair, strong athletic build",
-      "height_build": "6'1\" guard/forward",
-      "footwear_and_gear": "Navy shorts with white side panel, white/black basketball shoes",
-      "court_signature": "Right-baseline runners, high-post cutter feeds, catch-and-shoot 3-pointers"
-    },
-    "default_team_role": "Campbell United #7 / Wing-Guard",
-    "outfit_history": {
-      "2026-10-04_CU_vs_Mustangs_Champ": [
-        "#7 Nick Switzer (CU Red #7)"
-      ],
-      "2026-10-15_Pickup_G1": [
-        "#7 Nick Switzer (White Tee / Navy Shorts)"
-      ],
-      "2026-10-25_CU_vs_TMT_G2": [
-        "#7 Nick Switzer (CU Red #7)"
-      ],
-      "2026-11-01_CU_vs_Misfits2_G3": [
-        "#7 Nick Switzer (CU Red #7)"
-      ]
-    },
-    "updated_at": "2026-11-06T00:45:00Z"
-  },
-  "#9 Aaron": {
-    "player_id": "cu_9_aaron",
-    "name": "#9 Aaron",
-    "cu_jersey": "#9",
-    "cu_team": "Campbell United",
-    "biometric_confidence": "93% Biometric Match (Left-baseline reverse layup slasher, active rebounder & transition playmaker)",
-    "permanent_traits": "Two-way slashing wing/guard, crafty baseline reverse finisher & transition playmaker",
-    "biometric_anchors": {
-      "hair_and_face": "Short dark hair, lean guard/wing build",
-      "height_build": "6'0\" slashing wing/guard",
-      "footwear_and_gear": "Royal blue graphic tee (yellow chest bar), black shorts, black basketball shoes",
-      "court_signature": "Left-baseline drives, reverse layups, drive-and-kick corner feeds"
-    },
-    "default_team_role": "Campbell United #9 / Two-Way Wing",
-    "outfit_history": {
-      "2026-10-04_CU_vs_Mustangs_Champ": [
-        "#9 Aaron (CU Red #9)"
-      ],
-      "2026-10-15_Pickup_G1": [
-        "#9 Aaron (Blue Tee / Yellow Bar)"
-      ],
-      "2026-10-18_CU_vs_HalalHoopers_G1": [
-        "#9 Aaron (CU Red #9)"
-      ],
-      "2026-10-25_CU_vs_TMT_G2": [
-        "#9 Aaron (CU Red #9)"
-      ],
-      "2026-11-01_CU_vs_Misfits2_G3": [
-        "#9 Aaron (CU Red #9)"
-      ]
-    },
-    "updated_at": "2026-11-06T00:45:00Z"
+    "updated_at": "2026-11-06T01:45:00Z"
   },
   "#24 George": {
     "player_id": "cu_24_george",
     "name": "#24 George",
     "cu_jersey": "#24",
     "cu_team": "Campbell United",
-    "biometric_confidence": "95% Biometric & Gear Match (Tall forward with black right knee sleeve/brace & maroon shoes \u2014 matches Nov 1 CU #24)",
+    "biometric_confidence": "97% Ground-Truth Match (Verified in Nov 1 Misfits 2 s=2677s wearing Red #24; tall broad-shouldered forward with black right knee sleeve/brace & maroon shoes)",
     "permanent_traits": "Tall interior forward, wears black right knee sleeve/brace, physical screen-setter & paint finisher",
     "biometric_anchors": {
       "hair_and_face": "Short dark hair, tall broad-shouldered forward",
       "height_build": "6'4\" power forward / center",
-      "footwear_and_gear": "Black right knee sleeve/brace, teal shorts, maroon/red basketball shoes",
+      "footwear_and_gear": "Light grey sleeveless tank, teal shorts, black right knee sleeve/brace, maroon/red basketball shoes",
       "court_signature": "High ball-screens, paint floaters/hooks, offensive glass battles"
     },
     "default_team_role": "Campbell United #24 / Forward",
@@ -216,7 +93,175 @@
         "#24 George (CU Red #24 / Knee Brace)"
       ]
     },
-    "updated_at": "2026-11-06T00:45:00Z"
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "#16 Chris": {
+    "player_id": "cu_16_chris",
+    "name": "#16 Chris",
+    "cu_jersey": "#16",
+    "cu_team": "Campbell United",
+    "biometric_confidence": "96% Ground-Truth Match (Tall bearded interior anchor, grey shorts, black socks, white shoes \u2014 matches Campbell United interior anchor)",
+    "permanent_traits": "Tall bearded forward/center, physical screen-setter, dominant defensive rebounder & interior wall",
+    "biometric_anchors": {
+      "hair_and_face": "Dark hair with full dark beard",
+      "height_build": "6'4\" strong interior forward/center",
+      "footwear_and_gear": "Black tee, grey athletic shorts, black crew socks, white basketball shoes",
+      "court_signature": "Vertical rim protection, offensive rebound kick-outs, high-post screens"
+    },
+    "default_team_role": "Campbell United #16 / Center-Forward",
+    "outfit_history": {
+      "2026-10-15_Pickup_G1": [
+        "#16 Chris (Black Tee / Beard)"
+      ],
+      "2026-10-18_CU_vs_HalalHoopers_G1": [
+        "#16 Chris (CU Red #16)"
+      ],
+      "2026-10-25_CU_vs_TMT_G2": [
+        "#16 Chris (CU Red #16)"
+      ],
+      "2026-11-01_CU_vs_Misfits2_G3": [
+        "#16 Chris (CU Red #16)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "#7 Nick Switzer": {
+    "player_id": "cu_7_nick",
+    "name": "#7 Nick Switzer",
+    "cu_jersey": "#7",
+    "cu_team": "Campbell United",
+    "biometric_confidence": "100% Ground-Truth Match (Verified in Nov 1 Misfits 2 s=1040s & s=3147s wearing Red #7 with blonde/reddish-brown top-knot/bun; confirmed NOT present at Oct 15 pickup run)",
+    "permanent_traits": "Elite 3PT sharpshooter (6-for-6 3PT in Nov 1 G3) & high-IQ playmaker, blonde/reddish-brown hair tied in top-knot/bun",
+    "biometric_anchors": {
+      "hair_and_face": "Blonde / reddish-brown hair tied in top-knot / man-bun, beard",
+      "height_build": "6'1\" sharpshooting wing/guard",
+      "footwear_and_gear": "Campbell United Red #7 jersey, dark shorts, white crew socks, dark basketball shoes",
+      "court_signature": "Left-wing & corner catch-and-shoot 3PT heat checks, transition entry assists"
+    },
+    "default_team_role": "Campbell United #7 / Wing Sharpshooter",
+    "outfit_history": {
+      "2026-10-04_CU_vs_Mustangs_Champ": [
+        "#7 Nick Switzer (CU Red #7)"
+      ],
+      "2026-10-18_CU_vs_HalalHoopers_G1": [
+        "#7 Nick Switzer (CU Red #7)"
+      ],
+      "2026-10-25_CU_vs_TMT_G2": [
+        "#7 Nick Switzer (CU Red #7)"
+      ],
+      "2026-11-01_CU_vs_Misfits2_G3": [
+        "#7 Nick Switzer (CU Red #7)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "#44 Christian Raslowsky": {
+    "player_id": "cu_44_christian",
+    "name": "#44 Christian Raslowsky",
+    "cu_jersey": "#44",
+    "cu_team": "Campbell United",
+    "biometric_confidence": "100% Ground-Truth Match (Verified in Nov 1 Misfits 2 s=1550s & Oct 18 Halal Hoopers s=2925s wearing Red #44 with blue knee sleeves/tights)",
+    "permanent_traits": "High-rebounding two-way forward/guard, wears blue knee sleeves/compression support, relentless transition finisher",
+    "biometric_anchors": {
+      "hair_and_face": "Short light-brown/blonde hair, athletic forward/guard build",
+      "height_build": "6'1\" two-way guard/forward",
+      "footwear_and_gear": "Campbell United Red #44 jersey, black shorts, blue knee sleeves",
+      "court_signature": "Double-double rebounding, fast-break finishes, interior & perimeter passing"
+    },
+    "default_team_role": "Campbell United #44 / Guard-Forward",
+    "outfit_history": {
+      "2026-10-18_CU_vs_HalalHoopers_G1": [
+        "#44 Christian Raslowsky (CU Red #44)"
+      ],
+      "2026-10-25_CU_vs_TMT_G2": [
+        "#44 Christian Raslowsky (CU Red #44)"
+      ],
+      "2026-11-01_CU_vs_Misfits2_G3": [
+        "#44 Christian Raslowsky (CU Red #44)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "#9 Aaron": {
+    "player_id": "cu_9_aaron",
+    "name": "#9 Aaron",
+    "cu_jersey": "#9",
+    "cu_team": "Campbell United",
+    "biometric_confidence": "94% Match (Campbell United Red #9 slasher & Oct 15 Blue Pinnie / Grey Sleeves left-baseline reverse layup & walk-off finisher)",
+    "permanent_traits": "Two-way slashing wing/guard, crafty baseline reverse finisher & transition playmaker",
+    "biometric_anchors": {
+      "hair_and_face": "Short dark hair, athletic guard/wing build",
+      "height_build": "6'0\" slashing wing/guard",
+      "footwear_and_gear": "Blue pinnie over grey tee in Oct 15 pickup, black shorts, black basketball shoes",
+      "court_signature": "Left-baseline drives, reverse layups, transition leak-out finishes"
+    },
+    "default_team_role": "Campbell United #9 / Two-Way Wing",
+    "outfit_history": {
+      "2026-10-04_CU_vs_Mustangs_Champ": [
+        "#9 Aaron (CU Red #9)"
+      ],
+      "2026-10-15_Pickup_G1": [
+        "#9 Aaron (Blue Pinnie / Grey Sleeves)"
+      ],
+      "2026-10-18_CU_vs_HalalHoopers_G1": [
+        "#9 Aaron (CU Red #9)"
+      ],
+      "2026-10-25_CU_vs_TMT_G2": [
+        "#9 Aaron (CU Red #9)"
+      ],
+      "2026-11-01_CU_vs_Misfits2_G3": [
+        "#9 Aaron (CU Red #9)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "#20 Shane Hoffman (White Pinnie / Black Sleeves)": {
+    "player_id": "cu_20_shane_pickup",
+    "name": "#20 Shane Hoffman (White Pinnie / Black Sleeves)",
+    "cu_jersey": "#20",
+    "cu_team": "Campbell United / Pickup",
+    "biometric_confidence": "93% Biometric Match (6'2\" brown-haired bearded forward in White Pinnie over Black Tee + Grey Shorts; post turnaround at 02:23 & middle-cut bank runner at 03:37)",
+    "permanent_traits": "Strong forward/wing, right-block post turnaround & middle-lane cutter with soft bank-shot touch",
+    "biometric_anchors": {
+      "hair_and_face": "Short brown hair with trimmed beard",
+      "height_build": "6'2\" strong athletic forward/wing",
+      "footwear_and_gear": "White pinnie over black t-shirt, grey athletic shorts, black crew socks, dark shoes",
+      "court_signature": "Middle lane cuts, right-block post-ups, bank-shot runners"
+    },
+    "default_team_role": "Campbell United #20 / Forward-Wing",
+    "outfit_history": {
+      "2026-10-04_CU_vs_Mustangs_Champ": [
+        "#20 Shane Hoffman (CU Red #20)"
+      ],
+      "2026-10-15_Pickup_G1": [
+        "#20 Shane Hoffman (White Pinnie / Black Sleeves)"
+      ],
+      "2026-11-01_CU_vs_Misfits2_G3": [
+        "#20 Shane Hoffman (CU Red #20)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
+  },
+  "White Pinnie / Grey Sleeves (Nike Shorts)": {
+    "player_id": "pickup_white_pinnie_grey",
+    "name": "White Pinnie / Grey Sleeves (Nike Shorts)",
+    "cu_jersey": "Pickup",
+    "cu_team": "Pickup Crew",
+    "biometric_confidence": "99% Visual ID (Stocky dark-haired guard/forward with goatee in White Pinnie over Grey Tee + Black Nike Shorts + White Shoes; right-baseline floater at 01:35 & high-post dime at 03:35)",
+    "permanent_traits": "Stocky guard/forward with dark hair & goatee, tough baseline runner finisher & high-post cutter passer",
+    "biometric_anchors": {
+      "hair_and_face": "Short dark hair with goatee/beard, stocky strong build",
+      "height_build": "5'11\" stocky guard/forward",
+      "footwear_and_gear": "White pinnie over grey t-shirt, black Nike shorts with white logo, white basketball shoes",
+      "court_signature": "Right-baseline tear-drop runners, high-post cutter feeds"
+    },
+    "default_team_role": "Pickup Guard / High-Post Playmaker",
+    "outfit_history": {
+      "2026-10-15_Pickup_G1": [
+        "White Pinnie / Grey Sleeves (Nike Shorts)"
+      ]
+    },
+    "updated_at": "2026-11-06T01:45:00Z"
   },
   "Gary Wang": {
     "player_id": "pickup_gary_wang",
