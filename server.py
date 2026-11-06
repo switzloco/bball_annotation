@@ -274,6 +274,14 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                             "🔥 #99 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 — Film Room",
                             "Watch every bucket & dime from #99 Eugene Kim (29 PTS, 5 REB, 6 AST) & #32 Tianen Chen (30 PTS)!",
                         ),
+                        "2026-10-15_Pickup_G1": (
+                            "🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4) | CPSN Film Room",
+                            "Cross-run biometric player ID connecting Campbell United (#44 Christian, #4 Adam, #31 Evan, #16 Chris, #7 Nick, #9 Aaron, #24 George) to the Oct 15 pickup run!",
+                        ),
+                        "season_analytics": (
+                            "🧠 Campbell United Season Analytics & #4 Adam 3× Dunk Lab — CPSN Film Room",
+                            "Watch #4 Adam Fecteau's 3-Dunk 1st Half vs. Misfits 2 + Colab GPU Analytics across Campbell United's 4-0 streak!",
+                        ),
                     }
                     if game_val in game_og_map and not play_val:
                         custom_title, custom_desc = game_og_map[game_val]
@@ -386,6 +394,10 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     "2026-10-04_CU_vs_Mustangs_Champ",
                     "2026-10-18_CU_vs_HalalHoopers_G1",
                     "2026-10-25_CU_vs_TMT_G2",
+                    "2026-11-01_CU_vs_Misfits2_G3",
+                    "2026-09-20_SB_vs_Mustangs_Eugene41",
+                    "2026-10-18_SB_vs_Tandoori_Eugene29",
+                    "2026-10-15_Pickup_G1",
                     "2026-02-15_CU_vs_PimpsDown",
                     "2026-02-08_CU_vs_Eagles",
                     "2025-11-09_CU_vs_Crew7",

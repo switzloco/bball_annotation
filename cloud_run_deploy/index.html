@@ -1558,6 +1558,7 @@
           <option value="2026-02-08_CU_vs_Eagles">🏀 Majestic Archive: Campbell United 119, Eagles 69 (Feb 8, 2026)</option>
           <option value="2026-03-01_CU_vs_LattoTalent_Champ">🏀 Majestic Archive: Campbell United 45, Latto Talent 73 (Mar 1, 2026)</option>
           <option value="2025-11-09_CU_vs_Crew7">🏀 Majestic Archive: Campbell United 59, Crew 7 73 (Nov 9, 2025)</option>
+          <option value="2026-10-15_Pickup_G1">🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4)</option>
           <option value="2026-10-31">🌳 Pickup Run: Oct 31, 2026 (Campbell Park — Full Game + Game 2)</option>
         </select>
         <button class="blue-btn" id="scoutingQuickBtn" onclick="switchGameSession('scouting_nov8')" style="font-weight:800;border-color:#fde68a;color:#fde68a;background:rgba(217,119,6,0.22);" title="Open Nov 8 Opponent Scouting Report vs. Ricecookers">📋 Nov 8 Scouting: vs. Ricecookers</button>
@@ -1612,6 +1613,7 @@
         <button class="cu-tab-btn" data-session="2026-09-20_SB_vs_Mustangs_Eugene41" onclick="switchGameSession('2026-09-20_SB_vs_Mustangs_Eugene41')">👑 Eugene Kim 41 PTS (11× 3PM): SB 78, Mustangs 76 OT</button>
         <button class="cu-tab-btn" data-session="2026-10-18_SB_vs_Tandoori_Eugene29" onclick="switchGameSession('2026-10-18_SB_vs_Tandoori_Eugene29')">🔥 Eugene Kim 29 PTS (5× 3PM): SB 83, Tandoori 73</button>
         <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
+        <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
         <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; Adam 3× Dunk Lab</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')">📋 Nov 8 Scouting: vs. Ricecookers (Sun 8 PM)</button>
       </div>
@@ -1897,6 +1899,180 @@
     const LOCAL_SERVER_VIDEO = '20261031_full_game.mp4';
 
     const DEFAULT_CREW_MASTER = {
+      '#44 Christian Raslowsky': {
+        name: '#44 Christian Raslowsky',
+        cu_jersey: '#44',
+        cu_team: 'Campbell United',
+        biometric_confidence: '98% Biometric & Gear Match (Identical Black White-Stripe Shorts + Bright Orange Shoes in Oct 18 G1 vs. Halal Hoopers)',
+        permanent_traits: 'Primary ball-handler & transition floor general, wears black shorts with white side stripe & bright orange basketball shoes',
+        biometric_anchors: {
+          hair_and_face: 'Short dark hair, athletic guard build',
+          footwear_and_gear: 'Bright Orange basketball shoes, black shorts with vertical white side stripe, black crew socks'
+        },
+        default_team_role: 'Campbell United #44 / Point Guard',
+        outfit_history: {
+          '2026-10-15_Pickup_G1': ['#44 Christian Raslowsky (Blue Tee / Orange Shoes)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#44 Christian Raslowsky (CU Red #44 / Orange Shoes)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#44 Christian Raslowsky (CU Red #44)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#44 Christian Raslowsky (CU Red #44)']
+        }
+      },
+      '#4 Adam Fecteau': {
+        name: '#4 Adam Fecteau',
+        cu_jersey: '#4',
+        cu_team: 'Campbell United',
+        biometric_confidence: '95% Biometric Match (Explosive wing scorer, single white left-leg compression sleeve, pull-up 3PT & rim blocks)',
+        permanent_traits: 'Explosive athletic wing/forward, pull-up 3PT shooter, transition finisher & weak-side shot blocker',
+        biometric_anchors: {
+          hair_and_face: 'Medium brown hair, lean explosive wing build',
+          footwear_and_gear: 'Single white left-leg compression sleeve/tights, black shorts, white basketball shoes'
+        },
+        default_team_role: 'Campbell United #4 / Wing Scorer',
+        outfit_history: {
+          '2026-10-04_CU_vs_Mustangs_Champ': ['#4 Adam Fecteau (CU Red #4)'],
+          '2026-10-15_Pickup_G1': ['#4 Adam Fecteau (Blue Tee / White L-Leg Sleeve)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#4 Adam Fecteau (CU Red #4)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#4 Adam Fecteau (CU Red #4)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#4 Adam Fecteau (CU Red #4)']
+        }
+      },
+      '#31 Evan Kovarik': {
+        name: '#31 Evan Kovarik',
+        cu_jersey: '#31',
+        cu_team: 'Campbell United',
+        biometric_confidence: '96% Biometric & Gear Match (Blonde/light-brown hair, grey athletic shorts, black socks, high-efficiency paint & post finisher)',
+        permanent_traits: 'High-efficiency forward/wing, elite cutter, right-block post-up & bank-shot finisher',
+        biometric_anchors: {
+          hair_and_face: 'Short blonde / light-brown hair',
+          footwear_and_gear: 'Grey athletic shorts, black crew socks, black/white basketball shoes'
+        },
+        default_team_role: 'Campbell United #31 / Forward',
+        outfit_history: {
+          '2026-10-04_CU_vs_Mustangs_Champ': ['#31 Evan Kovarik (CU Red #31)'],
+          '2026-10-15_Pickup_G1': ['#31 Evan Kovarik (White/Black Raglan Tee)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#31 Evan Kovarik (CU Red #31 / Grey Shorts)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#31 Evan Kovarik (CU Red #31)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#31 Evan Kovarik (CU Red #31)']
+        }
+      },
+      '#16 Chris': {
+        name: '#16 Chris',
+        cu_jersey: '#16',
+        cu_team: 'Campbell United',
+        biometric_confidence: '96% Biometric Match (Tall bearded interior anchor, grey shorts, black socks, white shoes — matches Oct 18 & Nov 1 CU #16)',
+        permanent_traits: 'Tall bearded forward/center, physical screen-setter, dominant defensive rebounder & interior wall',
+        biometric_anchors: {
+          hair_and_face: 'Dark hair with full dark beard',
+          footwear_and_gear: 'Grey athletic shorts, black crew socks, white basketball shoes'
+        },
+        default_team_role: 'Campbell United #16 / Center-Forward',
+        outfit_history: {
+          '2026-10-15_Pickup_G1': ['#16 Chris (Black Tee / Beard)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#16 Chris (CU Red #16)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#16 Chris (CU Red #16)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#16 Chris (CU Red #16)']
+        }
+      },
+      '#7 Nick Switzer': {
+        name: '#7 Nick Switzer',
+        cu_jersey: '#7',
+        cu_team: 'Campbell United',
+        biometric_confidence: '94% Biometric Match (Strong guard/forward build, navy shorts with white side panel, baseline runner & high-post passing)',
+        permanent_traits: 'Sharpshooting wing/forward & high-IQ passer, baseline runner & catch-and-shoot 3PT threat',
+        biometric_anchors: {
+          hair_and_face: 'Short brown hair, strong athletic build',
+          footwear_and_gear: 'Navy shorts with white side panel, white/black basketball shoes'
+        },
+        default_team_role: 'Campbell United #7 / Wing-Guard',
+        outfit_history: {
+          '2026-10-04_CU_vs_Mustangs_Champ': ['#7 Nick Switzer (CU Red #7)'],
+          '2026-10-15_Pickup_G1': ['#7 Nick Switzer (White Tee / Navy Shorts)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#7 Nick Switzer (CU Red #7)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#7 Nick Switzer (CU Red #7)']
+        }
+      },
+      '#9 Aaron': {
+        name: '#9 Aaron',
+        cu_jersey: '#9',
+        cu_team: 'Campbell United',
+        biometric_confidence: '93% Biometric Match (Left-baseline reverse layup slasher, active rebounder & transition playmaker)',
+        permanent_traits: 'Two-way slashing wing/guard, crafty baseline reverse finisher & transition playmaker',
+        biometric_anchors: {
+          hair_and_face: 'Short dark hair, lean guard/wing build',
+          footwear_and_gear: 'Royal blue graphic tee (yellow chest bar), black shorts, black basketball shoes'
+        },
+        default_team_role: 'Campbell United #9 / Two-Way Wing',
+        outfit_history: {
+          '2026-10-04_CU_vs_Mustangs_Champ': ['#9 Aaron (CU Red #9)'],
+          '2026-10-15_Pickup_G1': ['#9 Aaron (Blue Tee / Yellow Bar)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#9 Aaron (CU Red #9)'],
+          '2026-10-25_CU_vs_TMT_G2': ['#9 Aaron (CU Red #9)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#9 Aaron (CU Red #9)']
+        }
+      },
+      '#24 George': {
+        name: '#24 George',
+        cu_jersey: '#24',
+        cu_team: 'Campbell United',
+        biometric_confidence: '95% Biometric & Gear Match (Tall forward with black right knee sleeve/brace & maroon shoes — matches Nov 1 CU #24)',
+        permanent_traits: 'Tall interior forward, wears black right knee sleeve/brace, physical screen-setter & paint finisher',
+        biometric_anchors: {
+          hair_and_face: 'Short dark hair, tall broad-shouldered forward',
+          footwear_and_gear: 'Black right knee sleeve/brace, teal shorts, maroon/red basketball shoes'
+        },
+        default_team_role: 'Campbell United #24 / Forward',
+        outfit_history: {
+          '2026-10-04_CU_vs_Mustangs_Champ': ['#24 George (CU Red #24)'],
+          '2026-10-15_Pickup_G1': ['#24 George (Grey Tank / Teal Shorts)'],
+          '2026-10-18_CU_vs_HalalHoopers_G1': ['#24 George (CU Red #24)'],
+          '2026-11-01_CU_vs_Misfits2_G3': ['#24 George (CU Red #24 / Knee Brace)']
+        }
+      },
+      'Gary Wang': {
+        name: 'Gary Wang',
+        cu_jersey: 'Pickup',
+        cu_team: 'Oct 15 Host / Camera',
+        biometric_confidence: '92% Match (Video uploader Gary Wang, compact guard with double black knee sleeves & post-game 3PT at 04:56)',
+        permanent_traits: 'Compact quick guard, wears double black knee sleeves, floor spacer & perimeter ball-mover',
+        biometric_anchors: {
+          hair_and_face: 'Short dark hair',
+          footwear_and_gear: 'Double black knee sleeves, grey tee, grey shorts'
+        },
+        default_team_role: 'Oct 15 Film Host / Guard',
+        outfit_history: {
+          '2026-10-15_Pickup_G1': ['Gary Wang (Dark Grey Tee / Double Knee Sleeves)']
+        }
+      },
+      '#23 White Tank (Top-Knot)': {
+        name: '#23 White Tank (Top-Knot)',
+        cu_jersey: '#23',
+        cu_team: 'Pickup Crew',
+        biometric_confidence: '99% Visual ID (Wears #23 white reversible jersey, top-knot hair, black shorts & black knee sleeve; walks past camera at 00:09)',
+        permanent_traits: 'High-usage slasher/forward in White #23 reversible tank, top-knot hair, aggressive middle-lane floater & spin-move driver',
+        biometric_anchors: {
+          hair_and_face: 'Dark hair tied in top-knot / man-bun',
+          footwear_and_gear: 'White #23 sleeveless reversible tank, black shorts, black knee sleeve, white shoes'
+        },
+        default_team_role: 'Pickup Wing / Slasher',
+        outfit_history: {
+          '2026-10-15_Pickup_G1': ['#23 White Tank (Top-Knot)']
+        }
+      },
+      'Grey Warriors Tank (L-Leg Sleeve)': {
+        name: 'Grey Warriors Tank (L-Leg Sleeve)',
+        cu_jersey: 'Pickup',
+        cu_team: 'Pickup Crew',
+        biometric_confidence: '99% Visual ID (Walks directly up to camera at 04:58.5 wearing sleeveless grey WARRIORS shirt & black left leg sleeve)',
+        permanent_traits: 'Lean guard/wing wearing sleeveless grey WARRIORS graphic tee & full black left-leg compression sleeve',
+        biometric_anchors: {
+          hair_and_face: 'Short dark hair, lean guard build (close-up at 04:58.5)',
+          footwear_and_gear: 'Sleeveless grey WARRIORS graphic tank, tan/black two-tone shorts, full black left-leg sleeve'
+        },
+        default_team_role: 'Pickup Wing / Camera',
+        outfit_history: {
+          '2026-10-15_Pickup_G1': ['Grey Warriors Tank (L-Leg Sleeve)']
+        }
+      },
       'Josh': {
         name: 'Josh',
         permanent_traits: 'Curly brown hair, stocky build, high-volume 3PT shooter & primary ball-handler',
@@ -2952,7 +3128,8 @@
       if (mapped && mapped.real_name) return mapped.real_name.trim().replace(/\s+/g, '_');
       const master = getMasterRoster();
       for (const m of Object.values(master)) {
-        const hist = (m.outfit_history && m.outfit_history['2026-10-31']) || [];
+        const histMap = m.outfit_history || {};
+        const hist = histMap[activeSessionId] || histMap['2026-10-15_Pickup_G1'] || histMap['2026-10-31'] || [];
         const list = Array.isArray(hist) ? hist : [hist];
         if (list.includes(visualId)) return m.name.replace(/\s+/g, '_');
       }
@@ -3051,34 +3228,49 @@
         }
       });
 
-      const entries = Object.values(master);
+      const entries = Object.values(master).sort((a, b) => {
+        const aHas = !!(a.outfit_history && a.outfit_history[activeSessionId]);
+        const bHas = !!(b.outfit_history && b.outfit_history[activeSessionId]);
+        if (aHas !== bHas) return bHas ? 1 : -1;
+        return 0;
+      });
+
       strip.innerHTML = entries.map(member => {
         const name = member.name;
         const mappedList = reverseMap[name.toLowerCase()] || [];
-        const histRaw = (member.outfit_history && member.outfit_history['2026-10-31']) || [];
+        const histMap = member.outfit_history || {};
+        const histRaw = histMap[activeSessionId] || (activeSessionId === '2026-10-31' ? histMap['2026-10-31'] : histMap['2026-10-15_Pickup_G1'] || histMap['2026-10-31']) || [];
         const histList = Array.isArray(histRaw) ? histRaw : (histRaw ? [histRaw] : []);
         const allTodayOutfits = [...new Set([...mappedList, ...histList])];
         const primaryOutfit = allTodayOutfits[0] || 'Not mapped today';
+        const matchedPlayerId = PLAYERS.find(p => p === primaryOutfit || p.toLowerCase().includes(name.toLowerCase())) || primaryOutfit;
         const todayDisplay = allTodayOutfits.length > 0 ? allTodayOutfits.join(' + ') : 'Not mapped today';
         const sessionCount = member.outfit_history ? Object.keys(member.outfit_history).length : 1;
         const role = member.default_team_role || 'Crew Regular';
         const traits = member.permanent_traits || '';
         const bio = member.biometric_anchors || {};
         const gearText = bio.footwear_and_gear || '';
-        const safeOutfit = primaryOutfit.replace(/'/g, "\\'");
+        const bioConf = member.biometric_confidence || '';
+        const cuJersey = member.cu_jersey || '';
+        const safeOutfit = matchedPlayerId.replace(/'/g, "\\'");
         const safeName = name.replace(/'/g, "\\'");
+        const hasPickup = !!(histMap['2026-10-15_Pickup_G1']);
+        const hasCuLeague = !!(histMap['2026-11-01_CU_vs_Misfits2_G3'] || histMap['2026-10-18_CU_vs_HalalHoopers_G1']);
         return `
-          <div class="crew-member-pill" data-crew-name="${escapeHtml(name)}">
+          <div class="crew-member-pill" data-crew-name="${escapeHtml(name)}" style="${histMap[activeSessionId] ? 'border-color:rgba(56,189,248,0.55);' : ''}">
             <div class="crew-pill-top">
               <span class="crew-pill-name">🏀 ${escapeHtml(name)}</span>
               <span class="crew-pill-role">${escapeHtml(role)}</span>
             </div>
-            <div class="crew-pill-outfit">👕 Today: ${escapeHtml(todayDisplay)}</div>
+            ${bioConf ? `<div style="font-size:0.7rem;color:#4ade80;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);border-radius:4px;padding:3px 6px;margin-bottom:3px;font-weight:700;">🔗 ${cuJersey && cuJersey.startsWith('#') ? 'CU ' + escapeHtml(cuJersey) + ' ' : ''}${escapeHtml(bioConf)}</div>` : ''}
+            <div class="crew-pill-outfit">👕 Outfit: ${escapeHtml(todayDisplay)}</div>
             ${gearText ? `<div class="crew-pill-traits" style="color:#ffd166;font-weight:600;">👟 Constant Gear: ${escapeHtml(gearText)}</div>` : ''}
             <div class="crew-pill-traits">🧬 Biometrics: ${escapeHtml(traits)}</div>
             <div class="crew-pill-actions">
-              ${PLAYERS.includes(primaryOutfit) ? `<button class="mini-btn ok-btn" onclick="startPlayerReel('${safeOutfit}', '${safeName}')">🎬 Highlight Reel</button>` : ''}
-              ${PLAYERS.includes(primaryOutfit) ? `<button class="mini-btn" onclick="filterByPlayer('${safeOutfit}')">🔍 Plays (${sessionCount}d)</button>` : ''}
+              ${PLAYERS.includes(matchedPlayerId) ? `<button class="mini-btn ok-btn" onclick="startPlayerReel('${safeOutfit}', '${safeName}')">🎬 Highlight Reel</button>` : ''}
+              ${PLAYERS.includes(matchedPlayerId) ? `<button class="mini-btn" onclick="filterByPlayer('${safeOutfit}')">🔍 Plays (${sessionCount} runs)</button>` : ''}
+              ${activeSessionId === '2026-10-15_Pickup_G1' && hasCuLeague ? `<button class="mini-btn" style="border-color:#f87171;color:#fca5a5;" onclick="switchGameSession('2026-11-01_CU_vs_Misfits2_G3')">🏀 CU League Film</button>` : ''}
+              ${activeSessionId !== '2026-10-15_Pickup_G1' && hasPickup ? `<button class="mini-btn" style="border-color:#38bdf8;color:#7dd3fc;" onclick="switchGameSession('2026-10-15_Pickup_G1')">🏀 Oct 15 Pickup</button>` : ''}
               <button class="mini-btn" onclick="prefillCrewMember('${safeName}', '${safeOutfit}')">✏️ Link Shirt</button>
             </div>
           </div>
