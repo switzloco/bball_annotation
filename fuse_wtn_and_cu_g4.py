@@ -309,7 +309,7 @@ def fuse_majestic_game(cfg):
         "events": events
     }
 
-MO_REEL_GCS = "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4"
+MO_REEL_GCS = "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2"
 
 CONFIGS = [
     {
@@ -371,7 +371,7 @@ CONFIGS = [
         "cu_h1_hoop": "left",
         "cu_h2_hoop": "right",
         "has_video": True,
-        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/2026-10-25_WTN_vs_NewAvengers_G2.mp4",
+        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/2026-10-25_WTN_vs_NewAvengers_G2.mp4?v=1080p",
         "mo_reel_url": MO_REEL_GCS,
         "cu_reel": MO_REEL_GCS,
         "team_top5_reel": MO_REEL_GCS,
@@ -379,7 +379,7 @@ CONFIGS = [
         "final_opp_score": 66,
         "exact_overrides": {
             "P1_12:11_2pt_#2": {
-                "s": 1182, "splash_s": 1185.5,
+                "s": 1181, "splash_s": 1185.0,
                 "desc": "🔥 #2 Mo slashes down the left lane in red and finishes a tough runner in traffic! (1/1 FG)"
             },
             "P1_11:59_reb_#2": {
@@ -387,20 +387,24 @@ CONFIGS = [
                 "desc": "💪 #2 Mo skies for the defensive rebound and immediately pushes the break coast-to-coast!"
             },
             "P1_11:50_3pt_#2": {
-                "s": 1205, "splash_s": 1209.0,
+                "s": 1205, "splash_s": 1208.5,
                 "desc": "🎯 #2 Mo pulls up in transition on the left wing and splashes a 3-Pointer! (5 straight PTS in 21 seconds!)"
             },
             "P1_6:44_2pt_#2": {
-                "s": 1578, "splash_s": 1582.0,
+                "s": 1578, "splash_s": 1581.5,
                 "desc": "⚡ #2 Mo attacks the left paint and scores his 3rd straight bucket! (7 PTS on 3/3 FG — 100% FG!)"
             },
             "P1_6:07_stl_#2": {
-                "s": 1616, "splash_s": 1619.0,
-                "desc": "🔒 #2 Mo jumps the passing lane for the defensive steal and ignites the fast break!"
+                "s": 1616, "splash_s": 1619.5,
+                "desc": "🔒 #2 Mo strips the ball at the top of the key for the defensive steal and ignites the fast break!"
+            },
+            "P2_6:07_reb_#2": {
+                "s": 3269, "splash_s": 3275.0,
+                "desc": "🚀 #2 Mo snags his 7th rebound, sprints coast-to-coast down the middle, and dishes in the paint!"
             },
             "P2_3:05_2pt_#34": {
-                "s": 3273, "splash_s": 3277.0,
-                "desc": "🏀 #34 Metals finishes at the right rim off a pinpoint transition dime from #2 Mo! (Assist: #2 Mo)"
+                "s": 3444, "splash_s": 3448.0,
+                "desc": "🏀 #34 Metals finishes inside on the break! (Boxscore Assist credited to #2 Mo at 3:05 LED)"
             }
         }
     },
@@ -412,8 +416,8 @@ CONFIGS = [
         "yt_id": "r0n2sCGhd78",
         "video_path": r"c:\dev\bball_annotation\majestic_wtn\2026-11-01_WTN_vs_CrunchTime_G3.mp4",
         "json_path": r"c:\dev\bball_annotation\majestic_wtn\2026-11-01_WTN_vs_CrunchTime_G3_full.json",
-        "p1_first_sec": 680.0,
-        "p2_first_sec": 2310.0,
+        "p1_first_sec": 715.0,
+        "p2_first_sec": 2274.0,
         "tipoff_sec": 672,
         "lag_sec": 3.5,
         "cu_team_name": "WeTheNorth",
@@ -422,10 +426,10 @@ CONFIGS = [
         "opp_record": "2-1 D6",
         "cu_jerseys": "White (#2 Mo, #16 Naz, #27 Graeme, #28 Ahmed, #29 Deeno, #31 Dan, #33 Hamza, #34 Metals)",
         "opp_jerseys": "Red",
-        "cu_h1_hoop": "right",
-        "cu_h2_hoop": "left",
+        "cu_h1_hoop": "left",
+        "cu_h2_hoop": "right",
         "has_video": True,
-        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/2026-11-01_WTN_vs_CrunchTime_G3.mp4",
+        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/2026-11-01_WTN_vs_CrunchTime_G3.mp4?v=1080p",
         "mo_reel_url": MO_REEL_GCS,
         "cu_reel": MO_REEL_GCS,
         "team_top5_reel": MO_REEL_GCS,
@@ -433,32 +437,32 @@ CONFIGS = [
         "final_opp_score": 67,
         "exact_overrides": {
             "P1_15:00_blk_#2": {
-                "s": 963, "splash_s": 965.5,
-                "desc": "🛡️ #2 Mo rotates over in the paint and swats away the Crunch Time layup attempt! (BLK)"
+                "s": 1012, "splash_s": 1016.0,
+                "desc": "🛡️ #2 Mo rotates over in the right paint and swats away the Crunch Time layup attempt! (BLK @ 15:00 LED)"
             },
             "P2_12:54_3pt_#2": {
-                "s": 2761, "splash_s": 2764.5,
-                "desc": "🎯 #2 Mo (White #2) catches on the left wing and buries 3-Pointer #1 of 5! (Assist: #33 Hamza)"
+                "s": 2721, "splash_s": 2726.0,
+                "desc": "🎯 #2 Mo (White #2) catches on the right wing and buries 3-Pointer #1 of 5! (Assist: #33 Hamza @ 12:54 LED)"
             },
             "P2_6:54_reb_#2": {
-                "s": 3126, "splash_s": 3128.0,
-                "desc": "💪 #2 Mo cleans the defensive glass at the right hoop and ignites the coast-to-coast break!"
+                "s": 3089, "splash_s": 3091.5,
+                "desc": "💪 #2 Mo cleans the defensive glass and ignites the coast-to-coast break! (6:54 LED)"
             },
             "P2_6:45_3pt_#2": {
-                "s": 3133, "splash_s": 3137.0,
-                "desc": "🔥 #2 Mo goes coast-to-coast after his rebound and splashes 3-Pointer #2 of 5 from the far-left wing!"
+                "s": 3093, "splash_s": 3098.5,
+                "desc": "🔥 #2 Mo goes coast-to-coast and splashes 3-Pointer #2 of 5 from the right wing! (6:45 LED)"
             },
             "P2_6:18_3pt_#2": {
-                "s": 3161, "splash_s": 3164.5,
-                "desc": "🔥🔥 BACK-TO-BACK TRIPLES! #2 Mo drills 3-Pointer #3 of 5 from the left wing! (2 3s in 27s, Assist: #29 Deeno)"
+                "s": 3121, "splash_s": 3126.5,
+                "desc": "🔥🔥 BACK-TO-BACK TRIPLES! #2 Mo drills 3-Pointer #3 of 5 from top of the key! (2 3s in 27s, Assist: #29 Deeno @ 6:18 LED)"
             },
             "P2_5:53_3pt_#2": {
-                "s": 3203, "splash_s": 3207.0,
-                "desc": "🌋 HEAT CHECK! #2 Mo splashes 3-Pointer #4 of 5! (3 straight triples in 52 seconds of game clock!)"
+                "s": 3146, "splash_s": 3152.0,
+                "desc": "🌋 HEAT CHECK! #2 Mo crosses over into a pull-up right-wing 3-Pointer #4 of 5 & high-fives! (3 straight triples in 52s @ 5:53 LED!)"
             },
             "P2_0:00_3pt_#2": {
-                "s": 3644, "splash_s": 3647.5,
-                "desc": "👑 CINCO DE MO! #2 Mo drains 3-Pointer #5 of 5 to finish with a team-high 15 PTS (5/10 3PT), 5 REB & 1 BLK! (Assist: #16 Naz)"
+                "s": 3669, "splash_s": 3673.5,
+                "desc": "👑 CINCO DE MO! #2 Mo drains contested right-wing 3-Pointer #5 of 5 to finish with 15 PTS (5/10 3PT), 5 REB & 1 BLK! (Assist: #16 Naz)"
             }
         }
     },

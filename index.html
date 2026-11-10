@@ -1641,7 +1641,7 @@
         <button class="cu-tab-btn" data-session="2026-10-25_WTN_vs_NewAvengers_G2" onclick="switchGameSession('2026-10-25_WTN_vs_NewAvengers_G2')" style="border-color:#fb7185;color:#fecdd3;">⚡ Oct 25 G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers</button>
         <button class="cu-tab-btn" data-session="2026-10-18_WTN_vs_OTFSelect_G1" onclick="switchGameSession('2026-10-18_WTN_vs_OTFSelect_G1')">🍁 Oct 18 G1: WTN vs. OTF Select (#2 Mo 3/3 FT, 4 REB)</button>
         <button class="cu-tab-btn" data-session="2026-11-08_WTN_vs_DomainExpansion_G4" onclick="switchGameSession('2026-11-08_WTN_vs_DomainExpansion_G4')" style="border-color:#4ade80;color:#bbf7d0;background:rgba(34,197,94,0.15);">🏆 Nov 8 G4: WeTheNorth 55, Domain Expansion 53 [WIN!]</button>
-        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download #2 Mo Reel MP4</a>
+        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download #2 Mo Reel MP4</a>
       </div>
     </div>
     <div style="font-size:0.75rem;color:#fda4af;font-weight:600;">
@@ -2832,8 +2832,8 @@
         await switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3');
       }
       stopAutoReel();
-      const reelUrl = 'https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4';
-      const localReelUrl = '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4';
+      const reelUrl = 'https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2';
+      const localReelUrl = '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2';
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       videoEl.src = isLocalHost ? localReelUrl : reelUrl;
       videoEl.onerror = () => {
@@ -2966,7 +2966,7 @@
         : (cfg.video_url || `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`);
       const localUrl = cfg.yt_id
         ? `/majestic_games/${activeSessionId}.mp4`
-        : (cfg.video_url && cfg.video_url.includes('WTN_Mo_Highlight_Reel') ? '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4' : `/majestic_games/${activeSessionId}.mp4`);
+        : (cfg.video_url && cfg.video_url.includes('WTN_Mo_Highlight_Reel') ? '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2' : `/majestic_games/${activeSessionId}.mp4`);
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
       if (hasVideo) {
@@ -3120,7 +3120,7 @@
         const isWtnGame = activeSessionId.includes('_WTN_');
         const wesPill = isWtnGame
           ? `<span class="chapter-pill" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48,#9f1239);color:#fff;font-weight:800;border-color:#fda4af;">🎬 Watch #2 Mo Highlight Reel (11 Plays • 5× 3PT Barrage)</span>
-             <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download #2 Mo Highlight Reel MP4</a>`
+             <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download #2 Mo Highlight Reel MP4</a>`
           : activeSessionId === '2026-02-15_CU_vs_PimpsDown'
           ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" target="_blank" download="2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⚡ Download Feb 15 CU vs. Pimps Down Reel MP4</a>`
           : activeSessionId === '2026-11-01_CU_vs_Misfits2_G3'
