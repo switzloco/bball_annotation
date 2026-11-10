@@ -278,6 +278,26 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                             "🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4) | CPSN Film Room",
                             "Cross-run biometric player ID connecting Campbell United (#44 Christian, #4 Adam, #31 Evan, #16 Chris, #7 Nick, #9 Aaron, #24 George) to the Oct 15 pickup run!",
                         ),
+                        "2026-11-08_CU_vs_Ricecookers_G4": (
+                            "🏆 Holiday '26 Game 4: Campbell United 66, Ricecookers 63 (OT) — 4-0 D2 Film & Box Score",
+                            "#20 Shane Hoffman's walk-off OT 3-Pointer (22 PTS) assisted by #44 Christian Raslowsky lifts Campbell United to 66–63 over Ricecookers!",
+                        ),
+                        "2026-10-18_WTN_vs_OTFSelect_G1": (
+                            "🍁 WeTheNorth (#2 Mo) vs. OTF Select — Holiday '26 Game 1 Film Room",
+                            "Watch synced game film, box score & #2 Mo's highlights from WeTheNorth vs. OTF Select!",
+                        ),
+                        "2026-10-25_WTN_vs_NewAvengers_G2": (
+                            "🍁 WeTheNorth (#2 Mo: 7 PTS on 3/3 FG, 7 REB, AST, STL) vs. New Avengers — Game 2 Film Room",
+                            "Watch #2 Mo's 100% FG shooting night (7 PTS, 7 REB, 1 AST, 1 STL) in WeTheNorth vs. New Avengers!",
+                        ),
+                        "2026-11-01_WTN_vs_CrunchTime_G3": (
+                            "🔥 #2 Mo 15 PTS (5× 3PM, 5 REB, 1 BLK): WeTheNorth vs. Crunch Time — Game 3 Film Room",
+                            "Watch all 5 3-pointers (including 3 straight triples in 52 seconds!) & 1st-half block from #2 Mo!",
+                        ),
+                        "2026-11-08_WTN_vs_DomainExpansion_G4": (
+                            "🏆 WeTheNorth 55, Domain Expansion 53 [WIN!] (#2 Mo Two-Way Showcase) — Game 4 Film Room",
+                            "Full box score, play-by-play & #2 Mo Season Highlight Reel from WeTheNorth's 55–53 victory over Domain Expansion!",
+                        ),
                         "season_analytics": (
                             "🧠 Campbell United Season Analytics & #4 Adam 3× Dunk Lab — CPSN Film Room",
                             "Watch #4 Adam Fecteau's 3-Dunk 1st Half vs. Misfits 2 + Colab GPU Analytics across Campbell United's 4-0 streak!",
@@ -395,6 +415,11 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     "2026-10-18_CU_vs_HalalHoopers_G1",
                     "2026-10-25_CU_vs_TMT_G2",
                     "2026-11-01_CU_vs_Misfits2_G3",
+                    "2026-11-08_CU_vs_Ricecookers_G4",
+                    "2026-10-18_WTN_vs_OTFSelect_G1",
+                    "2026-10-25_WTN_vs_NewAvengers_G2",
+                    "2026-11-01_WTN_vs_CrunchTime_G3",
+                    "2026-11-08_WTN_vs_DomainExpansion_G4",
                     "2026-09-20_SB_vs_Mustangs_Eugene41",
                     "2026-10-18_SB_vs_Tandoori_Eugene29",
                     "2026-10-15_Pickup_G1",
@@ -405,9 +430,12 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                 }
                 if game_slug in majestic_allowed:
                     local_oct = os.path.join("majestic_oct2026", f"{game_slug}.mp4")
+                    local_wtn = os.path.join("majestic_wtn", f"{game_slug}.mp4")
                     local_maj = os.path.join("majestic_games", f"{game_slug}.mp4")
                     if not IS_CLOUD_RUN and os.path.exists(local_oct):
                         src_video = local_oct
+                    elif not IS_CLOUD_RUN and os.path.exists(local_wtn):
+                        src_video = local_wtn
                     elif not IS_CLOUD_RUN and os.path.exists(local_maj):
                         src_video = local_maj
                     else:
@@ -679,7 +707,16 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 return None
             oct_path = os.path.join("majestic_oct2026", fname)
-            path = oct_path if os.path.exists(oct_path) else os.path.join("majestic_games", fname)
+            wtn_path = os.path.join("majestic_wtn", fname)
+            reel_path = os.path.join("majestic_games", "reels", fname)
+            if os.path.exists(oct_path):
+                path = oct_path
+            elif os.path.exists(wtn_path):
+                path = wtn_path
+            elif os.path.exists(reel_path):
+                path = reel_path
+            else:
+                path = os.path.join("majestic_games", fname)
         elif parsed.path.endswith("20261031_full_game.mp4"):
             if IS_CLOUD_RUN:
                 # Redirect video streaming & download requests on Cloud Run directly to Google Cloud Storage Edge CDN

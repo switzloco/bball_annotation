@@ -1550,6 +1550,11 @@
           <option value="2026-10-18_CU_vs_HalalHoopers_G1">🏀 Game 1: Campbell United 69, Halal Hoopers 47 (Oct 18, 2026)</option>
           <option value="2026-10-25_CU_vs_TMT_G2">🔥 Game 2: Campbell United 52, TMT 50 (Oct 25, 2026)</option>
           <option value="2026-11-01_CU_vs_Misfits2_G3">🚀 Game 3: Campbell United 83, Misfits 2 66 (Nov 1, 2026)</option>
+          <option value="2026-11-08_CU_vs_Ricecookers_G4">🏆 Game 4: Campbell United 66, Ricecookers 63 [OT WIN! 4-0 D2] (Nov 8, 2026)</option>
+          <option value="2026-11-01_WTN_vs_CrunchTime_G3">🍁 WeTheNorth G3: #2 Mo 15 PTS (5× 3PM, 5 REB, 1 BLK) vs. Crunch Time (Nov 1, 2026)</option>
+          <option value="2026-10-25_WTN_vs_NewAvengers_G2">🍁 WeTheNorth G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers (Oct 25, 2026)</option>
+          <option value="2026-10-18_WTN_vs_OTFSelect_G1">🍁 WeTheNorth G1: vs. OTF Select (#2 Mo 3/3 FT, 4 REB — Oct 18, 2026)</option>
+          <option value="2026-11-08_WTN_vs_DomainExpansion_G4">🏆 WeTheNorth G4: WeTheNorth 55, Domain Expansion 53 [WIN!] (Nov 8, 2026)</option>
           <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20, 2026)</option>
           <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
           <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam 3× Dunk Lab (Colab AI)</option>
@@ -1603,23 +1608,44 @@
   <div class="cu-hub-bar" id="cuHubBar">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#f87171;text-transform:uppercase;">
-        🏀 CAMPBELL UNITED HUB (FALL '26 CHAMPS 🏆 • 3-0 HOLIDAY '26 D2):
+        🏀 CAMPBELL UNITED HUB (FALL '26 CHAMPS 🏆 • 4-0 HOLIDAY '26 D2):
       </span>
       <div class="cu-hub-tabs" id="cuHubTabs">
         <button class="cu-tab-btn active" data-session="2026-10-04_CU_vs_Mustangs_Champ" onclick="switchGameSession('2026-10-04_CU_vs_Mustangs_Champ')">🏆 Oct 4 Champ: CU 76, Mustangs 66</button>
         <button class="cu-tab-btn" data-session="2026-10-18_CU_vs_HalalHoopers_G1" onclick="switchGameSession('2026-10-18_CU_vs_HalalHoopers_G1')">🏀 Oct 18 G1: CU 69, Halal Hoopers 47</button>
         <button class="cu-tab-btn" data-session="2026-10-25_CU_vs_TMT_G2" onclick="switchGameSession('2026-10-25_CU_vs_TMT_G2')">🔥 Oct 25 G2: CU 52, TMT 50</button>
         <button class="cu-tab-btn" data-session="2026-11-01_CU_vs_Misfits2_G3" onclick="switchGameSession('2026-11-01_CU_vs_Misfits2_G3')">🚀 Nov 1 G3: CU 83, Misfits 2 66</button>
+        <button class="cu-tab-btn" data-session="2026-11-08_CU_vs_Ricecookers_G4" onclick="switchGameSession('2026-11-08_CU_vs_Ricecookers_G4')" style="border-color:#fde047;color:#fef08a;background:rgba(234,179,8,0.18);">🏆 Nov 8 G4: CU 66, Ricecookers 63 (OT!)</button>
         <button class="cu-tab-btn" data-session="2026-09-20_SB_vs_Mustangs_Eugene41" onclick="switchGameSession('2026-09-20_SB_vs_Mustangs_Eugene41')">👑 Eugene Kim 41 PTS (11× 3PM): SB 78, Mustangs 76 OT</button>
         <button class="cu-tab-btn" data-session="2026-10-18_SB_vs_Tandoori_Eugene29" onclick="switchGameSession('2026-10-18_SB_vs_Tandoori_Eugene29')">🔥 Eugene Kim 29 PTS (5× 3PM): SB 83, Tandoori 73</button>
         <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
         <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
         <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; Adam 3× Dunk Lab</button>
-        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')">📋 Nov 8 Scouting: vs. Ricecookers (Sun 8 PM)</button>
+        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')">📋 Nov 8 Scouting: vs. Ricecookers</button>
       </div>
     </div>
     <div style="font-size:0.75rem;color:#94a3b8;font-weight:600;">
-      Next Game: <strong style="color:#fde68a;">Sun Nov 8 @ 8:00 PM vs. Ricecookers (The Grove CC — Div D2)</strong>
+      Latest Result: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT) — #20 Shane Walk-Off 3PT! (4-0 D2)</strong>
+    </div>
+  </div>
+
+  <!-- WE THE NORTH (#2 MO) SEASON HUB BAR (Holiday '26 Div D6 — Games 1–4 + #2 Mo Highlight Reel) -->
+  <div class="cu-hub-bar" id="wtnHubBar" style="background:linear-gradient(90deg, #1f0812 0%, #151024 55%, #0f172a 100%);border-bottom:1px solid rgba(244,63,94,0.4);">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#fb7185;text-transform:uppercase;">
+        🍁 WE THE NORTH HUB (#2 MO SPOTLIGHT • HOLIDAY '26 D6):
+      </span>
+      <div class="cu-hub-tabs" id="wtnHubTabs">
+        <button class="cu-tab-btn" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48 0%,#9f1239 100%);border-color:#fda4af;color:#fff;box-shadow:0 2px 10px rgba(225,29,72,0.4);">🎬 Watch #2 Mo Highlight Reel (11 Plays • 5× 3PT Barrage)</button>
+        <button class="cu-tab-btn" data-session="2026-11-01_WTN_vs_CrunchTime_G3" onclick="switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3')" style="border-color:#fb7185;color:#fecdd3;">🔥 Nov 1 G3: #2 Mo 15 PTS (5× 3PM, 5 REB, 1 BLK) vs. Crunch Time</button>
+        <button class="cu-tab-btn" data-session="2026-10-25_WTN_vs_NewAvengers_G2" onclick="switchGameSession('2026-10-25_WTN_vs_NewAvengers_G2')" style="border-color:#fb7185;color:#fecdd3;">⚡ Oct 25 G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers</button>
+        <button class="cu-tab-btn" data-session="2026-10-18_WTN_vs_OTFSelect_G1" onclick="switchGameSession('2026-10-18_WTN_vs_OTFSelect_G1')">🍁 Oct 18 G1: WTN vs. OTF Select (#2 Mo 3/3 FT, 4 REB)</button>
+        <button class="cu-tab-btn" data-session="2026-11-08_WTN_vs_DomainExpansion_G4" onclick="switchGameSession('2026-11-08_WTN_vs_DomainExpansion_G4')" style="border-color:#4ade80;color:#bbf7d0;background:rgba(34,197,94,0.15);">🏆 Nov 8 G4: WeTheNorth 55, Domain Expansion 53 [WIN!]</button>
+        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download #2 Mo Reel MP4</a>
+      </div>
+    </div>
+    <div style="font-size:0.75rem;color:#fda4af;font-weight:600;">
+      #2 Mo Season Totals: <strong style="color:#fff;">28 PTS • 6/11 3PT (54.5% 3P!) • 18 REB • 2 AST • 1 STL • 2 BLK</strong>
     </div>
   </div>
 
@@ -2801,6 +2827,37 @@
       `;
     }
 
+    async function playMoHighlightReel() {
+      if (!activeSessionId || !activeSessionId.includes('_WTN_')) {
+        await switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3');
+      }
+      stopAutoReel();
+      const reelUrl = 'https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4';
+      const localReelUrl = '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4';
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      videoEl.src = isLocalHost ? localReelUrl : reelUrl;
+      videoEl.onerror = () => {
+        if (videoEl.src !== reelUrl) {
+          videoEl.src = reelUrl;
+          videoEl.load();
+        }
+      };
+      videoEl.currentTime = 0;
+      const p = videoEl.play();
+      if (p && p.catch) p.catch(() => {});
+      const banner = document.getElementById('autoReelBanner');
+      const txt = document.getElementById('autoReelText');
+      if (banner) banner.style.display = 'flex';
+      if (txt) txt.textContent = '🎬 PLAYING #2 MO SEASON HIGHLIGHT REEL (11 PLAYS • 5× 3PT BARRAGE, 100% FG G2, BLOCK & STEAL)';
+      const gSelect = document.getElementById('gameFilter');
+      if (gSelect) {
+        gSelect.value = 'CU_HIGHLIGHTS';
+        renderPlays();
+      }
+      const videoWrap = document.getElementById('videoWrapper');
+      if (videoWrap) videoWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     async function switchGameSession(sessionId, skipUrlSync) {
       stopAutoReel();
       const sv = document.getElementById('scoutingTapeVideo');
@@ -2809,8 +2866,10 @@
       const picker = document.getElementById('sessionPicker');
       if (picker && picker.value !== activeSessionId) picker.value = activeSessionId;
 
-      document.querySelectorAll('#cuHubTabs .cu-tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.session === activeSessionId);
+      document.querySelectorAll('#cuHubTabs .cu-tab-btn, #wtnHubTabs .cu-tab-btn').forEach(btn => {
+        if (btn.dataset.session) {
+          btn.classList.toggle('active', btn.dataset.session === activeSessionId);
+        }
       });
 
       if (!skipUrlSync && window.history && window.history.replaceState) {
@@ -2901,19 +2960,24 @@
       const cfg = gData.config || {};
       const tipoffSec = Number(cfg.tipoff_sec) || (gData.events && gData.events[0] ? Math.max(0, gData.events[0].s - 15) : 0);
       const tipoffMmSs = cfg.tipoff_mmss || `${String(Math.floor(tipoffSec / 60)).padStart(2, '0')}:${String(tipoffSec % 60).padStart(2, '0')}`;
-      const hasVideo = cfg.has_video !== false && !!cfg.yt_id;
-      const gcsUrl = `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`;
-      const localUrl = `/majestic_games/${activeSessionId}.mp4`;
+      const hasVideo = cfg.has_video !== false && (!!cfg.yt_id || !!cfg.video_url);
+      const gcsUrl = cfg.yt_id
+        ? `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`
+        : (cfg.video_url || `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`);
+      const localUrl = cfg.yt_id
+        ? `/majestic_games/${activeSessionId}.mp4`
+        : (cfg.video_url && cfg.video_url.includes('WTN_Mo_Highlight_Reel') ? '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4' : `/majestic_games/${activeSessionId}.mp4`);
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
       if (hasVideo) {
-        const gcsPlayUrl = tipoffSec > 0 ? `${gcsUrl}#t=${tipoffSec}` : gcsUrl;
-        const localPlayUrl = tipoffSec > 0 ? `${localUrl}#t=${tipoffSec}` : localUrl;
+        const effectiveTip = cfg.yt_id ? tipoffSec : 0;
+        const gcsPlayUrl = effectiveTip > 0 ? `${gcsUrl}#t=${effectiveTip}` : gcsUrl;
+        const localPlayUrl = effectiveTip > 0 ? `${localUrl}#t=${effectiveTip}` : localUrl;
         videoEl.src = isLocalHost ? localPlayUrl : gcsPlayUrl;
         const cueToTipoff = () => {
-          if (pendingSeekTarget === null && tipoffSec > 0 && videoEl.currentTime < tipoffSec - 5) {
-            try { videoEl.currentTime = tipoffSec; } catch (e) {}
-            updateLiveScoreboard(tipoffSec);
+          if (pendingSeekTarget === null && effectiveTip > 0 && videoEl.currentTime < effectiveTip - 5) {
+            try { videoEl.currentTime = effectiveTip; } catch (e) {}
+            updateLiveScoreboard(effectiveTip);
           }
         };
         videoEl.addEventListener('loadedmetadata', cueToTipoff, { once: true });
@@ -3053,7 +3117,11 @@
       }
 
       if (chapterBar) {
-        const wesPill = activeSessionId === '2026-02-15_CU_vs_PimpsDown'
+        const isWtnGame = activeSessionId.includes('_WTN_');
+        const wesPill = isWtnGame
+          ? `<span class="chapter-pill" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48,#9f1239);color:#fff;font-weight:800;border-color:#fda4af;">🎬 Watch #2 Mo Highlight Reel (11 Plays • 5× 3PT Barrage)</span>
+             <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download #2 Mo Highlight Reel MP4</a>`
+          : activeSessionId === '2026-02-15_CU_vs_PimpsDown'
           ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" target="_blank" download="2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⚡ Download Feb 15 CU vs. Pimps Down Reel MP4</a>`
           : activeSessionId === '2026-11-01_CU_vs_Misfits2_G3'
             ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-weight:800;text-decoration:none;border-color:#c4b5fd;">🔨 Download #4 Adam 3× Dunk Reel MP4</a>
@@ -4195,9 +4263,11 @@
       const gameParam = params.get('game');
       const playSec = params.get('play') || params.get('t');
       const reelParam = params.get('reel');
-      const targetSession = gameParam || '2026-10-04_CU_vs_Mustangs_Champ';
+      const targetSession = gameParam || (reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
       await switchGameSession(targetSession, true);
-      if (reelParam === 'top5') {
+      if (reelParam === 'mo') {
+        setTimeout(() => playMoHighlightReel(), 400);
+      } else if (reelParam === 'top5') {
         setTimeout(() => startTop5Reel(), 400);
       } else if (reelParam === 'highlights' || reelParam === 'cu') {
         setTimeout(() => filterCuTeamHighlights(), 400);
@@ -4260,13 +4330,15 @@
 
       if (!isPickup && activeMajesticGame) {
         const cfg = activeMajesticGame.config || {};
+        const shortTeam = cfg.cu_team_name === 'WeTheNorth' ? 'WTN' : (cfg.cu_team_name === 'Sapa Boys' ? 'SB' : 'CU');
+        const teamIcon = cfg.cu_team_name === 'WeTheNorth' ? '🍁' : '🏀';
         const shortHalf = ((activePlay.segLabel || '').split('•')[0] || '').trim();
         gLabel.textContent = shortHalf ? `${shortHalf} • @ ${activePlay.t}` : (cfg.short_title || activeSessionId);
         s12.textContent = activePlay.s12;
-        s23.textContent = `Final: CU ${activeMajesticGame.final_cu_score} – ${activeMajesticGame.final_opp_score} ${cfg.opp_team_name}`;
-        if (cornerScore) cornerScore.textContent = `CU ${activePlay.s12} • @ ${activePlay.t}`;
+        s23.textContent = `Final: ${shortTeam} ${activeMajesticGame.final_cu_score} – ${activeMajesticGame.final_opp_score} ${cfg.opp_team_name}`;
+        if (cornerScore) cornerScore.textContent = `${shortTeam} ${activePlay.s12} • @ ${activePlay.t}`;
         const shortJerseyColor = (cfg.cu_jerseys || 'Red').split('(')[0].trim();
-        lName.textContent = `🏀 ${cfg.cu_team_name} (${shortJerseyColor})`;
+        lName.textContent = `${teamIcon} ${cfg.cu_team_name} (${shortJerseyColor})`;
         const cuPlayers = BOX_SCORE.filter(r => (r.games || '').includes(cfg.cu_team_name)).map(r => `${r.player} (${r.pts12}p)`).join(', ');
         lRoster.textContent = cuPlayers || '#44 Christian Raslowsky, #31 Evan Kovarik, #4 Adam Fecteau, #16 Chris, #9 Aaron, #7 Nick Switzer';
         rName.textContent = `⚔️ ${cfg.opp_team_name} (${cfg.opp_jerseys})`;
