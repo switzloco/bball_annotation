@@ -3248,7 +3248,8 @@
         const localPlayUrl = effectiveTip > 0 ? `${localUrl}#t=${effectiveTip}` : localUrl;
         videoEl.src = isLocalHost ? localPlayUrl : gcsPlayUrl;
         const cueToTipoff = () => {
-          if (pendingSeekTarget === null && effectiveTip > 0 && videoEl.currentTime < effectiveTip - 5) {
+          const curV = videoEl.currentSrc || videoEl.src || '';
+          if (!curV.includes('/reels/') && curV.includes(activeSessionId) && pendingSeekTarget === null && effectiveTip > 0 && videoEl.currentTime < effectiveTip - 5) {
             try { videoEl.currentTime = effectiveTip; } catch (e) {}
             updateLiveScoreboard(effectiveTip);
           }
