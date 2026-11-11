@@ -1799,12 +1799,12 @@
             <span class="collab-progress-pill" id="collabProgressPill">Loading calibration stats...</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <button class="collab-chip-btn mo-live" onclick="quickTagMoAtCurrentTime()" title="One-tap tag a #2 Mo bucket, dime, steal, or block at the current video timestamp!">📍 + Tag #2 Mo Highlight Here</button>
+            <button class="collab-chip-btn mo-live" id="quickTagMoBtn" onclick="quickTagMoAtCurrentTime()" title="One-tap tag a #2 Mo bucket, dime, steal, or block at the current video timestamp!">📍 + Tag #2 Mo Highlight Here</button>
             <button class="collab-chip-btn verify-ok" onclick="jumpToNextUnverifiedBucket()" id="nextUnverifiedBtn" title="Jump straight to the next LED-detected bucket that needs scorer confirmation">🎯 Next Unverified Bucket</button>
             <button class="collab-chip-btn" onclick="toggleCollabDrawer()" id="collabToggleBtn">🛠️ Calibration Controls ▾</button>
           </div>
         </div>
-        <div class="collab-drawer open" id="collabStudioDrawer">
+        <div class="collab-drawer" id="collabStudioDrawer">
           <div style="font-size:0.73rem;color:#cbd5e1;margin-bottom:5px;" id="collabContextNote">
             💡 <strong>How Collab Training Works:</strong> Physical LED Scoreboard AI recovered 100% of bucket timestamps even on zero-timestamp boxscores! Confirm scorers, reassign assists, or nudge shot sync (<code>-2s</code> / <code>+2s</code>) — every tap trains our cross-season model.
           </div>
@@ -3026,6 +3026,19 @@
       `;
     }
 
+    function playReelWithMutedFallback() {
+      const p = videoEl.play();
+      if (p && p.catch) {
+        p.catch(err => {
+          if (err && err.name === 'NotAllowedError') {
+            videoEl.muted = true;
+            const p2 = videoEl.play();
+            if (p2 && p2.catch) p2.catch(() => {});
+          }
+        });
+      }
+    }
+
     async function playCuRicecookersOtReel() {
       if (activeSessionId !== '2026-11-08_CU_vs_Ricecookers_G4') {
         await switchGameSession('2026-11-08_CU_vs_Ricecookers_G4');
@@ -3042,8 +3055,7 @@
         }
       };
       videoEl.currentTime = 0;
-      const p = videoEl.play();
-      if (p && p.catch) p.catch(() => {});
+      playReelWithMutedFallback();
       const banner = document.getElementById('autoReelBanner');
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
@@ -3073,8 +3085,7 @@
         }
       };
       videoEl.currentTime = 0;
-      const p = videoEl.play();
-      if (p && p.catch) p.catch(() => {});
+      playReelWithMutedFallback();
       const banner = document.getElementById('autoReelBanner');
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
@@ -3104,8 +3115,7 @@
         }
       };
       videoEl.currentTime = 0;
-      const p = videoEl.play();
-      if (p && p.catch) p.catch(() => {});
+      playReelWithMutedFallback();
       const banner = document.getElementById('autoReelBanner');
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
@@ -4586,6 +4596,14 @@
       const nextBtn = document.getElementById('nextUnverifiedBtn');
       if (nextBtn) {
         nextBtn.style.display = needsCount > 0 ? 'inline-flex' : 'none';
+      }
+      const moBtn = document.getElementById('quickTagMoBtn');
+      if (moBtn) {
+        moBtn.style.display = (activeSessionId && (activeSessionId.includes('_C7_') || activeSessionId.includes('_WTN_'))) ? 'inline-flex' : 'none';
+      }
+      const collabDr = document.getElementById('collabStudioDrawer');
+      if (collabDr) {
+        collabDr.classList.toggle('open', needsCount > 0);
       }
       if (sel) {
         const rosterList = (activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.active_roster && activeMajesticGame.config.active_roster.length)

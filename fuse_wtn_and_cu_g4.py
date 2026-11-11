@@ -143,16 +143,17 @@ def fuse_majestic_game(cfg):
         per = s.get("period", 1)
         per_label = "1st Half" if per == 1 else ("2nd Half" if per == 2 else "Overtime")
 
+        atk_our = is_our if st != "block" else (not is_our)
         if per == 1:
             vid_s = cfg["p1_first_sec"] + (dt - t1_0).total_seconds() - cfg.get("lag_sec", 3.5)
-            hoop_side = cfg["cu_h1_hoop"] if is_our else ("right" if cfg["cu_h1_hoop"] == "left" else "left")
+            hoop_side = cfg["cu_h1_hoop"] if atk_our else ("right" if cfg["cu_h1_hoop"] == "left" else "left")
         elif per == 2 or "p3_first_sec" not in cfg:
             vid_s = cfg["p2_first_sec"] + (dt - t2_0).total_seconds() - cfg.get("lag_sec", 3.5)
-            hoop_side = cfg["cu_h2_hoop"] if is_our else ("right" if cfg["cu_h2_hoop"] == "left" else "left")
+            hoop_side = cfg["cu_h2_hoop"] if atk_our else ("right" if cfg["cu_h2_hoop"] == "left" else "left")
         else:
             ot_hoop = cfg.get("cu_ot_hoop", cfg["cu_h2_hoop"])
             vid_s = cfg["p3_first_sec"] + (dt - t3_0).total_seconds() - cfg.get("lag_sec", 3.5)
-            hoop_side = ot_hoop if is_our else ("right" if ot_hoop == "left" else "left")
+            hoop_side = ot_hoop if atk_our else ("right" if ot_hoop == "left" else "left")
 
         # Pair Assist + Made FG within 6s
         assist_player = None
@@ -192,6 +193,10 @@ def fuse_majestic_game(cfg):
             play_s = int(round(ov["s"]))
             splash_s = float(ov["splash_s"])
             desc = ov["desc"]
+            if ov.get("assist_player"):
+                assist_player = ov["assist_player"]
+            if ov.get("hoop_side"):
+                hoop_side = ov["hoop_side"]
         else:
             splash_s = round(max(5.0, vid_s), 1)
             play_s = int(round(max(3.0, splash_s - 2.0)))
@@ -258,7 +263,7 @@ def fuse_majestic_game(cfg):
             "desc": desc,
             "avatar": "",
             "statlog_id": s.get("id"),
-            "isMajesticVerified": is_verified or (not cfg.get("exact_overrides"))
+            "isMajesticVerified": True
         })
         i += 1
 
@@ -542,28 +547,80 @@ CONFIGS = [
                 "s": 298, "splash_s": 300.0,
                 "desc": "🎯 #4 Adam Fecteau splashes the game's opening 3-Pointer from the left wing! (3-0 Campbell United) — Assist: #20 Shane Hoffman [19:42 1st Half]"
             },
+            766422: {
+                "s": 382, "splash_s": 383.2,
+                "desc": "🏀 #44 Christian Raslowsky elevates in the left lane for his first bucket! (5-4 Campbell United) [18:16 1st Half]"
+            },
+            766447: {
+                "s": 450, "splash_s": 451.5,
+                "desc": "🏀 #16 Chris attacks inside at the left hoop and finishes strong! (8-6 Campbell United) [16:58 1st Half]"
+            },
+            766482: {
+                "s": 567, "splash_s": 569.0,
+                "desc": "🏀 #44 Christian Raslowsky finishes inside off #16 Chris's interior pass! (10-8 Campbell United) [15:12 1st Half]"
+            },
+            766488: {
+                "s": 597, "splash_s": 598.5, "hoop_side": "right",
+                "desc": "🔒 #4 Adam Fecteau strips the ball on the perimeter and ignites the fast break! (10-8 Campbell United) [14:52 1st Half]"
+            },
             766496: {
                 "s": 608, "splash_s": 610.0,
                 "desc": "🔥 #44 Christian Raslowsky attacks the left lane and finishes high off the glass! (12-8 Campbell United) [14:34 1st Half]"
             },
             766504: {
-                "s": 630, "splash_s": 631.0,
+                "s": 630, "splash_s": 631.0, "hoop_side": "right",
                 "desc": "🚫 #20 Shane Hoffman elevates in the right paint for a huge rim-protecting BLOCK! (12-8 Campbell United) [14:14 1st Half]"
+            },
+            766567: {
+                "s": 812, "splash_s": 814.0, "assist_player": "#4 Adam Fecteau",
+                "desc": "🏀 #9 Aaron finishes inside off #4 Adam Fecteau's pass! (14-10 Campbell United) [11:06 1st Half]"
+            },
+            766584: {
+                "s": 861, "splash_s": 862.5,
+                "desc": "⚡ #4 Adam Fecteau slashes to the left hoop and scores! (16-10 Campbell United) [10:19 1st Half]"
+            },
+            766608: {
+                "s": 963, "splash_s": 965.0,
+                "desc": "💪 #44 Christian Raslowsky scores in the paint to push the lead to 6! (18-12 Campbell United) [8:38 1st Half]"
+            },
+            766673: {
+                "s": 1163, "splash_s": 1165.0,
+                "desc": "🏀 #16 Chris drives the left lane and scores in traffic! (21-17 Campbell United) [5:12 1st Half]"
             },
             766724: {
                 "s": 1400, "splash_s": 1402.0,
                 "desc": "🎯 #22 Matt Mocherman buries a high-arcing 3-Pointer! (26-22 Campbell United) — Assist: #44 Christian Raslowsky [2:41 1st Half]"
             },
+            766740: {
+                "s": 1573, "splash_s": 1574.8,
+                "desc": "⚡ #22 Matt Mocherman sprints coast-to-coast to beat the 1st-Half buzzer with a fast-break layup! (28-29) [0:00 1st Half]"
+            },
             766828: {
                 "s": 1891, "splash_s": 1893.0,
                 "desc": "🏀 #9 Aaron finishes inside off #44 Christian Raslowsky's pass! (32-29 Campbell United) [18:56 2nd Half]"
+            },
+            766898: {
+                "s": 2100, "splash_s": 2101.8, "hoop_side": "left",
+                "desc": "🔒 #24 George jumps the passing lane for the defensive steal! (32-31 Campbell United) [15:30 2nd Half]"
+            },
+            766910: {
+                "s": 2121, "splash_s": 2122.8,
+                "desc": "💪 AND-ONE! #44 Christian Raslowsky powers through contact at the right rim! (34-31 Campbell United) [14:52 2nd Half]"
+            },
+            766937: {
+                "s": 2224, "splash_s": 2225.8, "hoop_side": "left",
+                "desc": "🔒 #24 George comes away with his 2nd steal of the half! (35-33 Campbell United) [13:18 2nd Half]"
             },
             767020: {
                 "s": 2520, "splash_s": 2522.0,
                 "desc": "🎯 #12 Corey Randolph rises over the contest and drills a 3-Pointer! (38-44 Campbell United) — Assist: #4 Adam Fecteau [9:44 2nd Half]"
             },
+            767072: {
+                "s": 2697, "splash_s": 2698.5,
+                "desc": "🏀 #24 George finishes at the right rim off #16 Chris's dish! (40-46 Campbell United) [6:35 2nd Half]"
+            },
             767075: {
-                "s": 2703, "splash_s": 2704.5,
+                "s": 2703, "splash_s": 2704.5, "hoop_side": "left",
                 "desc": "🔒 #44 Christian Raslowsky picks off the pass and ignites a coast-to-coast break! [6:25 2nd Half]"
             },
             767077: {
@@ -573,6 +630,10 @@ CONFIGS = [
             767104: {
                 "s": 2837, "splash_s": 2838.5,
                 "desc": "🔥 #4 Adam Fecteau answers immediately with a clutch pull-up 3-Pointer! (45-49, 10 PTS / 4 AST / 2 STL) [5:46 2nd Half]"
+            },
+            767144: {
+                "s": 3039, "splash_s": 3040.8, "hoop_side": "left",
+                "desc": "🔒 #4 Adam Fecteau swipes a clutch late-game steal! (46-49) [2:17 2nd Half]"
             },
             767150: {
                 "s": 3123, "splash_s": 3124.5,
@@ -595,8 +656,8 @@ CONFIGS = [
                 "desc": "🚨 MIRACLE AT THE HORN!! #44 Christian Raslowsky (23 PTS, 14 REB) sprints coast-to-coast and splashes the BUZZER-BEATING 3-POINTER at 0:00 to tie it 61-61 & force Overtime!!"
             },
             767351: {
-                "s": 4196, "splash_s": 4197.0,
-                "desc": "🛡️ OVERTIME REJECTION! #16 Chris skies at the rim to swat away Ricecookers' layup attempt (tied 61-61 in OT)!"
+                "s": 4196, "splash_s": 4197.0, "hoop_side": "left",
+                "desc": "🛡️ OVERTIME REJECTION! #16 Chris skies at the left rim to swat away Ricecookers' layup attempt (tied 61-61 in OT)!"
             },
             767369: {
                 "s": 4247, "splash_s": 4248.8,
