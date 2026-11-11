@@ -111306,5 +111306,341 @@
         "avatar": ""
       }
     ]
+  },
+  "scouting_report_nov15_latto_talent": {
+    "game_id": 5812,
+    "opp_name": "Latto Talent",
+    "opp_jerseys": "HOT PINK JERSEYS",
+    "tape_header": "LATTO TALENT 1080p 2.0x ZOOM SCOUTING TAPE (HOT PINK JERSEYS)",
+    "tape_download_name": "latto_talent_scouting_tape_1080p.mp4",
+    "tape_summary_label": "Player Scouting Tape Chapters (11 Clips \u2022 1:33 Total \u2022 1080p HD):",
+    "quick_film_session": "2026-03-01_CU_vs_LattoTalent_Champ",
+    "quick_film_label": "\ud83c\udfac Watch Mar 1 Champ Film vs. Latto Talent",
+    "matchup_title": "Campbell United (4-0) vs. Latto Talent (3-1)",
+    "date_str": "Sunday, November 15, 2026 \u2022 5:00 PM PT",
+    "venue": "The Grove Community Center (Division D2 \u2022 Battle for #1 & Winter '26 Championship Rematch!)",
+    "logo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/latto_talent_logo.png?v=1",
+    "scouting_tape_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/latto_talent_scouting_tape_1080p.mp4?v=2",
+    "scouting_tape_chapters": [
+      {
+        "sec": 0.0,
+        "time": "0:00",
+        "player": "#9 Diallo Holmes",
+        "title": "Pull-Up Right-Wing 3PT (20.3 PPG, 10x 3PM, 88% FT)"
+      },
+      {
+        "sec": 9.0,
+        "time": "0:09",
+        "player": "#9 Diallo Holmes",
+        "title": "Rim Block -> Coast-to-Coast Dime to #1 Sean (3.3 APG, 1.3 BPG)"
+      },
+      {
+        "sec": 18.5,
+        "time": "0:18",
+        "player": "#9 Diallo Holmes",
+        "title": "Clutch 2nd-Half Kickout 3PT off #1 Sean Penetration (7x AST!)"
+      },
+      {
+        "sec": 27.0,
+        "time": "0:27",
+        "player": "#1 Sean Steven",
+        "title": "Early Pull-Up 3PT (11.5 PPG - Streaky 3/16 3PT in Wks 3-4)"
+      },
+      {
+        "sec": 35.5,
+        "time": "0:35",
+        "player": "#1 Sean Steven",
+        "title": "Crunch-Time Right-Hand Lane Drive (6/6 2PT = 100% Inside!)"
+      },
+      {
+        "sec": 44.0,
+        "time": "0:44",
+        "player": "#5 Brandon Nguyen",
+        "title": "H1 Buzzer-Beating Corner 3PT off #9 Diallo Kickout (4x 3PM)"
+      },
+      {
+        "sec": 52.5,
+        "time": "0:52",
+        "player": "#3 Mahaan",
+        "title": "Crunch-Time Go-Ahead Right-Corner 3PT (8.5 PPG, 80% FT)"
+      },
+      {
+        "sec": 61.0,
+        "time": "1:01",
+        "player": "#8 Radhir",
+        "title": "Wing Catch-and-Shoot 3PT off #9 Diallo Pass (7.3 PPG, 2.7 PF/G)"
+      },
+      {
+        "sec": 69.5,
+        "time": "1:09",
+        "player": "#4 Lazar",
+        "title": "Passing-Lane Steal & Breakaway Finish (5/6 2PT = 83.3%)"
+      },
+      {
+        "sec": 78.0,
+        "time": "1:18",
+        "player": "#2 Troy",
+        "title": "Transition Rim Run & Paint Finish (23p/11r vs CU in Mar 1 Champ!)"
+      },
+      {
+        "sec": 86.0,
+        "time": "1:26",
+        "player": "#10 Ty",
+        "title": "Bench Left-Corner 3PT off #9 Diallo Skip Pass (2/2 3PT = 100%)"
+      }
+    ],
+    "cu_summary": {
+      "record": "4-0 (Sole 1st Place D2 \u2014 +11.0 Avg Margin)",
+      "ppg": 67.5,
+      "opp_ppg": 56.5,
+      "rpg": 34.3,
+      "apg": 11.8,
+      "spg": 5.0,
+      "bpg": 2.8,
+      "streak": "W5 (Fall '26 Champs + 4-0 Holiday '26 incl. 66-63 OT Win vs. Ricecookers)"
+    },
+    "opp_summary": {
+      "team_id": 2343,
+      "name": "Latto Talent",
+      "record": "3-1 (T-2nd D2 \u2014 +1.0 Avg Margin \u2022 Winter '26 Champs)",
+      "ppg": 62.5,
+      "opp_ppg": 61.5,
+      "rpg": 30.8,
+      "apg": 10.8,
+      "spg": 5.3,
+      "bpg": 2.5,
+      "note": "Revenge & #1 Seed Showdown! Latto Talent beat CU 73-45 in the Mar 1 Winter '26 Final behind #2 Troy (23p/11r, who JUST returned in Wk 4!) and added superstar #9 Diallo Holmes (20.3 PPG, 10.0 RPG, 87.5% FT). NOTE: LT has trailed or tied at halftime in ALL 4 games (-4.5 PPG in 1H, +5.5 PPG in 2H), and Weeks 1-2 box scores logged makes only (Weeks 3-4 full tracking: 38.7% FG, 27.9% 3PT)."
+    },
+    "common_opponents": [
+      {
+        "opponent": "Misfits 2 (Common Opponent)",
+        "cu_result": "W 83\u201366 (+17 \u2022 Nov 1 Wk 3)",
+        "opp_result": "W 70\u201364 (+6 \u2022 Nov 8 Wk 4)",
+        "rc_result": "W 70\u201364 (+6 \u2022 Nov 8 Wk 4)",
+        "insight": "Campbell United dominated Misfits 2 by +17 (11x 3PM + #4 Adam 3 dunks), whereas Latto Talent was tied 33-33 at halftime and tied 59-59 with 2:20 left before #3 Mahaan's corner 3PT & #1 Sean's lane drive sealed it."
+      },
+      {
+        "opponent": "Ricecookers & TMT (Common Opponents)",
+        "cu_result": "W 66\u201363 OT (+3) & W 52\u201350 (+2)",
+        "opp_result": "W 68\u201363 (+5) & W 55\u201351 (+4)",
+        "rc_result": "W 68\u201363 (+5) & W 55\u201351 (+4)",
+        "insight": "Razor-close parity across both teams! Against Ricecookers, LT trailed 30-35 at half and needed #9 Diallo Holmes going 10/10 FT (27 PTS, 16 REB) when #1 Aaron & #6 Raj traded foul trouble."
+      },
+      {
+        "opponent": "Sapa Boys (THE LOSS BLUEPRINT \u2014 Wk 3)",
+        "cu_result": "Play Sun Nov 22 (Wk 6)",
+        "opp_result": "L 57\u201368 (-11 \u2022 LT's Lone Loss!)",
+        "rc_result": "L 57\u201368 (-11 \u2022 LT's Lone Loss!)",
+        "insight": "BLUEPRINT TO BEAT LATTO TALENT: Sapa Boys blitzed LT 39-31 in the 1st Half and walled off #9 Diallo Holmes inside WITHOUT fouling \u2014 holding Diallo to 4/14 FG (1/6 2PT!) and just 3/4 FT (14 PTS) while forcing #1 Sean into 2/7 3PT!"
+      },
+      {
+        "opponent": "Winter '26 Championship Rematch (Mar 1, 2026)",
+        "cu_result": "L 45\u201373 (Winter '26 Final)",
+        "opp_result": "W 73\u201345 (#2 Troy 23p/11r, #1 Sean 11p)",
+        "rc_result": "W 73\u201345 (#2 Troy 23p/11r, #1 Sean 11p)",
+        "insight": "In March, #2 Troy feasted in the paint for 23 PTS (10x 2PM) & 11 REB alongside #1 Sean (11 PTS), #5 Brandon (9 PTS), and #6 Raj. Troy just made his Holiday '26 debut in Week 4 (6 REB, 2 STL, 1 BLK) \u2014 CU's upgraded size (#44 Christian, #4 Adam, #16 Chris, #20 Shane) is built for payback!"
+      }
+    ],
+    "tactical_keys": [
+      {
+        "num": "1",
+        "title": "EXECUTE THE 'SAPA BOYS WALL' ON #9 DIALLO HOLMES \u2014 ZERO REACH-IN FOULS (87.5% FT!)",
+        "detail": "#9 Diallo Holmes accounts for 32.4% of Latto Talent's scoring (20.3 PPG, 10.0 RPG, 3.3 APG, 21/24 FT = 87.5%). When Ricecookers fouled him, he went 10/10 FT for 27 PTS. When Sapa Boys showed a vertical chest wall without reaching, he shot 1/6 on 2PTs (4/14 FG, 14 PTS). Run him off catch-and-shoot 3s (10x 3PM, 37.5% in Wks 3-4) into #44 Christian / #4 Adam / #16 Chris verticality, and gang-rebound his misses!"
+      },
+      {
+        "num": "2",
+        "title": "BLOW UP THE #1 SEAN -> #9 DIALLO TWO-MAN ENGINE & CUT OFF SEAN'S RIGHT-HAND PAINT DRIVES",
+        "detail": "#1 Sean Steven (11.5 PPG, 2.5 APG) has 7 direct assists to #9 Diallo \u2014 their #1 halfcourt trigger! Over Weeks 3-4 full tracking, Sean is a lethal 6/6 (100%) on 2PT drives inside the arc, but an icy 3/16 (18.8%) from 3PT (1/9 vs Misfits 2). Contain his right-hand lane penetration first, contest pull-up 3s under control, and deny the pocket/kickout pass back to #9 Diallo."
+      },
+      {
+        "num": "3",
+        "title": "DO NOT HELP OFF #5 BRANDON NGUYEN IN THE CORNERS \u2014 SAG OFF NON-SHOOTERS #2 TROY & #6 RAJ INSTEAD!",
+        "detail": "#5 Brandon Nguyen just erupted for 14 PTS on 4/10 3PT (including the H1 buzzer-beater) with 0 turnovers across 4 games, and #10 Ty is 2/2 on corner 3s. Face-guard #5 Brandon on #9 Diallo drives! Your paint help MUST come from sagging off non-shooters #2 Troy (0 3PA) and #6 Raj / #7 Tashi (0 3PA combined)."
+      },
+      {
+        "num": "4",
+        "title": "REVENGE GLASS ALERT ON #2 TROY + TRACK OFF-BALL CUTTERS (#4 LAZAR & #23 DILBAR)",
+        "detail": "#2 Troy wrecked CU for 23 PTS (10x 2PM) & 11 REB in the Mar 1 Championship and just returned in Week 4 (6 REB, 2 STL, 1 BLK). Put a body on #2 Troy every shot! Meanwhile, #4 Lazar (5/6 2PT = 83.3%) and #23 Dilbar (14 PTS on 6/8 FG vs Sapa Boys) feast on 45/baseline back-cuts when defenders ball-watch Diallo."
+      },
+      {
+        "num": "5",
+        "title": "UNLEASH CAMPBELL UNITED'S +12.8 1ST-HALF BLITZ & ATTACK #8 RADHIR / #6 RAJ FOUL TROUBLE",
+        "detail": "Latto Talent is a slow-starting team that has trailed or tied at halftime in ALL 4 games (-4.5 PPG in 1st Halves: 26-31 vs TMT, 30-35 vs RC, 31-39 vs SB, 33-33 vs MIS2). CU is D2's #1 1st-Half juggernaut! Push tempo early off stops, attack #8 Radhir (2.7 fouls/G) and #6 Raj (fouled out w/ 6 PF vs RC) to put CU in the bonus, and build a double-digit cushion before halftime!"
+      }
+    ],
+    "personnel": [
+      {
+        "number": "#9",
+        "name": "Diallo Holmes",
+        "role": "Superstar Point-Forward / #1 Scoring & Glass Threat",
+        "gp": 4,
+        "ppg": 20.3,
+        "rpg": 10.0,
+        "apg": 3.3,
+        "spg": 1.0,
+        "splits": "81 PTS in 4 GP (25, 27, 14, 15) \u2022 10x 3PM (37.5% in Wks 3-4) \u2022 21/24 FT (87.5%) \u2022 5 BLK",
+        "tendency": "High-usage point-forward (braids + white headband) who rebounds & pushes coast-to-coast (6 AST in Wk 4), pulls up from three (3x 3PM in 3 of 4 games), and lives at the FT line (10/10 FT vs RC). Struggled to 1/6 2PT when walled off by Sapa Boys.",
+        "matchup_plan": "Primary: #44 Christian Raslowsky / #4 Adam Fecteau. Run him off 3PT line into a disciplined 2-man chest wall in the paint \u2014 HANDS STRAIGHT UP (never reach, 88% FT!) \u2014 and finish every defensive board.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_9_diallo.jpg?v=2",
+        "tape_sec": 0.0,
+        "tape_label": "\ud83c\udfac Watch #9 Diallo Holmes Tape (3 Clips \u2022 0:00)"
+      },
+      {
+        "number": "#1",
+        "name": "Sean Steven",
+        "role": "Primary Ball-Handler / Paint Slasher & #9 Feeder",
+        "gp": 4,
+        "ppg": 11.5,
+        "rpg": 4.5,
+        "apg": 2.5,
+        "spg": 1.0,
+        "splits": "46 PTS in 4 GP (12, 11, 15, 8) \u2022 6/6 2PT (100%!) & 3/16 3PT (18.8%) in Wks 3-4 \u2022 7/11 FT",
+        "tendency": "Returning Champ guard who initiates offense, has 7 direct assists to #9 Diallo, and is automatic finishing right-hand drives in the lane (6/6 2PT last 2 games), while firing streaky high-volume 3s (1/9 vs MIS2).",
+        "matchup_plan": "Primary: #7 Nick Switzer / #20 Shane Hoffman. Keep him out of the middle of the paint (100% 2PT!), contest pull-up 3s without flying past his hip, and blow up his pick-and-pop/kickout chemistry with #9 Diallo.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_1_sean.jpg?v=2",
+        "tape_sec": 27.0,
+        "tape_label": "\ud83c\udfac Watch #1 Sean Steven Tape (2 Clips \u2022 0:27)"
+      },
+      {
+        "number": "#5",
+        "name": "Brandon Nguyen",
+        "role": "Corner & Wing Catch-and-Shoot Sniper",
+        "gp": 4,
+        "ppg": 8.0,
+        "rpg": 2.3,
+        "apg": 0.5,
+        "spg": 0.5,
+        "splits": "32 PTS in 4 GP (8, 6, 4, 14) \u2022 6x 3PM (4/10 3PT in Wk 4!) \u2022 2/2 FT \u2022 0 Turnovers in 4 GP!",
+        "tendency": "Returning Champ sharpshooter who relocate-drifts to the left/right corners when #9 Diallo or #1 Sean penetrates. Drained 4 triples (including the H1 buzzer-beater) vs Misfits 2 with zero turnovers all season.",
+        "matchup_plan": "Primary: #12 Corey Randolph / #22 Matt Mocherman. LOCK & TRAIL \u2014 zero help/stunting off #5 Brandon in the corners! Force him to put the ball on the deck inside the arc.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_5_brandon.jpg?v=2",
+        "tape_sec": 44.0,
+        "tape_label": "\ud83c\udfac Watch #5 Brandon Nguyen Tape (0:44)"
+      },
+      {
+        "number": "#3",
+        "name": "Mahaan",
+        "role": "Physical Wing Slasher & Crunch-Time Shooter",
+        "gp": 2,
+        "ppg": 8.5,
+        "rpg": 3.0,
+        "apg": 0.5,
+        "spg": 0.0,
+        "splits": "17 PTS in 2 GP (7 vs SB, 10 vs MIS2) \u2022 6/11 FG (54.5%) \u2022 5/8 2PT \u2022 1/3 3PT \u2022 4/5 FT (80%)",
+        "tendency": "Goggled mid-season wing addition who attacks closeouts hard (5/8 2PT, 4/5 FT) and buried the 62-59 go-ahead right-corner 3PT with 2:15 left vs Misfits 2.",
+        "matchup_plan": "Primary: #16 Chris / #20 Shane Hoffman. Close out on balance to respect the corner 3, then absorb contact with your chest on straight-line drives.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_3_mahaan.jpg?v=2",
+        "tape_sec": 52.5,
+        "tape_label": "\ud83c\udfac Watch #3 Mahaan Scouting Tape (0:52)"
+      },
+      {
+        "number": "#8",
+        "name": "Radhir",
+        "role": "High-Motor 3-and-D Wing Connector",
+        "gp": 3,
+        "ppg": 7.3,
+        "rpg": 4.3,
+        "apg": 1.7,
+        "spg": 1.0,
+        "splits": "22 PTS in 3 GP (4, 8, 10) \u2022 4x 3PM (2/8 3PT vs MIS2) \u2022 3 STL, 1 BLK \u2022 2.7 Fouls/G",
+        "tendency": "Active wing shooter & passing-lane gambler (2 STL, 1 BLK, 2 AST in Wk 4, incl. the crunch-time swing pass to #3 Mahaan) who commits 2.7 fouls/game pressing ball-handlers.",
+        "matchup_plan": "Close out short on wing catch-and-shoot 3s (2/8 3PT in Wk 4), protect cross-court passes, and attack him downhill early to pile up team fouls.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_8_radhir.jpg?v=2",
+        "tape_sec": 61.0,
+        "tape_label": "\ud83c\udfac Watch #8 Radhir Scouting Tape (1:01)"
+      },
+      {
+        "number": "#4",
+        "name": "Lazar (w/ #23 Dilbar)",
+        "role": "Off-Ball Cutters & Transition Leak-Out Threats",
+        "gp": 2,
+        "ppg": 6.5,
+        "rpg": 1.5,
+        "apg": 1.5,
+        "spg": 1.0,
+        "splits": "#4 Lazar: 13 PTS (5/6 2PT = 83.3%, 0/2 3PT) \u2022 #23 Dilbar: 8.0 PPG (14 PTS on 6/8 FG, 2/2 3PT vs SB)",
+        "tendency": "#4 Lazar thrives jumping passing lanes and cutting behind ball-watching defenders (4/5 2PT in Wk 4, 0/2 3PT). If #23 Dilbar suits up, respect his microwave scoring (14 PTS in Wk 3 vs Sapa Boys).",
+        "matchup_plan": "Don't turn your head completely when #9 Diallo drives \u2014 keep vision on weak-side 45/baseline cuts, and make crisp two-hand perimeter passes.",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_4_lazar.jpg?v=2",
+        "tape_sec": 69.5,
+        "tape_label": "\ud83c\udfac Watch #4 Lazar Scouting Tape (1:09)"
+      },
+      {
+        "number": "#2",
+        "name": "Troy",
+        "role": "REVENGE ALERT: Interior Paint Finisher & Glass Cleaner",
+        "gp": 1,
+        "ppg": 2.0,
+        "rpg": 6.0,
+        "apg": 1.0,
+        "spg": 2.0,
+        "splits": "Wk 4 Return: 2 PTS, 6 REB, 2 STL, 1 BLK \u2022 MAR 1 CHAMP VS CU: 23 PTS (10x 2PM), 11 REB, 4 AST!",
+        "tendency": "Athletic headband forward who DESTROYED Campbell United inside in the Winter '26 Final (23 PTS, 11 REB, 0 3PA) and just returned to the lineup in Week 4. Pure rim-runner, offensive rebounder, and shot-blocker.",
+        "matchup_plan": "Primary: #9 Aaron / #24 George / #31 Evan. SAG INTO THE PAINT (0 3PA!) to wall off #9 Diallo, then HIT & BOX OUT #2 TROY on every single shot \u2014 zero second-chance putbacks!",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_2_troy.jpg?v=2",
+        "tape_sec": 78.0,
+        "tape_label": "\ud83c\udfac Watch #2 Troy Scouting Tape (1:18)"
+      },
+      {
+        "number": "#10",
+        "name": "Ty (w/ #6 Raj & #7 Tashi)",
+        "role": "Bench Corner Spacer (#10) & Non-Shooting Bigs (#6/#7)",
+        "gp": 2,
+        "ppg": 3.0,
+        "rpg": 1.5,
+        "apg": 1.0,
+        "spg": 0.0,
+        "splits": "#10 Ty: 2/2 3PT (100% in Wks 3-4) \u2022 #6 Raj: 3.7 PPG (5/5 2PT, 0 3PA, 6 PF foul-out vs RC)",
+        "tendency": "#10 Ty spots up strictly in the corners (2/2 3PT off #9 Diallo skip passes). Reserve bigs #6 Raj and #7 Tashi never shoot 3s (0 3PA combined) and #6 Raj fouled out in 6 PF vs Ricecookers.",
+        "matchup_plan": "Respect #10 Ty in the corners (contest catch-and-shoot), but sag all the way to the nail/paint whenever #6 Raj or #7 Tashi are on the floor!",
+        "photo_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/scouting/lt_p_10_ty.jpg?v=2",
+        "tape_sec": 86.0,
+        "tape_label": "\ud83c\udfac Watch #10 Ty Scouting Tape (1:26)"
+      }
+    ],
+    "recent_games": [
+      {
+        "week": "Week 4 (Nov 8, 2026) \u2014 vs. Misfits 2",
+        "score": "W 70\u201364 (Tied 33\u201333 @ Half)",
+        "leaders": "#9 Diallo 15p/11r/6a/2b \u2022 #5 Brandon 14p (4/10 3PT) \u2022 #3 Mahaan 10p/5r (go-ahead 3) \u2022 #8 Radhir 10p/4r/2s \u2022 #1 Sean 8p/5r/5a \u2022 #4 Lazar 8p \u2022 #2 Troy 2p/6r/2s/1b"
+      },
+      {
+        "week": "Week 3 (Nov 1, 2026) \u2014 vs. Sapa Boys [BLUEPRINT LOSS]",
+        "score": "L 57\u201368 (Down 31\u201339 @ Half)",
+        "leaders": "#1 Sean 15p (6/13 FG, 2/7 3PT) \u2022 #23 Dilbar 14p (6/8 FG, 2/2 3PT) \u2022 #9 Diallo HELD TO 14p on 4/14 FG (1/6 2PT, 3/4 FT!) \u2022 #3 Mahaan 7p"
+      },
+      {
+        "week": "Week 2 (Oct 25, 2026) \u2014 vs. Ricecookers",
+        "score": "W 68\u201363 (Down 30\u201335 @ Half)",
+        "leaders": "#9 Diallo 27p/16r/3a/2b (10/10 FT!) \u2022 #1 Sean 11p/7r \u2022 #8 Radhir 8p/6r \u2022 #6 Raj 7p (fouled out w/ 6 PF) \u2022 #5 Brandon 6p"
+      },
+      {
+        "week": "Week 1 (Oct 18, 2026) \u2014 vs. TMT",
+        "score": "W 55\u201351 (Down 26\u201331 @ Half)",
+        "leaders": "#9 Diallo 25p/6r/2a/2s (3x 3PM, 6/8 FT) \u2022 #1 Sean 12p/4r/3a/2s \u2022 #5 Brandon 8p \u2022 #8 Radhir 4p \u2022 #6 Raj 4p"
+      }
+    ],
+    "film_links": [
+      {
+        "title": "Week 4: Latto Talent 70, Misfits 2 64 (Hot Pink Jerseys \u2022 1080p)",
+        "url": "https://www.youtube.com/watch?v=SdT-2krO6uY",
+        "note": "Full current squad w/ #9 Diallo (15/11/6), #5 Brandon (4x 3PM), #1 Sean, #3 Mahaan & #2 Troy's return"
+      },
+      {
+        "title": "Week 3 Blueprint Loss: Sapa Boys 68, Latto Talent 57",
+        "url": "https://www.youtube.com/watch?v=sQMruYEbMIs",
+        "note": "Watch how Sapa Boys walled off #9 Diallo inside without fouling (1/6 2PT, 4/14 FG) & built a 39-31 H1 lead!"
+      },
+      {
+        "title": "Week 1: Latto Talent 55, TMT 51",
+        "url": "https://www.youtube.com/watch?v=V-xYJ4ParM0",
+        "note": "#9 Diallo Holmes debut (25 PTS) + #1 Sean Steven (12 PTS) 2nd-half comeback vs TMT"
+      },
+      {
+        "title": "Winter '26 Championship (Mar 1, 2026): Latto Talent 73, Campbell United 45",
+        "url": "https://www.youtube.com/watch?v=VxsUFYxbics",
+        "note": "Revenge tape! Watch #2 Troy's 23 PTS & 11 REB interior game alongside #1 Sean & #5 Brandon"
+      }
+    ]
   }
 }

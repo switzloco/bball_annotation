@@ -8,14 +8,14 @@
   <meta property="og:site_name" content="Campbell United × CPSN Film Room" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bball-film-room-615717094211.us-central1.run.app/" />
-  <meta property="og:title" content="🏀 Campbell United Film Room &amp; Nov 8 Scouting Hub (Fall '26 Champs 🏆 &amp; 3-0 D2)" />
-  <meta property="og:description" content="Watch synced game film &amp; team highlights (Oct 4 Champ vs Mustangs, Game 1 vs Halal Hoopers, Game 2 vs TMT) + the Nov 8 Opponent Scouting Report vs. Ricecookers!" />
+  <meta property="og:title" content="🏀 Campbell United Film Room &amp; Nov 15 Scouting Hub (4-0 D2 vs. Latto Talent)" />
+  <meta property="og:description" content="Watch 1080p synced game film &amp; team highlights (incl. 66-63 OT Win vs Ricecookers) + the Nov 15 Opponent Scouting Report vs. Latto Talent!" />
   <meta property="og:image" content="https://bball-film-room-615717094211.us-central1.run.app/og_preview.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="🏀 Campbell United Film Room &amp; Nov 8 Scouting Hub (Fall '26 Champs 🏆 &amp; 3-0 D2)" />
-  <meta name="twitter:description" content="Watch synced game film &amp; team highlights (Oct 4 Champ vs Mustangs, Game 1 vs Halal Hoopers, Game 2 vs TMT) + the Nov 8 Opponent Scouting Report vs. Ricecookers!" />
+  <meta name="twitter:title" content="🏀 Campbell United Film Room &amp; Nov 15 Scouting Hub (4-0 D2 vs. Latto Talent)" />
+  <meta name="twitter:description" content="Watch 1080p synced game film &amp; team highlights (incl. 66-63 OT Win vs Ricecookers) + the Nov 15 Opponent Scouting Report vs. Latto Talent!" />
   <meta name="twitter:image" content="https://bball-film-room-615717094211.us-central1.run.app/og_preview.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1648,8 +1648,9 @@
           <option value="2026-01-11_C7_vs_OutOfShape_W1">🏀 Crew 7 W1 (Winter '26): #2 Mohamed 6 PTS (1/1 3PT, 3/3 FT) vs. Out Of Shape (Jan 11)</option>
           <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20, 2026)</option>
           <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
+          <option value="scouting_nov15">📋 NEW! Nov 15 Opponent Scouting Report: vs. Latto Talent (Sun 5:00 PM @ The Grove)</option>
           <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam 3× Dunk Lab (Colab AI)</option>
-          <option value="scouting_nov8">📋 Nov 8 Opponent Scouting Report: vs. Ricecookers (Sun 8:00 PM @ The Grove)</option>
+          <option value="scouting_nov8">📋 Archive: Nov 8 Scouting Report vs. Ricecookers (CU Won 66–63 OT!)</option>
           <option value="2026-02-15_CU_vs_PimpsDown">⚡ Winter '26 Wk 6: Campbell United 59, Pimps Down 51 (Feb 15, 2026)</option>
           <option value="2026-02-08_CU_vs_Eagles">🏀 Majestic Archive: Campbell United 119, Eagles 69 (Feb 8, 2026)</option>
           <option value="2026-03-01_CU_vs_LattoTalent_Champ">🏀 Majestic Archive: Campbell United 45, Latto Talent 73 (Mar 1, 2026)</option>
@@ -1657,7 +1658,7 @@
           <option value="2026-10-15_Pickup_G1">🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4)</option>
           <option value="2026-10-31">🌳 Pickup Run: Oct 31, 2026 (Campbell Park — Full Game + Game 2)</option>
         </select>
-        <button class="blue-btn" id="scoutingQuickBtn" onclick="switchGameSession('scouting_nov8')" style="font-weight:800;border-color:#fde68a;color:#fde68a;background:rgba(217,119,6,0.22);" title="Open Nov 8 Opponent Scouting Report vs. Ricecookers">📋 Nov 8 Scouting: vs. Ricecookers</button>
+        <button class="blue-btn" id="scoutingQuickBtn" onclick="switchGameSession('scouting_nov15')" style="font-weight:800;border-color:#f472b6;color:#fde68a;background:linear-gradient(135deg,rgba(219,39,119,0.34),rgba(217,119,6,0.28));" title="Open Nov 15 Opponent Scouting Report vs. Latto Talent (Sun 5:00 PM @ The Grove)">📋 Nov 15 Scouting: vs. Latto Talent</button>
         <button class="green-btn mobile-only-btn" onclick="shareToWhatsApp()" title="Share to WhatsApp">📲 WhatsApp</button>
         <button class="mobile-only-btn" id="mobileToolsBtn" onclick="toggleMobileTools()" title="Toggle Tools &amp; Filters">⚙️ Tools</button>
       </div>
@@ -1712,12 +1713,13 @@
         <button class="cu-tab-btn" data-session="2026-10-18_SB_vs_Tandoori_Eugene29" onclick="switchGameSession('2026-10-18_SB_vs_Tandoori_Eugene29')">🔥 Eugene Kim 29 PTS (5× 3PM): SB 83, Tandoori 73</button>
         <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
         <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
+        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15" onclick="switchGameSession('scouting_nov15')" style="border-color:#f472b6;color:#fef08a;background:linear-gradient(135deg,rgba(219,39,119,0.38) 0%,rgba(124,58,237,0.32) 100%);font-weight:900;box-shadow:0 2px 10px rgba(236,72,153,0.35);">📋 NEW! Nov 15 Scouting: vs. Latto Talent (Sun 5PM)</button>
         <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; Adam 3× Dunk Lab</button>
-        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')">📋 Nov 8 Scouting: vs. Ricecookers</button>
+        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')" style="opacity:0.86;">📋 Nov 8 Scouting (Ricecookers)</button>
       </div>
     </div>
     <div style="font-size:0.75rem;color:#94a3b8;font-weight:600;">
-      Latest Result: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT) — #44 Christian 61–61 Buzzer 3PT + #20 Shane OT Dagger 3PT! (4-0 D2 • 1080p Film &amp; Reel LIVE!)</strong>
+      Next Matchup: <strong style="color:#f472b6;">Sun Nov 15 @ 5:00 PM vs. Latto Talent (3-1 • #1 Seed &amp; Champ Rematch!)</strong> &nbsp;•&nbsp; Latest Win: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT • 4-0 D2!)</strong>
     </div>
   </div>
 
@@ -2669,6 +2671,13 @@
       if (!container || !sr) return;
       const cu = sr.cu_summary || {};
       const opp = sr.opp_summary || {};
+      const oppName = sr.opp_name || opp.name || 'Opponent';
+      const oppUpper = oppName.toUpperCase();
+      const tapeHeader = sr.tape_header || `${oppUpper} 2.2x ZOOM SCOUTING TAPE (CAROLINA BLUE JERSEYS)`;
+      const tapeDownload = sr.tape_download_name || 'scouting_tape_reel.mp4';
+      const tapeSummaryLabel = sr.tape_summary_label || `Player Scouting Tape Chapters (${(sr.scouting_tape_chapters || []).length} Clips):`;
+      const quickFilmSession = sr.quick_film_session || '2026-11-08_CU_vs_Ricecookers_G4';
+      const quickFilmLabel = sr.quick_film_label || '🎬 Watch CU 66–63 OT Win vs. Ricecookers';
       const commonHtml = (sr.common_opponents || []).map(c => `
         <div style="background:#0e131f;border:1px solid #263149;border-radius:7px;padding:10px 12px;margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:4px;">
@@ -2676,7 +2685,7 @@
             <span style="font-size:0.78rem;">
               <span style="color:var(--green);font-weight:700;">Campbell United: ${escapeHtml(c.cu_result)}</span>
               <span style="color:#64748b;margin:0 6px;">|</span>
-              <span style="color:#f87171;font-weight:700;">Ricecookers: ${escapeHtml(c.rc_result)}</span>
+              <span style="color:#f87171;font-weight:700;">${escapeHtml(oppName)}: ${escapeHtml(c.opp_result || c.rc_result || '')}</span>
             </span>
           </div>
           <div style="font-size:0.79rem;color:#cbd5e1;line-height:1.45;">${escapeHtml(c.insight)}</div>
@@ -2759,7 +2768,7 @@
       container.innerHTML = `
         <div class="scouting-hero">
           <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-            ${sr.logo_url ? `<img src="${escapeHtml(sr.logo_url)}" alt="Ricecookers Logo" style="width:62px;height:62px;border-radius:10px;border:2px solid #38bdf8;background:#0f172a;object-fit:contain;padding:3px;" />` : ''}
+            ${sr.logo_url ? `<img src="${escapeHtml(sr.logo_url)}" alt="${escapeHtml(oppName)} Logo" style="width:62px;height:62px;border-radius:10px;border:2px solid #38bdf8;background:#0f172a;object-fit:contain;padding:3px;" />` : ''}
             <div>
               <div style="font-family:var(--font-display);font-weight:800;font-size:0.85rem;letter-spacing:0.08em;color:#fde68a;text-transform:uppercase;">
                 📋 CPSN × CAMPBELL UNITED OFFICIAL SCOUTING REPORT • MAJESTIC HOOPS HOLIDAY '26 (DIV D2)
@@ -2768,32 +2777,32 @@
                 ${escapeHtml(sr.matchup_title)}
               </h1>
               <div style="font-size:0.88rem;color:#cbd5e1;font-weight:600;">
-                📅 ${escapeHtml(sr.date_str)} &nbsp;•&nbsp; 📍 ${escapeHtml(sr.venue)} &nbsp;•&nbsp; 🔥 Campbell United on 4-Game Win Streak!
+                📅 ${escapeHtml(sr.date_str)} &nbsp;•&nbsp; 📍 ${escapeHtml(sr.venue)} &nbsp;•&nbsp; 🔥 ${escapeHtml(cu.streak || 'Campbell United 4-0 in D2!')}
               </div>
             </div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button class="green-btn" onclick="shareToWhatsApp()" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">📲 Share Scouting Report to WhatsApp</button>
-            <button class="blue-btn" onclick="switchGameSession('2026-10-25_CU_vs_TMT_G2')" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">🎬 Watch CU vs. TMT Film (52-50)</button>
+            <button class="blue-btn" onclick="switchGameSession('${escapeHtml(quickFilmSession)}')" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">${escapeHtml(quickFilmLabel)}</button>
           </div>
         </div>
 
         ${sr.scouting_tape_url ? `
           <div class="scouting-panel" id="scoutingTapePanel" style="border-color:rgba(56,189,248,0.5);background:linear-gradient(180deg,#0f172a 0%,#0b0f19 100%);">
             <h3>
-              <span>🎥 RICECOOKERS 2.2x ZOOM SCOUTING TAPE (CAROLINA BLUE JERSEYS)</span>
-              <a href="${escapeHtml(sr.scouting_tape_url)}" download="ricecookers_scouting_tape_reel.mp4" class="btn-link blue-btn" style="font-size:0.74rem;padding:5px 10px;">⬇️ Download Scouting Tape MP4</a>
+              <span>🎥 ${escapeHtml(tapeHeader)}</span>
+              <a href="${escapeHtml(sr.scouting_tape_url)}" download="${escapeHtml(tapeDownload)}" class="btn-link blue-btn" style="font-size:0.74rem;padding:5px 10px;">⬇️ Download Scouting Tape MP4</a>
             </h3>
             <div class="scouting-tape-grid">
               <div>
                 <video id="scoutingTapeVideo" src="${escapeHtml(sr.scouting_tape_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #334155;background:#000;aspect-ratio:16/9;display:block;"></video>
                 <div id="scoutingTapeNowPlaying" style="margin-top:8px;font-size:0.84rem;font-weight:700;color:#7dd3fc;line-height:1.4;">
-                  ▶️ Select any player clip below (or tap any player card) to jump directly to their zoomed scouting tape!
+                  ▶️ Select any player clip below (or tap any player card) to jump directly to their zoomed 1080p scouting tape!
                 </div>
               </div>
               <div style="display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto;width:100%;">
                 <div style="font-size:0.76rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
-                  ⏱️ Player Scouting Tape Chapters (9 Clips • 1:25 Total):
+                  ⏱️ ${escapeHtml(tapeSummaryLabel)}
                 </div>
                 ${tapeChaptersHtml}
               </div>
@@ -2814,7 +2823,7 @@
                 </div>
               </div>
               <div style="background:#1a1118;border:1px solid rgba(248,113,113,0.4);border-radius:8px;padding:12px;">
-                <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:900;color:#f87171;">⚔️ RICECOOKERS (${escapeHtml(opp.record)})</div>
+                <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:900;color:#f87171;">⚔️ ${escapeHtml(oppUpper)} (${escapeHtml(opp.record)})</div>
                 <div style="font-size:0.8rem;color:#e2e8f0;margin-top:6px;line-height:1.6;">
                   • <strong>Offense:</strong> ${opp.ppg} PPG &nbsp;|&nbsp; <strong>Defense:</strong> ${opp.opp_ppg} OPP PPG<br/>
                   • <strong>Rebounds:</strong> ${opp.rpg} RPG &nbsp;|&nbsp; <strong>Assists:</strong> ${opp.apg} APG<br/>
@@ -2825,9 +2834,9 @@
             <div style="font-size:0.8rem;color:#fde68a;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);border-radius:6px;padding:8px 11px;margin-bottom:14px;">
               ⚠️ <strong>Scouting Alert:</strong> ${escapeHtml(opp.note)}
             </div>
-            <h3><span>🔄 Common-Opponent Comparison (TMT &amp; Misfits 2)</span></h3>
+            <h3><span>🔄 Common-Opponent &amp; Matchup Blueprint</span></h3>
             ${commonHtml}
-            <h3 style="margin-top:14px;"><span>🎥 Ricecookers Game Film (@majestichoops YouTube) &amp; Recent Box Scores</span></h3>
+            <h3 style="margin-top:14px;"><span>🎥 ${escapeHtml(oppName)} Game Film (@majestichoops YouTube) &amp; Recent Box Scores</span></h3>
             ${filmHtml}
             ${recentGamesHtml}
           </div>
@@ -2839,7 +2848,7 @@
         </div>
 
         <div class="scouting-panel">
-          <h3><span>🎯 Ricecookers Player-by-Player Personnel Scouting &amp; Defensive Matchups</span></h3>
+          <h3><span>🎯 ${escapeHtml(oppName)} Player-by-Player Personnel Scouting &amp; Defensive Matchups</span></h3>
           <div class="personnel-grid">
             ${personnelHtml}
           </div>
@@ -2857,7 +2866,12 @@
       }
       if (sv) {
         sv.currentTime = Number(sec) || 0;
-        sv.play().catch(() => {});
+        sv.play().catch(err => {
+          if (err && err.name === 'NotAllowedError') {
+            sv.muted = true;
+            sv.play().catch(() => {});
+          }
+        });
       }
     }
 
@@ -3155,10 +3169,12 @@
       const mainWorkspace = document.getElementById('mainFilmWorkspace');
       const lowerSection = document.getElementById('lowerStatsSection');
 
-      if (activeSessionId === 'scouting_nov8' || activeSessionId === 'season_analytics') {
+      if (activeSessionId === 'scouting_nov15' || activeSessionId === 'scouting_nov8' || activeSessionId === 'season_analytics') {
         if (videoEl && !videoEl.paused) videoEl.pause();
         const bundle = await ensureMajesticBundleLoaded();
-        if (activeSessionId === 'scouting_nov8' && bundle && bundle.scouting_report_nov8_ricecookers) {
+        if (activeSessionId === 'scouting_nov15' && bundle && bundle.scouting_report_nov15_latto_talent) {
+          renderScoutingReport(bundle.scouting_report_nov15_latto_talent);
+        } else if (activeSessionId === 'scouting_nov8' && bundle && bundle.scouting_report_nov8_ricecookers) {
           renderScoutingReport(bundle.scouting_report_nov8_ricecookers);
         } else if (activeSessionId === 'season_analytics' && bundle && bundle.season_analytics) {
           renderSeasonAnalytics(bundle.season_analytics);
@@ -4507,6 +4523,21 @@
         } else {
           waText = `🏀 *CPSN Film Room Highlight*\n${deepLink}`;
         }
+      } else if (activeSessionId === 'scouting_nov15') {
+        waText = [
+          '📋 *CAMPBELL UNITED SCOUTING REPORT: VS. LATTO TALENT (SUN NOV 15 @ 5:00 PM — THE GROVE CC)*',
+          '🏆 *Battle for #1 in D2 (CU 4-0 vs. LT 3-1) + Winter \'26 Championship Rematch!*',
+          `👉 *Interactive 1080p Scouting Tape & Personnel Hub:* ${baseOrigin}/?game=scouting_nov15`,
+          '',
+          '🔑 *5 KEYS TO VICTORY:*',
+          '• *Execute the Sapa Boys Wall on #9 Diallo Holmes (20.3 PPG, 10.0 RPG, 87.5% FT):* Hands straight up — NO reach-in fouls (held to 1/6 2PT by Sapa Boys)!',
+          '• *Cut off #1 Sean Steven\'s right-hand lane drives (6/6 2PT = 100%, 19% 3PT)* & blow up his 7 assists to #9 Diallo',
+          '• *ZERO help off #5 Brandon Nguyen in corners (4x 3PM in Wk 4)* — sag off non-shooters *#2 Troy & #6 Raj* instead!',
+          '• *REVENGE BOX-OUT ALERT on #2 Troy* (just returned in Wk 4 — had 23 PTS & 11 REB vs CU in Mar 1 Final!)',
+          '• *Blitz early!* LT has trailed/tied at halftime in ALL 4 games (-4.5 PPG in 1H) while CU is +12.8 in 1H!',
+          '',
+          `🎬 *Watch CU 66-63 OT Win Reel vs. Ricecookers (1080p):* ${baseOrigin}/?reel=cu_g4`
+        ].join('\n');
       } else if (activeSessionId === 'scouting_nov8') {
         waText = [
           '📋 *CAMPBELL UNITED SCOUTING REPORT: VS. RICECOOKERS (SUN NOV 8 @ 8:00 PM — THE GROVE CC)*',
@@ -4526,7 +4557,7 @@
         waText = [
           `🏀 *CAMPBELL UNITED FILM ROOM: ${(cfg.title || activeSessionId).toUpperCase()}*`,
           `👉 *Watch Synced Game Film & Box Score:* ${baseOrigin}/?game=${encodeURIComponent(activeSessionId)}`,
-          `📋 *Nov 8 Scouting Report (vs. Ricecookers):* ${baseOrigin}/?game=scouting_nov8`,
+          `📋 *Nov 15 Scouting Report (vs. Latto Talent):* ${baseOrigin}/?game=scouting_nov15`,
           '',
           `🔥 *Final Score:* ${cfg.cu_team_name} ${activeMajesticGame.final_cu_score} – ${activeMajesticGame.final_opp_score} ${cfg.opp_team_name}`,
           '_Tap any play to watch with 5s setup pre-roll or download an 11s MP4 clip!_'

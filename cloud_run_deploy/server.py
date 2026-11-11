@@ -244,6 +244,10 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     custom_title = None
                     custom_desc = None
                     game_og_map = {
+                        "scouting_nov15": (
+                            "📋 Campbell United Scouting Report: vs. Latto Talent (Sun Nov 15 @ 5:00 PM — Battle for #1!)",
+                            "1080p Scouting Tape & Matchup Plan for CU (4-0) vs. Latto Talent (3-1): #9 Diallo Holmes (20.3 PPG), #1 Sean Steven, #5 Brandon Nguyen & #2 Troy!",
+                        ),
                         "scouting_nov8": (
                             "📋 Campbell United Scouting Report: vs. Ricecookers (Sun Nov 8 @ 8:00 PM)",
                             "Complete personnel breakdown (#3 Dustin, #22 Sim, #7 Nate, #1 Aaron, #4 Eugene, #12 AJ, #11 Dylan), tactical keys to victory & game film!",
