@@ -115,10 +115,12 @@ def fuse_majestic_game(cfg):
     raw_logs.sort(key=lambda x: x["logged_at"])
 
     p1_logs = [s for s in raw_logs if s["period"] == 1]
-    p2_logs = [s for s in raw_logs if s["period"] >= 2]
+    p2_logs = [s for s in raw_logs if s["period"] == 2]
+    p3_logs = [s for s in raw_logs if s["period"] == 3]
 
     t1_0 = parse_iso(p1_logs[0]["logged_at"]) if p1_logs else parse_iso(raw_logs[0]["logged_at"])
     t2_0 = parse_iso(p2_logs[0]["logged_at"]) if p2_logs else t1_0
+    t3_0 = parse_iso(p3_logs[0]["logged_at"]) if p3_logs else t2_0
 
     our_team = cfg["cu_team_name"]
     opp_team = cfg["opp_team_name"]
@@ -139,14 +141,18 @@ def fuse_majestic_game(cfg):
         player = pid_map.get(s.get("player_id")) or s.get("player_name") or team or "Player"
         dt = parse_iso(s["logged_at"])
         per = s.get("period", 1)
-        per_label = "1st Half" if per == 1 else ("2nd Half" if per == 2 else "OT")
+        per_label = "1st Half" if per == 1 else ("2nd Half" if per == 2 else "Overtime")
 
         if per == 1:
             vid_s = cfg["p1_first_sec"] + (dt - t1_0).total_seconds() - cfg.get("lag_sec", 3.5)
             hoop_side = cfg["cu_h1_hoop"] if is_our else ("right" if cfg["cu_h1_hoop"] == "left" else "left")
-        else:
+        elif per == 2 or "p3_first_sec" not in cfg:
             vid_s = cfg["p2_first_sec"] + (dt - t2_0).total_seconds() - cfg.get("lag_sec", 3.5)
             hoop_side = cfg["cu_h2_hoop"] if is_our else ("right" if cfg["cu_h2_hoop"] == "left" else "left")
+        else:
+            ot_hoop = cfg.get("cu_ot_hoop", cfg["cu_h2_hoop"])
+            vid_s = cfg["p3_first_sec"] + (dt - t3_0).total_seconds() - cfg.get("lag_sec", 3.5)
+            hoop_side = ot_hoop if is_our else ("right" if ot_hoop == "left" else "left")
 
         # Pair Assist + Made FG within 6s
         assist_player = None
@@ -180,7 +186,8 @@ def fuse_majestic_game(cfg):
         ktype = norm_key_type(s)
 
         ov_key = f"P{per}_{gclock}_{ktype}_{player.split()[0]}"
-        ov = overrides.get(s.get("id")) or overrides.get(ov_key)
+        ov = overrides.get(s.get("id")) or overrides.get(str(s.get("id"))) or overrides.get(ov_key)
+        is_verified = bool(ov)
         if ov:
             play_s = int(round(ov["s"]))
             splash_s = float(ov["splash_s"])
@@ -249,7 +256,9 @@ def fuse_majestic_game(cfg):
             "rim_energy": 9.5 if pts_added > 0 else 0.0,
             "tags": tags,
             "desc": desc,
-            "avatar": ""
+            "avatar": "",
+            "statlog_id": s.get("id"),
+            "isMajesticVerified": is_verified or (not cfg.get("exact_overrides"))
         })
         i += 1
 
@@ -266,9 +275,13 @@ def fuse_majestic_game(cfg):
                     break
     else:
         cu_highlights = [e for e in events if e["is_cu"] and (e["pts_added"] >= 2 or e["action"] in ("Block", "Steal"))]
-        ot_3s = [e for e in cu_highlights if e["period"] == "OT" and e["pts_added"] == 3]
-        reg_3s = [e for e in cu_highlights if e["pts_added"] == 3 and e not in ot_3s]
-        top5 = (ot_3s + reg_3s + cu_highlights)[:5]
+        if cfg.get("top5_statlog_ids"):
+            by_sid = {e.get("statlog_id"): e for e in events}
+            top5 = [by_sid[sid] for sid in cfg["top5_statlog_ids"] if sid in by_sid]
+        else:
+            ot_3s = [e for e in cu_highlights if e["period"] in ("OT", "Overtime") and e["pts_added"] == 3]
+            reg_3s = [e for e in cu_highlights if e["pts_added"] == 3 and e not in ot_3s]
+            top5 = (ot_3s + reg_3s + cu_highlights)[:5]
 
     box_tables = build_box_tables(boxscore, our_team, opp_team, cfg["cu_record"], cfg["opp_record"])
 
@@ -499,27 +512,101 @@ CONFIGS = [
         "id": "majestic_2026_11_08_cu_ricecookers_g4",
         "slug": "2026-11-08_CU_vs_Ricecookers_G4",
         "short_title": "🏆 Game 4: CU 66, Ricecookers 63 [OT WIN! 4-0 D2] (Nov 8, 2026)",
-        "title": "Campbell United 66, Ricecookers 63 (OT) — #20 Shane Walk-Off 3PT! (4-0 D2, Nov 8, 2026)",
-        "yt_id": "",
-        "video_path": r"c:\dev\bball_annotation\majestic_games\reels\2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4",
+        "title": "Campbell United 66, Ricecookers 63 (OT) — #44 Christian 61-61 Buzzer 3PT + #20 Shane OT Winner! (4-0 D2, Nov 8, 2026)",
+        "yt_id": "R8rJLAbmVV8",
+        "video_path": r"c:\dev\bball_annotation\majestic_oct2026\2026-11-08_CU_vs_Ricecookers_G4.mp4",
         "json_path": r"c:\dev\bball_annotation\majestic_oct2026\2026-11-08_CU_vs_Ricecookers_G4_full.json",
-        "p1_first_sec": 60.0,
-        "p2_first_sec": 1400.0,
-        "tipoff_sec": 45,
-        "lag_sec": 3.0,
+        "p1_first_sec": 303.5,
+        "p2_first_sec": 1838.5,
+        "p3_first_sec": 4128.5,
+        "tipoff_sec": 285,
+        "lag_sec": 3.5,
         "cu_team_name": "Campbell United",
         "opp_team_name": "Ricecookers",
         "cu_record": "4-0 D2",
         "opp_record": "3-1 D2",
-        "cu_jerseys": "White (#4 Adam, #7 Nick, #12 Corey, #16 Chris, #20 Shane, #24 George, #44 Christian)",
-        "opp_jerseys": "Black (#1 Aaron, #3 Dustin, #4 Eugene, #7 Nate, #11 Dylan, #12 AJ, #22 Sim)",
+        "cu_jerseys": "White (#4 Adam, #9 Aaron, #12 Corey, #16 Chris, #20 Shane, #22 Matt, #24 George, #44 Christian)",
+        "opp_jerseys": "Black/Navy (#3 Dustin, #7 Nate, #10 Mike, #11 Dylan, #12 AJ, #34 Aaron, #42 Yves, #99 Binh)",
         "cu_h1_hoop": "left",
         "cu_h2_hoop": "right",
-        "has_video": False,
-        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4",
+        "cu_ot_hoop": "right",
+        "has_video": True,
+        "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/2026-11-08_CU_vs_Ricecookers_G4.mp4",
+        "cu_reel": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1",
+        "team_top5_reel": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1",
         "final_cu_score": 66,
         "final_opp_score": 63,
-        "exact_overrides": {}
+        "top5_statlog_ids": [767392, 767320, 767281, 767369, 767104],
+        "exact_overrides": {
+            766395: {
+                "s": 298, "splash_s": 300.0,
+                "desc": "🎯 #4 Adam Fecteau splashes the game's opening 3-Pointer from the left wing! (3-0 Campbell United) — Assist: #20 Shane Hoffman [19:42 1st Half]"
+            },
+            766496: {
+                "s": 608, "splash_s": 610.0,
+                "desc": "🔥 #44 Christian Raslowsky attacks the left lane and finishes high off the glass! (12-8 Campbell United) [14:34 1st Half]"
+            },
+            766504: {
+                "s": 630, "splash_s": 631.0,
+                "desc": "🚫 #20 Shane Hoffman elevates in the right paint for a huge rim-protecting BLOCK! (12-8 Campbell United) [14:14 1st Half]"
+            },
+            766724: {
+                "s": 1400, "splash_s": 1402.0,
+                "desc": "🎯 #22 Matt Mocherman buries a high-arcing 3-Pointer! (26-22 Campbell United) — Assist: #44 Christian Raslowsky [2:41 1st Half]"
+            },
+            766828: {
+                "s": 1891, "splash_s": 1893.0,
+                "desc": "🏀 #9 Aaron finishes inside off #44 Christian Raslowsky's pass! (32-29 Campbell United) [18:56 2nd Half]"
+            },
+            767020: {
+                "s": 2520, "splash_s": 2522.0,
+                "desc": "🎯 #12 Corey Randolph rises over the contest and drills a 3-Pointer! (38-44 Campbell United) — Assist: #4 Adam Fecteau [9:44 2nd Half]"
+            },
+            767075: {
+                "s": 2703, "splash_s": 2704.5,
+                "desc": "🔒 #44 Christian Raslowsky picks off the pass and ignites a coast-to-coast break! [6:25 2nd Half]"
+            },
+            767077: {
+                "s": 2709, "splash_s": 2711.5,
+                "desc": "⚡ #44 Christian Raslowsky goes coast-to-coast off the steal and finishes in the right lane! (42-46 Campbell United)"
+            },
+            767104: {
+                "s": 2837, "splash_s": 2838.5,
+                "desc": "🔥 #4 Adam Fecteau answers immediately with a clutch pull-up 3-Pointer! (45-49, 10 PTS / 4 AST / 2 STL) [5:46 2nd Half]"
+            },
+            767150: {
+                "s": 3123, "splash_s": 3124.5,
+                "desc": "🏀 #24 George finishes inside off #4 Adam Fecteau's drive-and-dish dime! (48-51 with 1:00 left)"
+            },
+            767223: {
+                "s": 3635, "splash_s": 3636.5,
+                "desc": "💪 #44 Christian Raslowsky powers through the paint to cut the deficit to 1! (53-54 Campbell United)"
+            },
+            767257: {
+                "s": 3752, "splash_s": 3754.0,
+                "desc": "🔥 #9 Aaron scores a huge crunch-time bucket off #4 Adam Fecteau's feed! (55-56 Campbell United)"
+            },
+            767281: {
+                "s": 3891, "splash_s": 3892.5,
+                "desc": "🌋 CLUTCH TRIPLE #1! Down 5 in the final seconds, #44 Christian Raslowsky drains a deep contested left-wing 3-Pointer over #11! (58-60)"
+            },
+            767320: {
+                "s": 4053, "splash_s": 4055.0,
+                "desc": "🚨 MIRACLE AT THE HORN!! #44 Christian Raslowsky (23 PTS, 14 REB) sprints coast-to-coast and splashes the BUZZER-BEATING 3-POINTER at 0:00 to tie it 61-61 & force Overtime!!"
+            },
+            767351: {
+                "s": 4196, "splash_s": 4197.0,
+                "desc": "🛡️ OVERTIME REJECTION! #16 Chris skies at the rim to swat away Ricecookers' layup attempt (tied 61-61 in OT)!"
+            },
+            767369: {
+                "s": 4247, "splash_s": 4248.8,
+                "desc": "🔥 GO-AHEAD OT BUCKET! #16 Chris drives the right baseline and scores off the glass for the 63-61 Overtime lead!"
+            },
+            767392: {
+                "s": 4372, "splash_s": 4373.8,
+                "desc": "👑 OVERTIME GAME-WINNER!! Tied 63-63, #20 Shane Hoffman buries the rainbow 3-Pointer (Assist: #44 Christian Raslowsky) + CU seals the final buzzer stop for 66-63 (4-0 D2)!!"
+            }
+        }
     }
 ]
 

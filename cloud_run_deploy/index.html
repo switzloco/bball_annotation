@@ -1706,7 +1706,8 @@
         <button class="cu-tab-btn" data-session="2026-10-18_CU_vs_HalalHoopers_G1" onclick="switchGameSession('2026-10-18_CU_vs_HalalHoopers_G1')">🏀 Oct 18 G1: CU 69, Halal Hoopers 47</button>
         <button class="cu-tab-btn" data-session="2026-10-25_CU_vs_TMT_G2" onclick="switchGameSession('2026-10-25_CU_vs_TMT_G2')">🔥 Oct 25 G2: CU 52, TMT 50</button>
         <button class="cu-tab-btn" data-session="2026-11-01_CU_vs_Misfits2_G3" onclick="switchGameSession('2026-11-01_CU_vs_Misfits2_G3')">🚀 Nov 1 G3: CU 83, Misfits 2 66</button>
-        <button class="cu-tab-btn" data-session="2026-11-08_CU_vs_Ricecookers_G4" onclick="switchGameSession('2026-11-08_CU_vs_Ricecookers_G4')" style="border-color:#fde047;color:#fef08a;background:rgba(234,179,8,0.18);">🏆 Nov 8 G4: CU 66, Ricecookers 63 (OT!)</button>
+        <button class="cu-tab-btn" data-session="2026-11-08_CU_vs_Ricecookers_G4" onclick="switchGameSession('2026-11-08_CU_vs_Ricecookers_G4')" style="border-color:#fde047;color:#fef08a;background:rgba(234,179,8,0.22);font-weight:900;">🏆 NEW FILM! Nov 8 G4: CU 66, Ricecookers 63 (OT!)</button>
+        <button class="cu-tab-btn" onclick="playCuRicecookersOtReel()" style="background:linear-gradient(135deg,#dc2626 0%,#991b1b 100%);border-color:#fde047;color:#fff;font-weight:900;box-shadow:0 2px 10px rgba(220,38,38,0.45);">🎬 Watch Nov 8 OT Comeback Reel (14 Plays • 1080p HD)</button>
         <button class="cu-tab-btn" data-session="2026-09-20_SB_vs_Mustangs_Eugene41" onclick="switchGameSession('2026-09-20_SB_vs_Mustangs_Eugene41')">👑 Eugene Kim 41 PTS (11× 3PM): SB 78, Mustangs 76 OT</button>
         <button class="cu-tab-btn" data-session="2026-10-18_SB_vs_Tandoori_Eugene29" onclick="switchGameSession('2026-10-18_SB_vs_Tandoori_Eugene29')">🔥 Eugene Kim 29 PTS (5× 3PM): SB 83, Tandoori 73</button>
         <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
@@ -1716,7 +1717,7 @@
       </div>
     </div>
     <div style="font-size:0.75rem;color:#94a3b8;font-weight:600;">
-      Latest Result: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT) — #20 Shane Walk-Off 3PT! (4-0 D2)</strong>
+      Latest Result: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT) — #44 Christian 61–61 Buzzer 3PT + #20 Shane OT Dagger 3PT! (4-0 D2 • 1080p Film &amp; Reel LIVE!)</strong>
     </div>
   </div>
 
@@ -3025,6 +3026,37 @@
       `;
     }
 
+    async function playCuRicecookersOtReel() {
+      if (activeSessionId !== '2026-11-08_CU_vs_Ricecookers_G4') {
+        await switchGameSession('2026-11-08_CU_vs_Ricecookers_G4');
+      }
+      stopAutoReel();
+      const reelUrl = 'https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1';
+      const localReelUrl = '/majestic_games/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1';
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      videoEl.src = isLocalHost ? localReelUrl : reelUrl;
+      videoEl.onerror = () => {
+        if (videoEl.src !== reelUrl) {
+          videoEl.src = reelUrl;
+          videoEl.load();
+        }
+      };
+      videoEl.currentTime = 0;
+      const p = videoEl.play();
+      if (p && p.catch) p.catch(() => {});
+      const banner = document.getElementById('autoReelBanner');
+      const txt = document.getElementById('autoReelText');
+      if (banner) banner.style.display = 'flex';
+      if (txt) txt.textContent = '🎬 PLAYING CAMPBELL UNITED 66, RICECOOKERS 63 (OT) COMEBACK REEL (14 PLAYS • 1080p FULL HD • #44 CHRISTIAN 61-61 BUZZER 3PT + #20 SHANE OT WINNER!)';
+      const gSelect = document.getElementById('gameFilter');
+      if (gSelect) {
+        gSelect.value = 'CU_HIGHLIGHTS';
+        renderPlays();
+      }
+      const videoWrap = document.getElementById('videoWrapper');
+      if (videoWrap) videoWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     async function playMoCrew7Reel() {
       if (!activeSessionId || !activeSessionId.includes('_C7_')) {
         await switchGameSession('2026-02-01_C7_vs_OutOfShape_W4');
@@ -3264,7 +3296,7 @@
           Math.abs((Number(ev.cu_score) || 0) - (Number(ev.opp_score) || 0)) <= 6;
 
         return {
-          g: ev.period === '1st Half' ? 'H1' : ev.period === 'Overtime' ? 'OT' : 'H2',
+          g: ev.period === '1st Half' ? 'H1' : (ev.period === 'Overtime' || ev.period === 'OT') ? 'OT' : 'H2',
           isCu: !!ev.is_cu,
           isClutchFt,
           segLabel: `${ev.period}${ev.game_clock ? ' (' + ev.game_clock + ')' : ''} • Wall ${ev.wall_clock}`,
@@ -3362,6 +3394,9 @@
              <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download #2 Mo Highlight Reel MP4</a>`
           : activeSessionId === '2026-02-15_CU_vs_PimpsDown'
           ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" target="_blank" download="2026-02-15_CU_vs_PimpsDown_Wes_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⚡ Download Feb 15 CU vs. Pimps Down Reel MP4</a>`
+          : activeSessionId === '2026-11-08_CU_vs_Ricecookers_G4'
+            ? `<span class="chapter-pill" onclick="playCuRicecookersOtReel()" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;font-weight:800;border-color:#fde047;">🎬 Watch CU 66–63 OT Comeback Reel (14 Plays • 1080p HD)</span>
+               <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1" target="_blank" download="2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download CU OT Win Reel MP4 (1080p)</a>`
           : activeSessionId === '2026-11-01_CU_vs_Misfits2_G3'
             ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-weight:800;text-decoration:none;border-color:#c4b5fd;">🔨 Download #4 Adam 3× Dunk Reel MP4</a>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">🎯 Download Nov 1 CU vs. Misfits 2 Reel MP4</a>`
@@ -4684,9 +4719,11 @@
       const gameParam = params.get('game');
       const playSec = params.get('play') || params.get('t');
       const reelParam = params.get('reel');
-      const targetSession = gameParam || (reelParam === 'mo_c7' ? '2026-02-01_C7_vs_OutOfShape_W4' : reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
+      const targetSession = gameParam || (reelParam === 'cu_g4' ? '2026-11-08_CU_vs_Ricecookers_G4' : reelParam === 'mo_c7' ? '2026-02-01_C7_vs_OutOfShape_W4' : reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
       await switchGameSession(targetSession, true);
-      if (reelParam === 'mo_c7') {
+      if (reelParam === 'cu_g4') {
+        setTimeout(() => playCuRicecookersOtReel(), 400);
+      } else if (reelParam === 'mo_c7') {
         setTimeout(() => playMoCrew7Reel(), 400);
       } else if (reelParam === 'mo') {
         setTimeout(() => playMoHighlightReel(), 400);

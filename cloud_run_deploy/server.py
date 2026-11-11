@@ -281,8 +281,8 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                             "Cross-run biometric player ID connecting Campbell United (#44 Christian, #4 Adam, #31 Evan, #16 Chris, #7 Nick, #9 Aaron, #24 George) to the Oct 15 pickup run!",
                         ),
                         "2026-11-08_CU_vs_Ricecookers_G4": (
-                            "🏆 Holiday '26 Game 4: Campbell United 66, Ricecookers 63 (OT) — 4-0 D2 Film & Box Score",
-                            "#20 Shane Hoffman's walk-off OT 3-Pointer (22 PTS) assisted by #44 Christian Raslowsky lifts Campbell United to 66–63 over Ricecookers!",
+                            "🏆 Holiday '26 Game 4: Campbell United 66, Ricecookers 63 (OT) — 4-0 D2 1080p Film Room",
+                            "#44 Christian Raslowsky's 61–61 buzzer 3PT (23 PTS, 14 REB) + #20 Shane Hoffman's OT game-winning 3PT lift Campbell United to 66–63 (4-0 D2)!",
                         ),
                         "2026-10-18_WTN_vs_OTFSelect_G1": (
                             "🍁 WeTheNorth (#2 Mo) vs. OTF Select — Holiday '26 Game 1 Film Room",
@@ -319,6 +319,9 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     }
                     if game_val in game_og_map and not play_val:
                         custom_title, custom_desc = game_og_map[game_val]
+                    elif reel_val == "cu_g4":
+                        custom_title = "🎬 Campbell United 66, Ricecookers 63 (OT) — 1080p Comeback & Game-Winner Reel (4-0 D2)"
+                        custom_desc = "Watch #44 Christian's 61-61 buzzer 3PT, #16 Chris's OT block & lead bucket, and #20 Shane's OT game-winning 3PT in 1080p Full HD!"
                     elif reel_val == "mo":
                         custom_title = "🎬 #2 Mo 1080p Highlight Reel — WeTheNorth & Crew 7 Showcase"
                         custom_desc = "Watch #2 Mohamed's 1080p Full HD highlights across WeTheNorth & Crew 7 with 2.0x ISO CAM zoom!"
@@ -795,9 +798,10 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
 
         if parsed.path.startswith("/majestic_games/") and parsed.path.endswith(".mp4"):
             fname = os.path.basename(parsed.path)
+            sub_dir = "reels/" if "/reels/" in parsed.path else ""
             if IS_CLOUD_RUN:
                 self.send_response(302)
-                self.send_header("Location", f"https://storage.googleapis.com/basketball-highlights-store/majestic/{fname}")
+                self.send_header("Location", f"https://storage.googleapis.com/basketball-highlights-store/majestic/{sub_dir}{fname}")
                 self.send_header("Cache-Control", "no-cache")
                 self.end_headers()
                 return None
