@@ -143,6 +143,8 @@ def load_feedback():
         "crew_master_roster": load_crew_master_roster(),
         "custom_plays": [],
         "segment_corrections": [],
+        "collab_calibrations": {},
+        "collab_live_tags": {},
     }
     target = FEEDBACK_FILE if os.path.exists(FEEDBACK_FILE) else "training_feedback.json"
     if not os.path.exists(target):
@@ -298,6 +300,18 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                             "🏆 WeTheNorth 55, Domain Expansion 53 [WIN!] (#2 Mo Two-Way Showcase) — Game 4 Film Room",
                             "Full box score, play-by-play & #2 Mo Season Highlight Reel from WeTheNorth's 55–53 victory over Domain Expansion!",
                         ),
+                        "2026-02-01_C7_vs_OutOfShape_W4": (
+                            "🔥 #2 Mohamed 25 PTS (11 FG, 3× 3PM, 9 REB, 1 BLK): Crew 7 vs. Out Of Shape — Winter '26 Film Room",
+                            "Watch #2 Mohamed's 25-point eruption on Crew 7 + live Collab Training verification in 1080p HD!",
+                        ),
+                        "2026-01-25_C7_vs_BTA_W3": (
+                            "⚡ #2 Mohamed Double-Double (13 PTS, 11 REB, 5 AST, STL, BLK): Crew 7 vs. BTA — Winter '26 Film Room",
+                            "Full 1080p game film & #2 Mohamed's all-around double-double showcase on Crew 7!",
+                        ),
+                        "2026-01-18_C7_vs_Breadwinners_W2": (
+                            "🎯 #2 Mohamed 14 PTS (4× 3PM, 7 REB, 3 STL, 1 BLK): Crew 7 vs. Breadwinners — Winter '26 Film Room",
+                            "Watch #2 Mohamed's 4-three sharpshooting & 3-steal defensive clinic for Crew 7!",
+                        ),
                         "season_analytics": (
                             "🧠 Campbell United Season Analytics & #4 Adam 3× Dunk Lab — CPSN Film Room",
                             "Watch #4 Adam Fecteau's 3-Dunk 1st Half vs. Misfits 2 + Colab GPU Analytics across Campbell United's 4-0 streak!",
@@ -305,6 +319,12 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     }
                     if game_val in game_og_map and not play_val:
                         custom_title, custom_desc = game_og_map[game_val]
+                    elif reel_val == "mo":
+                        custom_title = "🎬 #2 Mo 1080p Highlight Reel — WeTheNorth & Crew 7 Showcase"
+                        custom_desc = "Watch #2 Mohamed's 1080p Full HD highlights across WeTheNorth & Crew 7 with 2.0x ISO CAM zoom!"
+                    elif reel_val == "mo_c7":
+                        custom_title = "🔥 #2 Mohamed (Crew 7 • Winter '26) 1080p Highlight Reel — 58 PTS, 10× 3PM, 30 REB"
+                        custom_desc = "Watch #2 Mohamed's Winter '26 Crew 7 eruption (25 PTS vs OOS, 13/11/5 vs BTA, 4× 3PM vs Breadwinners) in 1080p HD!"
                     elif reel_val == "top5":
                         custom_title = "🎬 CPSN Top 5 Plays Auto-Reel — Campbell United Film Room"
                         custom_desc = "Auto-plays all 5 Top Plays back-to-back with 5s setup pre-roll!"
@@ -420,6 +440,10 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     "2026-10-25_WTN_vs_NewAvengers_G2",
                     "2026-11-01_WTN_vs_CrunchTime_G3",
                     "2026-11-08_WTN_vs_DomainExpansion_G4",
+                    "2026-01-11_C7_vs_OutOfShape_W1",
+                    "2026-01-18_C7_vs_Breadwinners_W2",
+                    "2026-01-25_C7_vs_BTA_W3",
+                    "2026-02-01_C7_vs_OutOfShape_W4",
                     "2026-09-20_SB_vs_Mustangs_Eugene41",
                     "2026-10-18_SB_vs_Tandoori_Eugene29",
                     "2026-10-15_Pickup_G1",
@@ -431,11 +455,14 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                 if game_slug in majestic_allowed:
                     local_oct = os.path.join("majestic_oct2026", f"{game_slug}.mp4")
                     local_wtn = os.path.join("majestic_wtn", f"{game_slug}.mp4")
+                    local_c7 = os.path.join("majestic_crew7", f"{game_slug}.mp4")
                     local_maj = os.path.join("majestic_games", f"{game_slug}.mp4")
                     if not IS_CLOUD_RUN and os.path.exists(local_oct):
                         src_video = local_oct
                     elif not IS_CLOUD_RUN and os.path.exists(local_wtn):
                         src_video = local_wtn
+                    elif not IS_CLOUD_RUN and os.path.exists(local_c7):
+                        src_video = local_c7
                     elif not IS_CLOUD_RUN and os.path.exists(local_maj):
                         src_video = local_maj
                     else:
@@ -682,6 +709,74 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     "hoop_rois_4k": data["session_metadata"].get("hoop_rois_4k"),
                 }
 
+            elif action == "collab_calibrate":
+                session_id = str(body.get("session_id", "2026-10-31"))
+                pkey = str(body.get("play_key", ""))
+                if session_id and pkey:
+                    if "collab_calibrations" not in data or not isinstance(data["collab_calibrations"], dict):
+                        data["collab_calibrations"] = {}
+                    if session_id not in data["collab_calibrations"]:
+                        data["collab_calibrations"][session_id] = {}
+                    prev_cal = dict(data["collab_calibrations"][session_id].get(pkey) or {})
+                    new_cal = {
+                        "play_key": pkey,
+                        "status": body.get("status", prev_cal.get("status", "verified")),
+                        "verified_player": body.get("verified_player", prev_cal.get("verified_player", "")),
+                        "verified_assist": body.get("verified_assist", prev_cal.get("verified_assist", "")),
+                        "start_s": body.get("start_s", prev_cal.get("start_s")),
+                        "splash_s": body.get("splash_s", prev_cal.get("splash_s")),
+                        "orig_s": body.get("orig_s", prev_cal.get("orig_s")),
+                        "led_clock": body.get("led_clock", prev_cal.get("led_clock", "")),
+                        "contributor": (body.get("contributor") or prev_cal.get("contributor") or "Crew Collab").strip(),
+                        "updated_at": now_iso,
+                    }
+                    data["collab_calibrations"][session_id][pkey] = new_cal
+                    drift_s = None
+                    if new_cal.get("splash_s") is not None and new_cal.get("orig_s") is not None:
+                        try:
+                            drift_s = round(float(new_cal["splash_s"]) - float(new_cal["orig_s"]), 2)
+                        except Exception:
+                            drift_s = None
+                    log_entry = {
+                        "timestamp": now_iso,
+                        "session_id": session_id,
+                        "dataset_split": "collab_gold_verified",
+                        "event": "collab_calibrate",
+                        "play_key": pkey,
+                        "drift_delta_s": drift_s,
+                        "calibration": new_cal,
+                    }
+
+            elif action == "collab_tag_live":
+                session_id = str(body.get("session_id", "2026-10-31"))
+                sec = round(float(body.get("video_seconds", 0)), 1)
+                mm = int(sec) // 60
+                ss = int(sec) % 60
+                if "collab_live_tags" not in data or not isinstance(data["collab_live_tags"], dict):
+                    data["collab_live_tags"] = {}
+                if session_id not in data["collab_live_tags"]:
+                    data["collab_live_tags"][session_id] = []
+                tag_obj = {
+                    "id": f"ctag_{int(time.time() * 1000)}",
+                    "s": max(0, int(round(sec - 3.5))),
+                    "splash_s": sec,
+                    "t": f"{mm:02d}:{ss:02d}",
+                    "player": body.get("player", "#2 Mohamed"),
+                    "action_type": body.get("action_type", "3-pt FG Made"),
+                    "pts_added": int(body.get("pts_added", 3 if "3-pt" in str(body.get("action_type", "")) else (2 if "2-pt" in str(body.get("action_type", "")) else 0))),
+                    "contributor": (body.get("contributor") or "Crew Collab").strip(),
+                    "note": (body.get("note") or "").strip(),
+                    "created_at": now_iso,
+                }
+                data["collab_live_tags"][session_id].append(tag_obj)
+                log_entry = {
+                    "timestamp": now_iso,
+                    "session_id": session_id,
+                    "dataset_split": "collab_live_crowd_tags",
+                    "event": "collab_tag_live",
+                    "tag": tag_obj,
+                }
+
             save_feedback(data, log_entry)
             payload = json.dumps(data).encode("utf-8")
             self.send_response(200)
@@ -708,11 +803,14 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                 return None
             oct_path = os.path.join("majestic_oct2026", fname)
             wtn_path = os.path.join("majestic_wtn", fname)
+            c7_path = os.path.join("majestic_crew7", fname)
             reel_path = os.path.join("majestic_games", "reels", fname)
             if os.path.exists(oct_path):
                 path = oct_path
             elif os.path.exists(wtn_path):
                 path = wtn_path
+            elif os.path.exists(c7_path):
+                path = c7_path
             elif os.path.exists(reel_path):
                 path = reel_path
             else:

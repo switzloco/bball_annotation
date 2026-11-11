@@ -1535,6 +1535,93 @@
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
       text-align: center;
     }
+
+    /* COLLAB TRAINING STUDIO STYLES */
+    .collab-studio-bar {
+      background: linear-gradient(135deg, #0d1f1c 0%, #111827 55%, #1e1b4b 100%);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    }
+    .collab-studio-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .collab-progress-pill {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(52, 211, 153, 0.5);
+      color: #6ee7b7;
+    }
+    .collab-drawer {
+      display: none;
+      margin-top: 9px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(148, 163, 184, 0.22);
+    }
+    .collab-drawer.open {
+      display: block;
+    }
+    .collab-controls-grid {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .collab-chip-btn {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #1e293b;
+      color: #f8fafc;
+      cursor: pointer;
+    }
+    .collab-chip-btn:hover {
+      border-color: #38bdf8;
+      background: #0f172a;
+    }
+    .collab-chip-btn.verify-ok {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: #34d399;
+      color: #a7f3d0;
+    }
+    .collab-chip-btn.mo-live {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      border-color: #fda4af;
+      color: #fff;
+    }
+    .tag.led-needs-verify {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fde68a;
+      border: 1px solid rgba(251, 191, 36, 0.45);
+    }
+    .tag.collab-gold {
+      background: rgba(16, 185, 129, 0.22);
+      color: #6ee7b7;
+      border: 1px solid rgba(52, 211, 153, 0.6);
+    }
+    .play-collab-inline {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px dashed rgba(52, 211, 153, 0.35);
+    }
   </style>
 </head>
 <body>
@@ -1555,6 +1642,10 @@
           <option value="2026-10-25_WTN_vs_NewAvengers_G2">🍁 WeTheNorth G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers (Oct 25, 2026)</option>
           <option value="2026-10-18_WTN_vs_OTFSelect_G1">🍁 WeTheNorth G1: vs. OTF Select (#2 Mo 3/3 FT, 4 REB — Oct 18, 2026)</option>
           <option value="2026-11-08_WTN_vs_DomainExpansion_G4">🏆 WeTheNorth G4: WeTheNorth 55, Domain Expansion 53 [WIN!] (Nov 8, 2026)</option>
+          <option value="2026-02-01_C7_vs_OutOfShape_W4">🔥 Crew 7 W4 (Winter '26): #2 Mohamed 25 PTS (11 FG, 3× 3PM, 9 REB) vs. Out Of Shape (Feb 1)</option>
+          <option value="2026-01-25_C7_vs_BTA_W3">⚡ Crew 7 W3 (Winter '26): #2 Mohamed 13 PTS, 11 REB, 5 AST Double-Double vs. BTA (Jan 25)</option>
+          <option value="2026-01-18_C7_vs_Breadwinners_W2">🎯 Crew 7 W2 (Winter '26): #2 Mohamed 14 PTS (4/4 3PT, 3 STL, BLK) vs. Breadwinners (Jan 18)</option>
+          <option value="2026-01-11_C7_vs_OutOfShape_W1">🏀 Crew 7 W1 (Winter '26): #2 Mohamed 6 PTS (1/1 3PT, 3/3 FT) vs. Out Of Shape (Jan 11)</option>
           <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20, 2026)</option>
           <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
           <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam 3× Dunk Lab (Colab AI)</option>
@@ -1629,23 +1720,29 @@
     </div>
   </div>
 
-  <!-- WE THE NORTH (#2 MO) SEASON HUB BAR (Holiday '26 Div D6 — Games 1–4 + #2 Mo Highlight Reel) -->
-  <div class="cu-hub-bar" id="wtnHubBar" style="background:linear-gradient(90deg, #1f0812 0%, #151024 55%, #0f172a 100%);border-bottom:1px solid rgba(244,63,94,0.4);">
+  <!-- #2 MOHAMED (MO) MULTI-SEASON SHOWCASE HUB (CREW 7 WINTER '26 + WE THE NORTH HOLIDAY '26) -->
+  <div class="cu-hub-bar" id="wtnHubBar" style="background:linear-gradient(90deg, #1f0812 0%, #1c140d 48%, #0f172a 100%);border-bottom:1px solid rgba(251,146,60,0.45);">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#fb7185;text-transform:uppercase;">
-        🍁 WE THE NORTH HUB (#2 MO SPOTLIGHT • HOLIDAY '26 D6):
+      <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#fb923c;text-transform:uppercase;">
+        🔥🍁 #2 MO 2026 MULTI-SEASON HUB (CREW 7 + WE THE NORTH):
       </span>
       <div class="cu-hub-tabs" id="wtnHubTabs">
-        <button class="cu-tab-btn" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48 0%,#9f1239 100%);border-color:#fda4af;color:#fff;box-shadow:0 2px 10px rgba(225,29,72,0.4);">🎬 Watch #2 Mo Highlight Reel (11 Plays • 5× 3PT Barrage)</button>
-        <button class="cu-tab-btn" data-session="2026-11-01_WTN_vs_CrunchTime_G3" onclick="switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3')" style="border-color:#fb7185;color:#fecdd3;">🔥 Nov 1 G3: #2 Mo 15 PTS (5× 3PM, 5 REB, 1 BLK) vs. Crunch Time</button>
-        <button class="cu-tab-btn" data-session="2026-10-25_WTN_vs_NewAvengers_G2" onclick="switchGameSession('2026-10-25_WTN_vs_NewAvengers_G2')" style="border-color:#fb7185;color:#fecdd3;">⚡ Oct 25 G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers</button>
-        <button class="cu-tab-btn" data-session="2026-10-18_WTN_vs_OTFSelect_G1" onclick="switchGameSession('2026-10-18_WTN_vs_OTFSelect_G1')">🍁 Oct 18 G1: WTN vs. OTF Select (#2 Mo 3/3 FT, 4 REB)</button>
-        <button class="cu-tab-btn" data-session="2026-11-08_WTN_vs_DomainExpansion_G4" onclick="switchGameSession('2026-11-08_WTN_vs_DomainExpansion_G4')" style="border-color:#4ade80;color:#bbf7d0;background:rgba(34,197,94,0.15);">🏆 Nov 8 G4: WeTheNorth 55, Domain Expansion 53 [WIN!]</button>
-        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download #2 Mo Reel MP4</a>
+        <button class="cu-tab-btn" onclick="playMoCrew7Reel()" style="background:linear-gradient(135deg,#ea580c 0%,#b91c1c 100%);border-color:#fdba74;color:#fff;box-shadow:0 2px 10px rgba(234,88,12,0.45);">🎬 NEW! Crew 7 Winter '26 Reel (14 Plays • 58 PTS, 10× 3PM)</button>
+        <button class="cu-tab-btn" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48 0%,#9f1239 100%);border-color:#fda4af;color:#fff;box-shadow:0 2px 10px rgba(225,29,72,0.38);">🎬 WeTheNorth Holiday '26 Reel (11 Plays • 5× 3PT Barrage)</button>
+        <button class="cu-tab-btn" data-session="2026-02-01_C7_vs_OutOfShape_W4" onclick="switchGameSession('2026-02-01_C7_vs_OutOfShape_W4')" style="border-color:#fdba74;color:#ffedd5;">🔥 Feb 1 C7 W4: #2 Mo 25 PTS (11 FG, 3× 3PM, 9 REB)</button>
+        <button class="cu-tab-btn" data-session="2026-01-25_C7_vs_BTA_W3" onclick="switchGameSession('2026-01-25_C7_vs_BTA_W3')" style="border-color:#fdba74;color:#ffedd5;">⚡ Jan 25 C7 W3: #2 Mo 13 PTS, 11 REB, 5 AST Double-Double</button>
+        <button class="cu-tab-btn" data-session="2026-01-18_C7_vs_Breadwinners_W2" onclick="switchGameSession('2026-01-18_C7_vs_Breadwinners_W2')" style="border-color:#fdba74;color:#ffedd5;">🎯 Jan 18 C7 W2: #2 Mo 14 PTS (4/4 3PT, 3 STL, BLK)</button>
+        <button class="cu-tab-btn" data-session="2026-01-11_C7_vs_OutOfShape_W1" onclick="switchGameSession('2026-01-11_C7_vs_OutOfShape_W1')">🏀 Jan 11 C7 W1: #2 Mo 6 PTS (3/3 FT)</button>
+        <button class="cu-tab-btn" data-session="2026-11-01_WTN_vs_CrunchTime_G3" onclick="switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3')" style="border-color:#fb7185;color:#fecdd3;">🍁 Nov 1 WTN G3: #2 Mo 15 PTS (5× 3PM)</button>
+        <button class="cu-tab-btn" data-session="2026-10-25_WTN_vs_NewAvengers_G2" onclick="switchGameSession('2026-10-25_WTN_vs_NewAvengers_G2')" style="border-color:#fb7185;color:#fecdd3;">🍁 Oct 25 WTN G2: #2 Mo 7 PTS (3/3 FG, 7 REB)</button>
+        <button class="cu-tab-btn" data-session="2026-11-08_WTN_vs_DomainExpansion_G4" onclick="switchGameSession('2026-11-08_WTN_vs_DomainExpansion_G4')" style="border-color:#4ade80;color:#bbf7d0;background:rgba(34,197,94,0.15);">🏆 Nov 8 WTN G4: 55–53 [WIN!]</button>
+        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1" target="_blank" download="2026-02-01_C7_Mo_Winter26_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download C7 Reel MP4</a>
+        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.12);">⬇️ Download WTN Reel MP4</a>
       </div>
     </div>
-    <div style="font-size:0.75rem;color:#fda4af;font-weight:600;">
-      #2 Mo Season Totals: <strong style="color:#fff;">28 PTS • 6/11 3PT (54.5% 3P!) • 18 REB • 2 AST • 1 STL • 2 BLK</strong>
+    <div style="font-size:0.74rem;color:#fed7aa;font-weight:600;">
+      #2 Mohamed 2026 Majestic Career (19 GP): <strong style="color:#fff;">155 PTS • 29× 3PM • 89 REB • 29 AST • 9 STL • 8 BLK</strong>
+      <span style="color:#94a3b8;"> | Winter '26 Crew 7: 58 PTS (10× 3PM, 30 REB, 10 AST) • Fall '26 Crew 7: 45 PTS • Holiday '26 WTN: 28 PTS</span>
     </div>
   </div>
 
@@ -1687,6 +1784,41 @@
         <div id="hoopCalibOverlay" onclick="handleHoopCalibClick(event)" style="display:none;position:absolute;inset:0;background:rgba(15,23,42,0.35);cursor:crosshair;z-index:30;align-items:flex-start;justify-content:center;padding-top:14px;">
           <div style="background:rgba(11,15,25,0.95);border:2px solid var(--blue);border-radius:8px;padding:8px 14px;font-size:0.82rem;font-weight:700;color:#fff;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.7);" id="hoopCalibPrompt">
             🎯 Click directly on the NEAR / MAIN HOOP rim in the video...
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 🤝 Collab Training Studio (Zero-Timestamp LED Calibration & Teammate Verification) -->
+      <div class="collab-studio-bar" id="collabStudioBar">
+        <div class="collab-studio-top">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:var(--font-display);font-weight:900;font-size:0.9rem;color:#34d399;letter-spacing:0.04em;">
+              🤝 COLLAB TRAINING STUDIO
+            </span>
+            <span class="collab-progress-pill" id="collabProgressPill">Loading calibration stats...</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <button class="collab-chip-btn mo-live" onclick="quickTagMoAtCurrentTime()" title="One-tap tag a #2 Mo bucket, dime, steal, or block at the current video timestamp!">📍 + Tag #2 Mo Highlight Here</button>
+            <button class="collab-chip-btn verify-ok" onclick="jumpToNextUnverifiedBucket()" id="nextUnverifiedBtn" title="Jump straight to the next LED-detected bucket that needs scorer confirmation">🎯 Next Unverified Bucket</button>
+            <button class="collab-chip-btn" onclick="toggleCollabDrawer()" id="collabToggleBtn">🛠️ Calibration Controls ▾</button>
+          </div>
+        </div>
+        <div class="collab-drawer open" id="collabStudioDrawer">
+          <div style="font-size:0.73rem;color:#cbd5e1;margin-bottom:5px;" id="collabContextNote">
+            💡 <strong>How Collab Training Works:</strong> Physical LED Scoreboard AI recovered 100% of bucket timestamps even on zero-timestamp boxscores! Confirm scorers, reassign assists, or nudge shot sync (<code>-2s</code> / <code>+2s</code>) — every tap trains our cross-season model.
+          </div>
+          <div class="collab-controls-grid">
+            <input type="text" id="collabContributorInput" placeholder="Your Name (e.g. Nick / Mo)" value="" style="max-width:145px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
+            <select id="collabLivePlayerSelect" style="font-size:0.73rem;padding:4px 6px;max-width:175px;"></select>
+            <select id="collabLiveActionSelect" style="font-size:0.73rem;padding:4px 6px;">
+              <option value="3-pt FG Made">🎯 3-Pointer Made</option>
+              <option value="2-pt FG Made">🏀 2-PT Drive / Finish</option>
+              <option value="Assist">🤝 Assist / Dime</option>
+              <option value="Steal">🔒 Defensive Steal</option>
+              <option value="Block">🚫 Shot Block</option>
+            </select>
+            <input type="text" id="collabLiveNoteInput" placeholder="Optional note (e.g. corner 3, euro-step)..." style="flex:1;min-width:150px;font-size:0.73rem;padding:4px 7px;" />
+            <button class="collab-chip-btn verify-ok" onclick="submitCollabLiveTag()">➕ Save Live Tag @ Video Time</button>
           </div>
         </div>
       </div>
@@ -2374,8 +2506,11 @@
       plays: {},
       crew_roster_map: {},
       crew_master_roster: { ...DEFAULT_CREW_MASTER },
-      custom_plays: []
+      custom_plays: [],
+      collab_calibrations: {},
+      collab_live_tags: {}
     };
+    let collabModeInline = true;
     let openForms = {};
     let mode = 'local';
     let ytPlayer = null;
@@ -2399,15 +2534,78 @@
       return visualId;
     }
 
+    function fmtSecMmSs(sec) {
+      const v = Math.max(0, Math.round(Number(sec) || 0));
+      return `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(v % 60).padStart(2, '0')}`;
+    }
+
+    function applyCollabCalibrationToPlay(p) {
+      const pKey = String(p.origS !== undefined ? p.origS : p.s);
+      const sessionCals = (feedbackState.collab_calibrations || {})[activeSessionId] || {};
+      const cal = sessionCals[pKey];
+      if (!cal) return { ...p, playKey: pKey };
+      const updated = { ...p, playKey: pKey, collabCal: cal };
+      if (cal.splash_s !== undefined && cal.splash_s !== null && !isNaN(Number(cal.splash_s))) {
+        updated.s = Math.max(0, Math.round(Number(cal.splash_s)));
+        updated.t = fmtSecMmSs(updated.s);
+      }
+      if (cal.verified_player) {
+        updated.player = cal.verified_player;
+      }
+      if (cal.status === 'verified') {
+        updated.isCollabGold = true;
+        updated.isMajesticVerified = true;
+        updated.collabNeedsVerify = false;
+        updated.desc = String(updated.desc || '').replace(' [LED-Synced • Tap 🤝 Collab to Verify Scorer]', '');
+        if (cal.verified_player && p.player && cal.verified_player !== p.player && updated.desc.includes(p.player)) {
+          updated.desc = updated.desc.replace(p.player, cal.verified_player);
+        }
+        if (cal.verified_assist) {
+          if (/Assist:/i.test(updated.desc)) {
+            updated.desc = updated.desc.replace(/Assist:\s*[^(\[]+/, `Assist: ${cal.verified_assist} `);
+          } else {
+            updated.desc += ` — Assist: ${cal.verified_assist}`;
+          }
+        }
+      }
+      return updated;
+    }
+
     function getAllPlaysSorted() {
+      const calibratedBase = BASE_PLAYS.map(applyCollabCalibrationToPlay);
+      const liveSessionTags = ((feedbackState.collab_live_tags || {})[activeSessionId] || []).map(lt => {
+        const mappedTags = ['MADE', 'SPECIAL'];
+        if (/3-pt/i.test(lt.action_type || '')) mappedTags.push('3PT');
+        if (/Steal|Block/i.test(lt.action_type || '')) mappedTags.splice(0, mappedTags.length, 'DEF', 'SPECIAL');
+        return {
+          g: 'H2',
+          isCu: true,
+          segLabel: `🤝 Collab Live Tag by ${lt.contributor || 'Crew'}`,
+          t: lt.t || fmtSecMmSs(lt.splash_s || lt.s),
+          s: Math.round(Number(lt.splash_s || lt.s || 0)),
+          origS: Math.round(Number(lt.splash_s || lt.s || 0)),
+          playKey: lt.id || String(lt.s),
+          hoop: 'Live Tag',
+          player: lt.player || '#2 Mohamed',
+          tags: mappedTags,
+          s12: 'LIVE TAG',
+          s23: `Added by ${lt.contributor || 'Crew'}`,
+          desc: `${lt.player || '#2 Mohamed'} — ${lt.action_type || 'Highlight'}${lt.note ? ': ' + lt.note : ''}`,
+          isCustom: true,
+          isCollabGold: true
+        };
+      });
+
       if (activeSessionId !== '2026-10-31') {
-        return [...BASE_PLAYS].sort((a, b) => a.s - b.s);
+        return [...calibratedBase, ...liveSessionTags].sort((a, b) => a.s - b.s);
       }
       const customs = (feedbackState.custom_plays || []).map(cp => ({
         g: cp.g || 'G2',
         segLabel: 'Player Added',
         t: cp.t,
         s: cp.s,
+        origS: cp.s,
+        playKey: String(cp.s),
         hoop: cp.hoop || 'Near',
         player: cp.player,
         tags: [cp.event_type || 'MADE'],
@@ -2416,7 +2614,7 @@
         desc: cp.desc,
         isCustom: true
       }));
-      return [...BASE_PLAYS, ...customs].sort((a, b) => a.s - b.s);
+      return [...calibratedBase, ...customs, ...liveSessionTags].sort((a, b) => a.s - b.s);
     }
 
     async function ensureMajesticBundleLoaded() {
@@ -2827,6 +3025,37 @@
       `;
     }
 
+    async function playMoCrew7Reel() {
+      if (!activeSessionId || !activeSessionId.includes('_C7_')) {
+        await switchGameSession('2026-02-01_C7_vs_OutOfShape_W4');
+      }
+      stopAutoReel();
+      const reelUrl = 'https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1';
+      const localReelUrl = '/majestic_games/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1';
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      videoEl.src = isLocalHost ? localReelUrl : reelUrl;
+      videoEl.onerror = () => {
+        if (videoEl.src !== reelUrl) {
+          videoEl.src = reelUrl;
+          videoEl.load();
+        }
+      };
+      videoEl.currentTime = 0;
+      const p = videoEl.play();
+      if (p && p.catch) p.catch(() => {});
+      const banner = document.getElementById('autoReelBanner');
+      const txt = document.getElementById('autoReelText');
+      if (banner) banner.style.display = 'flex';
+      if (txt) txt.textContent = '🎬 PLAYING #2 MOHAMED CREW 7 WINTER \'26 REEL (14 PLAYS • 1080p FULL HD • 58 PTS, 10× 3PM, 30 REB, 10 AST)';
+      const gSelect = document.getElementById('gameFilter');
+      if (gSelect) {
+        gSelect.value = 'CU_HIGHLIGHTS';
+        renderPlays();
+      }
+      const videoWrap = document.getElementById('videoWrapper');
+      if (videoWrap) videoWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     async function playMoHighlightReel() {
       if (!activeSessionId || !activeSessionId.includes('_WTN_')) {
         await switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3');
@@ -2964,9 +3193,11 @@
       const gcsUrl = cfg.yt_id
         ? `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`
         : (cfg.video_url || `https://storage.googleapis.com/basketball-highlights-store/majestic/${activeSessionId}.mp4`);
-      const localUrl = cfg.yt_id
-        ? `/majestic_games/${activeSessionId}.mp4`
-        : (cfg.video_url && cfg.video_url.includes('WTN_Mo_Highlight_Reel') ? '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2' : `/majestic_games/${activeSessionId}.mp4`);
+      const localUrl = (cfg.has_video === false && cfg.video_url && cfg.video_url.includes('C7_Mo_Winter26_Reel'))
+        ? '/majestic_games/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1'
+        : cfg.yt_id
+          ? `/majestic_games/${activeSessionId}.mp4`
+          : (cfg.video_url && cfg.video_url.includes('WTN_Mo_Highlight_Reel') ? '/majestic_games/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2' : `/majestic_games/${activeSessionId}.mp4`);
       const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
       if (hasVideo) {
@@ -3039,14 +3270,18 @@
           segLabel: `${ev.period}${ev.game_clock ? ' (' + ev.game_clock + ')' : ''} • Wall ${ev.wall_clock}`,
           t: ev.t,
           s: ev.s,
+          origS: ev.s,
+          ledFlipS: ev.led_flip_s || null,
+          collabNeedsVerify: rawTags.includes('COLLAB_NEEDS_VERIFY') || ev.isMajesticVerified === false,
           hoop: ev.hoop_side === 'right' ? 'Right Hoop' : 'Left Hoop',
           player: ev.player,
+          assistPlayer: ev.assist_player || '',
           avatar: ev.avatar || '',
           tags: mappedTags,
           s12: `${ev.cu_score} – ${ev.opp_score}`,
           s23: `${cfg.cu_team_name} vs ${cfg.opp_team_name}`,
           desc: ev.desc,
-          isMajesticVerified: true
+          isMajesticVerified: ev.isMajesticVerified !== false
         };
       });
 
@@ -3118,7 +3353,11 @@
 
       if (chapterBar) {
         const isWtnGame = activeSessionId.includes('_WTN_');
-        const wesPill = isWtnGame
+        const isC7Game = activeSessionId.includes('_C7_');
+        const wesPill = isC7Game
+          ? `<span class="chapter-pill" onclick="playMoCrew7Reel()" style="background:linear-gradient(135deg,#ea580c,#b91c1c);color:#fff;font-weight:800;border-color:#fdba74;">🎬 Watch #2 Mo Crew 7 Reel (14 Plays • 58 PTS, 10× 3PM)</span>
+             <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1" target="_blank" download="2026-02-01_C7_Mo_Winter26_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download Crew 7 Reel MP4</a>`
+          : isWtnGame
           ? `<span class="chapter-pill" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48,#9f1239);color:#fff;font-weight:800;border-color:#fda4af;">🎬 Watch #2 Mo Highlight Reel (11 Plays • 5× 3PT Barrage)</span>
              <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p2" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download #2 Mo Highlight Reel MP4</a>`
           : activeSessionId === '2026-02-15_CU_vs_PimpsDown'
@@ -3196,6 +3435,7 @@
 
     function refreshUI() {
       updateTrainingSummaryCounters();
+      if (typeof updateCollabStudioUI === 'function') updateCollabStudioUI();
       renderTop5();
       renderCrewMasterRoster();
       renderDropdownsAndBoxScore();
@@ -3689,15 +3929,19 @@
         const isDisputed = fb.wrong_votes > 0 || notes.some(n => !/Verified/i.test(n.issue_type || ''));
         const isVerified = (fb.accurate_votes > 0 || p.isMajesticVerified) && !isDisputed;
 
-        const statusBadge = p.isCustom
-          ? `<span class="tag human-added">👤 PLAYER-LOGGED PLAY</span>`
-          : isDisputed
-            ? `<span class="tag disputed">🚨 DISPUTED (${fb.wrong_votes})</span>`
-            : p.isMajesticVerified
-              ? `<span class="tag verified">✅ CV + RECLEAGUE VERIFIED</span>`
-              : isVerified
-                ? `<span class="tag verified">✅ VERIFIED (${fb.accurate_votes})</span>`
-                : `<span class="tag ai-guess">🤖 UNVERIFIED AI GUESS</span>`;
+        const statusBadge = p.isCollabGold
+          ? `<span class="tag collab-gold">🤝 COLLAB GOLD VERIFIED${p.collabCal && p.collabCal.contributor ? ' (' + escapeHtml(p.collabCal.contributor) + ')' : ''}</span>`
+          : p.isCustom
+            ? `<span class="tag human-added">👤 PLAYER-LOGGED PLAY</span>`
+            : isDisputed
+              ? `<span class="tag disputed">🚨 DISPUTED (${fb.wrong_votes})</span>`
+              : p.collabNeedsVerify
+                ? `<span class="tag led-needs-verify">⚡ LED-SYNCED • VERIFY SCORER</span>`
+                : p.isMajesticVerified
+                  ? `<span class="tag verified">✅ CV + LED 1080p VERIFIED</span>`
+                  : isVerified
+                    ? `<span class="tag verified">✅ VERIFIED (${fb.accurate_votes})</span>`
+                    : `<span class="tag ai-guess">🤖 UNVERIFIED AI GUESS</span>`;
 
         const avatarHtml = p.avatar
           ? `<img src="${escapeHtml(p.avatar)}" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid var(--accent);vertical-align:middle;margin-right:4px;" onerror="this.style.display='none'" />`
@@ -3754,14 +3998,28 @@
 
             <div class="play-actions-bar">
               <div class="action-btns">
-                <button class="mini-btn ok-btn" onclick="votePlay(${p.s}, 'accurate')">👍 Accurate (${fb.accurate_votes || 0})</button>
-                <button class="mini-btn flag-btn" onclick="toggleNoteForm(${p.s})">🚩 Wrong! Fix / Note (${notes.length})</button>
-                <button class="mini-btn" onclick="votePlay(${p.s}, 'fire')">🔥 Top Play (${fb.fire_votes || 0})</button>
-                <button class="mini-btn" onclick="sharePlayLink(${p.s}, this)" title="Copy direct link to this play">🔗 Share</button>
+                <button class="mini-btn ok-btn" onclick="collabConfirmPlay('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, '${escapeHtml(p.player).replace(/'/g, "\'")}')">✅ Spot-On${p.isCollabGold ? ' ✓' : ''}</button>
+                <button class="mini-btn" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, -2)" title="Shift shot timestamp 2.0s earlier">⏪ -2s</button>
+                <button class="mini-btn" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, 2)" title="Shift shot timestamp 2.0s later">+2s ⏩</button>
+                <button class="mini-btn" onclick="collabSetCurrentVideoTime('${p.playKey || p.s}', ${p.origS !== undefined ? p.origS : p.s})" title="Set current paused video time as the exact bucket splash!">📍 Sync Here</button>
+                <button class="mini-btn flag-btn" onclick="toggleNoteForm(${p.s})">👕 Scorer / Note (${notes.length})</button>
+                <button class="mini-btn" onclick="votePlay(${p.s}, 'fire')">🔥 (${fb.fire_votes || 0})</button>
                 <button class="mini-btn wa-btn" onclick="shareToWhatsApp(${p.s}, this)" title="Share play to WhatsApp">📲 WhatsApp</button>
               </div>
               <a class="mini-btn dl-btn" href="/api/clip?game=${encodeURIComponent(activeSessionId)}&s=${p.s}&dur=11&name=${encodeURIComponent(buildClipFilename(p, p.s))}" download="${buildClipFilename(p, p.s)}.mp4">⬇️ Clip MP4 (11s)</a>
             </div>
+            ${(p.collabNeedsVerify || activeSessionId.includes('_C7_')) ? `
+            <div class="play-collab-inline">
+              <span style="font-size:0.7rem;color:#6ee7b7;font-weight:700;">🤝 Who scored @ ${p.t}?</span>
+              <select style="font-size:0.7rem;padding:2px 5px;max-width:165px;" onchange="if(this.value) collabReassignPlayer('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, this.value)">
+                <option value="">👕 Confirm / Switch Scorer...</option>
+                ${(activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.active_roster ? activeMajesticGame.config.active_roster : PLAYERS.slice(0, 8)).map(rp => `<option value="${escapeHtml(rp)}" ${rp === p.player ? 'selected' : ''}>${escapeHtml(rp)}</option>`).join('')}
+              </select>
+              <select style="font-size:0.7rem;padding:2px 5px;max-width:155px;" onchange="collabReassignAssist('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, this.value)">
+                <option value="">🤝 + Add Assist...</option>
+                ${(activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.active_roster ? activeMajesticGame.config.active_roster : PLAYERS.slice(0, 8)).map(rp => `<option value="${escapeHtml(rp)}">${escapeHtml(rp)}</option>`).join('')}
+              </select>
+            </div>` : ''}
 
             ${notes.length > 0 ? `<div class="notes-list">${notesHtml}</div>` : ''}
 
@@ -4258,14 +4516,179 @@
       window.open(waUrl, '_blank', 'noopener,noreferrer');
     }
 
+
+    function getCollabContributor() {
+      const el = document.getElementById('collabContributorInput');
+      const saved = localStorage.getItem('bball_collab_name') || '';
+      if (el && el.value.trim()) return el.value.trim();
+      if (el && saved) el.value = saved;
+      return saved || 'Crew Collab';
+    }
+
+    function toggleCollabDrawer() {
+      const dr = document.getElementById('collabStudioDrawer');
+      if (dr) dr.classList.toggle('open');
+    }
+
+    function updateCollabStudioUI() {
+      const pill = document.getElementById('collabProgressPill');
+      const sel = document.getElementById('collabLivePlayerSelect');
+      const savedName = localStorage.getItem('bball_collab_name') || '';
+      const nameInput = document.getElementById('collabContributorInput');
+      if (nameInput && !nameInput.value && savedName) nameInput.value = savedName;
+
+      const allPlays = getAllPlaysSorted();
+      const cuBuckets = allPlays.filter(p => p.isCu !== false && p.tags && (p.tags.includes('MADE') || p.tags.includes('DEF')));
+      const verifiedBuckets = cuBuckets.filter(p => p.isCollabGold || (!p.collabNeedsVerify && p.isMajesticVerified));
+      const needsCount = Math.max(0, cuBuckets.length - verifiedBuckets.length);
+      if (pill) {
+        if (needsCount > 0) {
+          pill.textContent = `✅ ${verifiedBuckets.length}/${cuBuckets.length} Verified • ⚡ ${needsCount} Need Scorer Check`;
+        } else {
+          pill.textContent = `✅ ${verifiedBuckets.length}/${cuBuckets.length} Plays Synced & Verified`;
+        }
+      }
+      const nextBtn = document.getElementById('nextUnverifiedBtn');
+      if (nextBtn) {
+        nextBtn.style.display = needsCount > 0 ? 'inline-flex' : 'none';
+      }
+      if (sel) {
+        const rosterList = (activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.active_roster && activeMajesticGame.config.active_roster.length)
+          ? activeMajesticGame.config.active_roster
+          : PLAYERS;
+        const prev = sel.value;
+        sel.innerHTML = rosterList.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(displayPlayerName(p))}</option>`).join('');
+        const moMatch = rosterList.find(p => /#2\s*Mo/i.test(p));
+        if (prev && rosterList.includes(prev)) sel.value = prev;
+        else if (moMatch) sel.value = moMatch;
+      }
+    }
+
+    function jumpToNextUnverifiedBucket() {
+      const curSec = getCurrentVideoSeconds();
+      const allPlays = getAllPlaysSorted();
+      const unv = allPlays.filter(p => p.collabNeedsVerify && !p.isCollabGold);
+      if (!unv.length) {
+        alert('🎉 Every bucket in this game has been verified!');
+        return;
+      }
+      const nextPlay = unv.find(p => p.s > curSec + 2) || unv[0];
+      seekTo(nextPlay.s, true);
+      const card = document.getElementById(`play-s-${nextPlay.s}`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function collabConfirmPlay(playKey, curS, origS, player) {
+      postFeedback({
+        action: 'collab_calibrate',
+        session_id: activeSessionId,
+        play_key: String(playKey),
+        status: 'verified',
+        verified_player: player,
+        splash_s: curS,
+        orig_s: origS,
+        contributor: getCollabContributor()
+      });
+    }
+
+    function collabReassignPlayer(playKey, curS, origS, newPlayer) {
+      if (!newPlayer) return;
+      postFeedback({
+        action: 'collab_calibrate',
+        session_id: activeSessionId,
+        play_key: String(playKey),
+        status: 'verified',
+        verified_player: newPlayer,
+        splash_s: curS,
+        orig_s: origS,
+        contributor: getCollabContributor()
+      });
+    }
+
+    function collabReassignAssist(playKey, curS, origS, assistPlayer) {
+      if (!assistPlayer) return;
+      postFeedback({
+        action: 'collab_calibrate',
+        session_id: activeSessionId,
+        play_key: String(playKey),
+        status: 'verified',
+        verified_assist: assistPlayer,
+        splash_s: curS,
+        orig_s: origS,
+        contributor: getCollabContributor()
+      });
+    }
+
+    function collabNudgeTime(playKey, curS, origS, deltaSec) {
+      const nextS = Math.max(0, Math.round(Number(curS) + Number(deltaSec)));
+      postFeedback({
+        action: 'collab_calibrate',
+        session_id: activeSessionId,
+        play_key: String(playKey),
+        status: 'verified',
+        splash_s: nextS,
+        orig_s: origS,
+        contributor: getCollabContributor()
+      }).then(() => seekTo(nextS, true));
+    }
+
+    function collabSetCurrentVideoTime(playKey, origS) {
+      const liveS = Math.max(0, Math.round(videoEl.currentTime || 0));
+      postFeedback({
+        action: 'collab_calibrate',
+        session_id: activeSessionId,
+        play_key: String(playKey),
+        status: 'verified',
+        splash_s: liveS,
+        orig_s: origS,
+        contributor: getCollabContributor()
+      });
+    }
+
+    function quickTagMoAtCurrentTime() {
+      const sec = Math.max(1, Math.round(videoEl.currentTime || 0));
+      const moName = activeSessionId.includes('_WTN_') ? '#2 Mo' : '#2 Mohamed';
+      postFeedback({
+        action: 'collab_tag_live',
+        session_id: activeSessionId,
+        video_seconds: sec,
+        player: moName,
+        action_type: '3-pt FG Made',
+        contributor: getCollabContributor(),
+        note: 'Tagged live in Collab Studio'
+      });
+    }
+
+    function submitCollabLiveTag() {
+      const sec = Math.max(1, Math.round(videoEl.currentTime || 0));
+      const playerSel = document.getElementById('collabLivePlayerSelect');
+      const actSel = document.getElementById('collabLiveActionSelect');
+      const noteEl = document.getElementById('collabLiveNoteInput');
+      const player = (playerSel && playerSel.value) || '#2 Mohamed';
+      const action_type = (actSel && actSel.value) || '2-pt FG Made';
+      const note = (noteEl && noteEl.value.trim()) || '';
+      if (noteEl) noteEl.value = '';
+      postFeedback({
+        action: 'collab_tag_live',
+        session_id: activeSessionId,
+        video_seconds: sec,
+        player,
+        action_type,
+        contributor: getCollabContributor(),
+        note
+      });
+    }
+
     async function handleUrlDeepLinks() {
       const params = new URLSearchParams(window.location.search);
       const gameParam = params.get('game');
       const playSec = params.get('play') || params.get('t');
       const reelParam = params.get('reel');
-      const targetSession = gameParam || (reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
+      const targetSession = gameParam || (reelParam === 'mo_c7' ? '2026-02-01_C7_vs_OutOfShape_W4' : reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
       await switchGameSession(targetSession, true);
-      if (reelParam === 'mo') {
+      if (reelParam === 'mo_c7') {
+        setTimeout(() => playMoCrew7Reel(), 400);
+      } else if (reelParam === 'mo') {
         setTimeout(() => playMoHighlightReel(), 400);
       } else if (reelParam === 'top5') {
         setTimeout(() => startTop5Reel(), 400);
@@ -4330,8 +4753,8 @@
 
       if (!isPickup && activeMajesticGame) {
         const cfg = activeMajesticGame.config || {};
-        const shortTeam = cfg.cu_team_name === 'WeTheNorth' ? 'WTN' : (cfg.cu_team_name === 'Sapa Boys' ? 'SB' : 'CU');
-        const teamIcon = cfg.cu_team_name === 'WeTheNorth' ? '🍁' : '🏀';
+        const shortTeam = cfg.cu_team_name === 'WeTheNorth' ? 'WTN' : (cfg.cu_team_name === 'Crew 7' ? 'C7' : (cfg.cu_team_name === 'Sapa Boys' ? 'SB' : 'CU'));
+        const teamIcon = cfg.cu_team_name === 'WeTheNorth' ? '🍁' : (cfg.cu_team_name === 'Crew 7' ? '🔥' : '🏀');
         const shortHalf = ((activePlay.segLabel || '').split('•')[0] || '').trim();
         gLabel.textContent = shortHalf ? `${shortHalf} • @ ${activePlay.t}` : (cfg.short_title || activeSessionId);
         s12.textContent = activePlay.s12;

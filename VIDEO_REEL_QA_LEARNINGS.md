@@ -53,3 +53,25 @@ Statlog `logged_at` timestamps measure **real-world wall time** when the scoreke
 1. Crop the physical gym wall LED scoreboard (`~120x100 px`) as an inset onto every candidate highlight contact sheet.
 2. Verify **both** that the LED game clock matches the statlog `clock` (`±3s`) **and** that the target player's jersey number (`#2` for Mo) is visibly making the shot/block/steal in the frame.
 3. Append a cache-busting version query parameter (e.g. `?v=1080p2`) whenever overwriting an existing `.mp4` object on Google Cloud Storage (`gs://basketball-highlights-store/...`) so browser caches and GCS CDN edges immediately serve the newly encoded file.
+
+
+---
+
+## 5. Zero-Timestamp Historical Season Recovery (Physical LED Scoreboard Binary Search)
+
+### Discovery (`Crew 7` — `Winter 2026`, `player=274`)
+When processing `#2 Mohamed`'s `Winter 2026` season on `Crew 7` (`https://mh.majesticstats.com/player?player=274`), every `statlog` row across all 4 games had `clock: "0:00"`, `period: 1`, and identical `2026-03-09` bulk-import `logged_at` timestamps (transcribed weeks later from paper scoresheets — **zero play-by-play timestamps**).
+
+### What We Learned & Built
+1. **Physical LED Scoreboard Binary-Search Detector (`86/86` = `100.0%` Recovery)**:
+   - Even when paper boxscores lack timestamps, the gym's physical wall LED scoreboard (`HOME` / `GUESTS` score ROI at Gunderson HS `x=1753..1896, y=288..325` and Quimby Oak MS `x=1610..1642, y=312..354`) increments after every made FG and FT.
+   - Coarse-scanning the LED ROI every `20s` followed by a 5-step binary search (`±0.6s` precision) recovered **100% of `Crew 7` scoring events** across all three `1080p` game films (`W4`: `30/30`, `W3`: `31/31`, `W2`: `25/25` — matching every `3PM`, `2PM`, and `FTM` in the paper boxscores with zero missing or phantom points).
+2. **Scorekeeper Fast-Break Tap Latency (`3s` Half-Court vs. `8–13s` Fast-Break)**:
+   - Half-court jump shots flip the LED scoreboard `2.5–4.5s` after the ball splashes through the net.
+   - On **fast-break layups** (especially at Quimby Oak MS in `W4`), the table operator often watches the transition sequence finish and taps the scoreboard `8–13s` after the make. Always inspect `t_led - 12s .. t_led - 2s` when `t_led - 3s` shows players already back on defense.
+3. **Cross-Game `1080p` Biometric + Kit Anchoring (`#2 Mohamed` vs. Teammates)**:
+   - When multiple teammates wear similar undershirts (e.g. `#2 Mohamed` and `#10 Shain` both wore white T-shirt sleeves under red `Crew 7` jerseys in `W4`), cross-referencing `W2` (`s=900` & `s=2500` where `#2 Mohamed` stood 6 feet from the lens) locked in unmistakable anchors: **lean 6'1"–6'2" frame, short buzz/fade haircut, matching red `Crew 7` shorts with white side stripe (vs. `#10`'s black shorts), and bright cyan-blue sneakers in `W2`**.
+4. **Strict 7-Bit ASCII for `cv2.putText` Broadcast Graphics**:
+   - OpenCV Hershey fonts only support 7-bit ASCII (`0x20..0x7E`); Unicode characters like `•`, `—`, or `×` render as `???`. Always use ASCII `-` and `x` in `cv2.putText` lower-thirds.
+5. **Interactive Collaborative Training Studio (`🤝 Collab Training`)**:
+   - Pairing automated LED Scoreboard Binary Search (which nails **when** every `+2`/`+3` happened) with 1-tap teammate verification in `index.html` + `server.py` (`collab_calibrate` & `collab_tag_live`, logging `drift_delta_s` and verified player/assist labels to `training_corrections.jsonl`) turns historical zero-timestamp game film into a gold-labeled multi-season CV dataset.

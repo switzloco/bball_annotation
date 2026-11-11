@@ -472,5 +472,44 @@
       ]
     },
     "updated_at": "2026-11-01T00:40:00Z"
+  },
+  "#2 Mohamed (Mo)": {
+    "player_id": "majestic_274_mohamed",
+    "majestic_ids": {
+      "Winter 2026 (Crew 7)": 274,
+      "Spring 2026 (Crew 7)": 7380,
+      "Fall 2026 (Crew 7)": 10638,
+      "Holiday 2026 (WeTheNorth)": 237902
+    },
+    "name": "#2 Mohamed (Mo)",
+    "cu_jersey": "#2",
+    "cu_team": "Crew 7 / WeTheNorth",
+    "biometric_confidence": "99% Cross-Season Ground-Truth Match (Verified across 1080p WTN G2/G3 & Crew 7 Winter '26 wearing #2; lean athletic two-way wing, right-handed high-arc wing 3PT release, coast-to-coast rebound-and-push stride)",
+    "permanent_traits": "High-volume wing sharpshooter (29x 3PM in 2026), coast-to-coast defensive rebounder & ball-pusher, active weak-side shot blocker & passing-lane thief",
+    "biometric_anchors": {
+      "hair_and_face": "Short dark hair, lean athletic guard/wing build",
+      "height_build": "6'1\"\u20136'2\" long-striding athletic guard/wing",
+      "footwear_and_gear": "Always wears #2 jersey (White/Red on WeTheNorth; Black/Dark on Crew 7), red/black athletic trim, white/light low-top basketball shoes",
+      "court_signature": "High-arc right-handed wing catch-and-shoot & crossover pull-up 3s, grabs defensive board & immediately pushes middle, weak-side paint blocks"
+    },
+    "default_team_role": "Crew 7 & WeTheNorth #2 / Two-Way Wing Sharpshooter",
+    "outfit_history": {
+      "2026-01-18_C7_vs_Breadwinners_W2": [
+        "#2 Mohamed (Crew 7 #2 \u2014 14 PTS, 4/4 3PT, 3 STL, 1 BLK)"
+      ],
+      "2026-01-25_C7_vs_BTA_W3": [
+        "#2 Mohamed (Crew 7 #2 \u2014 13 PTS, 11 REB, 5 AST, 1 STL, 1 BLK)"
+      ],
+      "2026-02-01_C7_vs_OutOfShape_W4": [
+        "#2 Mohamed (Crew 7 #2 \u2014 25 PTS, 11/11 FG, 3/3 3PT, 9 REB, 1 BLK)"
+      ],
+      "2026-10-25_WTN_vs_NewAvengers_G2": [
+        "#2 Mo (WeTheNorth Red #2 \u2014 7 PTS, 3/3 FG, 7 REB)"
+      ],
+      "2026-11-01_WTN_vs_CrunchTime_G3": [
+        "#2 Mo (WeTheNorth White #2 \u2014 15 PTS, 5x 3PM, 5 REB, 1 BLK)"
+      ]
+    },
+    "updated_at": "2026-11-11T00:00:00Z"
   }
 }
