@@ -1948,8 +1948,9 @@
             <span class="sc-badge">CPSN TOP 5</span>
             <span id="top5TitleLabel">CAMPBELL PARK PLAYS OF THE RUN</span>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <button class="mini-btn ok-btn" id="playTop5ReelBtn" onclick="startTop5Reel()" style="font-weight:700;">▶️ Auto-Play Top 5</button>
+            <button class="mini-btn" id="playTurnoverReelBtn" onclick="startTurnoverReel('CU')" style="display:none;font-weight:800;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.55);color:#fdba74;">🔄 Turnover Film</button>
             <button class="mini-btn" onclick="toggleTop5()">Hide / Show</button>
           </div>
         </div>
@@ -1984,6 +1985,9 @@
             <option value="PUTBACK">💪 OREB & Putbacks</option>
             <option value="CHG">🛡️ Charges Drawn (Elite Defense!)</option>
             <option value="DEF">🔒 All Defensive Stops (Charges, Steals &amp; Blocks)</option>
+            <option value="TOV_CU">🔄 Team Turnovers (Film Study — Clean Up!)</option>
+            <option value="TOV_OPP">🦅 Forced Opponent Turnovers (Takeaways!)</option>
+            <option value="TOV_ALL">🔄 All Turnovers (Both Teams)</option>
           </select>
         </div>
         <div class="filter-row">
@@ -2002,6 +2006,7 @@
   <!-- LOWER SECTION: Single-Game Shot Chart + Day-to-Day Persistent Crew Roster + Disputed Stats Table -->
   <div class="lower-section" id="lowerStatsSection">
     <div id="singleGameShotChartMount" style="margin-bottom:16px;display:none;"></div>
+    <div id="singleGameTurnoverMount" style="margin-bottom:16px;display:none;"></div>
     <div class="crew-mapper-card">
       <div class="crew-mapper-header">
         <div>
@@ -3094,6 +3099,149 @@
       `;
     }
 
+    function renderSingleGameTurnoverStrip(gData) {
+      const mount = document.getElementById('singleGameTurnoverMount');
+      const hdrBtn = document.getElementById('playTurnoverReelBtn');
+      const tovPlays = (BASE_PLAYS || []).filter(p => p.tags && p.tags.includes('TOV'));
+      const cuTovs = tovPlays.filter(p => p.isCu);
+      const oppTovs = tovPlays.filter(p => !p.isCu);
+
+      if (hdrBtn) {
+        if (cuTovs.length > 0) {
+          hdrBtn.style.display = 'inline-flex';
+          hdrBtn.textContent = `🔄 Turnovers (${cuTovs.length})`;
+        } else {
+          hdrBtn.style.display = 'none';
+        }
+      }
+
+      if (!mount) return;
+      if (!gData || (cuTovs.length === 0 && oppTovs.length === 0)) {
+        mount.style.display = 'none';
+        mount.innerHTML = '';
+        return;
+      }
+
+      const cfg = gData.config || {};
+      const cuName = cfg.cu_team_name || 'Campbell United';
+      const oppName = cfg.opp_team_name || 'Opponent';
+      const cu1h = cuTovs.filter(p => p.g === 'H1').length;
+      const cu2h = cuTovs.length - cu1h;
+      const opp1h = oppTovs.filter(p => p.g === 'H1').length;
+      const opp2h = oppTovs.length - opp1h;
+
+      const byPlayer = {};
+      cuTovs.forEach(p => {
+        const nm = p.player || 'Team';
+        byPlayer[nm] = (byPlayer[nm] || 0) + 1;
+      });
+      const playerPillsHtml = Object.entries(byPlayer)
+        .sort((a, b) => b[1] - a[1])
+        .map(([pl, cnt]) => {
+          const plJs = pl.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+          return `<button type="button" onclick="startTurnoverReel('CU', '${escapeHtml(plJs)}')" style="cursor:pointer;background:rgba(249,115,22,0.14);border:1px solid rgba(249,115,22,0.45);color:#fed7aa;font-size:0.75rem;font-weight:800;padding:4px 9px;border-radius:999px;">🎬 ${escapeHtml(displayPlayerName(pl))} (${cnt} TOV)</button>`;
+        }).join('');
+
+      mount.style.display = 'block';
+      mount.innerHTML = `
+        <div class="scouting-panel" style="margin:0;border-color:rgba(249,115,22,0.52);background:linear-gradient(180deg,#161224 0%,#0b1120 100%);">
+          <h3 style="margin-top:0;">
+            <span>🔄 Single-Game Turnover &amp; Ball-Security Film Study</span>
+            <span style="font-size:0.73rem;color:#fdba74;font-weight:800;text-transform:none;">1-Click Sequential 1080p Turnover Video Reel</span>
+          </h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-bottom:10px;">
+            <div style="background:#131829;border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <div>
+                <div style="font-family:var(--font-display);font-size:0.98rem;font-weight:900;color:#fdba74;">🏀 ${escapeHtml(cuName.toUpperCase())}: ${cuTovs.length} LOGGED TURNOVERS</div>
+                <div style="font-size:0.76rem;color:#cbd5e1;margin-top:2px;">1st Half: <strong>${cu1h}</strong> &nbsp;•&nbsp; 2nd Half / OT: <strong>${cu2h}</strong></div>
+              </div>
+              ${cuTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('CU')" style="cursor:pointer;background:linear-gradient(135deg,#ea580c,#c2410c);border:1px solid #fdba74;color:#fff;font-size:0.76rem;font-weight:800;padding:7px 11px;border-radius:6px;">▶️ Watch All ${cuTovs.length} Team TOVs</button>` : ''}
+            </div>
+            <div style="background:#0e1b18;border:1px solid rgba(34,197,94,0.4);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <div>
+                <div style="font-family:var(--font-display);font-size:0.98rem;font-weight:900;color:#86efac;">🦅 FORCED ${escapeHtml(oppName.toUpperCase())} TURNOVERS: ${oppTovs.length}</div>
+                <div style="font-size:0.76rem;color:#cbd5e1;margin-top:2px;">1st Half: <strong>${opp1h}</strong> &nbsp;•&nbsp; 2nd Half / OT: <strong>${opp2h}</strong></div>
+              </div>
+              ${oppTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('OPP')" style="cursor:pointer;background:linear-gradient(135deg,#059669,#047857);border:1px solid #86efac;color:#fff;font-size:0.76rem;font-weight:800;padding:7px 11px;border-radius:6px;">▶️ Watch ${oppTovs.length} Takeaways</button>` : ''}
+            </div>
+          </div>
+          ${playerPillsHtml ? `
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:0.73rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Tap Player Turnover Reel:</span>
+              ${playerPillsHtml}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderTurnoverLabPanel(tl) {
+      if (!tl || !tl.reel_url) return '';
+      const pillsHtml = (tl.summary_pills || []).map(sp => `
+        <span style="background:#151e32;border:1px solid rgba(249,115,22,0.45);color:#fed7aa;font-size:0.75rem;font-weight:800;padding:4px 10px;border-radius:999px;">
+          🔄 ${escapeHtml(sp)}
+        </span>
+      `).join('');
+
+      const cardsHtml = (tl.cards || []).map(c => `
+        <div style="background:#0d1424;border:1px solid #26344d;border-top:3px solid ${escapeHtml(c.accent || '#f97316')};border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;min-width:0;">
+          <div style="font-size:0.7rem;font-weight:900;letter-spacing:0.05em;color:${escapeHtml(c.accent || '#fdba74')};text-transform:uppercase;">${escapeHtml(c.badge)}</div>
+          <div style="font-family:var(--font-display);font-size:1.04rem;font-weight:900;color:#fff;line-height:1.2;">${escapeHtml(c.title)}</div>
+          <div style="font-size:0.73rem;font-weight:800;color:#fde68a;background:#141d30;padding:4px 7px;border-radius:5px;">📊 ${escapeHtml(c.stat)}</div>
+          <p style="margin:0;font-size:0.81rem;color:#cbd5e1;line-height:1.52;">${escapeHtml(c.body)}</p>
+        </div>
+      `).join('');
+
+      const chapsHtml = (tl.chapters || []).map((ch, idx) => {
+        const isForce = (ch.part || '').includes('PART 1');
+        const isAlert = (ch.part || '').includes('PART 2');
+        const dot = isForce ? '🟢' : isAlert ? '🟠' : '🔴';
+        const lblJs = `${ch.player} — ${ch.title}`.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return `
+          <button type="button" class="scouting-chapter-btn" onclick="seekTurnoverTape(${Number(ch.sec) || 0}, '${escapeHtml(lblJs)}')">
+            <strong style="color:#fdba74;">${escapeHtml(ch.time)}</strong> &nbsp;${dot} <strong>${escapeHtml(ch.player)}:</strong> ${escapeHtml(ch.title)}
+          </button>
+        `;
+      }).join('');
+
+      return `
+        <div class="scouting-panel" id="turnoverFilmLabPanel" style="border-color:rgba(249,115,22,0.55);background:linear-gradient(180deg,#141324 0%,#090d16 100%);">
+          <h3>
+            <span>🔄 ${escapeHtml(tl.headline || 'Turnover & Ball-Security Film Lab')}</span>
+            <a href="${escapeHtml(tl.reel_url)}" download="${escapeHtml(tl.download_name || 'Turnover_Film_Study_1080p.mp4')}" class="btn-link blue-btn" style="font-size:0.73rem;padding:5px 10px;">⬇️ Download Turnover Reel MP4</a>
+          </h3>
+          ${pillsHtml ? `<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;">${pillsHtml}</div>` : ''}
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-bottom:14px;">
+            ${cardsHtml}
+          </div>
+          <div class="scouting-tape-grid">
+            <div style="min-width:0;">
+              <video id="turnoverTapeVideo" src="${escapeHtml(tl.reel_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #334155;background:#000;aspect-ratio:16/9;display:block;"></video>
+              <div id="turnoverTapeNowPlaying" style="margin-top:8px;font-size:0.83rem;font-weight:700;color:#fdba74;line-height:1.4;">
+                ▶️ Tap any clip on the right — 🟢 Force Latto Turnovers (Clips 1–4) • 🟠 Latto 2H Steal Blitz (Clips 5–6) • 🔴 CU Self-Scout Cleanup (Clips 7–10)
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto;width:100%;min-width:0;">
+              <div style="font-size:0.75rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
+                🎬 ${escapeHtml(tl.subheadline || '10 Turnover & Ball-Security Film Chapters:')}
+              </div>
+              ${chapsHtml}
+            </div>
+          </div>
+          ${tl.proof_grid_url ? `
+            <details style="margin-top:12px;background:#0b1120;border:1px solid #334155;border-radius:8px;padding:10px 12px;">
+              <summary style="cursor:pointer;font-family:var(--font-display);font-size:0.94rem;font-weight:900;color:#fdba74;letter-spacing:0.03em;text-transform:uppercase;">
+                🖼️ View 10-Clip Turnover Film Study Contact Sheet (Force LT TOVs + Steal Blitz + CU Cleanup ▾)
+              </summary>
+              <div style="margin-top:10px;">
+                <img src="${escapeHtml(tl.proof_grid_url)}" alt="10-Clip Turnover Film Study Proof Grid" style="width:100%;height:auto;display:block;border-radius:7px;border:1px solid #334155;" loading="lazy" />
+              </div>
+            </details>
+          ` : ''}
+        </div>
+      `;
+    }
+
     function renderShotContestLabPanel(scp) {
       const insightsHtml = (scp.key_insights || []).map(ins => `
         <div style="font-size:0.81rem;color:#e2e8f0;background:#111a2e;border-left:3px solid #38bdf8;padding:8px 11px;border-radius:5px;margin-bottom:7px;line-height:1.5;">
@@ -3547,6 +3695,7 @@
 
       const scp = ev.shot_contest_prototype || null;
       const cvLabHtml = scp ? renderShotContestLabPanel(scp) : '';
+      const tovLabHtml = sr.turnover_lab ? renderTurnoverLabPanel(sr.turnover_lab) : '';
 
       return `
         <div class="scouting-panel" style="border-color:rgba(56,189,248,0.45);">
@@ -3606,6 +3755,8 @@
             ${cuImpHtml}
           </div>
         </div>
+
+        ${tovLabHtml}
 
         <div class="scouting-panel" style="border-color:rgba(168,85,247,0.45);">
           <h3>
@@ -3806,7 +3957,7 @@
                 <div style="font-size:0.8rem;color:#e2e8f0;margin-top:6px;line-height:1.6;">
                   • <strong>Offense:</strong> ${cu.ppg} PPG &nbsp;|&nbsp; <strong>Defense:</strong> ${cu.opp_ppg} OPP PPG<br/>
                   • <strong>Rebounds:</strong> ${cu.rpg} RPG &nbsp;|&nbsp; <strong>Assists:</strong> ${cu.apg} APG<br/>
-                  • <strong>Steals / Blocks:</strong> ${cu.spg} SPG / ${cu.bpg} BPG
+                  • <strong>Steals / Blocks:</strong> ${cu.spg} SPG / ${cu.bpg} BPG${cu.topg !== undefined ? `<br/>• <strong>Turnovers:</strong> ${cu.topg} TOPG ${cu.ast_tov ? `(${escapeHtml(cu.ast_tov)})` : ''}` : ''}
                 </div>
               </div>
               <div style="background:#1a1118;border:1px solid rgba(248,113,113,0.4);border-radius:8px;padding:12px;">
@@ -3814,7 +3965,7 @@
                 <div style="font-size:0.8rem;color:#e2e8f0;margin-top:6px;line-height:1.6;">
                   • <strong>Offense:</strong> ${opp.ppg} PPG &nbsp;|&nbsp; <strong>Defense:</strong> ${opp.opp_ppg} OPP PPG<br/>
                   • <strong>Rebounds:</strong> ${opp.rpg} RPG &nbsp;|&nbsp; <strong>Assists:</strong> ${opp.apg} APG<br/>
-                  • <strong>Steals / Blocks:</strong> ${opp.spg} SPG / ${opp.bpg} BPG
+                  • <strong>Steals / Blocks:</strong> ${opp.spg} SPG / ${opp.bpg} BPG${opp.topg !== undefined ? `<br/>• <strong>Turnovers:</strong> ${opp.topg} TOPG ${opp.ast_tov ? `(${escapeHtml(opp.ast_tov)})` : ''}` : ''}
                 </div>
               </div>
             </div>
@@ -3833,6 +3984,8 @@
             ${keysHtml}
           </div>
         </div>
+
+        ${sr.turnover_lab ? renderTurnoverLabPanel(sr.turnover_lab) : ''}
 
         <div class="scouting-panel">
           <h3><span>🎯 ${escapeHtml(oppName)} Player-by-Player Personnel Scouting &amp; Defensive Matchups</span></h3>
@@ -3870,6 +4023,38 @@
 
         ${isEvanMode ? renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) : broadcastBodyHtml}
       `;
+    }
+
+    function seekTurnoverTape(sec, label) {
+      const tv = document.getElementById('turnoverTapeVideo');
+      const panel = document.getElementById('turnoverFilmLabPanel');
+      const np = document.getElementById('turnoverTapeNowPlaying');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (np && label) {
+        np.innerHTML = `🎬 <strong>Now Playing Turnover Clip:</strong> ${escapeHtml(label)}`;
+      }
+      if (tv) {
+        const rawSec = Number(sec) || 0;
+        const targetSec = rawSec > 0 ? rawSec + 0.08 : 0;
+        const applySeekAndPlay = () => {
+          const safeSec = (Number.isFinite(tv.duration) && tv.duration > 0.5)
+            ? Math.min(targetSec, Math.max(0, tv.duration - 0.25))
+            : targetSec;
+          try { tv.currentTime = safeSec; } catch (_) {}
+          tv.play().catch(err => {
+            if (err && err.name === 'NotAllowedError') {
+              tv.muted = true;
+              tv.play().catch(() => {});
+            }
+          });
+        };
+        if (tv.readyState === 0) {
+          tv.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+          tv.load();
+        } else {
+          applySeekAndPlay();
+        }
+      }
     }
 
     function seekScoutingTape(sec, label) {
@@ -4245,6 +4430,7 @@
 
       if (activeSessionId === '2026-10-31') {
         renderSingleGameShotChart(null, '');
+        renderSingleGameTurnoverStrip(null);
         activeMajesticGame = null;
         PLAYERS = [...PICKUP_PLAYERS];
         TOP_5_PLAYS = [...PICKUP_TOP_5_PLAYS];
@@ -4369,6 +4555,8 @@
           mappedTags.push('DEF');
         }
         if (rawTags.includes('REB')) mappedTags.push('PUTBACK');
+        const isTovEv = rawTags.includes('TOV') || /turnover/i.test(ev.action || '');
+        if (isTovEv) mappedTags.push('TOV');
         if (mappedTags.length === 0) mappedTags.push('MISS');
         const isFt = mappedTags.includes('FT');
         const isClutchFt = isFt && mappedTags.includes('MADE') &&
@@ -4376,13 +4564,18 @@
           parseClkSec(ev.game_clock) <= 90 &&
           Math.abs((Number(ev.cu_score) || 0) - (Number(ev.opp_score) || 0)) <= 6;
 
+        const tovLeadSec = isTovEv ? Math.max(0, (Number(ev.s) || 0) - 6) : ev.s;
+        const tovLeadMmSs = isTovEv
+          ? `${String(Math.floor(tovLeadSec / 60)).padStart(2, '0')}:${String(Math.floor(tovLeadSec % 60)).padStart(2, '0')}`
+          : ev.t;
+
         return {
           g: ev.period === '1st Half' ? 'H1' : (ev.period === 'Overtime' || ev.period === 'OT') ? 'OT' : 'H2',
           isCu: !!ev.is_cu,
           isClutchFt,
           segLabel: `${ev.period}${ev.game_clock ? ' (' + ev.game_clock + ')' : ''} • Wall ${ev.wall_clock}`,
-          t: ev.t,
-          s: ev.s,
+          t: tovLeadMmSs,
+          s: tovLeadSec,
           origS: ev.s,
           ledFlipS: ev.led_flip_s || null,
           collabNeedsVerify: rawTags.includes('COLLAB_NEEDS_VERIFY') || ev.isMajesticVerified === false,
@@ -4494,16 +4687,23 @@
         const shotChartPill = (gData.shot_chart && gData.shot_chart.shots && gData.shot_chart.shots.length > 0)
           ? `<span class="chapter-pill" style="background:#0369a1;color:#fff;font-weight:800;border-color:#38bdf8;" onclick="document.getElementById('singleGameShotChartMount')?.scrollIntoView({behavior:'smooth',block:'start'})">🎯 Interactive Shot Chart (${gData.shot_chart.zone_verified_fga} FGA)</span>`
           : '';
+        const cuTovCnt = BASE_PLAYS.filter(p => p.isCu && p.tags.includes('TOV')).length;
+        const oppTovCnt = BASE_PLAYS.filter(p => !p.isCu && p.tags.includes('TOV')).length;
+        const tovPill = (cuTovCnt + oppTovCnt > 0)
+          ? `<span class="chapter-pill" style="background:#9a3412;color:#fed7aa;font-weight:800;border-color:#fb923c;" onclick="startTurnoverReel('${cuTovCnt > 0 ? 'CU' : 'OPP'}')">🔄 Turnover Film (${cuTovCnt} Team / ${oppTovCnt} Forced)</span>`
+          : '';
         chapterBar.innerHTML = `
           <span class="chapter-pill" style="background:#1e3a8a;color:#fff;font-weight:800;border-color:#60a5fa;" onclick="seekTo(${tipoffSec}, false)" title="Jump right to the opening jump ball (skip warmups)">🏀 ${tipoffMmSs} Opening Tip-Off</span>
           <span class="chapter-pill" style="background:#990000;color:#fff;font-weight:800;" onclick="filterCuTeamHighlights()">🎬 Auto-Play ${escapeHtml(cfg.cu_team_name || 'Campbell United')} Highlights</span>
           ${shotChartPill}
+          ${tovPill}
           ${wesPill}
           ${teamPills}
         `;
       }
 
       renderSingleGameShotChart(gData.shot_chart || null, activeSessionId);
+      renderSingleGameTurnoverStrip(gData);
 
       const blTrack = document.getElementById('bottomlineTrack');
       if (blTrack && TOP_5_PLAYS.length > 0) {
@@ -5062,9 +5262,10 @@
 
       const filtered = allPlays.filter(p => {
         const fb = (feedbackState.plays || {})[String(p.s)] || { accurate_votes: 0, wrong_votes: 0, notes: [] };
-        if (g === 'CU_HIGHLIGHTS') {
+        const isTovFilter = type === 'TOV_CU' || type === 'TOV_OPP' || type === 'TOV_ALL';
+        if (g === 'CU_HIGHLIGHTS' && !isTovFilter) {
           if (!p.isCu || !isHighlightEligiblePlay(p)) return false;
-        } else if (g !== 'ALL' && p.g !== g) {
+        } else if (g !== 'ALL' && g !== 'CU_HIGHLIGHTS' && p.g !== g) {
           return false;
         }
         if (player !== 'ALL' && p.player !== player && canonicalPlayerName(p.player).toLowerCase() !== canonicalPlayerName(player).toLowerCase()) return false;
@@ -5074,6 +5275,9 @@
         if (type === 'PUTBACK' && !p.tags.includes('PUTBACK')) return false;
         if (type === 'CHG' && !p.tags.includes('CHG')) return false;
         if (type === 'DEF' && !p.tags.includes('DEF') && !p.tags.includes('CHG')) return false;
+        if (type === 'TOV_CU' && (!p.tags.includes('TOV') || !p.isCu)) return false;
+        if (type === 'TOV_OPP' && (!p.tags.includes('TOV') || p.isCu)) return false;
+        if (type === 'TOV_ALL' && !p.tags.includes('TOV')) return false;
         if (q) {
           const dispName = displayPlayerName(p.player).toLowerCase();
           const inNotes = (fb.notes || []).some(n => (n.comment || '').toLowerCase().includes(q) || (n.author || '').toLowerCase().includes(q));
@@ -5114,6 +5318,7 @@
           if (t === '3PT') return `<span class="tag three">3PT</span>`;
           if (t === 'PUTBACK') return `<span class="tag made">OREB PUTBACK</span>`;
           if (t === 'DEF') return hasChgTag ? '' : `<span class="tag def">STL / BLK</span>`;
+          if (t === 'TOV') return `<span class="tag" style="background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.55);color:#fdba74;">🔄 TURNOVER</span>`;
           if (t === 'SPECIAL') return `<span class="tag special">HIGHLIGHT</span>`;
           return `<span class="tag miss">MISS</span>`;
         }).join('');
@@ -5461,6 +5666,49 @@
       autoReelQueue = effTop5.map(tp => ({ s: tp.s, t: tp.t, label: `${tp.rank} ${displayPlayerName(tp.player)}` }));
       autoReelIdx = 0;
       autoReelLabel = 'CPSN TOP 5 COUNTDOWN';
+      playCurrentReelItem();
+    }
+
+    function startTurnoverReel(mode, optPlayer) {
+      const isOpp = mode === 'OPP';
+      const allPlays = getAllPlaysSorted();
+      const matching = allPlays.filter(p => {
+        if (!p.tags || !p.tags.includes('TOV')) return false;
+        if (isOpp ? p.isCu : !p.isCu) return false;
+        if (optPlayer && p.player !== optPlayer && canonicalPlayerName(p.player).toLowerCase() !== canonicalPlayerName(optPlayer).toLowerCase()) return false;
+        return true;
+      });
+
+      const gEl = document.getElementById('gameFilter');
+      const tEl = document.getElementById('typeFilter');
+      const pEl = document.getElementById('playerFilter');
+      const sEl = document.getElementById('searchFilter');
+      if (gEl) gEl.value = 'ALL';
+      if (tEl) tEl.value = isOpp ? 'TOV_OPP' : 'TOV_CU';
+      if (pEl) {
+        if (optPlayer && Array.from(pEl.options).some(o => o.value === optPlayer)) {
+          pEl.value = optPlayer;
+        } else {
+          pEl.value = 'ALL';
+        }
+      }
+      if (sEl) sEl.value = '';
+      renderPlays();
+
+      if (matching.length === 0) return;
+      const vEl = document.getElementById('videoPlayer');
+      if (vEl) vEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      autoReelQueue = matching.map(p => ({
+        s: p.s,
+        t: p.t,
+        label: `${displayPlayerName(p.player)} — ${p.segLabel || p.g}`
+      }));
+      autoReelIdx = 0;
+      autoReelLabel = optPlayer
+        ? `${displayPlayerName(optPlayer).toUpperCase()} TURNOVER FILM (${matching.length})`
+        : isOpp
+          ? `FORCED OPPONENT TAKEAWAYS (${matching.length})`
+          : `TEAM TURNOVER FILM STUDY (${matching.length})`;
       playCurrentReelItem();
     }
 
