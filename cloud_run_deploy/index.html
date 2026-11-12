@@ -3074,7 +3074,7 @@
         return [
           h >= 2 ? `<span style="color:#4ade80;">✅ ${h} Handlers/Initiators</span>` : `<span style="color:#fbbf24;">⚠️ ${h} Handler (Watch Press)</span>`,
           sh >= 3 ? `<span style="color:#38bdf8;">🎯 ${sh} Spacers</span>` : `<span style="color:#f87171;">⚠️ ${sh} Spacers (Tight Paint)</span>`,
-          ns <= 1 ? `<span style="color:#a7f3d0;">✅ &le;1 Non-Shooter</span>` : `<span style="color:#f87171;">🚫 ${ns} Non-Shooters (Stagger!)</span>`,
+          ns <= 1 ? `<span style="color:#a7f3d0;">✅ Max 1 Non-Shooter</span>` : `<span style="color:#f87171;">🚫 ${ns} Non-Shooters (Stagger!)</span>`,
           rb >= 1 ? `<span style="color:#c4b5fd;">🛡️ ${rb} Wall Big${rb > 1 ? 's' : ''}</span>` : `<span style="color:#fbbf24;">⚠️ Small-Ball Glass</span>`
         ].join(' • ');
       };
@@ -3090,12 +3090,12 @@
       const fmt5 = (u) => u.map(p => `<span style="display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:5px;padding:2px 7px;margin:2px;font-weight:800;color:#f8fafc;font-size:0.8rem;">${escapeHtml(p.label)}</span>`).join('');
       const minPills = plan.active.map((p, i) => `
         <span style="display:inline-flex;align-items:center;gap:4px;background:#0f172a;border:1px solid #26344d;border-radius:999px;padding:3px 9px;font-size:0.74rem;color:#e2e8f0;">
-          <strong>${escapeHtml(p.id)}</strong> <span style="color:#7dd3fc;font-weight:800;">~${plan.mins[i]}m</span>
+          <strong>${escapeHtml(p.label)}</strong> <span style="color:#7dd3fc;font-weight:800;">~${plan.mins[i]}m</span>
         </span>
       `).join('');
 
       const foulNote = plan.active.length <= 6
-        ? '🚨 6-Man Ironman Alert: Zero reach-ins! Keep 2H team fouls <7 and slow halfcourt tempo.'
+        ? '🚨 6-Man Turnout: Avoid reach-ins, keep 2H team fouls under 7, and control halfcourt pace.'
         : plan.isPlayoff
           ? '🏆 Playoff / Crunch Mode: Shorten bench in final 6:00 around active rim wall + 2 handlers; sub offense/defense on dead balls.'
           : `📅 Regular-Season Equity (${plan.active.length} Dressed): Sub 2–3 guys at ~13:30 & ~7:00 marks each half so everyone stays in rhythm without breaking spacing rules.`;
