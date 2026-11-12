@@ -767,19 +767,43 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     data["collab_live_tags"] = {}
                 if session_id not in data["collab_live_tags"]:
                     data["collab_live_tags"][session_id] = []
+                linked_key = str(body.get("linked_opp_play_key") or "").strip()
+                existing_idx = None
+                if linked_key:
+                    for idx_t, t_item in enumerate(data["collab_live_tags"][session_id]):
+                        if str(t_item.get("linked_opp_play_key") or "") == linked_key:
+                            existing_idx = idx_t
+                            break
+                tag_id = (
+                    data["collab_live_tags"][session_id][existing_idx]["id"]
+                    if existing_idx is not None
+                    else f"ctag_{int(time.time() * 1000)}"
+                )
+                play_sec = max(0, int(round(sec if linked_key else sec - 3.5)))
+                p_mm = int(play_sec) // 60
+                p_ss = int(play_sec) % 60
+                act_type = body.get("action_type", "3-pt FG Made")
                 tag_obj = {
-                    "id": f"ctag_{int(time.time() * 1000)}",
-                    "s": max(0, int(round(sec - 3.5))),
+                    "id": tag_id,
+                    "s": play_sec,
                     "splash_s": sec,
-                    "t": f"{mm:02d}:{ss:02d}",
+                    "t": f"{p_mm:02d}:{p_ss:02d}" if linked_key else f"{mm:02d}:{ss:02d}",
                     "player": body.get("player", "#2 Mohamed"),
-                    "action_type": body.get("action_type", "3-pt FG Made"),
-                    "pts_added": int(body.get("pts_added", 3 if "3-pt" in str(body.get("action_type", "")) else (2 if "2-pt" in str(body.get("action_type", "")) else 0))),
+                    "action_type": act_type,
+                    "pts_added": int(body.get("pts_added", 3 if "3-pt" in str(act_type) else (2 if "2-pt" in str(act_type) else 0))),
                     "contributor": (body.get("contributor") or "Crew Collab").strip(),
                     "note": (body.get("note") or "").strip(),
+                    "linked_opp_play_key": linked_key,
+                    "opp_offender": (body.get("opp_offender") or "").strip(),
+                    "score_str": (body.get("score_str") or "").strip(),
+                    "seg_label": (body.get("seg_label") or "").strip(),
+                    "hoop": (body.get("hoop") or "").strip(),
                     "created_at": now_iso,
                 }
-                data["collab_live_tags"][session_id].append(tag_obj)
+                if existing_idx is not None:
+                    data["collab_live_tags"][session_id][existing_idx] = tag_obj
+                else:
+                    data["collab_live_tags"][session_id].append(tag_obj)
                 log_entry = {
                     "timestamp": now_iso,
                     "session_id": session_id,
@@ -787,6 +811,27 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                     "event": "collab_tag_live",
                     "tag": tag_obj,
                 }
+
+            elif action == "remove_collab_live_tag":
+                session_id = str(body.get("session_id", "2026-10-31"))
+                tag_id = str(body.get("tag_id") or "").strip()
+                linked_key = str(body.get("linked_opp_play_key") or "").strip()
+                if "collab_live_tags" in data and isinstance(data["collab_live_tags"], dict) and session_id in data["collab_live_tags"]:
+                    before_list = data["collab_live_tags"][session_id]
+                    data["collab_live_tags"][session_id] = [
+                        t for t in before_list
+                        if not (
+                            (tag_id and str(t.get("id") or "") == tag_id)
+                            or (linked_key and str(t.get("linked_opp_play_key") or "") == linked_key)
+                        )
+                    ]
+                    log_entry = {
+                        "timestamp": now_iso,
+                        "session_id": session_id,
+                        "event": "remove_collab_live_tag",
+                        "tag_id": tag_id,
+                        "linked_opp_play_key": linked_key,
+                    }
 
             save_feedback(data, log_entry)
             payload = json.dumps(data).encode("utf-8")

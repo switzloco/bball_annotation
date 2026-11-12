@@ -716,6 +716,10 @@
     .play-card.disputed-play { border-left: 4px solid var(--red); }
     .play-card.verified-play { border-left: 4px solid var(--green); }
     .play-card.custom-added-play { border-left: 4px solid var(--blue); }
+    .play-card.charge-play {
+      border-left: 4px solid #fbbf24;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.12) 0%, rgba(16, 185, 129, 0.07) 100%);
+    }
 
     .play-main-row {
       display: grid;
@@ -755,6 +759,12 @@
     .tag.three { background: rgba(192,132,252,0.15); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
     .tag.miss { background: rgba(148,163,184,0.12); color: var(--muted); }
     .tag.def { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+    .tag.chg {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(16, 185, 129, 0.26) 100%);
+      color: #fde047;
+      border: 1px solid #fbbf24;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+    }
     .tag.special { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent); }
     .tag.ai-guess { background: var(--yellow-soft); color: #fde047; border: 1px solid rgba(234,179,8,0.4); }
     .tag.disputed { background: var(--red-soft); color: #fca5a5; border: 1px solid var(--red); }
@@ -806,6 +816,8 @@
     .mini-btn.ok-btn:hover { background: var(--green-soft); }
     .mini-btn.dl-btn { color: #7dd3fc; border-color: rgba(56,189,248,0.35); }
     .mini-btn.dl-btn:hover { background: var(--blue-soft); }
+    .mini-btn.chg-btn { color: #fde047; border-color: rgba(251,191,36,0.5); background: rgba(245,158,11,0.12); font-weight: 700; }
+    .mini-btn.chg-btn:hover { background: rgba(245,158,11,0.24); border-color: #fde047; color: #fff; }
 
     .notes-list { display: flex; flex-direction: column; gap: 5px; margin-top: 3px; }
     .note-item {
@@ -1803,6 +1815,7 @@
             <span class="collab-progress-pill" id="collabProgressPill">Loading calibration stats...</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <button class="collab-chip-btn" id="quickTagChargeBtn" onclick="openChargeTagInCollab()" style="border-color:rgba(251,191,36,0.65);background:rgba(245,158,11,0.16);color:#fde047;font-weight:800;" title="Majestic's scorer tablet doesn't have a Charge Drawn button! Tag any charge drawn here to promote it to CPSN Top 5 Plays &amp; +2.5 PPR!">🛡️ + Tag Charge Drawn</button>
             <button class="collab-chip-btn mo-live" id="quickTagMoBtn" onclick="quickTagMoAtCurrentTime()" title="One-tap tag a #2 Mo bucket, dime, steal, or block at the current video timestamp!">📍 + Tag #2 Mo Highlight Here</button>
             <button class="collab-chip-btn verify-ok" onclick="jumpToNextUnverifiedBucket()" id="nextUnverifiedBtn" title="Jump straight to the next LED-detected bucket that needs scorer confirmation">🎯 Next Unverified Bucket</button>
             <button class="collab-chip-btn" onclick="toggleCollabDrawer()" id="collabToggleBtn">🛠️ Calibration Controls ▾</button>
@@ -1810,12 +1823,13 @@
         </div>
         <div class="collab-drawer" id="collabStudioDrawer">
           <div style="font-size:0.73rem;color:#cbd5e1;margin-bottom:5px;" id="collabContextNote">
-            💡 <strong>How Collab Training Works:</strong> Physical LED Scoreboard AI recovered 100% of bucket timestamps even on zero-timestamp boxscores! Confirm scorers, reassign assists, or nudge shot sync (<code>-2s</code> / <code>+2s</code>) — every tap trains our cross-season model.
+            💡 <strong>How Collab Training Works:</strong> Confirm scorers, reassign assists, nudge shot sync (<code>-2s</code> / <code>+2s</code>), or tag <strong>🛡️ Charges Drawn</strong> (which Majestic's scorer iPad logs only as generic opponent fouls — tagging a Charge Drawn auto-promotes it into Top 5 Highlights &amp; adds <strong>+2.5 PPR</strong>!).
           </div>
           <div class="collab-controls-grid">
             <input type="text" id="collabContributorInput" placeholder="Your Name (e.g. Nick / Mo)" value="" style="max-width:145px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
             <select id="collabLivePlayerSelect" style="font-size:0.73rem;padding:4px 6px;max-width:175px;"></select>
             <select id="collabLiveActionSelect" style="font-size:0.73rem;padding:4px 6px;">
+              <option value="Charge Drawn">🛡️ Charge Drawn (Elite Defense!)</option>
               <option value="3-pt FG Made">🎯 3-Pointer Made</option>
               <option value="2-pt FG Made">🏀 2-PT Drive / Finish</option>
               <option value="Assist">🤝 Assist / Dime</option>
@@ -1832,7 +1846,7 @@
       <div class="missing-play-bar">
         <div class="missing-play-top">
           <span style="font-size:0.76rem;color:#cbd5e1;">
-            🕵️ <strong>Did the AI miss your bucket, assist, steal, or block?</strong> Pause at the moment & log it:
+            🕵️ <strong>Did the scorer/AI miss your 🛡️ charge drawn, bucket, assist, steal, or block?</strong> Pause at the moment &amp; log it:
           </span>
           <div style="display:flex;gap:6px;">
             <button class="blue-btn" onclick="openMissingPlayDrawer()">➕ Log Missing Play @ Current Time</button>
@@ -1848,6 +1862,7 @@
               <option value="Single (3v3)">Single Hoop (3v3 Half-Court)</option>
             </select>
             <select id="mpType">
+              <option value="CHG">🛡️ Charge Drawn (Elite Defense!)</option>
               <option value="MADE">Made Basket</option>
               <option value="3PT">3-Pointer</option>
               <option value="DEF">Steal / Block</option>
@@ -1967,7 +1982,8 @@
             <option value="MADE">✅ Made Baskets Only</option>
             <option value="3PT">🎯 3-Point Attempts & Makes</option>
             <option value="PUTBACK">💪 OREB & Putbacks</option>
-            <option value="DEF">🔒 Steals & Blocks</option>
+            <option value="CHG">🛡️ Charges Drawn (Elite Defense!)</option>
+            <option value="DEF">🔒 All Defensive Stops (Charges, Steals &amp; Blocks)</option>
           </select>
         </div>
         <div class="filter-row">
@@ -2579,46 +2595,64 @@
     function getAllPlaysSorted() {
       const calibratedBase = BASE_PLAYS.map(applyCollabCalibrationToPlay);
       const liveSessionTags = ((feedbackState.collab_live_tags || {})[activeSessionId] || []).map(lt => {
+        const isChargeTag = /charge/i.test(lt.action_type || '');
         const mappedTags = ['MADE', 'SPECIAL'];
         if (/3-pt/i.test(lt.action_type || '')) mappedTags.push('3PT');
-        if (/Steal|Block/i.test(lt.action_type || '')) mappedTags.splice(0, mappedTags.length, 'DEF', 'SPECIAL');
+        if (isChargeTag) {
+          mappedTags.splice(0, mappedTags.length, 'CHG', 'DEF', 'SPECIAL');
+        } else if (/Steal|Block/i.test(lt.action_type || '')) {
+          mappedTags.splice(0, mappedTags.length, 'DEF', 'SPECIAL');
+        }
+        const pLabel = lt.player || '#7 Nick Switzer';
+        const richDesc = isChargeTag
+          ? `🛡️ ELITE DEFENSIVE STOP — ${pLabel} plants outside the restricted arc and DRAWS THE CHARGE${lt.opp_offender ? ' on ' + lt.opp_offender : ''}! (Offensive Foul Turnover${lt.note ? ' • ' + lt.note : ''})`
+          : `${pLabel} — ${lt.action_type || 'Highlight'}${lt.note ? ': ' + lt.note : ''}`;
+        const playSec = Math.round(Number(lt.linked_opp_play_key ? (lt.s ?? lt.splash_s) : (lt.splash_s || lt.s || 0)));
         return {
-          g: 'H2',
+          g: (lt.seg_label && /1st Half/i.test(lt.seg_label)) ? 'H1' : (lt.seg_label && /Overtime/i.test(lt.seg_label)) ? 'OT' : 'H2',
           isCu: true,
-          segLabel: `🤝 Collab Live Tag by ${lt.contributor || 'Crew'}`,
-          t: lt.t || fmtSecMmSs(lt.splash_s || lt.s),
-          s: Math.round(Number(lt.splash_s || lt.s || 0)),
-          origS: Math.round(Number(lt.splash_s || lt.s || 0)),
-          playKey: lt.id || String(lt.s),
-          hoop: 'Live Tag',
-          player: lt.player || '#2 Mohamed',
+          segLabel: lt.seg_label ? `${lt.seg_label} • 🤝 Tagged by ${lt.contributor || 'Crew'}` : `🤝 Collab Live Tag by ${lt.contributor || 'Crew'}`,
+          t: lt.t || fmtSecMmSs(playSec),
+          s: playSec,
+          origS: playSec,
+          playKey: lt.id || String(playSec),
+          liveTagId: lt.id || '',
+          linkedOppKey: lt.linked_opp_play_key || '',
+          hoop: lt.hoop || 'Live Tag',
+          player: pLabel,
+          rawAction: lt.action_type || '',
           tags: mappedTags,
-          s12: 'LIVE TAG',
-          s23: `Added by ${lt.contributor || 'Crew'}`,
-          desc: `${lt.player || '#2 Mohamed'} — ${lt.action_type || 'Highlight'}${lt.note ? ': ' + lt.note : ''}`,
+          s12: lt.score_str || (isChargeTag ? '🛡️ CHG' : 'LIVE TAG'),
+          s23: isChargeTag ? `+2.5 PPR • Tagged by ${lt.contributor || 'Crew'}` : `Added by ${lt.contributor || 'Crew'}`,
+          desc: richDesc,
           isCustom: true,
           isCollabGold: true
         };
       });
 
-      if (activeSessionId !== '2026-10-31') {
-        return [...calibratedBase, ...liveSessionTags].sort((a, b) => a.s - b.s);
-      }
-      const customs = (feedbackState.custom_plays || []).map(cp => ({
-        g: cp.g || 'G2',
-        segLabel: 'Player Added',
-        t: cp.t,
-        s: cp.s,
-        origS: cp.s,
-        playKey: String(cp.s),
-        hoop: cp.hoop || 'Near',
-        player: cp.player,
-        tags: [cp.event_type || 'MADE'],
-        s12: 'Custom',
-        s23: 'Added by ' + (cp.author || 'Player'),
-        desc: cp.desc,
-        isCustom: true
-      }));
+      const customs = (feedbackState.custom_plays || [])
+        .filter(cp => (cp.session_id || '2026-10-31') === activeSessionId)
+        .map(cp => {
+          const evType = cp.event_type || 'MADE';
+          const cTags = evType === 'CHG' ? ['CHG', 'DEF', 'SPECIAL'] : [evType];
+          return {
+            g: cp.g || 'G2',
+            isCu: true,
+            segLabel: 'Player Added',
+            t: cp.t,
+            s: cp.s,
+            origS: cp.s,
+            playKey: String(cp.s),
+            hoop: cp.hoop || 'Near',
+            player: cp.player,
+            tags: cTags,
+            s12: evType === 'CHG' ? '🛡️ CHG' : 'Custom',
+            s23: 'Added by ' + (cp.author || 'Player'),
+            desc: evType === 'CHG' && !/charge/i.test(cp.desc || '') ? `🛡️ CHARGE DRAWN — ${cp.desc}` : cp.desc,
+            isCustom: true
+          };
+        });
+
       return [...calibratedBase, ...customs, ...liveSessionTags].sort((a, b) => a.s - b.s);
     }
 
@@ -2646,7 +2680,31 @@
       if (p.tags.includes('FT') || /free throw/i.test(p.desc || '')) {
         return !!p.isClutchFt;
       }
-      return p.tags.includes('MADE') || p.tags.includes('DEF') || p.tags.includes('SPECIAL');
+      return p.tags.includes('CHG') || p.tags.includes('MADE') || p.tags.includes('DEF') || p.tags.includes('SPECIAL');
+    }
+
+    function getEffectiveTop5Plays() {
+      const chargePlays = getAllPlaysSorted().filter(p => p.isCu !== false && p.tags && p.tags.includes('CHG'));
+      if (!chargePlays.length) return TOP_5_PLAYS;
+      const existingSecs = new Set(TOP_5_PLAYS.map(tp => Number(tp.s)));
+      const promotedCharges = chargePlays
+        .filter(cp => !existingSecs.has(Number(cp.s)))
+        .map(cp => ({
+          rank: '#1',
+          t: cp.t,
+          s: cp.s,
+          player: cp.player,
+          tags: ['CHG', 'DEF', 'SPECIAL'],
+          desc: cp.desc,
+          title: `${cp.desc}${cp.s12 && cp.s12 !== '🛡️ CHG' ? ' (' + cp.s12 + ')' : ''}`
+        }));
+      if (!promotedCharges.length) return TOP_5_PLAYS;
+      // Keep any walk-off / OT game-winner at #1 if present, otherwise lead with Elite Charge Drawn!
+      const hasGameWinnerAt1 = TOP_5_PLAYS.length > 0 && /game-winner|walk-off|buzzer/i.test(TOP_5_PLAYS[0].title || '');
+      const combined = hasGameWinnerAt1
+        ? [TOP_5_PLAYS[0], ...promotedCharges, ...TOP_5_PLAYS.slice(1)]
+        : [...promotedCharges, ...TOP_5_PLAYS];
+      return combined.slice(0, 5).map((item, idx) => ({ ...item, rank: `#${idx + 1}` }));
     }
 
     function filterCuTeamHighlights() {
@@ -2656,10 +2714,12 @@
       }
       renderPlays();
       const cuHighlights = getAllPlaysSorted().filter(p => p.isCu && isHighlightEligiblePlay(p));
-      // Ensure non-FT field goals/stops always lead the reel; any late-game clutch FTs stay at the end
+      // Lead with Elite Charges Drawn (CHG) & non-FT buckets/stops; late-game clutch FTs stay at the end
       const nonFt = cuHighlights.filter(p => !p.tags.includes('FT'));
+      const chargesFirst = nonFt.filter(p => p.tags.includes('CHG'));
+      const otherNonFt = nonFt.filter(p => !p.tags.includes('CHG'));
       const clutchFt = cuHighlights.filter(p => p.tags.includes('FT'));
-      const orderedHighlights = [...nonFt, ...clutchFt];
+      const orderedHighlights = [...chargesFirst, ...otherNonFt, ...clutchFt];
       if (orderedHighlights.length > 0) {
         autoReelQueue = orderedHighlights.slice(0, 15).map(p => ({ s: p.s, t: p.t, label: `${p.player} — ${p.desc}` }));
         autoReelIdx = 0;
@@ -3358,6 +3418,7 @@
               <span style="color:#94a3b8;font-size:0.74rem;margin-right:4px;">#${idx + 1}</span>
               ${escapeHtml(p.player)}
               ${p.dunks > 0 ? `<span class="tag special" style="margin-left:6px;background:#7c3aed;color:#fff;font-size:0.65rem;">🔨 ${p.dunks}× DUNK</span>` : ''}
+              ${(p.charges_drawn || 0) > 0 ? `<span class="tag chg" style="margin-left:6px;font-size:0.65rem;">🛡️ ${p.charges_drawn}× CHG</span>` : ''}
             </td>
             <td style="padding:8px 6px;text-align:center;color:#cbd5e1;">${p.gp}</td>
             <td style="padding:8px 6px;text-align:center;font-weight:900;color:#fde68a;">${p.pts} <span style="font-size:0.72rem;color:#94a3b8;">(${p.ppg})</span></td>
@@ -3465,6 +3526,9 @@
 
           <div class="scouting-panel">
             <h3><span>📊 Player Efficiency &amp; Shot Profile Leaderboard (Oct 4 – Nov 1)</span></h3>
+            <div style="font-size:0.76rem;color:#fde68a;background:rgba(245,158,11,0.12);border:1px solid rgba(251,191,36,0.38);border-radius:6px;padding:7px 10px;margin-bottom:8px;line-height:1.45;">
+              🛡️ <strong>Elite Defensive Highlight Rule — Charges Drawn (<code>CHG</code> = +2.5 PPR):</strong> Majestic's scorer iPad logs charges only as generic opponent fouls. Any <strong>🛡️ Charge Drawn</strong> tagged in the Film Room or converted in 1 click from an opponent foul now earns <strong>+2.5 PPR</strong> (above Steals/Blocks at +2.0 PPR) and auto-promotes into <strong>CPSN Top 5 Plays &amp; Team Highlight Reels</strong>!
+            </div>
             <div style="overflow-x:auto;">
               <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
                 <thead>
@@ -3776,7 +3840,12 @@
         if (rawTags.includes('MAKE')) mappedTags.push('MADE');
         if (rawTags.includes('3PT')) mappedTags.push('3PT');
         if (rawTags.includes('FT') || /free throw/i.test(ev.action || '')) mappedTags.push('FT');
-        if (rawTags.includes('STL') || rawTags.includes('BLK')) mappedTags.push('DEF');
+        const isChargeEv = rawTags.includes('CHG') || /charge/i.test(ev.action || '') || /took a charge|draws the charge|charge drawn/i.test(ev.desc || '');
+        if (isChargeEv) {
+          mappedTags.push('CHG', 'DEF', 'SPECIAL');
+        } else if (rawTags.includes('STL') || rawTags.includes('BLK')) {
+          mappedTags.push('DEF');
+        }
         if (rawTags.includes('REB')) mappedTags.push('PUTBACK');
         if (mappedTags.length === 0) mappedTags.push('MISS');
         const isFt = mappedTags.includes('FT');
@@ -3797,6 +3866,7 @@
           collabNeedsVerify: rawTags.includes('COLLAB_NEEDS_VERIFY') || ev.isMajesticVerified === false,
           hoop: ev.hoop_side === 'right' ? 'Right Hoop' : 'Left Hoop',
           player: ev.player,
+          rawAction: ev.action || '',
           assistPlayer: ev.assist_player || '',
           avatar: ev.avatar || '',
           tags: mappedTags,
@@ -3810,14 +3880,14 @@
       // Build TOP_5_PLAYS featuring diverse Campbell United / featured team players
       const teamTop5 = (gData.top5_team_events && gData.top5_team_events.length > 0)
         ? gData.top5_team_events
-        : (gData.events || []).filter(ev => ev.is_cu && (ev.pts_added >= 2 || ev.action === 'Steal' || ev.action === 'Block')).slice(0, 5);
+        : (gData.events || []).filter(ev => ev.is_cu && (ev.action === 'Charge Drawn' || (ev.tags || []).includes('CHG') || ev.pts_added >= 2 || ev.action === 'Steal' || ev.action === 'Block')).slice(0, 5);
 
       TOP_5_PLAYS = teamTop5.slice(0, 5).map((ev, idx) => ({
         rank: `#${idx + 1}`,
         t: ev.t,
         s: ev.s,
         player: ev.player,
-        tags: ev.pts_added === 3 ? ['MADE', '3PT'] : ev.pts_added === 2 ? ['MADE'] : ['DEF'],
+        tags: (ev.action === 'Charge Drawn' || (ev.tags || []).includes('CHG')) ? ['CHG', 'DEF', 'SPECIAL'] : ev.pts_added === 3 ? ['MADE', '3PT'] : ev.pts_added === 2 ? ['MADE'] : ['DEF'],
         desc: ev.desc,
         title: `${ev.desc} (${ev.cu_score}–${ev.opp_score})`
       }));
@@ -3860,7 +3930,7 @@
 
       const cuHighList = (gData.cu_highlight_events && gData.cu_highlight_events.length > 0)
         ? gData.cu_highlight_events
-        : (gData.events || []).filter(e => e.is_cu && (e.pts_added >= 2 || e.action === 'Steal' || e.action === 'Block')).slice(0, 14);
+        : (gData.events || []).filter(e => e.is_cu && (e.action === 'Charge Drawn' || (e.tags || []).includes('CHG') || e.pts_added >= 2 || e.action === 'Steal' || e.action === 'Block')).slice(0, 14);
 
       const hasOt = BASE_PLAYS.some(p => p.g === 'OT');
       if (gSelect) {
@@ -3896,7 +3966,7 @@
                 ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-10-18_SB_vs_Tandoori_Eugene29_Highlights.mp4" target="_blank" download="2026-10-18_SB_vs_Tandoori_Eugene29_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">🔥 Download #99 Eugene Kim 29-PT (5× 3PM) Reel MP4 (5 REB / 6 AST / 1 STL / 1 BLK)</a>`
                 : '';
         const teamPills = cuHighList.slice(0, 12).map(ev => {
-          const shortAct = ev.pts_added === 3 ? '🎯 3PT' : ev.pts_added === 2 ? '🏀 2PT' : ev.action === 'Steal' ? '🔒 STL' : ev.action === 'Block' ? '🚫 BLK' : '🔥 FT';
+          const shortAct = (ev.action === 'Charge Drawn' || (ev.tags || []).includes('CHG')) ? '🛡️ CHG' : ev.pts_added === 3 ? '🎯 3PT' : ev.pts_added === 2 ? '🏀 2PT' : ev.action === 'Steal' ? '🔒 STL' : ev.action === 'Block' ? '🚫 BLK' : '🔥 FT';
           return `<span class="chapter-pill" style="border-color:#fde68a;color:#fde68a;" onclick="seekTo(${ev.s}, true)">${ev.t} ${escapeHtml(ev.player)} ${shortAct} (${ev.cu_score}-${ev.opp_score})</span>`;
         }).join('');
         chapterBar.innerHTML = `
@@ -3962,6 +4032,22 @@
       updateTrainingSummaryCounters();
       if (typeof updateCollabStudioUI === 'function') updateCollabStudioUI();
       renderTop5();
+      const blTrack = document.getElementById('bottomlineTrack');
+      const effTop5 = getEffectiveTop5Plays();
+      if (blTrack && effTop5.length > 0 && activeMajesticGame) {
+        blTrack.innerHTML = effTop5.map(tp =>
+          `<span class="ticker-item" onclick="seekTo(${tp.s}, true)"><strong>${escapeHtml(tp.rank)} (${escapeHtml(tp.t)})</strong> ${escapeHtml(tp.desc)}</span>`
+        ).join('<span class="ticker-sep">•</span>');
+      }
+      const gSelect = document.getElementById('gameFilter');
+      if (gSelect && activeMajesticGame) {
+        const cuOpt = Array.from(gSelect.options).find(o => o.value === 'CU_HIGHLIGHTS');
+        if (cuOpt) {
+          const liveCuHighCount = getAllPlaysSorted().filter(p => p.isCu && isHighlightEligiblePlay(p)).length;
+          const tName = (activeMajesticGame.config && activeMajesticGame.config.cu_team_name) || 'Campbell United';
+          cuOpt.textContent = `🏀 ${tName} Highlights (${liveCuHighCount})`;
+        }
+      }
       renderCrewMasterRoster();
       renderDropdownsAndBoxScore();
       renderPlays();
@@ -4028,7 +4114,8 @@
       const tags = playObj.tags || [];
       const desc = playObj.desc || '';
       let action = 'play';
-      if (tags.includes('PUTBACK')) action = 'putback_layup';
+      if (tags.includes('CHG') || /took a charge|draws the charge|charge drawn/i.test(desc)) action = 'charge_drawn';
+      else if (tags.includes('PUTBACK')) action = 'putback_layup';
       else if (tags.includes('3PT') && tags.includes('MADE')) action = /pull-up/i.test(desc) ? 'pullup_3pt' : '3pt';
       else if (tags.includes('3PT')) action = 'missed_3pt';
       else if (tags.includes('DEF') && tags.includes('MADE')) action = 'steal_and_score';
@@ -4049,7 +4136,8 @@
 
     function renderTop5() {
       const list = document.getElementById('top5List');
-      list.innerHTML = TOP_5_PLAYS.map(tp => {
+      const effectiveTop5 = getEffectiveTop5Plays();
+      list.innerHTML = effectiveTop5.map(tp => {
         const fb = (feedbackState.plays || {})[String(tp.s)] || { fire_votes: 0 };
         const clipName = buildClipFilename(tp, tp.s);
         return `
@@ -4224,20 +4312,37 @@
       const mpPlayer = document.getElementById('mpPlayer');
       mpPlayer.innerHTML = PLAYERS.map(p => `<option value="${p.replace(/"/g, '&quot;')}">${displayPlayerName(p)}</option>`).join('');
 
+      const allSessionPlays = getAllPlaysSorted();
+      const chgCountsByPlayer = {};
+      allSessionPlays.forEach(sp => {
+        if (sp.tags && sp.tags.includes('CHG') && sp.player) {
+          chgCountsByPlayer[sp.player] = (chgCountsByPlayer[sp.player] || 0) + 1;
+        }
+      });
+
       const tbody = document.getElementById('boxScoreBody');
       tbody.innerHTML = BOX_SCORE.map(r => {
         const mapped = (feedbackState.crew_roster_map || {})[r.player];
         const traitsBadge = mapped && mapped.traits ? `<div style="font-size:0.68rem;color:var(--blue);">Traits: ${escapeHtml(mapped.traits)}</div>` : '';
+        const chgCount = chgCountsByPlayer[r.player] || 0;
+        const chgBadge = chgCount > 0 ? ` <span class="tag chg" style="font-size:0.64rem;vertical-align:middle;">🛡️ ${chgCount}× CHG</span>` : '';
+        let pprDisplay = r.pts23;
+        if (chgCount > 0 && /^PPR:\s*([\d.-]+)/.test(String(r.pts23 || ''))) {
+          const basePpr = parseFloat(RegExp.$1);
+          if (!isNaN(basePpr)) {
+            pprDisplay = `PPR: ${(basePpr + chgCount * 2.5).toFixed(1)} (+${(chgCount * 2.5).toFixed(1)} CHG)`;
+          }
+        }
         return `
           <tr class="player-row" onclick="filterByPlayer('${r.player.replace(/'/g, "\\'")}')">
             <td style="font-weight:700;color:#fff;">
-              ${escapeHtml(displayPlayerName(r.player))}
+              ${escapeHtml(displayPlayerName(r.player))}${chgBadge}
               <span style="font-size:0.68rem;color:var(--accent);">[Audit Plays]</span>
               ${traitsBadge}
             </td>
             <td style="color:var(--muted);">${r.games}</td>
             <td style="font-weight:700;color:var(--accent);">${r.pts12}</td>
-            <td>${r.pts23}</td>
+            <td>${pprDisplay}</td>
             <td>${r.fg}</td>
             <td>${r.fg2}</td>
             <td>${r.fg3}</td>
@@ -4316,6 +4421,7 @@
 
       postFeedback({
         action: 'add_missing_play',
+        session_id: activeSessionId,
         video_seconds: sec,
         segment,
         hoop,
@@ -4438,7 +4544,8 @@
         if (type === 'MADE' && !p.tags.includes('MADE')) return false;
         if (type === '3PT' && !p.tags.includes('3PT')) return false;
         if (type === 'PUTBACK' && !p.tags.includes('PUTBACK')) return false;
-        if (type === 'DEF' && !p.tags.includes('DEF')) return false;
+        if (type === 'CHG' && !p.tags.includes('CHG')) return false;
+        if (type === 'DEF' && !p.tags.includes('DEF') && !p.tags.includes('CHG')) return false;
         if (q) {
           const dispName = displayPlayerName(p.player).toLowerCase();
           const inNotes = (fb.notes || []).some(n => (n.comment || '').toLowerCase().includes(q) || (n.author || '').toLowerCase().includes(q));
@@ -4472,11 +4579,13 @@
           ? `<img src="${escapeHtml(p.avatar)}" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid var(--accent);vertical-align:middle;margin-right:4px;" onerror="this.style.display='none'" />`
           : '';
 
+        const hasChgTag = p.tags.includes('CHG');
         const badges = p.tags.map(t => {
+          if (t === 'CHG') return `<span class="tag chg">🛡️ CHARGE DRAWN</span>`;
           if (t === 'MADE') return `<span class="tag made">MADE</span>`;
           if (t === '3PT') return `<span class="tag three">3PT</span>`;
           if (t === 'PUTBACK') return `<span class="tag made">OREB PUTBACK</span>`;
-          if (t === 'DEF') return `<span class="tag def">STL / BLK</span>`;
+          if (t === 'DEF') return hasChgTag ? '' : `<span class="tag def">STL / BLK</span>`;
           if (t === 'SPECIAL') return `<span class="tag special">HIGHLIGHT</span>`;
           return `<span class="tag miss">MISS</span>`;
         }).join('');
@@ -4502,8 +4611,21 @@
           `;
         }).join('');
 
+        const oppPlayKey = String(p.playKey || p.s);
+        const sessionLiveTags = (feedbackState.collab_live_tags || {})[activeSessionId] || [];
+        const claimedChargeTag = (!p.isCu && activeMajesticGame)
+          ? sessionLiveTags.find(lt => String(lt.linked_opp_play_key || '') === oppPlayKey && /charge/i.test(lt.action_type || ''))
+          : null;
+        const isOppFoulOrTov = Boolean(activeMajesticGame && !p.isCu && /^(Foul|Turnover)$/i.test(p.rawAction || ''));
+        const cuRosterChoices = activeMajesticGame
+          ? ((activeMajesticGame.config && activeMajesticGame.config.active_roster && activeMajesticGame.config.active_roster.length)
+              ? activeMajesticGame.config.active_roster
+              : BOX_SCORE.filter(r => r.isCu).map(r => r.player))
+          : [];
+        const heroTeamShort = (activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.cu_team_name) || 'CU';
+
         return `
-          <div class="play-card ${p.isCustom ? 'custom-added-play' : isDisputed ? 'disputed-play' : isVerified ? 'verified-play' : ''}" id="play-s-${p.s}">
+          <div class="play-card ${hasChgTag ? 'charge-play' : p.isCustom ? 'custom-added-play' : isDisputed ? 'disputed-play' : isVerified ? 'verified-play' : ''}" id="play-s-${p.s}">
             <div class="play-main-row" onclick="seekTo(${p.s}, true)">
               <div class="play-time">${p.t}</div>
               <div class="play-body">
@@ -4530,9 +4652,22 @@
                 <button class="mini-btn flag-btn" onclick="toggleNoteForm(${p.s})">👕 Scorer / Note (${notes.length})</button>
                 <button class="mini-btn" onclick="votePlay(${p.s}, 'fire')">🔥 (${fb.fire_votes || 0})</button>
                 <button class="mini-btn wa-btn" onclick="shareToWhatsApp(${p.s}, this)" title="Share play to WhatsApp">📲 WhatsApp</button>
+                ${p.liveTagId ? `<button class="mini-btn flag-btn" onclick="removeCollabLiveTag('${escapeHtml(p.liveTagId)}')" title="Remove this live tag">✕ Undo Tag</button>` : ''}
               </div>
               <a class="mini-btn dl-btn" href="/api/clip?game=${encodeURIComponent(activeSessionId)}&s=${p.s}&dur=11&name=${encodeURIComponent(buildClipFilename(p, p.s))}" download="${buildClipFilename(p, p.s)}.mp4">⬇️ Clip MP4 (11s)</a>
             </div>
+            ${isOppFoulOrTov ? `
+            <div class="play-collab-inline" style="background:rgba(245,158,11,0.08);border-top:1px dashed rgba(251,191,36,0.35);padding-top:5px;margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              ${claimedChargeTag
+                ? `<span style="font-size:0.72rem;color:#fde047;font-weight:800;">🛡️ Upgraded to ELITE CHARGE DRAWN (+2.5 PPR): <strong>${escapeHtml(claimedChargeTag.player)}</strong> took the charge on ${escapeHtml(p.player)}!</span>
+                   <button class="mini-btn flag-btn" onclick="removeCollabLiveTag('${escapeHtml(claimedChargeTag.id)}')">✕ Undo</button>`
+                : `<span style="font-size:0.7rem;color:#fde68a;font-weight:700;">🛡️ Offensive Foul / Charge?</span>
+                   <select class="chg-defender-select" style="font-size:0.7rem;padding:2px 6px;max-width:215px;border-color:rgba(251,191,36,0.5);color:#fde047;background:#111827;" onchange="if(this.value) claimChargeFromOppFoul('${escapeHtml(oppPlayKey)}', ${p.s}, '${escapeHtml(p.player).replace(/'/g, "\\'")}', '${escapeHtml(p.s12).replace(/'/g, "\\'")}', '${escapeHtml(p.segLabel).replace(/'/g, "\\'")}', '${escapeHtml(p.hoop).replace(/'/g, "\\'")}', this.value)">
+                     <option value="">⚡ 1-Click: Credit ${escapeHtml(heroTeamShort)} Charge Drawn...</option>
+                     ${cuRosterChoices.map(rp => `<option value="${escapeHtml(rp)}">🛡️ ${escapeHtml(rp)} (Took the Charge!)</option>`).join('')}
+                   </select>`
+              }
+            </div>` : ''}
             ${(p.collabNeedsVerify || activeSessionId.includes('_C7_')) ? `
             <div class="play-collab-inline">
               <span style="font-size:0.7rem;color:#6ee7b7;font-weight:700;">🤝 Who scored @ ${p.t}?</span>
@@ -4555,6 +4690,7 @@
                   <option value="Wrong Player ID">Wrong Player ID</option>
                   <option value="Shot Make/Miss Wrong">Shot Make/Miss Wrong</option>
                   <option value="Missed My Assist!">Missed My Assist!</option>
+                  <option value="Took a Charge! (Credit CHG)">🛡️ Took a Charge! (Credit CHG Highlight)</option>
                   <option value="Missed My Steal/Block!">Missed My Steal/Block!</option>
                   <option value="Missed Foul Call">Missed Foul Call</option>
                   <option value="Segment / Game Boundary Note">Segment / Game Boundary Note</option>
@@ -4793,7 +4929,8 @@
     let autoReelLabel = '';
 
     function startTop5Reel() {
-      autoReelQueue = TOP_5_PLAYS.map(tp => ({ s: tp.s, t: tp.t, label: `${tp.rank} ${displayPlayerName(tp.player)}` }));
+      const effTop5 = getEffectiveTop5Plays();
+      autoReelQueue = effTop5.map(tp => ({ s: tp.s, t: tp.t, label: `${tp.rank} ${displayPlayerName(tp.player)}` }));
       autoReelIdx = 0;
       autoReelLabel = 'CPSN TOP 5 COUNTDOWN';
       playCurrentReelItem();
@@ -4805,9 +4942,10 @@
         (p.player === visualOutfit || canonicalPlayerName(p.player).toLowerCase() === crewName.toLowerCase()) &&
         isHighlightEligiblePlay(p)
       );
-      // Put field goals & defensive stops first so a free throw never leads the reel
+      // Lead with Elite Charges Drawn (CHG), then field goals & steals/blocks, with any FTs last
       const highlights = [
-        ...rawHighlights.filter(p => !p.tags.includes('FT')),
+        ...rawHighlights.filter(p => p.tags.includes('CHG')),
+        ...rawHighlights.filter(p => !p.tags.includes('FT') && !p.tags.includes('CHG')),
         ...rawHighlights.filter(p => p.tags.includes('FT'))
       ];
       if (highlights.length === 0) {
@@ -4976,10 +5114,13 @@
       const gameParam = activeSessionId && activeSessionId !== '2026-10-31' ? `game=${encodeURIComponent(activeSessionId)}&` : '';
       let waText = '';
       if (typeof seconds === 'number' && !isNaN(seconds)) {
-        const topPlay = TOP_5_PLAYS.find(tp => tp.s === seconds);
+        const effTop5 = getEffectiveTop5Plays();
+        const topPlay = effTop5.find(tp => tp.s === seconds);
         const playObj = getAllPlaysSorted().find(p => p.s === seconds);
         const deepLink = `${baseOrigin}/?${gameParam}play=${seconds}`;
-        if (topPlay) {
+        if (playObj && playObj.tags && playObj.tags.includes('CHG')) {
+          waText = `🛡️ *CPSN ELITE DEFENSIVE HIGHLIGHT — CHARGE DRAWN (@ ${playObj.t})*\n*${displayPlayerName(playObj.player)}:* ${playObj.desc}\n\n▶️ *Watch w/ 5s Setup Pre-Roll:*\n${deepLink}`;
+        } else if (topPlay) {
           waText = `🏀 *CPSN TOP PLAY (${topPlay.rank} @ ${topPlay.t})*\n*${displayPlayerName(topPlay.player)}:* ${topPlay.title}\n\n▶️ *Watch w/ 5s Setup Pre-Roll:*\n${deepLink}`;
         } else if (playObj) {
           waText = `🏀 *CPSN Highlight (@ ${playObj.t} — ${playObj.segLabel})*\n*${displayPlayerName(playObj.player)}:* ${playObj.desc}\n\n▶️ *Watch Play:*\n${deepLink}`;
@@ -5092,7 +5233,7 @@
       if (nameInput && !nameInput.value && savedName) nameInput.value = savedName;
 
       const allPlays = getAllPlaysSorted();
-      const cuBuckets = allPlays.filter(p => p.isCu !== false && p.tags && (p.tags.includes('MADE') || p.tags.includes('DEF')));
+      const cuBuckets = allPlays.filter(p => p.isCu !== false && p.tags && (p.tags.includes('CHG') || p.tags.includes('MADE') || p.tags.includes('DEF')));
       const verifiedBuckets = cuBuckets.filter(p => p.isCollabGold || (!p.collabNeedsVerify && p.isMajesticVerified));
       const needsCount = Math.max(0, cuBuckets.length - verifiedBuckets.length);
       if (pill) {
@@ -5221,13 +5362,54 @@
       });
     }
 
+    function openChargeTagInCollab() {
+      const dr = document.getElementById('collabStudioDrawer');
+      if (dr && !dr.classList.contains('open')) dr.classList.add('open');
+      const actSel = document.getElementById('collabLiveActionSelect');
+      if (actSel) actSel.value = 'Charge Drawn';
+      if (mode === 'local' && videoEl && !videoEl.paused) videoEl.pause();
+      const noteEl = document.getElementById('collabLiveNoteInput');
+      if (noteEl) {
+        noteEl.placeholder = 'Optional charge note (e.g. planted outside arc vs #9 Diallo drive)...';
+        noteEl.focus();
+      }
+    }
+
+    function claimChargeFromOppFoul(oppPlayKey, sec, oppOffender, scoreStr, segLabel, hoop, cuDefender) {
+      if (!cuDefender) return;
+      postFeedback({
+        action: 'collab_tag_live',
+        session_id: activeSessionId,
+        video_seconds: sec,
+        player: cuDefender,
+        action_type: 'Charge Drawn',
+        pts_added: 0,
+        linked_opp_play_key: String(oppPlayKey),
+        opp_offender: oppOffender,
+        score_str: scoreStr,
+        seg_label: segLabel,
+        hoop: hoop,
+        contributor: getCollabContributor(),
+        note: 'Converted from opponent foul/turnover in Play-by-Play'
+      });
+    }
+
+    function removeCollabLiveTag(tagId) {
+      if (!tagId) return;
+      postFeedback({
+        action: 'remove_collab_live_tag',
+        session_id: activeSessionId,
+        tag_id: String(tagId)
+      });
+    }
+
     function submitCollabLiveTag() {
       const sec = Math.max(1, Math.round(videoEl.currentTime || 0));
       const playerSel = document.getElementById('collabLivePlayerSelect');
       const actSel = document.getElementById('collabLiveActionSelect');
       const noteEl = document.getElementById('collabLiveNoteInput');
-      const player = (playerSel && playerSel.value) || '#2 Mohamed';
-      const action_type = (actSel && actSel.value) || '2-pt FG Made';
+      const player = (playerSel && playerSel.value) || '#7 Nick Switzer';
+      const action_type = (actSel && actSel.value) || 'Charge Drawn';
       const note = (noteEl && noteEl.value.trim()) || '';
       if (noteEl) noteEl.value = '';
       postFeedback({

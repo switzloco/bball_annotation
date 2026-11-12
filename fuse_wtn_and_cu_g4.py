@@ -38,10 +38,12 @@ def build_box_tables(boxscore, our_team, opp_team, our_rec, opp_rec):
             ast = int(p.get("assists") or 0)
             stl = int(p.get("steals") or 0)
             blk = int(p.get("blocks") or 0)
+            chg = int(p.get("charges_drawn") or p.get("charges") or 0)
             fls = int(p.get("fouls") or 0)
             tfls = int(p.get("techs") or p.get("tech_fouls") or 0)
             tos = int(p.get("turnovers") or 0)
-            ppr = round(pts + reb * 1.2 + ast * 1.5 + stl * 2.0 + blk * 2.0 - tos * 1.0 - fls * 0.5, 1)
+            # Charges Drawn carry +2.5 PPR (forced turnover + offensive foul on opponent scorer)
+            ppr = round(pts + reb * 1.2 + ast * 1.5 + stl * 2.0 + blk * 2.0 + chg * 2.5 - tos * 1.0 - fls * 0.5, 1)
             vals = [pts, ftm, fgm, twopm, threepm, reb, ast, stl, blk, fls, tfls, tos]
             for idx_v, v in enumerate(vals):
                 tot[idx_v] += v
@@ -76,6 +78,8 @@ def stat_action_label(s):
         return "Steal"
     if st in ("block", "blk"):
         return "Block"
+    if st in ("charge", "charge_drawn", "chg"):
+        return "Charge Drawn"
     if st in ("turnover", "to"):
         return "Turnover"
     if st == "foul":
@@ -99,6 +103,8 @@ def norm_key_type(s):
         return "stl"
     if st == "block":
         return "blk"
+    if st in ("charge", "charge_drawn", "chg"):
+        return "chg"
     return st
 
 def fuse_majestic_game(cfg):
@@ -213,6 +219,8 @@ def fuse_majestic_game(cfg):
                 desc = f"{player} comes away with the defensive steal! ({team}, {gclock} {per_label})"
             elif ktype == "blk":
                 desc = f"{player} swats the shot attempt! ({team}, {gclock} {per_label})"
+            elif ktype == "chg":
+                desc = f"🛡️ ELITE DEFENSIVE STOP — {player} plants outside the restricted arc and DRAWS THE CHARGE! ({team}, {gclock} {per_label})"
             elif ktype == "ast":
                 desc = f"{player} dishes an assist ({team}, {gclock} {per_label})"
             else:
@@ -233,6 +241,8 @@ def fuse_majestic_game(cfg):
             tags.append("STL")
         elif ktype == "blk":
             tags.append("BLK")
+        elif ktype == "chg":
+            tags.extend(["CHG", "DEF", "SPECIAL"])
         if assist_player:
             tags.append("AST")
         if "#2 Mo" in player or (assist_player and "#2 Mo" in assist_player):
@@ -279,14 +289,19 @@ def fuse_majestic_game(cfg):
                 if len(top5) == 5:
                     break
     else:
-        cu_highlights = [e for e in events if e["is_cu"] and (e["pts_added"] >= 2 or e["action"] in ("Block", "Steal"))]
+        cu_highlights = [e for e in events if e["is_cu"] and (e["pts_added"] >= 2 or e["action"] in ("Charge Drawn", "Block", "Steal"))]
         if cfg.get("top5_statlog_ids"):
             by_sid = {e.get("statlog_id"): e for e in events}
             top5 = [by_sid[sid] for sid in cfg["top5_statlog_ids"] if sid in by_sid]
         else:
+            chg_evs = [e for e in cu_highlights if e["action"] == "Charge Drawn" or "CHG" in e.get("tags", [])]
             ot_3s = [e for e in cu_highlights if e["period"] in ("OT", "Overtime") and e["pts_added"] == 3]
             reg_3s = [e for e in cu_highlights if e["pts_added"] == 3 and e not in ot_3s]
-            top5 = (ot_3s + reg_3s + cu_highlights)[:5]
+            dedup_top = []
+            for cand in (ot_3s + chg_evs + reg_3s + cu_highlights):
+                if cand not in dedup_top:
+                    dedup_top.append(cand)
+            top5 = dedup_top[:5]
 
     box_tables = build_box_tables(boxscore, our_team, opp_team, cfg["cu_record"], cfg["opp_record"])
 
