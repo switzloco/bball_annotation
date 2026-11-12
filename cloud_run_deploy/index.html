@@ -3148,7 +3148,7 @@
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
             <div>
               <div style="font-family:var(--font-display);font-size:1.02rem;font-weight:900;color:#fde68a;letter-spacing:0.03em;text-transform:uppercase;">
-                🏀 Live Sunday Roll-Call, Season Mode &amp; Matchup Builder (No Static 90s Starting 5s!)
+                🏀 Sunday Roll-Call &amp; Matchup Rotation Builder
               </div>
               <div style="font-size:0.75rem;color:#94a3b8;">
                 Tap who's actually at The Grove on Sunday + choose Regular Season vs. Playoffs &amp; Latto's live lineup:
@@ -3216,113 +3216,6 @@
       else if (kind === 'matchup') sundayBuilderState.matchupMode = val;
       const out = document.getElementById('sundayPlanOutput');
       if (out) out.innerHTML = renderSundayPlanBodyHtml();
-    }
-
-    function renderSystemDataHygienePanel(sdh) {
-      if (!sdh) return '';
-      const guardrailsHtml = (sdh.guardrails || []).map(g => `
-        <div style="background:#0d1526;border:1px solid #243554;border-left:3px solid #38bdf8;border-radius:6px;padding:9px 11px;min-width:0;box-sizing:border-box;">
-          <div style="font-size:0.8rem;font-weight:900;color:#7dd3fc;margin-bottom:3px;">🛡️ ${escapeHtml(g.layer)}</div>
-          <div style="font-size:0.76rem;color:#cbd5e1;line-height:1.45;">${escapeHtml(g.detail)}</div>
-        </div>
-      `).join('');
-
-      const verdictsHtml = (sdh.rerun_verdicts || []).map(v => {
-        const st = String(v.status || '');
-        const isGood = st === 'ROCK-SOLID' || st === 'STRONGER';
-        const col = st === 'STRONGER' ? '#4ade80' : (isGood ? '#7dd3fc' : '#fde047');
-        const bg = st === 'STRONGER' ? 'rgba(34,197,94,0.14)' : (isGood ? 'rgba(56,189,248,0.14)' : 'rgba(250,204,21,0.14)');
-        const bd = st === 'STRONGER' ? 'rgba(74,222,128,0.45)' : (isGood ? 'rgba(56,189,248,0.45)' : 'rgba(250,204,21,0.45)');
-        return `
-          <div style="background:#0c1322;border:1px solid #23324d;border-radius:7px;padding:10px 12px;min-width:0;box-sizing:border-box;">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px;">
-              <span style="font-size:0.81rem;font-weight:900;color:#f8fafc;">${escapeHtml(v.metric)}</span>
-              <span style="background:${bg};border:1px solid ${bd};color:${col};font-size:0.68rem;font-weight:900;padding:2px 7px;border-radius:999px;">${escapeHtml(st)}</span>
-            </div>
-            <div style="font-size:0.74rem;color:#fde68a;font-weight:700;margin-bottom:4px;">
-              Raw v1: <span style="color:#94a3b8;">${escapeHtml(v.before)}</span> &rarr; Sanitized v2.3: <span style="color:#86efac;">${escapeHtml(v.after)}</span>
-            </div>
-            <div style="font-size:0.75rem;color:#cbd5e1;line-height:1.45;">${escapeHtml(v.takeaway)}</div>
-          </div>
-        `;
-      }).join('');
-
-      const gameRowsHtml = (sdh.games || []).map(g => {
-        const regBadge = g.regime === 'PARTIAL_FG'
-          ? `<span style="background:rgba(56,189,248,0.16);border:1px solid rgba(56,189,248,0.45);color:#7dd3fc;padding:1px 6px;border-radius:999px;font-size:0.68rem;font-weight:800;">PARTIAL-FG</span>`
-          : `<span style="background:rgba(148,163,184,0.15);border:1px solid rgba(148,163,184,0.35);color:#cbd5e1;padding:1px 6px;border-radius:999px;font-size:0.68rem;font-weight:800;">MAKES-ONLY</span>`;
-        const logFgStr = g.logged_fg_pct !== null && g.logged_fg_pct !== undefined
-          ? `${escapeHtml(g.logged_fg)} (${g.logged_fg_pct}%)`
-          : `${escapeHtml(g.logged_fg)} (N/A)`;
-        const impFgStr = g.imputed_true_fg
-          ? `<strong style="color:#fde047;">${escapeHtml(g.imputed_true_fg)} (${g.imputed_true_fg_pct}% FG / ${g.imputed_true_efg_pct}% eFG)</strong>`
-          : `<span style="color:#64748b;">—</span>`;
-        const orphanStr = g.orphan_unlogged_team_misses !== null && g.orphan_unlogged_team_misses !== undefined
-          ? `<span style="color:${g.orphan_unlogged_team_misses >= 15 ? '#fca5a5' : '#fde68a'};font-weight:800;">+${g.orphan_unlogged_team_misses} unlogged</span>`
-          : `<span style="color:#64748b;">—</span>`;
-        const tovBadge = g.tov_tracking_reliable
-          ? `<span style="color:#86efac;font-weight:800;">${escapeHtml(g.logged_tov_team_opp)} ✓</span>`
-          : `<span style="color:#fca5a5;font-weight:800;">${escapeHtml(g.logged_tov_team_opp)} ⚠️ UNTRACKED</span>`;
-        return `
-          <tr style="border-bottom:1px solid #1e293b;font-size:0.74rem;">
-            <td style="padding:6px 8px;font-weight:800;color:#f8fafc;white-space:nowrap;">${escapeHtml(g.game_label)}</td>
-            <td style="padding:6px 6px;text-align:center;white-space:nowrap;">${regBadge}</td>
-            <td style="padding:6px 6px;text-align:center;color:${g.frozen_zero_clock_events_repaired >= 10 ? '#fda4af' : '#cbd5e1'};font-weight:700;white-space:nowrap;">${g.frozen_zero_clock_events_repaired || 0}${g.overrun_periods_reconstructed ? ' (OVR)' : ''}</td>
-            <td style="padding:6px 6px;text-align:center;color:#cbd5e1;white-space:nowrap;">${logFgStr}</td>
-            <td style="padding:6px 6px;text-align:center;white-space:nowrap;">${orphanStr}</td>
-            <td style="padding:6px 6px;text-align:center;white-space:nowrap;">${impFgStr}</td>
-            <td style="padding:6px 8px;text-align:center;white-space:nowrap;">${tovBadge}</td>
-          </tr>
-        `;
-      }).join('');
-
-      return `
-        <div id="systemDataHygienePanel" class="scouting-panel" style="border-color:rgba(250,204,21,0.45);background:linear-gradient(180deg,#101726 0%,#090e1a 100%);">
-          <h3>
-            <span>🛡️ ${escapeHtml(sdh.headline || 'System-Level Majestic Data Hygiene & v2.3 Re-Run Audit')}</span>
-            <span style="font-size:0.72rem;color:#fde047;font-weight:800;text-transform:none;">10-Game JSON Sanitizer • Active-Clock Repair • Imputed True FGA</span>
-          </h3>
-          <p style="margin:0 0 12px 0;font-size:0.82rem;color:#cbd5e1;line-height:1.58;background:#0c1322;border:1px solid #26344d;border-radius:7px;padding:10px 12px;">
-            🔬 ${escapeHtml(sdh.summary || '')}
-          </p>
-          <div style="font-family:var(--font-display);font-size:0.95rem;font-weight:900;color:#7dd3fc;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:7px;">
-            ⚙️ 5 System-Level Guardrails Active (${escapeHtml(sdh.version || 'v2.3')})
-          </div>
-          <div class="personnel-grid" style="margin-bottom:14px;">
-            ${guardrailsHtml}
-          </div>
-          <div style="font-family:var(--font-display);font-size:0.95rem;font-weight:900;color:#86efac;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:7px;">
-            📊 Re-Run Impact: What Stayed Rock-Solid vs. What Shifted
-          </div>
-          <div class="personnel-grid" style="margin-bottom:14px;">
-            ${verdictsHtml}
-          </div>
-          <details style="background:#0b1120;border:1px solid #26344d;border-radius:8px;padding:10px 12px;">
-            <summary style="cursor:pointer;font-size:0.82rem;font-weight:900;color:#fde68a;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
-              <span>📋 View Full 10-Game Scorer Hygiene &amp; Possession-Imputed True FG% Matrix (CU + Latto Talent)</span>
-              <span style="font-size:0.72rem;color:#7dd3fc;">Tap to Expand ▾</span>
-            </summary>
-            <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;margin-top:10px;">
-              <table style="width:100%;border-collapse:collapse;min-width:620px;">
-                <thead>
-                  <tr style="background:#141d30;border-bottom:1px solid #334155;font-size:0.69rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.03em;">
-                    <th style="padding:7px 8px;text-align:left;">Game</th>
-                    <th style="padding:7px 6px;text-align:center;">Regime</th>
-                    <th style="padding:7px 6px;text-align:center;">0:00 Fixed</th>
-                    <th style="padding:7px 6px;text-align:center;">Logged FG</th>
-                    <th style="padding:7px 6px;text-align:center;">Orphan Misses</th>
-                    <th style="padding:7px 6px;text-align:center;">Imputed True FG / eFG</th>
-                    <th style="padding:7px 8px;text-align:center;">Logged TOV (T/O)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${gameRowsHtml}
-                </tbody>
-              </table>
-            </div>
-          </details>
-        </div>
-      `;
     }
 
     function renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) {
@@ -3437,13 +3330,12 @@
 
       const scp = ev.shot_contest_prototype || null;
       const cvLabHtml = scp ? renderShotContestLabPanel(scp) : '';
-      const hygienePanelHtml = ev.system_data_hygiene ? renderSystemDataHygienePanel(ev.system_data_hygiene) : '';
 
       return `
         <div class="scouting-panel" style="border-color:rgba(56,189,248,0.45);">
           <h3>
             <span>📖 Latto Talent (3-1) — 3-Paragraph Opponent Team Report</span>
-            <span style="font-size:0.74rem;color:#94a3b8;font-weight:700;text-transform:none;">Expert-Audited • Sunday Turnout, Bonus Fouls &amp; CV Shot Profile</span>
+            <span style="font-size:0.74rem;color:#94a3b8;font-weight:700;text-transform:none;">Play Style, Strengths &amp; Sunday Gameplan</span>
           </h3>
           ${reportParasHtml}
         </div>
@@ -3451,7 +3343,7 @@
         <div class="scouting-panel">
           <h3>
             <span>⏱️ Latto Talent Player-by-Player Brief &amp; Expected Minutes</span>
-            <span style="font-size:0.74rem;color:#7dd3fc;font-weight:800;text-transform:none;">200.0 Team Player-Minutes Budget (40-Min Regulation Game • Scorer-Tracked MPG)</span>
+            <span style="font-size:0.74rem;color:#7dd3fc;font-weight:800;text-transform:none;">40-Min Game Rotation (200 Total Player-Minutes)</span>
           </h3>
           <div class="personnel-grid">
             ${ltMinsHtml}
@@ -3486,7 +3378,7 @@
         <div class="scouting-panel" style="border-color:rgba(74,222,128,0.42);">
           <h3>
             <span>🪞 Campbell United (4-0) Self-Scout — Player-by-Player Improvement Focus</span>
-            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">👔 Team-Management Blinded Audit • Film-Calibrated (Majestic Scorer Noise Caveated) • Garbage-Time Adjusted</span>
+            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">Competitive Minutes • Film-Checked Shooting Splits</span>
           </h3>
           <div class="personnel-grid">
             ${cuImpHtml}
@@ -3496,10 +3388,10 @@
         <div class="scouting-panel" style="border-color:rgba(168,85,247,0.45);">
           <h3>
             <span>🧪 Campbell United On-Court Lineup Synergy Lab (Garbage-Time Filtered)</span>
-            <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">201.0 Competitive Minutes Across 6 Wins (Strips 39.3m of &ge;18pt Blowout Noise)</span>
+            <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">201 Competitive Minutes Across 6 Wins (Excludes Blowout Garbage Time)</span>
           </h3>
           <div style="font-size:0.79rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:12px;line-height:1.5;">
-            🔬 <strong>Men's-League Rotation Reality:</strong> ${escapeHtml(lu.methodology || '')}
+            📋 <strong>Rotation Notes:</strong> ${escapeHtml(lu.methodology || '')}
           </div>
           ${renderSundayRollCallBuilderHtml()}
           ${archRowsHtml ? `
@@ -3537,8 +3429,6 @@
         </div>
 
         ${cvLabHtml}
-
-        ${hygienePanelHtml}
       `;
     }
 

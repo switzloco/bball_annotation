@@ -20,3 +20,7 @@ Majestic Hoops (`majesticstats.com`) iPad table-scorer box scores and `statlog` 
 1. **Tier 1 — Film-Verified / CV-Localized Ground Truth (Gold)**: Actual video frames, Collab Studio human-verified tags, `CHG` (Charges Drawn), and CV court-homography localizations (upgrade CV from statlog-triggered to **Rim-Impulse + Orphan-DREB triggered** so unlogged misses are captured).
 2. **Tier 2 — Scoreboard-Coupled Counts (Silver)**: Final/halftime scores, `PTS`, `2PM`, `3PM`, `FTM`, and `PF`.
 3. **Tier 3 — Discretionary Table-Scorer Taps (Noisy Approximation — NEVER Call "Verified")**: Always pair raw `FG%` with **Possession-Imputed True `FG%` / `eFG%`** from `majestic_hygiene.py`.
+
+## Presentation Rule in Scouting Reports (Succinct, Never Preachy!)
+- Keep data-hygiene math (`majestic_hygiene.py`, `0:00` clock reconstruction, orphan-rebound imputation, stint priors) **under the hood**.
+- In scouting reports and UI cards, **never lecture the reader about scorer errors or methodology**. Simply present the clean basketball numbers directly and add a brief 3–6 word note **only where film/tracking differs meaningfully from the box score** (e.g., `~30% true FG on film vs. 39% box`, `~6/13 3PT on film vs. 6/8 box`, `3/11 3PT on film vs. 3/12 box`).
