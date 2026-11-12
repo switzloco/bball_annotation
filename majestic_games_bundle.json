@@ -131651,7 +131651,7 @@
         }
       ],
       "cu_lineups": {
-        "methodology": "CU has won with 4 different 6-to-8 man turnouts in 4 weeks. Use the roll-call builder below to set rotations once Sunday turnout is known (201 competitive minutes across 6 wins, excluding 18+ pt blowout garbage time).",
+        "methodology": "201 competitive minutes tracked across 6 Campbell United wins (Fall Semifinal vs. Latto Talent, Fall Final vs. Mustangs, and Holiday Weeks 1–4), excluding blowout stretches above 18 points. Reflects historical on-court performance across all 10 roster players in the stints they played (no Sunday attendance assumed).",
         "archetype_splits": [
           {
             "archetype": "2+ Handlers (Evan, Adam, Nick) + 3+ Shooters + At Most 1 of George / Aaron",
@@ -131728,48 +131728,48 @@
         ],
         "outperforming": [
           {
-            "name": "1. Regular-Season Balanced Waves (Adapt to Sunday Roll Call)",
-            "players": "Rim Big (Chris, Aaron, or Matt) + 2+ Handlers (Evan, Adam, Nick, Christian) + 3+ Shooters (George & Aaron Staggered)",
-            "metrics": "1.11 Off PPP / 0.82 Def PPP (+0.29 Net PPP, 17.4% True TOV%) • +6.0/10m across 69.7 competitive mins (130–88 over 4 different weekly turnouts)",
-            "why_it_works": "Works regardless of which 7–9 guys walk into The Grove at 4:50 PM. Gives everyone balanced 20–28m regular-season shifts across two staggered waves without stranding Christian as solo point guard (-2.8/10m) or clogging the lane with multiple non-shooters (-3.8/10m).",
-            "when_to_use": "Week 5 default: tip off with whoever warmed up early inside these 5 roles and sub in 5–6 min waves."
+            "name": "1. Two-Plus Handlers + Three-Plus Shooters (George & Aaron Staggered)",
+            "players": "Rim Big (Chris, Aaron, or Matt) + 2+ Handlers (Evan, Adam, Nick, Christian) + 3+ Shooters (Evan, Adam, Shane, Corey, Nick, Matt, Christian)",
+            "metrics": "1.11 Off PPP / 0.82 Def PPP (+0.29 Net PPP, 17.4% True TOV%) • +6.0/10m across 69.7 competitive mins (130–88)",
+            "why_it_works": "Maintained strong offensive spacing and transition defense across four different weekly roster combinations without stranding Christian as solo point guard (-2.8/10m) or crowding the lane with multiple non-shooters (-3.8/10m).",
+            "when_to_use": "69.7 competitive minutes across all 6 tracked wins."
           },
           {
-            "name": "2. Matchup Counter A — Slasher Clamp (vs. #1 Sean Surge / Latto 4-Guard)",
-            "players": "On-Ball Stopper (George or Adam on #1 Sean) + Switchable Big (Christian or Chris) + 3 Shooters (Evan, Shane, Nick, Corey, Matt)",
-            "metrics": "1.23 Off PPP / 0.89 Def PPP (+0.34 Net PPP, 15.0% True TOV% with Christian + Adam + Shane) • +5.9/10m with Christian + Adam + Shane (40.7m: 83–59) • +4.2/10m in 4-Out Spacing (94.3m)",
-            "why_it_works": "Deploys whenever #1 Sean (6/6 right-hand 2PT) heats up or Latto sits #2 Troy for 4 perimeter players — puts fresh lateral legs squarely on Sean's right hip while surrounding our stopper with 4 shooters.",
-            "when_to_use": "Mid-half counter if #1 Sean gets downhill or Latto goes small."
+            "name": "2. Four-Out Spacer Core (Christian + Adam + Shane)",
+            "players": "Christian + Adam + Shane Alongside a Single Big (Chris, Aaron, or Matt) or Wing (George, Corey, Evan, Nick)",
+            "metrics": "1.23 Off PPP / 0.89 Def PPP (+0.34 Net PPP, 15.0% True TOV%) • +5.9/10m across 40.7m (83–59) • +4.2/10m in 4-Out Spacing (94.3m)",
+            "why_it_works": "Highest offensive efficiency of any high-minute trio (1.23 Off PPP), opening driving lanes for Christian and Adam while keeping perimeter defenders (George, Adam, Corey, Shane) fresh on opposing slashers.",
+            "when_to_use": "40.7 competitive minutes across Holiday Weeks 1–4, including the G4 OT win vs. Ricecookers."
           },
           {
-            "name": "3. Matchup Counter B — Final 6:00 Rim-Wall Closer (vs. #9 Diallo + #2 Troy)",
-            "players": "Core Anchors (Christian, Chris, Evan) + On-Ball Defender (Adam or George) + Hot Wing Shooter (Shane, Nick, Corey, or Matt)",
-            "metrics": "1.19 Off PPP / 0.70 Def PPP (+0.49 Net PPP, 12.5% True TOV% with Christian + Chris + Evan) • +7.7/10m with Christian + Chris + Evan (45.3m: 78–43) • Closed Out 66–63 G4 OT Win",
-            "why_it_works": "Flexes cleanly to whoever is dressed: in G4 OT vs. Ricecookers (with Evan and Nick both out), plugging Adam, Shane, and Corey/George next to Christian and Chris closed out the 66–63 win.",
-            "when_to_use": "Final 6:00 of tight games and opposing bonus situations."
+            "name": "3. Two-Way Anchor Trio (Christian + Chris + Evan)",
+            "players": "Christian + Chris + Evan + Two Perimeter Guards/Wings (Adam, Shane, Corey, Nick, George, or Matt)",
+            "metrics": "1.19 Off PPP / 0.70 Def PPP (+0.49 Net PPP, 12.5% True TOV%) • +7.7/10m across 45.3m (78–43)",
+            "why_it_works": "Best defensive efficiency (0.70 Def PPP) and lowest turnover rate (12.5% True TOV%) of any CU combination — pairing interior rim protection and rebounding (Chris + Christian) with steady ball security (Evan).",
+            "when_to_use": "45.3 competitive minutes across Fall Playoffs and Holiday Weeks 1–2."
           }
         ],
         "underperforming": [
           {
-            "name": "1. Three Non-Shooters Together (George, Aaron & Chris Paint Jam)",
-            "players": "Any 5-Man Unit Playing George + Aaron + Chris Simultaneously",
-            "metrics": "0.77 Off PPP / 0.84 Def PPP (-0.07 Net PPP) • -3.8/10m across 13.0m • George + Aaron Paired: +0.6/10m (48.7m, vs. +4.4/10m Staggered)",
-            "why_it_struggles": "With no 3PT threat across three frontcourt spots, #2 Troy and #9 Diallo camp in the paint — forcing CU into tight (<4 ft) contests where our shooting drops from 76% to 46% eFG.",
-            "fix": "Rotation Rule 1: Stagger George and Aaron — never play more than one non-shooter alongside Chris."
+            "name": "1. Three Non-Shooters Together (George, Aaron & Chris)",
+            "players": "5-Man Stints With George, Aaron & Chris On Court Simultaneously",
+            "metrics": "0.77 Off PPP / 0.84 Def PPP (-0.07 Net PPP) • -3.8/10m across 13.0m • George + Aaron Paired: +0.6/10m (48.7m) vs. +4.4/10m Staggered (152.3m)",
+            "why_it_struggles": "Defense holds up (0.84 Def PPP), but lacking perimeter threats across three spots lets help defenders pack the paint — forcing tightly contested (<4 ft) looks where CU drops from 62.2% to 40.4% eFG.",
+            "fix": "Film Finding: Staggering George and Aaron (1.09 Off PPP, +4.4/10m over 152.3m) preserves driving and post space for both."
           },
           {
-            "name": "2. Zero-Organizer Lineups (Evan, Adam & Nick All Sitting)",
-            "players": "Christian Forced Into Solo Point Guard Duty Without Evan, Adam, or Nick",
-            "metrics": "0.64 Off PPP / 1.06 Def PPP (-0.41 Net PPP, 30.1% True TOV%) • -2.8/10m across 14.3m (vs. +5.3/10m with 2+ Handlers on the Floor)",
-            "why_it_struggles": "Forces Christian to bring the ball up against full-court pressure (#8 Radhir, #1 Sean, #4 Lazar) and initiate through dig help — leading to 1st-half gather turnovers and late-clock bailouts.",
-            "fix": "Rotation Rule 2: Keep at least two of Evan, Adam, and Nick (or one plus Christian) handling the ball every shift."
+            "name": "2. Zero Primary Organizers (Christian Solo Point Guard)",
+            "players": "Stints With Evan, Adam & Nick All Off the Floor",
+            "metrics": "0.64 Off PPP / 1.06 Def PPP (-0.41 Net PPP, 30.1% True TOV%) • -2.8/10m across 14.3m (vs. +5.3/10m with 2+ Handlers)",
+            "why_it_struggles": "Asking Christian to bring the ball up alone against pressure and initiate through nail digs drove turnovers up to 30.1% and fueled opponent runouts (1.06 Def PPP).",
+            "fix": "Film Finding: Keeping secondary ball-handling on the floor cut turnover rate nearly in half (17.4% TOV%) and lifted offense by +0.47 PPP."
           },
           {
-            "name": "3. Early 2nd-Half Reach-In Bonus Trap (7+ Team Fouls)",
-            "players": "Tired Perimeter Defenders Reaching on #9 Diallo & #1 Sean Drives",
-            "metrics": "Latto 2nd-Half FTM = 26 vs. 1st-Half FTM = 9 (3x Surge Fuels Their +5.5 PPG 2H Comebacks)",
-            "why_it_struggles": "Latto shoots ~30% FG on film (39% box) against set halfcourt defenses, winning close games when opponents put #9 Diallo (21/24 FT) and #3 Mahaan (4/5 FT) on the line.",
-            "fix": "Rotation Rule 3: Rotate fresh legs (George, Shane, Corey, Adam) onto #1 Sean, pull anyone with 3 fouls in the 1st half, and keep 2H team fouls under 7."
+            "name": "3. Bonus-Foul Stretches (7+ Team Fouls in Tight Halves)",
+            "players": "Perimeter Reach-In Fouls Putting Opponents on the Line",
+            "metrics": "CU Competitive Half-Court Defense = 0.82 Def PPP • Latto Talent Scored 26 of 35 FTM in 2nd Halves",
+            "why_it_struggles": "In tight 2nd halves (G2 TMT, G4 Ricecookers OT), reach-in fouls gifted free throws when CU set defense was otherwise holding opponents to 0.82 Def PPP.",
+            "fix": "Film Finding: Vertical contests without reaching keep possessions in live half-court play where CU holds a +0.20 Net PPP edge."
           }
         ]
       },
