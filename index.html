@@ -2966,17 +2966,22 @@
       `;
 
       const pRowsHtml = (tData.players || []).map(p => {
-        const diffCol = p.diff_pct >= 0 ? '#4ade80' : '#f87171';
-        const diffSign = p.diff_pct >= 0 ? `+${p.diff_pct}%` : `${p.diff_pct}%`;
+        const hasEfg = p.efg_pct !== null && p.efg_pct !== undefined;
+        const diffVal = Number(p.diff_pct) || 0;
+        const diffCol = !hasEfg ? '#94a3b8' : (diffVal >= 0 ? '#4ade80' : '#f87171');
+        const diffSign = diffVal >= 0 ? `+${diffVal}%` : `${diffVal}%`;
+        const efgCell = hasEfg
+          ? `${p.efg_pct}% <span style="font-size:0.67rem;opacity:0.85;">(${diffSign})</span>`
+          : `<span style="font-size:0.68rem;color:#94a3b8;font-weight:700;">Makes Only</span>`;
         const isSel = reg.playerFilter === p.player;
         const pJs = p.player.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         return `
           <tr onclick="updateCvCardFilter('${sideKey}','player','${escapeHtml(pJs)}')" title="Click to filter chart to ${escapeHtml(p.player)}" style="cursor:pointer;border-bottom:1px solid #1e293b;font-size:0.74rem;background:${isSel ? 'rgba(56,189,248,0.16)' : 'transparent'};">
             <td style="padding:5px 6px;font-weight:800;color:${isSel ? '#38bdf8' : '#f8fafc'};">${isSel ? '🎯 ' : ''}${escapeHtml(p.player)}</td>
-            <td style="padding:5px 4px;text-align:center;color:#cbd5e1;">${escapeHtml(p.fg_str)}${p.three_str ? ` <span style="color:#94a3b8;font-size:0.67rem;">(${escapeHtml(p.three_str)} 3P)</span>` : ''}</td>
+            <td style="padding:5px 4px;text-align:center;color:#cbd5e1;">${escapeHtml(p.fg_str)}${p.three_str ? ` <span style="color:#94a3b8;font-size:0.67rem;">(${escapeHtml(p.three_str)})</span>` : ''}</td>
             <td style="padding:5px 4px;text-align:center;color:#7dd3fc;">${p.avg_dist_ft} ft</td>
             <td style="padding:5px 4px;text-align:center;color:#fde68a;">${p.avg_def_ft} ft</td>
-            <td style="padding:5px 6px;text-align:right;font-weight:800;color:${diffCol};">${p.efg_pct}% <span style="font-size:0.67rem;opacity:0.85;">(${diffSign})</span></td>
+            <td style="padding:5px 6px;text-align:right;font-weight:800;color:${diffCol};">${efgCell}</td>
           </tr>
         `;
       }).join('');
