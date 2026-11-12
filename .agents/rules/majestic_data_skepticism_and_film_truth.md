@@ -1,20 +1,22 @@
 # Majestic Stats Skepticism & Film-First Ground Truth Rule
 
 ## Why This Tool Exists ("Why You Have a Job")
-Majestic Hoops (`majesticstats.com`) iPad table-scorer box scores are **approximate at best** — never treat raw Majestic `FGA`, `FG%`, `3PT%`, `REB`, `AST`, or `TOV` as ground truth without auditing the game film!
+Majestic Hoops (`majesticstats.com`) iPad table-scorer box scores and `statlog` timelines are **approximate at best** — never treat raw Majestic `FGA`, `FG%`, `3PT%`, `REB`, `AST`, `TOV`, or `clock` strings as ground truth without running `majestic_hygiene.py` and auditing game film!
 
-## Empirical Proof from Game Film (`G3 vs. Misfits 2`, Nov 1, 2026)
-Even in Weeks 3–4 where Majestic enabled missed-shot buttons (unlike Weeks 1–2 which logged `0` misses, `FGM == FGA`), film inspection of `2026-11-01_CU_vs_Misfits2_G3.mp4` exposed massive table-scorer noise:
-1. **Unlogged Missed Shots (`37` `MISS_PRIOR` Orphan Rebounds in One Game)**: Whenever play moved fast or a rebound/putback happened quickly (e.g. `#7 Nick`'s missed heat-check right-wing 3 at `5:44 2H` rebounded by `#9 Aaron`, or airballs/out-of-bounds misses), the scorer tapped only the rebound (or nothing), turning `#7 Nick`'s true **`~6/13` (`~46%`)** 3PT volume night into an inflated **`6/8` (`75%`)** box-score mirage.
-2. **Cross-Jersey Miss Misattribution**: From 50 ft away at the scorer's table, iPad operators guess jerseys on misses — e.g., at `3:01 2H` (`s=3322s`), `#7 Nick` missed a right-wing 3PT on film that the scorer billed to `#20 Shane Hoffman` (simultaneously inflating `#7`'s FG% and depressing `#20`'s FG%), and at `13:14 2H` double-logged a miss and make on the same shot.
-3. **Massive Turnover Undercounting**: In `G3` (`83–66`, 40 minutes of up-tempo play), the Majestic scorer logged **just `1` total turnover for all of Campbell United** (`3` for Misfits 2), creating fake `4:0` / `7:1` `AST/TOV` ratios and logging live-ball steals as "Rebounds" (`s=2453s`).
+## 5 Systemic Failure Modes Proven Across All 10 League JSONs + Film
+1. **Unlogged Missed Shots (`OrphanOppDREB`) Even in Weeks 3–4**:
+   - Weeks 1–2 logged **makes only** (`0` misses, `FGM == FGA`).
+   - Even in Weeks 3–4 (`PARTIAL_FG`), fast rebounds, airballs, and quick putbacks cause iPad scorers to drop `15%–35%` of missed shots: e.g., `#7 Nick`'s true `~6/13` (`~46%`) 3PT night in `G3` was logged as `6/8` (`75%`), and Latto Talent's logged `21/48` (`43.8%`) vs. Sapa Boys hid **`26` Sapa Boys defensive rebounds with zero prior missed shot logged** (Possession-Imputed True Shooting = **`~21/74`, `28.4% FG`**; Weeks 3–4 combined drops from `38.7%` logged FG to **`~30.3% FG / ~36.8% eFG%`**).
+2. **Unpaused-Timer `"0:00"` Clock Overrun Bug**:
+   - Majestic's iPad clock (`20:00 -> 0:00`) is not wired to the gym scoreboard and frequently runs continuously through timeouts, fouls, free throws, and final-`2:00` stop-clock play — hitting `"0:00"` with `5–7` minutes of real basketball left and dumping `28–60` crunch-time events at `"0:00"` (`60` in `CU G4 OT`, `39` in `LT Wk2 OT`, `31` in `LT Wk4`). Always reconstruct **Dead-Ball-Stripped Active Clock** from UTC `logged_at` (`majestic_hygiene.sanitize_majestic_game`) or calibrate directly to the gym LED scoreboard on film.
+3. **Fat-Finger Double-Taps & Cross-Jersey Miss Misattributions**:
+   - Adjacent same-player `MISS -> MAKE` taps `<=3s` with zero rebound between (`2` removed in `CU G3`), plus 50-ft cross-jersey guesses (`#7`'s `3:01 2H` miss billed to `#20 Shane`).
+4. **Inconsistent Turnover Tracking (`TOV` Gate Required)**:
+   - Scorekeepers range from `1` CU turnover in `40m` (`CU G3`) to `17` (`CU G4`). Gate any cross-game `TOPG` or `AST/TOV` claim on **`combined_logged_tov >= 10`**.
+5. **Null-Period DNP Rows & Missing Substitution Logs**:
+   - Strip `period: null` (`dnp`) entries before sorting `statlog`, weight Tier-2 (`Made FG / FT / Foul`) `8.5x` above Tier-3 (`Miss / REB / AST / STL / TOV`) in stint solving, require `>=3.0m` bench/court exposure for Within-Game On/Off, and disclose `±2.5–4.0/10m` single-player solver uncertainty when subs are reconstructed.
 
 ## Mandatory 3-Tier Data Trust Hierarchy
-1. **Tier 1 — Film-Verified / CV-Localized Ground Truth (Gold)**:
-   - Actual video frame inspection, Collab Studio human-verified tags, `CHG` (Charges Drawn), and CV court-homography shot/contest localizations. Always prioritize Tier 1 when film is available.
-2. **Tier 2 — Scoreboard-Coupled Counts (Silver)**:
-   - Final/halftime scores, `PTS`, `2PM`, `3PM`, `FTM` (coupled to the gym LED scoreboard), and `PF` (coupled to referee table foul/bonus calls, though individual jersey attribution can still drift by `±1`).
-3. **Tier 3 — Discretionary Table-Scorer Taps (Noisy Approximation — NEVER Call "Verified")**:
-   - Weeks 1–2 `FGA`/`FTA` (`0%` misses logged — completely unusable for `%`).
-   - Weeks 3–4 `FGA`, `FG%`, `3PT%`, `AST`, `REB`, `STL`, `TOV` — directional only (`FGA` systematically undercounts true attempts by `15–35%` and `TOV` is wildly inconsistent across scorekeepers, e.g., `1 TOV` in `G3` vs. `17 TOV` in `G4`).
-   - **Rule**: Never label raw Majestic Weeks 3–4 splits as `"Verified"` unless audited on video; explicitly caveat table-scorer miss/turnover undercounting and cross-check outliers on film!
+1. **Tier 1 — Film-Verified / CV-Localized Ground Truth (Gold)**: Actual video frames, Collab Studio human-verified tags, `CHG` (Charges Drawn), and CV court-homography localizations (upgrade CV from statlog-triggered to **Rim-Impulse + Orphan-DREB triggered** so unlogged misses are captured).
+2. **Tier 2 — Scoreboard-Coupled Counts (Silver)**: Final/halftime scores, `PTS`, `2PM`, `3PM`, `FTM`, and `PF`.
+3. **Tier 3 — Discretionary Table-Scorer Taps (Noisy Approximation — NEVER Call "Verified")**: Always pair raw `FG%` with **Possession-Imputed True `FG%` / `eFG%`** from `majestic_hygiene.py`.
