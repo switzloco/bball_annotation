@@ -1999,8 +1999,9 @@
     </div>
   </div>
 
-  <!-- LOWER SECTION: Day-to-Day Persistent Crew Roster + Disputed Stats Table -->
+  <!-- LOWER SECTION: Single-Game Shot Chart + Day-to-Day Persistent Crew Roster + Disputed Stats Table -->
   <div class="lower-section" id="lowerStatsSection">
+    <div id="singleGameShotChartMount" style="margin-bottom:16px;display:none;"></div>
     <div class="crew-mapper-card">
       <div class="crew-mapper-header">
         <div>
@@ -2750,7 +2751,21 @@
       }
     }
 
-    function inspectCvShot(readoutId, encodedJson, filmSessionId) {
+    const cvCardRegistry = {};
+
+    function watchCvShotClip(sessionId, sec) {
+      if (!sessionId) return;
+      const targetSec = Math.max(0, Number(sec) || 0);
+      if (activeSessionId === sessionId) {
+        seekTo(targetSec, true);
+        const vw = document.getElementById('videoWrapper');
+        if (vw) vw.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        jumpFromAnalyticsToPlay(sessionId, targetSec);
+      }
+    }
+
+    function inspectCvShot(readoutId, encodedJson, fallbackSessionId) {
       const el = document.getElementById(readoutId);
       if (!el) return;
       try {
@@ -2758,15 +2773,41 @@
         const resBadge = s.made
           ? `<span style="color:#4ade80;font-weight:900;">✅ MADE ${s.is_3pt ? '3PT' : '2PT'}</span>`
           : `<span style="color:#f87171;font-weight:900;">❌ MISSED ${s.is_3pt ? '3PT' : '2PT'}</span>`;
-        const filmBtn = filmSessionId
-          ? `<button class="blue-btn" style="font-size:0.72rem;padding:4px 9px;font-weight:800;margin-left:8px;" onclick="jumpFromAnalyticsToPlay('${escapeHtml(filmSessionId)}', ${Math.max(0, (Number(s.t_rel) || 2) - 2.0).toFixed(1)})">🎬 Watch Release in 1080p Film</button>`
+        const effSession = s.session_id || fallbackSessionId || '';
+        const gameTag = s.short_tab ? `<span style="color:#93c5fd;">${escapeHtml(s.short_tab)}</span> • ` : '';
+        const zoneTag = s.zone ? ` • <strong>Zone:</strong> ${escapeHtml(s.zone)}` : '';
+        const filmBtn = effSession
+          ? `<button class="blue-btn" style="font-size:0.72rem;padding:4px 9px;font-weight:800;margin-left:6px;" onclick="watchCvShotClip('${escapeHtml(effSession)}', ${(Math.max(0, (Number(s.t_rel) || 2) - 2.0)).toFixed(1)})">🎬 Watch Release in Film</button>`
           : '';
-        el.innerHTML = `🎯 <strong>${escapeHtml(s.player)}</strong> (${escapeHtml(s.clk)}) • ${resBadge} • <strong>Hoop Dist:</strong> ${s.dist} ft • <strong>Nearest Defender:</strong> ${s.def_dist} ft (${escapeHtml(s.tier)}) • <strong>xFG%:</strong> ${s.xfg}% ${filmBtn}`;
+        el.innerHTML = `🎯 ${gameTag}<strong>${escapeHtml(s.player)}</strong> (${escapeHtml(s.clk)}) • ${resBadge}${zoneTag} • <strong>Dist:</strong> ${s.dist} ft • <strong>Nearest Def:</strong> ${s.def_dist} ft (${escapeHtml(s.tier)}) • <strong>xFG:</strong> ${s.xfg}% ${filmBtn}`;
       } catch (_) {}
     }
 
-    function renderTeamShotContestCard(tData, sideKey, filmSessionId) {
+    function updateCvCardFilter(sideKey, field, val) {
+      const reg = cvCardRegistry[sideKey];
+      if (!reg) return;
+      if (field === 'scope') {
+        reg.activeScope = val;
+        reg.playerFilter = 'ALL';
+      } else if (field === 'player') {
+        reg.playerFilter = (reg.playerFilter === val && val !== 'ALL') ? 'ALL' : val;
+      } else if (field === 'shotType') {
+        reg.shotFilter = val;
+      }
+      const mount = document.getElementById(`cvCardMount_${sideKey}`);
+      if (mount) {
+        mount.innerHTML = buildCvCardInnerHtml(sideKey);
+      }
+    }
+
+    function buildCvCardInnerHtml(sideKey) {
+      const reg = cvCardRegistry[sideKey];
+      if (!reg) return '';
+      const tData = (reg.scopes && reg.activeScope && reg.scopes[reg.activeScope])
+        ? reg.scopes[reg.activeScope]
+        : reg.baseData;
       if (!tData) return '';
+
       const readoutId = `cvShotReadout_${sideKey}`;
       const f2x = yFt => Math.max(8, Math.min(452, 230 + Number(yFt) * 10)).toFixed(1);
       const f2y = xFt => Math.max(8, Math.min(342, Number(xFt) * 10)).toFixed(1);
@@ -2775,6 +2816,35 @@
         if ((tier || '').startsWith('Open')) return '#fbbf24';
         return '#4ade80';
       };
+
+      const allShots = tData.shots || [];
+      const uniquePlayers = [];
+      const seenP = new Set();
+      (tData.players || []).forEach(p => {
+        if (p.player && !seenP.has(p.player)) {
+          seenP.add(p.player);
+          uniquePlayers.push(p.player);
+        }
+      });
+
+      const filteredShots = allShots.filter(s => {
+        if (reg.playerFilter !== 'ALL' && s.player !== reg.playerFilter) return false;
+        if (reg.shotFilter === '3PT' && !s.is_3pt) return false;
+        if (reg.shotFilter === '2PT' && s.is_3pt) return false;
+        if (reg.shotFilter === 'MAKES' && !s.made) return false;
+        return true;
+      });
+
+      const fga = filteredShots.length;
+      const fgm = filteredShots.filter(s => s.made).length;
+      const threes = filteredShots.filter(s => s.is_3pt);
+      const twos = filteredShots.filter(s => !s.is_3pt);
+      const tpm = threes.filter(s => s.made).length;
+      const pts = filteredShots.reduce((acc, s) => acc + (s.made ? (s.is_3pt ? 3 : 2) : 0), 0);
+      const efgPct = fga ? ((pts / 2) / fga * 100).toFixed(1) : '0.0';
+      const avg2 = twos.length ? (twos.reduce((a, s) => a + Number(s.dist || 0), 0) / twos.length).toFixed(1) : '0.0';
+      const avg3 = threes.length ? (threes.reduce((a, s) => a + Number(s.dist || 0), 0) / threes.length).toFixed(1) : '0.0';
+      const avgDef = fga ? (filteredShots.reduce((a, s) => a + Number(s.def_dist || 0), 0) / fga).toFixed(1) : '0.0';
 
       const arcPts = [];
       for (let i = -46; i <= 46; i++) {
@@ -2787,19 +2857,19 @@
       }
       const arcPoly = arcPts.join(' ');
 
-      const raysSvg = (tData.shots || []).map(s => {
+      const raysSvg = filteredShots.map(s => {
         const sx = f2x(s.y), sy = f2y(s.x), dx = f2x(s.dy), dy = f2y(s.dx);
         const col = tierHex(s.tier);
         return `<line x1="${sx}" y1="${sy}" x2="${dx}" y2="${dy}" stroke="${col}" stroke-opacity="0.38" stroke-width="1.5" /><circle cx="${dx}" cy="${dy}" r="2.2" fill="#94a3b8" fill-opacity="0.68" />`;
       }).join('');
 
-      const markersSvg = (tData.shots || []).map(s => {
+      const markersSvg = filteredShots.map(s => {
         const sx = Number(f2x(s.y)), sy = Number(f2y(s.x));
         const col = tierHex(s.tier);
         const enc = encodeURIComponent(JSON.stringify(s));
-        const fsArg = filmSessionId ? `'${escapeHtml(filmSessionId)}'` : `''`;
+        const fsArg = reg.filmSessionId ? `'${escapeHtml(reg.filmSessionId)}'` : `''`;
         const handlers = `style="cursor:pointer;" onclick="inspectCvShot('${readoutId}', '${enc}', ${fsArg})" onmouseenter="inspectCvShot('${readoutId}', '${enc}', ${fsArg})"`;
-        const tip = `<title>${escapeHtml(s.player)} (${escapeHtml(s.clk)}): ${s.made ? 'MADE' : 'MISSED'} ${s.is_3pt ? '3PT' : '2PT'} | Dist ${s.dist} ft | Nearest Def ${s.def_dist} ft (${escapeHtml(s.tier)})</title>`;
+        const tip = `<title>${escapeHtml(s.player)} (${escapeHtml(s.clk)}): ${s.made ? 'MADE' : 'MISSED'} ${s.is_3pt ? '3PT' : '2PT'} | ${escapeHtml(s.zone || '')} | Dist ${s.dist} ft | Nearest Def ${s.def_dist} ft (${escapeHtml(s.tier)})</title>`;
         if (s.made) {
           return `<g ${handlers}>${tip}<circle cx="${sx}" cy="${sy}" r="6.4" fill="${col}" stroke="#ffffff" stroke-width="1.4" /></g>`;
         }
@@ -2807,80 +2877,214 @@
         return `<g ${handlers}>${tip}<line x1="${sx-r}" y1="${sy-r}" x2="${sx+r}" y2="${sy+r}" stroke="${col}" stroke-width="2.4" stroke-linecap="round" /><line x1="${sx-r}" y1="${sy+r}" x2="${sx+r}" y2="${sy-r}" stroke="${col}" stroke-width="2.4" stroke-linecap="round" /></g>`;
       }).join('');
 
-      const tiersHtml = (tData.tiers || []).map(t => {
-        const col = tierHex(t.tier);
-        const barW = Math.min(100, Math.max(0, Number(t.efg_pct) || 0));
-        const tickLeft = Math.min(100, Math.max(0, Number(t.xefg_pct) || 0));
+      // Live-computed Contest Tiers for active filter
+      const tierDefs = [
+        { label: 'Tight (<4 ft)', prefix: 'Tight' },
+        { label: 'Open (4-6 ft)', prefix: 'Open' },
+        { label: 'Wide Open (6+ ft)', prefix: 'Wide' }
+      ];
+      const tiersHtml = tierDefs.map(td => {
+        const ts = filteredShots.filter(s => String(s.tier || '').startsWith(td.prefix));
+        const nt = ts.length;
+        const share = fga ? ((100 * nt) / fga).toFixed(0) : '0';
+        const tfgm = ts.filter(s => s.made).length;
+        const t3 = ts.filter(s => s.is_3pt);
+        const t3m = t3.filter(s => s.made).length;
+        const tpts = ts.reduce((a, s) => a + (s.made ? (s.is_3pt ? 3 : 2) : 0), 0);
+        const tefg = nt ? ((tpts / 2) / nt * 100).toFixed(1) : '0.0';
+        const txefg = nt ? (ts.reduce((a, s) => a + (Number(s.xfg || 0) * (s.is_3pt ? 1.5 : 1.0)), 0) / nt).toFixed(1) : '0.0';
+        const col = tierHex(td.label);
+        const barW = Math.min(100, Math.max(0, Number(tefg) || 0));
+        const tickLeft = Math.min(100, Math.max(0, Number(txefg) || 0));
         return `
-          <div style="margin-bottom:8px;">
-            <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:800;margin-bottom:3px;gap:6px;flex-wrap:wrap;">
-              <span style="color:${col};">${escapeHtml(t.tier)} — ${t.fga} FGA (${t.share_pct}%) • ${escapeHtml(t.fg_str)} FG (${escapeHtml(t.three_str)})</span>
-              <span style="color:#f8fafc;">${t.efg_pct}% eFG <span style="color:#94a3b8;font-weight:600;">(xeFG ${t.xefg_pct}%)</span></span>
+          <div style="margin-bottom:7px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.74rem;font-weight:800;margin-bottom:3px;gap:6px;flex-wrap:wrap;">
+              <span style="color:${col};">${escapeHtml(td.label)} — ${nt} FGA (${share}%) • ${tfgm}/${nt} FG (${t3m}/${t3.length} 3PT)</span>
+              <span style="color:#f8fafc;">${tefg}% eFG <span style="color:#94a3b8;font-weight:600;">(xeFG ${txefg}%)</span></span>
             </div>
-            <div style="position:relative;height:10px;background:#1e293b;border-radius:999px;overflow:hidden;">
+            <div style="position:relative;height:9px;background:#1e293b;border-radius:999px;overflow:hidden;">
               <div style="width:${barW}%;height:100%;background:${col};border-radius:999px;"></div>
-              <div style="position:absolute;left:${tickLeft}%;top:0;bottom:0;width:2px;background:#ffffff;" title="Expected xeFG%: ${t.xefg_pct}%"></div>
+              <div style="position:absolute;left:${tickLeft}%;top:0;bottom:0;width:2px;background:#ffffff;" title="Expected xeFG%: ${txefg}%"></div>
             </div>
           </div>
         `;
       }).join('');
 
+      // Compact Zone Split Strip (Rim / Mid / L-Corner / L-Wing / Top / R-Wing / R-Corner)
+      const zoneBuckets = [
+        { short: 'Rim (<6.5ft)', match: s => s.zone === 'Rim / Restricted' },
+        { short: 'Paint/Mid', match: s => s.zone === 'Paint / Short Mid' || s.zone === 'Midrange' },
+        { short: 'L Corner 3', match: s => s.zone === 'Left Corner 3' },
+        { short: 'L Wing 3', match: s => s.zone === 'Left Wing 3' },
+        { short: 'Top Key 3', match: s => s.zone === 'Top of Key 3' },
+        { short: 'R Wing 3', match: s => s.zone === 'Right Wing 3' },
+        { short: 'R Corner 3', match: s => s.zone === 'Right Corner 3' }
+      ];
+      const zonePillsHtml = zoneBuckets.map(zb => {
+        const zs = filteredShots.filter(zb.match);
+        const nz = zs.length;
+        const zm = zs.filter(s => s.made).length;
+        const zpts = zs.reduce((a, s) => a + (s.made ? (s.is_3pt ? 3 : 2) : 0), 0);
+        const zefg = nz ? Math.round((zpts / 2) / nz * 100) : 0;
+        const zCol = !nz ? '#64748b' : (zefg >= 55 ? '#4ade80' : zefg >= 40 ? '#fde68a' : '#f87171');
+        return `<div style="background:#11192c;border:1px solid #26354f;border-radius:6px;padding:4px 6px;text-align:center;min-width:68px;flex:1 1 74px;">
+          <div style="font-size:0.63rem;color:#94a3b8;font-weight:800;text-transform:uppercase;">${escapeHtml(zb.short)}</div>
+          <div style="font-size:0.74rem;font-weight:900;color:${zCol};">${zm}/${nz} <span style="font-size:0.65rem;opacity:0.85;">(${nz ? zefg + '%' : '—'})</span></div>
+        </div>`;
+      }).join('');
+
+      // Scope Tabs (if multi-game explorer)
+      const scopeTabsHtml = (reg.scopeTabs && reg.scopeTabs.length > 0) ? `
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">
+          ${reg.scopeTabs.map(st => {
+            const act = reg.activeScope === st.id;
+            return `<button type="button" onclick="updateCvCardFilter('${sideKey}','scope','${escapeHtml(st.id)}')" style="cursor:pointer;border-radius:6px;padding:5px 9px;font-size:0.72rem;font-weight:800;border:1px solid ${act ? '#38bdf8' : '#334155'};background:${act ? '#0284c7' : '#131d31'};color:${act ? '#ffffff' : '#cbd5e1'};">${escapeHtml(st.label)}</button>`;
+          }).join('')}
+        </div>
+      ` : '';
+
+      // Filter Controls Row: Player Select + Shot Type Pills
+      const shotTypes = [
+        { id: 'ALL', label: 'All FGA' },
+        { id: '3PT', label: '3PT Only' },
+        { id: '2PT', label: '2PT / Rim' },
+        { id: 'MAKES', label: 'Makes Only' }
+      ];
+      const filterBarHtml = `
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:8px;background:#101829;border:1px solid #223049;border-radius:7px;padding:6px 8px;">
+          <select aria-label="Filter Shooter" onchange="updateCvCardFilter('${sideKey}','player',this.value)" style="background:#0b1120;color:#f8fafc;border:1px solid #334155;border-radius:5px;padding:4px 7px;font-size:0.73rem;font-weight:700;max-width:100%;min-width:140px;flex:1 1 150px;">
+            <option value="ALL" ${reg.playerFilter === 'ALL' ? 'selected' : ''}>🏀 All Shooters (${allShots.length} FGA)</option>
+            ${uniquePlayers.map(pn => `<option value="${escapeHtml(pn)}" ${reg.playerFilter === pn ? 'selected' : ''}>${escapeHtml(pn)}</option>`).join('')}
+          </select>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            ${shotTypes.map(st => {
+              const act = reg.shotFilter === st.id;
+              return `<button type="button" onclick="updateCvCardFilter('${sideKey}','shotType','${st.id}')" style="cursor:pointer;border-radius:5px;padding:4px 7px;font-size:0.69rem;font-weight:800;border:1px solid ${act ? '#fbbf24' : '#334155'};background:${act ? 'rgba(251,191,36,0.18)' : '#162033'};color:${act ? '#fde047' : '#cbd5e1'};">${st.label}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
       const pRowsHtml = (tData.players || []).map(p => {
         const diffCol = p.diff_pct >= 0 ? '#4ade80' : '#f87171';
         const diffSign = p.diff_pct >= 0 ? `+${p.diff_pct}%` : `${p.diff_pct}%`;
+        const isSel = reg.playerFilter === p.player;
+        const pJs = p.player.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         return `
-          <tr style="border-bottom:1px solid #1e293b;font-size:0.75rem;">
-            <td style="padding:5px 6px;font-weight:800;color:#f8fafc;">${escapeHtml(p.player)}</td>
-            <td style="padding:5px 4px;text-align:center;color:#cbd5e1;">${escapeHtml(p.fg_str)}</td>
+          <tr onclick="updateCvCardFilter('${sideKey}','player','${escapeHtml(pJs)}')" title="Click to filter chart to ${escapeHtml(p.player)}" style="cursor:pointer;border-bottom:1px solid #1e293b;font-size:0.74rem;background:${isSel ? 'rgba(56,189,248,0.16)' : 'transparent'};">
+            <td style="padding:5px 6px;font-weight:800;color:${isSel ? '#38bdf8' : '#f8fafc'};">${isSel ? '🎯 ' : ''}${escapeHtml(p.player)}</td>
+            <td style="padding:5px 4px;text-align:center;color:#cbd5e1;">${escapeHtml(p.fg_str)}${p.three_str ? ` <span style="color:#94a3b8;font-size:0.67rem;">(${escapeHtml(p.three_str)} 3P)</span>` : ''}</td>
             <td style="padding:5px 4px;text-align:center;color:#7dd3fc;">${p.avg_dist_ft} ft</td>
             <td style="padding:5px 4px;text-align:center;color:#fde68a;">${p.avg_def_ft} ft</td>
-            <td style="padding:5px 6px;text-align:right;font-weight:800;color:${diffCol};">${p.efg_pct}% <span style="font-size:0.68rem;opacity:0.85;">(${diffSign})</span></td>
+            <td style="padding:5px 6px;text-align:right;font-weight:800;color:${diffCol};">${p.efg_pct}% <span style="font-size:0.67rem;opacity:0.85;">(${diffSign})</span></td>
           </tr>
         `;
       }).join('');
 
       return `
-        <div style="background:#0c1322;border:1px solid #26354f;border-radius:9px;padding:12px 14px;min-width:0;">
-          <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#fff;text-transform:uppercase;">${escapeHtml(tData.team_name)}</div>
-          <div style="font-size:0.75rem;color:#7dd3fc;font-weight:700;margin-bottom:8px;">${escapeHtml(tData.opp_note)}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:0.73rem;font-weight:800;color:#e2e8f0;background:#131d31;padding:6px 9px;border-radius:6px;margin-bottom:8px;">
-            <span>FGA: ${tData.zone_verified_fga}</span>
-            <span>•</span>
-            <span>Avg 2PT: ${tData.avg_2pt_dist_ft} ft</span>
-            <span>•</span>
-            <span>Avg 3PT: ${tData.avg_3pt_dist_ft} ft</span>
-            <span>•</span>
-            <span>Avg Def: ${tData.avg_def_ft} ft</span>
-            <span>•</span>
-            <span style="color:#4ade80;">eFG: ${tData.efg_pct}%</span>
-          </div>
-          <svg viewBox="0 0 460 350" style="width:100%;height:auto;display:block;background:#141c2e;border:1px solid #334155;border-radius:7px;margin-bottom:8px;">
-            <rect x="170" y="0" width="120" height="190" fill="rgba(30,41,59,0.45)" stroke="#475569" stroke-width="1.5" />
-            <circle cx="230" cy="190" r="60" fill="none" stroke="#475569" stroke-width="1.3" stroke-dasharray="4,4" />
-            <polyline points="${arcPoly}" fill="none" stroke="#64748b" stroke-width="2" />
-            <line x1="200" y1="40" x2="260" y2="40" stroke="#cbd5e1" stroke-width="2.5" />
-            <circle cx="230" cy="52.5" r="9" fill="none" stroke="#f97316" stroke-width="2.5" />
-            ${raysSvg}
-            ${markersSvg}
-          </svg>
-          <div id="${readoutId}" style="font-size:0.76rem;color:#cbd5e1;background:#111827;border:1px solid #283548;border-radius:6px;padding:7px 9px;margin-bottom:10px;min-height:34px;line-height:1.45;">
-            👆 Tap or hover any shot marker (<strong style="color:#4ade80;">● Made</strong> / <strong style="color:#f87171;">✕ Miss</strong>; <span style="color:#f87171;">Red &lt;4ft</span> • <span style="color:#fbbf24;">Gold 4–6ft</span> • <span style="color:#4ade80;">Green 6+ft</span>) to inspect distance &amp; nearest defender!
-          </div>
-          <div style="margin-bottom:10px;">${tiersHtml}</div>
-          <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;">
-            <table style="width:100%;border-collapse:collapse;min-width:290px;">
-              <thead>
-                <tr style="border-bottom:1px solid #334155;font-size:0.68rem;color:#94a3b8;text-transform:uppercase;">
-                  <th style="padding:4px 6px;text-align:left;">Shooter</th>
-                  <th style="padding:4px 4px;text-align:center;">FG</th>
-                  <th style="padding:4px 4px;text-align:center;">Dist</th>
-                  <th style="padding:4px 4px;text-align:center;">Def</th>
-                  <th style="padding:4px 6px;text-align:right;">eFG (vs xeFG)</th>
-                </tr>
-              </thead>
-              <tbody>${pRowsHtml}</tbody>
-            </table>
-          </div>
+        <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#fff;text-transform:uppercase;">${escapeHtml(tData.team_name)}</div>
+        <div style="font-size:0.75rem;color:#7dd3fc;font-weight:700;margin-bottom:8px;">${escapeHtml(tData.opp_note)}</div>
+        ${scopeTabsHtml}
+        ${filterBarHtml}
+        <div style="display:flex;gap:7px;flex-wrap:wrap;font-size:0.73rem;font-weight:800;color:#e2e8f0;background:#131d31;padding:6px 9px;border-radius:6px;margin-bottom:8px;">
+          <span>FG: ${fgm}/${fga} (${tpm}/${threes.length} 3PT)</span>
+          <span>•</span>
+          <span>Avg 2PT: ${avg2} ft</span>
+          <span>•</span>
+          <span>Avg 3PT: ${avg3} ft</span>
+          <span>•</span>
+          <span>Avg Def: ${avgDef} ft</span>
+          <span>•</span>
+          <span style="color:#4ade80;">eFG: ${efgPct}%</span>
+        </div>
+        <svg viewBox="0 0 460 358" style="width:100%;height:auto;display:block;background:#141c2e;border:1px solid #334155;border-radius:7px;margin-bottom:8px;">
+          <rect x="170" y="0" width="120" height="190" fill="rgba(30,41,59,0.45)" stroke="#475569" stroke-width="1.5" />
+          <circle cx="230" cy="190" r="60" fill="none" stroke="#475569" stroke-width="1.3" stroke-dasharray="4,4" />
+          <polyline points="${arcPoly}" fill="none" stroke="#64748b" stroke-width="2" />
+          <line x1="200" y1="40" x2="260" y2="40" stroke="#cbd5e1" stroke-width="2.5" />
+          <circle cx="230" cy="52.5" r="9" fill="none" stroke="#f97316" stroke-width="2.5" />
+          <text x="10" y="18" fill="#64748b" font-size="9.5" font-weight="800" font-family="sans-serif">L CORNER</text>
+          <text x="450" y="18" fill="#64748b" font-size="9.5" font-weight="800" font-family="sans-serif" text-anchor="end">R CORNER</text>
+          <text x="12" y="348" fill="#7dd3fc" font-size="10.5" font-weight="800" font-family="sans-serif">← SHOOTER'S LEFT (Facing Hoop)</text>
+          <text x="448" y="348" fill="#7dd3fc" font-size="10.5" font-weight="800" font-family="sans-serif" text-anchor="end">(Facing Hoop) SHOOTER'S RIGHT →</text>
+          ${raysSvg}
+          ${markersSvg}
+        </svg>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;">${zonePillsHtml}</div>
+        <div id="${readoutId}" style="font-size:0.76rem;color:#cbd5e1;background:#111827;border:1px solid #283548;border-radius:6px;padding:7px 9px;margin-bottom:10px;min-height:34px;line-height:1.45;">
+          👆 Tap any shot (<strong style="color:#4ade80;">● Made</strong> / <strong style="color:#f87171;">✕ Miss</strong>; <span style="color:#f87171;">Red &lt;4ft</span> • <span style="color:#fbbf24;">Gold 4–6ft</span> • <span style="color:#4ade80;">Green 6+ft</span>) to inspect release &amp; jump straight to game film!
+        </div>
+        <div style="margin-bottom:10px;">${tiersHtml}</div>
+        <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;">
+          <table style="width:100%;border-collapse:collapse;min-width:290px;">
+            <thead>
+              <tr style="border-bottom:1px solid #334155;font-size:0.68rem;color:#94a3b8;text-transform:uppercase;">
+                <th style="padding:4px 6px;text-align:left;">Shooter (Tap to Filter)</th>
+                <th style="padding:4px 4px;text-align:center;">FG (3PT)</th>
+                <th style="padding:4px 4px;text-align:center;">Dist</th>
+                <th style="padding:4px 4px;text-align:center;">Def</th>
+                <th style="padding:4px 6px;text-align:right;">eFG (vs xeFG)</th>
+              </tr>
+            </thead>
+            <tbody>${pRowsHtml}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderTeamShotContestCard(tData, sideKey, filmSessionId, scopesMap, scopeTabs, defaultScope) {
+      if (!tData && !scopesMap) return '';
+      cvCardRegistry[sideKey] = {
+        baseData: tData,
+        scopes: scopesMap || null,
+        scopeTabs: scopeTabs || null,
+        activeScope: defaultScope || (scopesMap ? 'all_season' : ''),
+        filmSessionId: filmSessionId || '',
+        playerFilter: 'ALL',
+        shotFilter: 'ALL'
+      };
+      return `
+        <div id="cvCardMount_${sideKey}" style="background:#0c1322;border:1px solid #26354f;border-radius:9px;padding:12px 14px;min-width:0;">
+          ${buildCvCardInnerHtml(sideKey)}
+        </div>
+      `;
+    }
+
+    function renderSeasonShotLabPanel(scl) {
+      if (!scl || !scl.scopes) return '';
+      const insightsHtml = (scl.key_insights || []).map(ins => `
+        <div style="font-size:0.81rem;color:#e2e8f0;background:#111a2e;border-left:3px solid #38bdf8;padding:8px 11px;border-radius:5px;margin-bottom:7px;line-height:1.5;">
+          🎯 ${escapeHtml(ins)}
+        </div>
+      `).join('');
+      return `
+        <div class="scouting-panel" id="seasonShotLabPanel" style="border-color:rgba(56,189,248,0.55);background:linear-gradient(180deg,#0f172a 0%,#090d16 100%);">
+          <h3>
+            <span>🎯 ${escapeHtml(scl.headline || 'Campbell United Full-Season & Single-Game Shot & Contest Lab')}</span>
+            <span style="font-size:0.73rem;color:#fde047;font-weight:800;text-transform:none;">180°-Rotated Half-Court Geometry • 1-Click Film Jump</span>
+          </h3>
+          <div style="margin-bottom:10px;">${insightsHtml}</div>
+          ${renderTeamShotContestCard(scl.scopes.all_season, 'season_cu', '', scl.scopes, scl.scope_tabs, scl.default_scope || 'all_season')}
+        </div>
+      `;
+    }
+
+    function renderSingleGameShotChart(scData, sessionId) {
+      const mount = document.getElementById('singleGameShotChartMount');
+      if (!mount) return;
+      if (!scData || !scData.shots || scData.shots.length === 0) {
+        mount.style.display = 'none';
+        mount.innerHTML = '';
+        return;
+      }
+      mount.style.display = 'block';
+      mount.innerHTML = `
+        <div class="scouting-panel" style="margin:0;border-color:rgba(56,189,248,0.5);background:linear-gradient(180deg,#0f172a 0%,#0b1120 100%);">
+          <h3 style="margin-top:0;">
+            <span>🎯 Single-Game Shot Distance &amp; Nearest-Defender Contest Chart</span>
+            <span style="font-size:0.73rem;color:#7dd3fc;font-weight:800;text-transform:none;">Tap Any Shot Dot to Seek Video Player Above!</span>
+          </h3>
+          ${renderTeamShotContestCard(scData, 'single_game_cu', sessionId)}
         </div>
       `;
     }
@@ -2892,20 +3096,27 @@
         </div>
       `).join('');
 
+      const evanCuTabs = scp.cu_scopes ? [
+        { id: 'all_season', label: '🔥 Full Season (5 GP)' },
+        { id: 'full_tracking', label: '🎯 Wks 3–4 Full' },
+        { id: 'cu_g4', label: 'Wk 4 vs Ricecookers (OT)' },
+        { id: 'cu_g3', label: 'Wk 3 vs Misfits 2' },
+        { id: 'cu_g2', label: 'Wk 2 vs TMT' },
+        { id: 'cu_g1', label: 'Wk 1 vs Halal' },
+        { id: 'cu_champ', label: 'Fall Champ' }
+      ] : null;
+
       return `
         <div class="scouting-panel" id="cvShotContestPanel" style="border-color:rgba(250,204,21,0.55);background:linear-gradient(180deg,#0f172a 0%,#090d16 100%);">
           <h3>
-            <span>🎯 ${escapeHtml(scp.headline || 'Prototype CV Lab: Shot Distance & Nearest-Defender Contest')}</span>
-            <span style="font-size:0.73rem;color:#fde047;font-weight:800;text-transform:none;">3D BallerCam Court Homography + YOLOX-S + HSV Jersey Tracker</span>
+            <span>🎯 ${escapeHtml(scp.headline || 'CV Shot Distance & Nearest-Defender Contest Lab')}</span>
+            <span style="font-size:0.73rem;color:#fde047;font-weight:800;text-transform:none;">180°-Rotated 3D Court Homography + YOLOX-S</span>
           </h3>
-          <div style="font-size:0.78rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:10px;line-height:1.5;">
-            🛰️ <strong>How It Works:</strong> ${escapeHtml(scp.methodology || '')}
-          </div>
           <div style="margin-bottom:12px;">
             ${insightsHtml}
           </div>
           <div class="scouting-grid-2col">
-            ${renderTeamShotContestCard(scp.cu, 'cu', '2026-11-08_CU_vs_Ricecookers_G4')}
+            ${renderTeamShotContestCard(scp.cu, 'cu', '2026-11-08_CU_vs_Ricecookers_G4', scp.cu_scopes || null, evanCuTabs, scp.cu_scopes ? 'all_season' : '')}
             ${renderTeamShotContestCard(scp.lt, 'lt', '')}
           </div>
           ${scp.proof_grid_url ? `
@@ -3755,10 +3966,10 @@
         <div class="scouting-hero" style="border-color:rgba(168,85,247,0.5);background:linear-gradient(135deg,#1e1035 0%,#0f172a 100%);">
           <div>
             <div style="font-family:var(--font-display);font-weight:800;font-size:0.85rem;letter-spacing:0.08em;color:#e9d5ff;text-transform:uppercase;">
-              🧠 GOOGLE COLAB GPU VISION &amp; ADVANCED ANALYTICS PIPELINE • CAMPBELL UNITED (4-0 STREAK)
+              🧠 GOOGLE COLAB GPU VISION &amp; ADVANCED ANALYTICS PIPELINE • CAMPBELL UNITED (5-0 STREAK)
             </div>
             <h1 style="font-family:var(--font-display);font-size:2.05rem;font-weight:900;color:#fff;letter-spacing:0.02em;text-transform:uppercase;margin:2px 0 4px;">
-              ${escapeHtml(sa.title || 'Campbell United — Season Analytics & Dunk Lab')}
+              ${escapeHtml(sa.title || 'Campbell United — Season Analytics & Shot Lab')}
             </h1>
             <div style="font-size:0.86rem;color:#cbd5e1;font-weight:600;">
               ${escapeHtml(sa.subtitle || '')}
@@ -3769,6 +3980,8 @@
             <a href="${escapeHtml(sa.github_url || '#')}" target="_blank" rel="noopener" class="btn-link blue-btn" style="font-weight:800;padding:8px 14px;font-size:0.82rem;">💻 GitHub Repo (switzloco/bball_annotation)</a>
           </div>
         </div>
+
+        ${sa.shot_chart_lab ? renderSeasonShotLabPanel(sa.shot_chart_lab) : ''}
 
         ${dr.video_url ? `
           <div class="scouting-panel" id="scoutingTapePanel" style="border-color:rgba(168,85,247,0.55);background:linear-gradient(180deg,#131129 0%,#0b0f19 100%);">
@@ -4019,6 +4232,7 @@
       const gSelect = document.getElementById('gameFilter');
 
       if (activeSessionId === '2026-10-31') {
+        renderSingleGameShotChart(null, '');
         activeMajesticGame = null;
         PLAYERS = [...PICKUP_PLAYERS];
         TOP_5_PLAYS = [...PICKUP_TOP_5_PLAYS];
@@ -4265,13 +4479,19 @@
           const shortAct = (ev.action === 'Charge Drawn' || (ev.tags || []).includes('CHG')) ? '🛡️ CHG' : ev.pts_added === 3 ? '🎯 3PT' : ev.pts_added === 2 ? '🏀 2PT' : ev.action === 'Steal' ? '🔒 STL' : ev.action === 'Block' ? '🚫 BLK' : '🔥 FT';
           return `<span class="chapter-pill" style="border-color:#fde68a;color:#fde68a;" onclick="seekTo(${ev.s}, true)">${ev.t} ${escapeHtml(ev.player)} ${shortAct} (${ev.cu_score}-${ev.opp_score})</span>`;
         }).join('');
+        const shotChartPill = (gData.shot_chart && gData.shot_chart.shots && gData.shot_chart.shots.length > 0)
+          ? `<span class="chapter-pill" style="background:#0369a1;color:#fff;font-weight:800;border-color:#38bdf8;" onclick="document.getElementById('singleGameShotChartMount')?.scrollIntoView({behavior:'smooth',block:'start'})">🎯 Interactive Shot Chart (${gData.shot_chart.zone_verified_fga} FGA)</span>`
+          : '';
         chapterBar.innerHTML = `
           <span class="chapter-pill" style="background:#1e3a8a;color:#fff;font-weight:800;border-color:#60a5fa;" onclick="seekTo(${tipoffSec}, false)" title="Jump right to the opening jump ball (skip warmups)">🏀 ${tipoffMmSs} Opening Tip-Off</span>
           <span class="chapter-pill" style="background:#990000;color:#fff;font-weight:800;" onclick="filterCuTeamHighlights()">🎬 Auto-Play ${escapeHtml(cfg.cu_team_name || 'Campbell United')} Highlights</span>
+          ${shotChartPill}
           ${wesPill}
           ${teamPills}
         `;
       }
+
+      renderSingleGameShotChart(gData.shot_chart || null, activeSessionId);
 
       const blTrack = document.getElementById('bottomlineTrack');
       if (blTrack && TOP_5_PLAYS.length > 0) {
