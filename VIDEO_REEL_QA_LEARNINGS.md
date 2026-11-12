@@ -75,3 +75,26 @@ When processing `#2 Mohamed`'s `Winter 2026` season on `Crew 7` (`https://mh.maj
    - OpenCV Hershey fonts only support 7-bit ASCII (`0x20..0x7E`); Unicode characters like `•`, `—`, or `×` render as `???`. Always use ASCII `-` and `x` in `cv2.putText` lower-thirds.
 5. **Interactive Collaborative Training Studio (`🤝 Collab Training`)**:
    - Pairing automated LED Scoreboard Binary Search (which nails **when** every `+2`/`+3` happened) with 1-tap teammate verification in `index.html` + `server.py` (`collab_calibrate` & `collab_tag_live`, logging `drift_delta_s` and verified player/assist labels to `training_corrections.jsonl`) turns historical zero-timestamp game film into a gold-labeled multi-season CV dataset.
+
+
+---
+
+## 6. Chapter-Boundary Keyframe PTS Offset (`-f concat -c copy`) & End-of-Reel Dead-Ball Repetition (`scouting_nov15`)
+
+### Discovery (`latto_talent_scouting_tape_1080p.mp4` — Nov 15 Scouting Report)
+When QA-testing the end of the Latto Talent `1080p` scouting reel (`Clips #8–#11`), two distinct issues combined to make the final chapters appear to replay the same play repeatedly:
+
+1. **B-Frame PTS Shift (`+0.021354s`) + Sparse GOP (`keyint=250`) in `-f concat -c copy` Segment Splicing**:
+   - Encoding each clip separately with B-frames + AAC priming (`-c:a aac -shortest`) and stitching via `ffmpeg -f concat -c copy` shifted every segment's video I-frame to `+.021354s` **after** the nominal chapter start (`61.021354s > 61.0s`, `69.521354s > 69.5s`, `78.021354s > 78.0s`, `86.021354s > 86.0s`).
+   - Because Clips 10 (`240` frames) and 11 (`225` frames) were shorter than `libx264`'s default `250`-frame GOP (`8.33s`), each segment contained **only one sync sample (`stss`)**.
+   - Clicking **Chapter 11 / Card 8 (`#10 Ty`, `seekScoutingTape(86.0)`)** sought to `86.000s < 86.021354s`, which belonged to **Clip 10's GOP (`78.021354s`, `#2 Troy`)**, stalling at `readyState = 1` or snapping backward on hardware/mobile decoders to replay `#2 Troy`'s clip instead of `#10 Ty`'s clip.
+2. **Consecutive Untrimmed Opponent Inbound/Transition Possessions (`Clips #8–#10`)**:
+   - Clips 8, 9, and 10 each included `4.0–5.0s` of Misfits 2 (Light Blue) rebounding/inbounding under the left hoop and jogging left-to-right across midcourt before/after the Latto Talent highlight, making continuous playback from `1:01` to `1:33` look like the same Light Blue transition possession three times in a row.
+
+### Mandatory Pipeline Rules for Chaptered Scouting & Highlight Reels
+1. **Never Stitch Separately Encoded MP4 Segments with `-f concat -c copy` for Chapter-Indexed Reels**:
+   - Build a single sample-exact `48 kHz` PCM WAV master (`master_scouting_audio.wav`) and stream all clips sequentially through **one continuous `rawvideo bgr24` -> `libx264` pipe** (`-bf 0 -g 30 -keyint_min 15 -force_key_frames <csv_of_chapter_starts>`). This guarantees `start_time = 0.000000`, dense `1.0s` GOPs, and an exact I-frame at every `0.000000s` chapter boundary.
+2. **Offset Non-Zero Browser Chapter Seeks by `+0.10s` (`seekScoutingTape`)**:
+   - In HTML5 `<video>` chapter buttons (`seekScoutingTape(sec)`), seek non-zero chapters to `sec + 0.10` (after ensuring `readyState >= 1`) so floating-point/sync-sample rounding can never land inside the preceding clip's GOP.
+3. **Trim Dead-Ball Opponent Inbounds Tightly (`≤1.2s` Follow-Through After Make)**:
+   - Cut each scouting clip immediately after the ball clears the net (`+1.0s` to `+1.3s`) rather than holding `4–5s` into the opponent's baseline inbound.

@@ -2865,13 +2865,26 @@
         np.innerHTML = `🎬 <strong>Now Playing Clip:</strong> ${escapeHtml(label)}`;
       }
       if (sv) {
-        sv.currentTime = Number(sec) || 0;
-        sv.play().catch(err => {
-          if (err && err.name === 'NotAllowedError') {
-            sv.muted = true;
-            sv.play().catch(() => {});
-          }
-        });
+        const rawSec = Number(sec) || 0;
+        const targetSec = rawSec > 0 ? rawSec + 0.10 : 0;
+        const applySeekAndPlay = () => {
+          const safeSec = (Number.isFinite(sv.duration) && sv.duration > 0.5)
+            ? Math.min(targetSec, Math.max(0, sv.duration - 0.25))
+            : targetSec;
+          try { sv.currentTime = safeSec; } catch (_) {}
+          sv.play().catch(err => {
+            if (err && err.name === 'NotAllowedError') {
+              sv.muted = true;
+              sv.play().catch(() => {});
+            }
+          });
+        };
+        if (sv.readyState === 0) {
+          sv.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+          sv.load();
+        } else {
+          applySeekAndPlay();
+        }
       }
     }
 
