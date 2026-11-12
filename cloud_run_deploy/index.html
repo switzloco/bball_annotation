@@ -3105,6 +3105,7 @@
       const tovPlays = (BASE_PLAYS || []).filter(p => p.tags && p.tags.includes('TOV'));
       const cuTovs = tovPlays.filter(p => p.isCu);
       const oppTovs = tovPlays.filter(p => !p.isCu);
+      const ps = gData && gData.poss_summary ? gData.poss_summary : null;
 
       if (hdrBtn) {
         if (cuTovs.length > 0) {
@@ -3116,7 +3117,7 @@
       }
 
       if (!mount) return;
-      if (!gData || (cuTovs.length === 0 && oppTovs.length === 0)) {
+      if (!gData || (!ps && cuTovs.length === 0 && oppTovs.length === 0)) {
         mount.style.display = 'none';
         mount.innerHTML = '';
         return;
@@ -3139,38 +3140,277 @@
         .sort((a, b) => b[1] - a[1])
         .map(([pl, cnt]) => {
           const plJs = pl.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-          return `<button type="button" onclick="startTurnoverReel('CU', '${escapeHtml(plJs)}')" style="cursor:pointer;background:rgba(249,115,22,0.14);border:1px solid rgba(249,115,22,0.45);color:#fed7aa;font-size:0.75rem;font-weight:800;padding:4px 9px;border-radius:999px;">🎬 ${escapeHtml(displayPlayerName(pl))} (${cnt} TOV)</button>`;
+          return `<button type="button" onclick="startTurnoverReel('CU', '${escapeHtml(plJs)}')" style="cursor:pointer;background:rgba(249,115,22,0.14);border:1px solid rgba(249,115,22,0.45);color:#fed7aa;font-size:0.74rem;font-weight:800;padding:4px 9px;border-radius:999px;">🎬 ${escapeHtml(displayPlayerName(pl))} (${cnt} TOV)</button>`;
         }).join('');
+
+      const cvTovPillsHtml = (ps && ps.cv_unlogged_clips ? ps.cv_unlogged_clips : []).map(c =>
+        `<button type="button" onclick="seekTo(${Number(c.s) || 0}, true)" style="cursor:pointer;background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.45);color:#bae6fd;font-size:0.73rem;font-weight:800;padding:4px 9px;border-radius:999px;">🔍 CV Perceived TOV @ ${escapeHtml(c.t)} (${escapeHtml(c.period || '')})</button>`
+      ).join('');
+
+      let possBodyHtml = '';
+      if (ps) {
+        const netSign = Number(ps.net_ppp) >= 0 ? `+${Number(ps.net_ppp).toFixed(2)}` : Number(ps.net_ppp).toFixed(2);
+        const actRowsHtml = (ps.action_rows || []).map(r => {
+          const pctW = Math.max(3, Math.min(100, Math.round((Number(r.ppp || 0) / 1.45) * 100)));
+          const barCol = r.color || '#38bdf8';
+          const clipBtns = (r.clips || []).slice(0, 3).map(cl => {
+            const isScore = cl.kind === 'SCORE';
+            const bBg = isScore ? 'rgba(34,197,94,0.15)' : 'rgba(249,115,22,0.15)';
+            const bBd = isScore ? 'rgba(74,222,128,0.45)' : 'rgba(251,146,60,0.45)';
+            const bCol = isScore ? '#bbf7d0' : '#fed7aa';
+            return `<button type="button" onclick="seekTo(${Number(cl.s) || 0}, true)" style="cursor:pointer;background:${bBg};border:1px solid ${bBd};color:${bCol};font-size:0.7rem;font-weight:800;padding:2px 7px;border-radius:999px;">🎬 ${escapeHtml(cl.t)} ${escapeHtml(cl.label)}</button>`;
+          }).join('');
+          return `
+            <div style="background:#0d1526;border:1px solid #223049;border-radius:8px;padding:8px 10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                <span style="font-weight:800;font-size:0.8rem;color:#f8fafc;">${escapeHtml(r.label)} <span style="color:#94a3b8;font-weight:700;font-size:0.73rem;">(${r.poss} acts • ${r.freq_pct}%)</span></span>
+                <span style="font-weight:900;font-size:0.82rem;color:${barCol};">${Number(r.ppp).toFixed(2)} PPP <span style="color:#cbd5e1;font-weight:700;font-size:0.73rem;">(${r.pts} PTS • ${escapeHtml(r.fg_str)} FG, ${r.efg_pct}% eFG • ${r.ft_trips} FT • ${r.tov_total} TOV / ${r.tov_pct}%)</span></span>
+              </div>
+              <div style="height:8px;background:#172236;border-radius:999px;overflow:hidden;margin-bottom:${clipBtns ? '6px' : '0'};">
+                <div style="width:${pctW}%;height:100%;background:${barCol};border-radius:999px;"></div>
+              </div>
+              ${clipBtns ? `<div style="display:flex;gap:5px;flex-wrap:wrap;">${clipBtns}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+
+        possBodyHtml = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:10px;">
+            <div style="background:#101b2d;border:1px solid rgba(74,222,128,0.38);border-radius:8px;padding:8px 10px;">
+              <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Off / Def PPP</div>
+              <div style="font-family:var(--font-display);font-size:1.18rem;font-weight:900;color:#4ade80;">${Number(ps.off_ppp).toFixed(2)} / ${Number(ps.def_ppp).toFixed(2)}</div>
+              <div style="font-size:0.72rem;color:#cbd5e1;">Net <strong>${netSign} PPP</strong> (${ps.pts}–${ps.opp_pts})</div>
+            </div>
+            <div style="background:#101b2d;border:1px solid rgba(56,189,248,0.38);border-radius:8px;padding:8px 10px;">
+              <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">True Possessions</div>
+              <div style="font-family:var(--font-display);font-size:1.18rem;font-weight:900;color:#38bdf8;">${ps.poss} Poss</div>
+              <div style="font-size:0.72rem;color:#cbd5e1;">Majestic + CV Court-Pan Sync</div>
+            </div>
+            <div style="background:#101b2d;border:1px solid rgba(251,191,36,0.38);border-radius:8px;padding:8px 10px;">
+              <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">True TOV% (Balanced)</div>
+              <div style="font-family:var(--font-display);font-size:1.18rem;font-weight:900;color:#fbbf24;">${ps.tov_pct}% (${ps.total_tov} TOV)</div>
+              <div style="font-size:0.72rem;color:#cbd5e1;">${ps.majestic_tov} Logged + ${ps.cv_perceived_tov} CV Perceived</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
+            ${actRowsHtml}
+          </div>
+        `;
+      }
 
       mount.style.display = 'block';
       mount.innerHTML = `
-        <div class="scouting-panel" style="margin:0;border-color:rgba(249,115,22,0.52);background:linear-gradient(180deg,#161224 0%,#0b1120 100%);">
+        <div class="scouting-panel" style="margin:0;border-color:rgba(56,189,248,0.48);background:linear-gradient(180deg,#0f172a 0%,#0b1120 100%);">
           <h3 style="margin-top:0;">
-            <span>🔄 Single-Game Turnover &amp; Ball-Security Film Study</span>
-            <span style="font-size:0.73rem;color:#fdba74;font-weight:800;text-transform:none;">1-Click Sequential 1080p Turnover Video Reel</span>
+            <span>⚡ ${ps ? 'Single-Game Possession Efficiency (PPP) &amp; Action-Type Breakdown' : 'Single-Game Turnover &amp; Ball-Security Film Study'}</span>
+            <span style="font-size:0.73rem;color:#7dd3fc;font-weight:800;text-transform:none;">${ps ? 'Majestic + 1080p CV Perceived • Tap Any Clip to Seek Video!' : '1-Click Sequential 1080p Turnover Video Reel'}</span>
           </h3>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-bottom:10px;">
-            <div style="background:#131829;border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          ${possBodyHtml}
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-bottom:${(playerPillsHtml || cvTovPillsHtml) ? '8px' : '0'};">
+            <div style="background:#131829;border:1px solid rgba(249,115,22,0.35);border-radius:8px;padding:8px 11px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
               <div>
-                <div style="font-family:var(--font-display);font-size:0.98rem;font-weight:900;color:#fdba74;">🏀 ${escapeHtml(cuName.toUpperCase())}: ${cuTovs.length} LOGGED TURNOVERS</div>
-                <div style="font-size:0.76rem;color:#cbd5e1;margin-top:2px;">1st Half: <strong>${cu1h}</strong> &nbsp;•&nbsp; 2nd Half / OT: <strong>${cu2h}</strong></div>
+                <div style="font-family:var(--font-display);font-size:0.94rem;font-weight:900;color:#fdba74;">🏀 ${escapeHtml(cuName.toUpperCase())} BALL SECURITY: ${ps ? `${ps.total_tov} TOV (${ps.majestic_tov} Maj + ${ps.cv_perceived_tov} CV)` : `${cuTovs.length} Logged TOVs`}</div>
+                <div style="font-size:0.74rem;color:#cbd5e1;margin-top:2px;">Logged 1H: <strong>${cu1h}</strong> &nbsp;•&nbsp; 2H/OT: <strong>${cu2h}</strong></div>
               </div>
-              ${cuTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('CU')" style="cursor:pointer;background:linear-gradient(135deg,#ea580c,#c2410c);border:1px solid #fdba74;color:#fff;font-size:0.76rem;font-weight:800;padding:7px 11px;border-radius:6px;">▶️ Watch All ${cuTovs.length} Team TOVs</button>` : ''}
+              ${cuTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('CU')" style="cursor:pointer;background:linear-gradient(135deg,#ea580c,#c2410c);border:1px solid #fdba74;color:#fff;font-size:0.74rem;font-weight:800;padding:6px 10px;border-radius:6px;">▶️ Logged TOVs (${cuTovs.length})</button>` : ''}
             </div>
-            <div style="background:#0e1b18;border:1px solid rgba(34,197,94,0.4);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div style="background:#0e1b18;border:1px solid rgba(34,197,94,0.35);border-radius:8px;padding:8px 11px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
               <div>
-                <div style="font-family:var(--font-display);font-size:0.98rem;font-weight:900;color:#86efac;">🦅 FORCED ${escapeHtml(oppName.toUpperCase())} TURNOVERS: ${oppTovs.length}</div>
-                <div style="font-size:0.76rem;color:#cbd5e1;margin-top:2px;">1st Half: <strong>${opp1h}</strong> &nbsp;•&nbsp; 2nd Half / OT: <strong>${opp2h}</strong></div>
+                <div style="font-family:var(--font-display);font-size:0.94rem;font-weight:900;color:#86efac;">🦅 FORCED ${escapeHtml(oppName.toUpperCase())} TURNOVERS: ${oppTovs.length}</div>
+                <div style="font-size:0.74rem;color:#cbd5e1;margin-top:2px;">1H: <strong>${opp1h}</strong> &nbsp;•&nbsp; 2H/OT: <strong>${opp2h}</strong></div>
               </div>
-              ${oppTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('OPP')" style="cursor:pointer;background:linear-gradient(135deg,#059669,#047857);border:1px solid #86efac;color:#fff;font-size:0.76rem;font-weight:800;padding:7px 11px;border-radius:6px;">▶️ Watch ${oppTovs.length} Takeaways</button>` : ''}
+              ${oppTovs.length > 0 ? `<button type="button" onclick="startTurnoverReel('OPP')" style="cursor:pointer;background:linear-gradient(135deg,#059669,#047857);border:1px solid #86efac;color:#fff;font-size:0.74rem;font-weight:800;padding:6px 10px;border-radius:6px;">▶️ Takeaways (${oppTovs.length})</button>` : ''}
             </div>
           </div>
-          ${playerPillsHtml ? `
+          ${(playerPillsHtml || cvTovPillsHtml) ? `
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:0.73rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Tap Player Turnover Reel:</span>
+              <span style="font-size:0.72rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Film Jumps:</span>
               ${playerPillsHtml}
+              ${cvTovPillsHtml}
             </div>
           ` : ''}
+        </div>
+      `;
+    }
+
+    let possActionLabState = { pal: null, tl: null, activeScope: 'cu_season' };
+
+    function switchPossActionScope(scopeId) {
+      if (!possActionLabState.pal || !possActionLabState.pal.cu_scopes || !possActionLabState.pal.cu_scopes[scopeId]) return;
+      possActionLabState.activeScope = scopeId;
+      const inner = document.getElementById('possActionLabInnerMount');
+      if (inner) {
+        inner.innerHTML = buildPossActionLabInnerHtml();
+      }
+    }
+
+    function buildPossActionLabInnerHtml() {
+      const pal = possActionLabState.pal;
+      if (!pal || !pal.cu_scopes) return '';
+      const scKey = possActionLabState.activeScope || 'cu_season';
+      const cuSc = pal.cu_scopes[scKey] || pal.cu_scopes.cu_season;
+      const ltSc = pal.lt_wk4 || null;
+      const ltMap = {};
+      if (ltSc && ltSc.action_rows) {
+        ltSc.action_rows.forEach(r => { ltMap[r.id] = r; });
+      }
+
+      const tabsHtml = (pal.scope_tabs || []).map(tb => {
+        const act = tb.id === scKey;
+        return `<button type="button" onclick="switchPossActionScope('${escapeHtml(tb.id)}')" style="cursor:pointer;border-radius:999px;padding:5px 11px;font-size:0.74rem;font-weight:800;border:1px solid ${act ? '#38bdf8' : '#334155'};background:${act ? 'rgba(56,189,248,0.2)' : '#131d31'};color:${act ? '#bae6fd' : '#cbd5e1'};">${escapeHtml(tb.label)}</button>`;
+      }).join('');
+
+      const netSign = Number(cuSc.net_ppp) >= 0 ? `+${Number(cuSc.net_ppp).toFixed(2)}` : Number(cuSc.net_ppp).toFixed(2);
+      const rowsHtml = (cuSc.action_rows || []).map(cr => {
+        const lr = ltMap[cr.id] || { ppp: 0, poss: 0, freq_pct: 0, pts: 0, fg_str: '0/0', efg_pct: 0, ft_trips: 0, tov_total: 0, tov_pct: 0 };
+        const cuW = Math.max(3, Math.min(100, Math.round((Number(cr.ppp || 0) / 1.45) * 100)));
+        const ltW = Math.max(2, Math.min(100, Math.round((Number(lr.ppp || 0) / 1.45) * 100)));
+        const clipBtns = (cr.clips || []).map(cl => {
+          const isScore = cl.kind === 'SCORE';
+          const bBg = isScore ? 'rgba(34,197,94,0.15)' : 'rgba(249,115,22,0.15)';
+          const bBd = isScore ? 'rgba(74,222,128,0.45)' : 'rgba(251,146,60,0.45)';
+          const bCol = isScore ? '#bbf7d0' : '#fed7aa';
+          return `<button type="button" onclick="watchCvShotClip('${escapeHtml(cl.g)}', ${Number(cl.s) || 0})" style="cursor:pointer;background:${bBg};border:1px solid ${bBd};color:${bCol};font-size:0.7rem;font-weight:800;padding:3px 8px;border-radius:999px;">🎬 ${escapeHtml(cl.t)} ${escapeHtml(cl.label)}</button>`;
+        }).join('');
+
+        return `
+          <div style="background:#0d1424;border:1px solid #24324a;border-radius:9px;padding:10px 12px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+              <div style="font-weight:900;font-size:0.86rem;color:#f8fafc;">${escapeHtml(cr.label)}</div>
+              <div style="font-size:0.73rem;color:#94a3b8;font-weight:700;">Share: <strong style="color:#7dd3fc;">CU ${cr.freq_pct}% (${cr.poss})</strong> &nbsp;|&nbsp; <strong style="color:#fdba74;">Latto ${lr.freq_pct}% (${lr.poss})</strong></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:${clipBtns ? '7px' : '0'};">
+              <div>
+                <div style="display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:0.74rem;margin-bottom:2px;">
+                  <span style="color:#bae6fd;font-weight:800;">🏀 CU: <strong>${Number(cr.ppp).toFixed(2)} PPP</strong> (${cr.pts} PTS)</span>
+                  <span style="color:#cbd5e1;">${escapeHtml(cr.fg_str)} FG (${cr.efg_pct}% eFG) • ${cr.ft_trips} FT • ${cr.tov_total} TOV (${cr.tov_pct}%)</span>
+                </div>
+                <div style="height:8px;background:#172236;border-radius:999px;overflow:hidden;">
+                  <div style="width:${cuW}%;height:100%;background:#38bdf8;border-radius:999px;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:0.74rem;margin-bottom:2px;">
+                  <span style="color:#fed7aa;font-weight:800;">⚔️ Latto Wk 4: <strong>${Number(lr.ppp).toFixed(2)} PPP</strong> (${lr.pts} PTS)</span>
+                  <span style="color:#94a3b8;">${escapeHtml(lr.fg_str)} FG (${lr.efg_pct}% eFG) • ${lr.ft_trips || 0} FT • ${lr.tov_total || 0} TOV (${lr.tov_pct}%)</span>
+                </div>
+                <div style="height:7px;background:#172236;border-radius:999px;overflow:hidden;">
+                  <div style="width:${ltW}%;height:100%;background:#f97316;border-radius:999px;"></div>
+                </div>
+              </div>
+            </div>
+            ${clipBtns ? `<div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;"><span style="font-size:0.69rem;color:#94a3b8;font-weight:800;text-transform:uppercase;">Watch Film:</span>${clipBtns}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+          ${tabsHtml}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:9px;margin-bottom:12px;">
+          <div style="background:#0e192b;border:1px solid rgba(74,222,128,0.4);border-left:4px solid #4ade80;border-radius:8px;padding:9px 11px;">
+            <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">CU Off / Def PPP (${escapeHtml(cuSc.label.split('(')[0].trim())})</div>
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:900;color:#4ade80;">${Number(cuSc.off_ppp).toFixed(2)} / ${Number(cuSc.def_ppp).toFixed(2)}</div>
+            <div style="font-size:0.73rem;color:#cbd5e1;">Net <strong>${netSign} PPP</strong> (${cuSc.pts}–${cuSc.opp_pts} on ${cuSc.poss} Poss)</div>
+          </div>
+          <div style="background:#0e192b;border:1px solid rgba(56,189,248,0.4);border-left:4px solid #38bdf8;border-radius:8px;padding:9px 11px;">
+            <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">CU True TOV% (Majestic + CV)</div>
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:900;color:#38bdf8;">${cuSc.tov_pct}% (${cuSc.total_tov} TOV)</div>
+            <div style="font-size:0.73rem;color:#cbd5e1;">${cuSc.majestic_tov} Logged + ${cuSc.cv_perceived_tov} CV Perceived</div>
+          </div>
+          ${ltSc ? `
+          <div style="background:#171524;border:1px solid rgba(249,115,22,0.4);border-left:4px solid #f97316;border-radius:8px;padding:9px 11px;">
+            <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Latto Talent Wk 4 PPP</div>
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:900;color:#fb923c;">${Number(ltSc.off_ppp).toFixed(2)} / ${Number(ltSc.def_ppp).toFixed(2)}</div>
+            <div style="font-size:0.73rem;color:#cbd5e1;">W ${ltSc.pts}–${ltSc.opp_pts} vs. Misfits 2 (${ltSc.poss} Poss • ${ltSc.tov_pct}% TOV)</div>
+          </div>
+          ` : ''}
+          <div style="background:#151329;border:1px solid rgba(167,139,250,0.4);border-left:4px solid #a78bfa;border-radius:8px;padding:9px 11px;">
+            <div style="font-size:0.69rem;font-weight:800;color:#94a3b8;text-transform:uppercase;">Anchor Trio Net PPP</div>
+            <div style="font-family:var(--font-display);font-size:1.25rem;font-weight:900;color:#c4b5fd;">+0.49 Net PPP</div>
+            <div style="font-size:0.73rem;color:#cbd5e1;">Christian + Chris + Evan (1.19 Off / 0.70 Def)</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${rowsHtml}
+        </div>
+      `;
+    }
+
+    function renderPossessionActionLabPanel(pal, tl) {
+      if (!pal || !pal.cu_scopes) {
+        return tl ? renderTurnoverLabPanel(tl) : '';
+      }
+      possActionLabState = { pal, tl: tl || null, activeScope: 'cu_season' };
+
+      const takeawaysHtml = (pal.key_takeaways || []).map(tk => `
+        <div style="font-size:0.81rem;color:#e2e8f0;background:#111a2e;border-left:3px solid #38bdf8;padding:8px 11px;border-radius:5px;margin-bottom:7px;line-height:1.5;">
+          ⚡ ${escapeHtml(tk)}
+        </div>
+      `).join('');
+
+      let tovDrawerHtml = '';
+      if (tl && tl.reel_url) {
+        const chapsHtml = (tl.chapters || []).map(ch => {
+          const isForce = (ch.part || '').includes('PART 1');
+          const isAlert = (ch.part || '').includes('PART 2');
+          const dot = isForce ? '🟢' : isAlert ? '🟠' : '🔴';
+          const lblJs = `${ch.player} — ${ch.title}`.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+          return `
+            <button type="button" class="scouting-chapter-btn" onclick="document.getElementById('turnoverDrawerDetails').open=true; seekTurnoverTape(${Number(ch.sec) || 0}, '${escapeHtml(lblJs)}')">
+              <strong style="color:#fdba74;">${escapeHtml(ch.time)}</strong> &nbsp;${dot} <strong>${escapeHtml(ch.player)}:</strong> ${escapeHtml(ch.title)}
+            </button>
+          `;
+        }).join('');
+
+        tovDrawerHtml = `
+          <details id="turnoverDrawerDetails" style="margin-top:12px;background:#0b1120;border:1px solid rgba(249,115,22,0.42);border-radius:8px;padding:10px 12px;">
+            <summary style="cursor:pointer;font-family:var(--font-display);font-size:0.96rem;font-weight:900;color:#fdba74;letter-spacing:0.03em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <span>🔄 Optional 1080p Turnover &amp; Ball-Security Film Study Reel (10 Clips: Force Latto TOVs + Steal Blitz + CU Cleanup ▾)</span>
+              <a href="${escapeHtml(tl.reel_url)}" download="${escapeHtml(tl.download_name || 'Turnover_Film_Study_1080p.mp4')}" class="btn-link blue-btn" style="font-size:0.72rem;padding:4px 9px;" onclick="event.stopPropagation();">⬇️ Download MP4</a>
+            </summary>
+            <div style="margin-top:10px;" class="scouting-tape-grid">
+              <div style="min-width:0;">
+                <video id="turnoverTapeVideo" src="${escapeHtml(tl.reel_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #334155;background:#000;aspect-ratio:16/9;display:block;"></video>
+                <div id="turnoverTapeNowPlaying" style="margin-top:8px;font-size:0.82rem;font-weight:700;color:#fdba74;line-height:1.4;">
+                  ▶️ Tap any clip on the right — 🟢 Force Latto Turnovers (Clips 1–4) • 🟠 Latto 2H Steal Blitz (Clips 5–6) • 🔴 CU Ball-Security Cleanup (Clips 7–10)
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;width:100%;min-width:0;">
+                ${chapsHtml}
+              </div>
+            </div>
+          </details>
+        `;
+      }
+
+      const proofDrawerHtml = (pal.summary_chart_url || pal.cv_proof_url) ? `
+        <details style="margin-top:10px;background:#0b1120;border:1px solid #334155;border-radius:8px;padding:10px 12px;">
+          <summary style="cursor:pointer;font-family:var(--font-display);font-size:0.94rem;font-weight:900;color:#7dd3fc;letter-spacing:0.03em;text-transform:uppercase;">
+            📊 View Full-Season PPP &amp; Action-Type Comparison Chart + 1080p CV Possession Proof Grid ▾
+          </summary>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:10px;">
+            ${pal.summary_chart_url ? `<img src="${escapeHtml(pal.summary_chart_url)}" alt="Possession Efficiency and Action-Type PPP Breakdown" style="width:100%;height:auto;display:block;border-radius:7px;border:1px solid #334155;" loading="lazy" />` : ''}
+            ${pal.cv_proof_url ? `<img src="${escapeHtml(pal.cv_proof_url)}" alt="1080p CV Perceived Unlogged Possessions Proof Grid" style="width:100%;height:auto;display:block;border-radius:7px;border:1px solid #334155;" loading="lazy" />` : ''}
+          </div>
+        </details>
+      ` : '';
+
+      return `
+        <div class="scouting-panel" id="possessionActionLabPanel" style="border-color:rgba(56,189,248,0.52);background:linear-gradient(180deg,#0f172a 0%,#090d16 100%);">
+          <h3>
+            <span>⚡ ${escapeHtml(pal.headline || 'Possession Efficiency (PPP) & Action-Type Breakdown')}</span>
+            <span style="font-size:0.73rem;color:#7dd3fc;font-weight:800;text-transform:none;">Majestic + 1080p CV Perceived • 1-Click Film Jumps</span>
+          </h3>
+          <div style="margin-bottom:10px;">
+            ${takeawaysHtml}
+          </div>
+          <div id="possActionLabInnerMount">
+            ${buildPossActionLabInnerHtml()}
+          </div>
+          ${tovDrawerHtml}
+          ${proofDrawerHtml}
         </div>
       `;
     }
@@ -3654,15 +3894,20 @@
         const pillBg = isGood ? 'rgba(34,197,94,0.16)' : 'rgba(239,68,68,0.16)';
         const pillBd = isGood ? 'rgba(74,222,128,0.5)' : 'rgba(248,113,113,0.5)';
         const pillCol = isGood ? '#86efac' : '#fca5a5';
+        const pppStr = a.off_ppp ? `${a.off_ppp} / ${a.def_ppp}` : '—';
+        const netPppStr = a.net_ppp || '—';
+        const tovStr = a.tov_pct || '—';
         return `
           <tr style="border-bottom:1px solid #1e293b;">
             <td style="padding:8px 10px;font-weight:800;color:#f8fafc;font-size:0.8rem;">${isGood ? '🟢' : '🔴'} ${escapeHtml(a.archetype)}</td>
-            <td style="padding:8px 8px;text-align:center;color:#7dd3fc;font-weight:700;font-size:0.78rem;white-space:nowrap;">${escapeHtml(a.comp_min)}</td>
-            <td style="padding:8px 8px;text-align:center;color:#cbd5e1;font-size:0.78rem;white-space:nowrap;">${escapeHtml(a.score)}</td>
-            <td style="padding:8px 8px;text-align:center;white-space:nowrap;">
-              <span style="background:${pillBg};border:1px solid ${pillBd};color:${pillCol};font-weight:900;font-size:0.78rem;padding:2px 8px;border-radius:999px;">${escapeHtml(a.net_10m)}</span>
+            <td style="padding:8px 7px;text-align:center;color:#7dd3fc;font-weight:700;font-size:0.77rem;white-space:nowrap;">${escapeHtml(a.comp_min)}</td>
+            <td style="padding:8px 7px;text-align:center;color:#e2e8f0;font-weight:700;font-size:0.77rem;white-space:nowrap;">${escapeHtml(pppStr)}</td>
+            <td style="padding:8px 7px;text-align:center;color:${pillCol};font-weight:900;font-size:0.78rem;white-space:nowrap;">${escapeHtml(netPppStr)}</td>
+            <td style="padding:8px 7px;text-align:center;color:#93c5fd;font-weight:700;font-size:0.76rem;white-space:nowrap;">${escapeHtml(tovStr)}</td>
+            <td style="padding:8px 7px;text-align:center;color:#cbd5e1;font-size:0.76rem;white-space:nowrap;">${escapeHtml(a.score)}</td>
+            <td style="padding:8px 7px;text-align:center;white-space:nowrap;">
+              <span style="background:${pillBg};border:1px solid ${pillBd};color:${pillCol};font-weight:900;font-size:0.76rem;padding:2px 8px;border-radius:999px;">${escapeHtml(a.net_10m)}</span>
             </td>
-            <td style="padding:8px 10px;text-align:right;color:#fde68a;font-size:0.75rem;font-weight:700;white-space:nowrap;">${escapeHtml(a.vs_base)}</td>
           </tr>
         `;
       }).join('');
@@ -3695,7 +3940,7 @@
 
       const scp = ev.shot_contest_prototype || null;
       const cvLabHtml = scp ? renderShotContestLabPanel(scp) : '';
-      const tovLabHtml = sr.turnover_lab ? renderTurnoverLabPanel(sr.turnover_lab) : '';
+      const tovLabHtml = renderPossessionActionLabPanel(sr.possession_action_lab, sr.turnover_lab);
 
       return `
         <div class="scouting-panel" style="border-color:rgba(56,189,248,0.45);">
@@ -3771,12 +4016,14 @@
             <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;background:#0b1120;border:1px solid #26344d;border-radius:8px;margin-bottom:14px;">
               <table style="width:100%;border-collapse:collapse;min-width:520px;">
                 <thead>
-                  <tr style="background:#141d30;border-bottom:1px solid #334155;font-size:0.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">
-                    <th style="padding:8px 10px;text-align:left;">High-Sample Competitive Lineup Archetype / Trio</th>
-                    <th style="padding:8px 8px;text-align:center;">Comp Min</th>
-                    <th style="padding:8px 8px;text-align:center;">Score</th>
-                    <th style="padding:8px 8px;text-align:center;">Net / 10m</th>
-                    <th style="padding:8px 10px;text-align:right;">vs. Game Baseline</th>
+                  <tr style="background:#141d30;border-bottom:1px solid #334155;font-size:0.71rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">
+                    <th style="padding:8px 10px;text-align:left;">Competitive Lineup Archetype / Trio</th>
+                    <th style="padding:8px 7px;text-align:center;">Min</th>
+                    <th style="padding:8px 7px;text-align:center;">Off / Def PPP</th>
+                    <th style="padding:8px 7px;text-align:center;">Net PPP</th>
+                    <th style="padding:8px 7px;text-align:center;">True TOV%</th>
+                    <th style="padding:8px 7px;text-align:center;">Score</th>
+                    <th style="padding:8px 7px;text-align:center;">Net / 10m</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -3956,6 +4203,7 @@
                 <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:900;color:#4ade80;">🏀 CAMPBELL UNITED (${escapeHtml(cu.record)})</div>
                 <div style="font-size:0.8rem;color:#e2e8f0;margin-top:6px;line-height:1.6;">
                   • <strong>Offense:</strong> ${cu.ppg} PPG &nbsp;|&nbsp; <strong>Defense:</strong> ${cu.opp_ppg} OPP PPG<br/>
+                  ${cu.off_ppp !== undefined ? `• <strong>Efficiency:</strong> ${Number(cu.off_ppp).toFixed(2)} Off PPP / ${Number(cu.def_ppp).toFixed(2)} Def PPP (${escapeHtml(cu.true_tov_pct || '')} True TOV%)<br/>` : ''}
                   • <strong>Rebounds:</strong> ${cu.rpg} RPG &nbsp;|&nbsp; <strong>Assists:</strong> ${cu.apg} APG<br/>
                   • <strong>Steals / Blocks:</strong> ${cu.spg} SPG / ${cu.bpg} BPG${cu.topg !== undefined ? `<br/>• <strong>Turnovers:</strong> ${cu.topg} TOPG ${cu.ast_tov ? `(${escapeHtml(cu.ast_tov)})` : ''}` : ''}
                 </div>
@@ -3964,6 +4212,7 @@
                 <div style="font-family:var(--font-display);font-size:1.05rem;font-weight:900;color:#f87171;">⚔️ ${escapeHtml(oppUpper)} (${escapeHtml(opp.record)})</div>
                 <div style="font-size:0.8rem;color:#e2e8f0;margin-top:6px;line-height:1.6;">
                   • <strong>Offense:</strong> ${opp.ppg} PPG &nbsp;|&nbsp; <strong>Defense:</strong> ${opp.opp_ppg} OPP PPG<br/>
+                  ${opp.wk4_off_ppp !== undefined ? `• <strong>Wk 4 Film Efficiency:</strong> ${Number(opp.wk4_off_ppp).toFixed(2)} Off PPP / ${Number(opp.wk4_def_ppp).toFixed(2)} Def PPP (${escapeHtml(opp.wk4_tov_pct || '')} TOV%)<br/>` : ''}
                   • <strong>Rebounds:</strong> ${opp.rpg} RPG &nbsp;|&nbsp; <strong>Assists:</strong> ${opp.apg} APG<br/>
                   • <strong>Steals / Blocks:</strong> ${opp.spg} SPG / ${opp.bpg} BPG${opp.topg !== undefined ? `<br/>• <strong>Turnovers:</strong> ${opp.topg} TOPG ${opp.ast_tov ? `(${escapeHtml(opp.ast_tov)})` : ''}` : ''}
                 </div>
@@ -3985,7 +4234,7 @@
           </div>
         </div>
 
-        ${sr.turnover_lab ? renderTurnoverLabPanel(sr.turnover_lab) : ''}
+        ${renderPossessionActionLabPanel(sr.possession_action_lab, sr.turnover_lab)}
 
         <div class="scouting-panel">
           <h3><span>🎯 ${escapeHtml(oppName)} Player-by-Player Personnel Scouting &amp; Defensive Matchups</span></h3>
@@ -5913,9 +6162,9 @@
           '• Slow starters (-4.5 PPG in 1H across all 4 games) who shoot 38.7% FG / 27.9% 3PT when walled off without fouling!',
           '• #2 Troy returned in Wk 4 (26.9 min) — sag off him (0 3PA) to wall #9 Diallo, then box him out!',
           '',
-          '🧪 *CU LINEUP RULES:*',
-          '• *Dynamic Slot Rules (Adapt to Sunday Turnout & Matchups — No Static 5s!):* Always keep 1 Rim-Wall Big (#16/#9/#22) + 2+ Handlers ({#31,#4,#7}+#44) + 3+ Spacers (+6.0/10m Comp across 4 different weekly rosters!)',
-          '• *Stagger Non-Shooters:* Never pair #24 George + #9 Aaron together alongside #16 Chris (-3.8/10m), and use the live Sunday Roll-Call & Matchup Builder in the link above at tip-off!'
+          '🧪 *CU LINEUP & PPP RULES:*',
+          '• *Dynamic Slot Rules (Adapt to Sunday Turnout & Matchups — No Static 5s!):* Always keep 1 Rim-Wall Big (Chris, Aaron, or Matt) + 2+ Handlers (Evan, Adam, or Nick alongside Christian) + 3+ Spacers (1.11 Off PPP / 0.82 Def PPP, +6.0/10m Comp!)',
+          '• *Stagger Non-Shooters:* Never pair George + Aaron together alongside Chris (0.77 Off PPP, -3.8/10m), and use the live Sunday Roll-Call & Matchup Builder in the link above at tip-off!'
         ].join('\n');
       } else if (activeSessionId === 'scouting_nov15') {
         waText = [
