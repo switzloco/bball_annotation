@@ -111801,7 +111801,7 @@
         }
       ],
       "cu_lineups": {
-        "methodology": "Blinded Team-Management Audit across 201.0 Garbage-Time-Filtered Competitive Minutes in our last 6 wins (4-0 Holiday '26 + 2-0 Fall '26 Playoffs; strips 39.3m of >=18pt blowout garbage time vs. Halal Hoopers & Misfits 2 where Misfits 2 outscored CU 50-39!). Lineup billing is ordered strictly by competitive availability (including close grinders) and within-game on/off impact.",
+        "methodology": "Men's-League Reality Check: CU has dressed 4 different 6-to-8 man rosters across 4 weeks (6 in G1; 8 in G2 w/o #7/#12; 8 in G3 w/o #31/#22; 8 in G4 OT w/o #31/#7). Static 'Starting 5s' are obsolete the second Sunday roll call happens — and Week 5 Regular Season prioritizes balanced minute equity & fresh legs, whereas Playoffs/Final 6:00 tighten to matchups. Below are verified Slot Blueprints across 201.0 Garbage-Time-Filtered Competitive Minutes.",
         "archetype_splits": [
           {
             "archetype": "Optimal Formula (2+ Handlers/Connectors {#31,#4,#7} + 3+ Spacers + <=1 of {#24,#9})",
@@ -111854,25 +111854,25 @@
         ],
         "outperforming": [
           {
-            "name": "1. Dual-Handler Twin-Wall Starters & Closers",
-            "players": "#44 Christian + #16 Chris + #31 Evan + #4 Adam + (#20 Shane or #7 Nick)",
-            "metrics": "+7.7/10m Comp (#44+#16+#31 over 45.3m: 78-43) • +6.0/10m Optimal Formula (69.7m)",
-            "why_it_works": "Built around our verified +7.7/10m anchor trio (#44 + #16 + #31) and two pressure-tested ball-handlers (#31, #4) to beat Latto's 5.3 SPG ball-hawks and generate >=4 ft open looks (76.1% CV eFG%). Flex #20 Shane (+6.23/10m Comp On, G4 OT winner, wing size vs. #3 Mahaan/#8 Radhir) or #7 Nick (corner 3PT gravity vs. zone/help, lock-and-trail on #5 Brandon) in the 5th spot based on Latto's wing alignment.",
-            "when_to_use": "Opening 7 minutes (fixing our 0-3 halftime deficit trend vs. top-3 foes!) and final 7 minutes of the 2nd Half."
+            "name": "1. Regular-Season Balanced Equity Blueprint (Adapt to Sunday Roll Call)",
+            "players": "[Rim-Wall Big: #16/#9/#22] + [2+ Handlers: {#31,#4,#7}+#44] + [3+ Shooters / <=1 of {#24,#9}]",
+            "metrics": "+6.0/10m Comp (130–88 across 69.7m over 4 different weekly turnouts!)",
+            "why_it_works": "Works regardless of which 7–9 guys walk into The Grove at 4:50 PM! Gives everyone balanced 20–28m regular-season shifts across two staggered waves without ever stranding #44 as solo PG (-2.8/10m) or clogging the lane with multiple non-shooters (-3.8/10m).",
+            "when_to_use": "Week 5 Regular-Season default: tip off with whoever warmed up early inside these 5 functional slots and sub in 5–6 min waves."
           },
           {
-            "name": "2. 4-Out PoA Lockdown Blitz (#24 On #1 Sean)",
-            "players": "#44 Christian + #24 George + #4 Adam + #20 Shane + #31 Evan (or #7 Nick)",
-            "metrics": "+5.9/10m Comp (#44+#4+#20 over 40.7m: 83-59) • +4.2/10m 4-Out Spacing Split (94.3m)",
-            "why_it_works": "Puts #24 George squarely on #1 Sean's right hand while surrounding him with 4 shooters (#44, #4, #20, #31/#7) so Latto's single-big defense cannot camp in the paint.",
-            "when_to_use": "Mid-half tempo surges and whenever #16 Chris catches a breather."
+            "name": "2. Matchup Counter A — PoA Slasher Clamp (vs. #1 Sean Surge / LT 4-Guard)",
+            "players": "[PoA Stopper: #24 or #4 on #1 Sean] + [Switchable Big: #44/#16] + [3 Active Spacers from {#31,#20,#7,#12,#22}]",
+            "metrics": "+5.9/10m Comp (#44+#4+#20 over 40.7m: 83–59) • +4.2/10m 4-Out Spacing Split (94.3m)",
+            "why_it_works": "Deploys whenever #1 Sean (6/6 right-hand 2PT) heats up or Latto sits #2 Troy for 4 perimeter players — puts fresh lateral legs squarely on Sean's right hip while surrounding our stopper with 4 shooters.",
+            "when_to_use": "Mid-half tempo counters or whenever Latto downsizes to a single big."
           },
           {
-            "name": "3. Staggered Interior-Punch Bench Unit (#9 Aaron or #22 Matt)",
-            "players": "#16 Chris (or #44) + #9 Aaron (or #22 Matt) + #31 Evan + #20 Shane + #12 Corey",
-            "metrics": "+4.4/10m Staggered (#24/#9 <=1 On over 152.3m) • #22 Matt +4.61/10m Grinder On/Off",
-            "why_it_works": "Pairs one high-motor interior finisher/box-out big (#9 Aaron or #22 Matt) with two steady wings (#20, #12) and our #1 organizer (#31 Evan) while giving heavy-minute ironmen #44 Christian, #16 Chris, or #4 Adam a 3-4 minute breather.",
-            "when_to_use": "Late 1st Half / early 2nd Half rotation bridge against Latto's 8-man Sunday fatigue."
+            "name": "3. Matchup Counter B — Final 6:00 / Playoff High-Leverage Wall (vs. #9 Diallo + #2 Troy)",
+            "players": "[Active Core of {#44,#16,#31}] + [PoA/Handler: #4 or #24] + [Hot-Hand Wing Spacer: #20, #7, #12, or #22]",
+            "metrics": "+7.7/10m Comp (#44+#16+#31 over 45.3m: 78–43) • G4 OT Won w/o #31/#7 Using Exact Same Slot Recipe!",
+            "why_it_works": "Proves functional slots beat static names: in G4 OT vs. Ricecookers (with #31 & #7 both out), plugging #4 + #20 + #12/#24 into these exact slots next to #44 + #16 closed out a 66–63 OT win!",
+            "when_to_use": "Final 5–6 minutes of a 1-to-2 possession game or Playoff elimination stints."
           }
         ],
         "underperforming": [

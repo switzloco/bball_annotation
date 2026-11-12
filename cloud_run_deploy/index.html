@@ -2922,6 +2922,302 @@
       `;
     }
 
+    // =========================================================================
+    // DYNAMIC SUNDAY ROLL-CALL, SEASON CONTEXT & MATCHUP ROTATION BUILDER
+    // =========================================================================
+    const CU_ROSTER_ARCHETYPES = [
+      { id: '#44', label: '#44 Christian', role: 'Point-Forward / Wall', handler: 0.6, shooter: true, rimBig: true, poa: false, nonShooter: false, weight: 96 },
+      { id: '#16', label: '#16 Chris',     role: 'Paint Anchor / Glass', handler: 0.0, shooter: false, rimBig: true, poa: false, nonShooter: false, weight: 90 },
+      { id: '#4',  label: '#4 Adam',       role: '2-Way Handler / PoA',  handler: 1.0, shooter: true, rimBig: false, poa: true,  nonShooter: false, weight: 89 },
+      { id: '#31', label: '#31 Evan',      role: 'Organizer PG / Wing',  handler: 1.0, shooter: true, rimBig: false, poa: true,  nonShooter: false, weight: 91 },
+      { id: '#20', label: '#20 Shane',     role: '3&D Wing Spacer',      handler: 0.2, shooter: true, rimBig: false, poa: false, nonShooter: false, weight: 84 },
+      { id: '#9',  label: '#9 Aaron',      role: 'Interior Scorer / Big',handler: 0.0, shooter: false, rimBig: true, poa: false, nonShooter: true,  weight: 79 },
+      { id: '#24', label: '#24 George',    role: 'PoA Slasher Stopper',  handler: 0.0, shooter: false, rimBig: false, poa: true,  nonShooter: true,  weight: 78 },
+      { id: '#7',  label: '#7 Nick',       role: 'Corner 3PT / Connector',handler: 0.8, shooter: true, rimBig: false, poa: false, nonShooter: false, weight: 77 },
+      { id: '#12', label: '#12 Corey',     role: 'Corner 3&D Wing',      handler: 0.2, shooter: true, rimBig: false, poa: false, nonShooter: false, weight: 73 },
+      { id: '#22', label: '#22 Matt',      role: 'Stretch Big / Box-Out',handler: 0.0, shooter: true, rimBig: true, poa: false, nonShooter: false, weight: 75 }
+    ];
+
+    let sundayBuilderState = {
+      activeIds: ['#44', '#16', '#4', '#31', '#20', '#9', '#24', '#7'], // Realistic 8-man Sunday turnout default
+      seasonMode: 'reg',       // 'reg' (Balanced Equity) | 'playoff' (Playoff / Final 6:00 Crunch)
+      matchupMode: 'standard'  // 'standard' | 'poa_sean' | 'glass_troy' | 'zone_buster'
+    };
+
+    function scoreFiveUnit(five, matchupMode, isWave2) {
+      let s = five.reduce((acc, p) => acc + p.weight, 0);
+      const handlers = five.reduce((acc, p) => acc + (p.handler >= 0.8 ? 1 : p.handler >= 0.5 ? 0.5 : 0), 0);
+      const shooters = five.filter(p => p.shooter).length;
+      const rimBigs = five.filter(p => p.rimBig).length;
+      const poas = five.filter(p => p.poa).length;
+      const nonShooters = five.filter(p => p.nonShooter).length;
+      const has16 = five.some(p => p.id === '#16');
+
+      // Core verified analytics guardrails
+      if (handlers >= 2.0) s += 45;
+      else if (handlers >= 1.3) s += 18;
+      else s -= 55; // Never strand solo handler (-2.8/10m trap)
+
+      if (rimBigs >= 1) s += 35;
+      else s -= 45; // Need vertical wall on #9 Diallo & box-out on #2 Troy
+
+      if (rimBigs > 2) s -= 28;
+
+      if (nonShooters >= 2 && has16) s -= 90; // -3.8/10m 3-non-shooter paint jam!
+      else if (nonShooters >= 2) s -= 45;     // #24 + #9 together (-2.34 vs base)
+
+      if (shooters >= 3) s += 30;
+      else if (shooters === 2) s -= 10;
+      else s -= 45;
+
+      // Matchup-specific adjustments
+      if (matchupMode === 'poa_sean') {
+        s += poas * 24;
+        if (shooters >= 4) s += 22;
+        if (five.some(p => p.id === '#24')) s += 18;
+      } else if (matchupMode === 'glass_troy') {
+        if (rimBigs === 2) s += 34;
+        if (five.some(p => p.id === '#16')) s += 16;
+        if (five.some(p => p.id === '#9' || p.id === '#22')) s += 16;
+      } else if (matchupMode === 'zone_buster') {
+        s += shooters * 22;
+        s -= nonShooters * 35;
+        if (five.some(p => p.id === '#7' || p.id === '#20' || p.id === '#12')) s += 15;
+      } else {
+        if (poas >= 1) s += 16;
+      }
+      if (isWave2) s *= 0.95;
+      return s;
+    }
+
+    function pickBestFiveFromPool(pool, matchupMode, mustInclude) {
+      const req = (mustInclude || []).filter(p => pool.some(x => x.id === p.id)).slice(0, 5);
+      const rem = pool.filter(p => !req.some(r => r.id === p.id));
+      const need = 5 - req.length;
+      if (need <= 0) return req.slice(0, 5);
+      if (rem.length <= need) return req.concat(rem);
+
+      let bestUnit = null;
+      let bestScore = -1e9;
+      function comb(start, chosen) {
+        if (chosen.length === need) {
+          const unit = req.concat(chosen);
+          const sc = scoreFiveUnit(unit, matchupMode, mustInclude && mustInclude.length > 0);
+          if (sc > bestScore) {
+            bestScore = sc;
+            bestUnit = unit;
+          }
+          return;
+        }
+        for (let i = start; i <= rem.length - (need - chosen.length); i++) {
+          chosen.push(rem[i]);
+          comb(i + 1, chosen);
+          chosen.pop();
+        }
+      }
+      comb(0, []);
+      return bestUnit || pool.slice(0, 5);
+    }
+
+    function computeSundayRotationPlan() {
+      const active = CU_ROSTER_ARCHETYPES.filter(p => sundayBuilderState.activeIds.includes(p.id));
+      if (active.length < 5) {
+        return { error: `Check in at least 5 players (currently ${active.length} selected) to build a 5-man rotation!` };
+      }
+      const mMode = sundayBuilderState.matchupMode;
+      const isPlayoff = sundayBuilderState.seasonMode === 'playoff';
+
+      // Closing / High-Leverage Matchup 5
+      const closing5 = pickBestFiveFromPool(active, mMode, []);
+      // Opener / Wave 1: in Regular Season, balance slightly if >=8 dressed; in Playoff, open strong
+      const opener5 = isPlayoff ? closing5 : pickBestFiveFromPool(active, 'standard', []);
+      // Bench players who weren't in Opener MUST get run in Wave 2!
+      const benchPool = active.filter(p => !opener5.some(o => o.id === p.id));
+      // If both #9 and #24 are on bench and >=8 active, stagger them across waves if needed
+      let wave2Must = benchPool.slice(0, 4);
+      if (wave2Must.some(p => p.id === '#9') && wave2Must.some(p => p.id === '#24') && active.length >= 7) {
+        // Keep one in Wave 2, swap the other into a quick sub wave note so we never pair #9+#24+#16
+        wave2Must = wave2Must.filter(p => p.id !== '#9');
+      }
+      const wave2 = benchPool.length > 0
+        ? pickBestFiveFromPool(active, mMode, wave2Must)
+        : opener5;
+
+      // Compute realistic 200-minute Sunday target budget
+      const n = active.length;
+      const rawShares = active.map(p => {
+        const inClose = closing5.some(c => c.id === p.id);
+        const inOpen = opener5.some(o => o.id === p.id);
+        if (isPlayoff) {
+          return (inClose ? 34 : 16) + (p.weight - 75) * 0.32;
+        } else {
+          // Regular Season: flat, egalitarian men's-league distribution (~21-29m for 8 guys)
+          return 23 + (inClose ? 3.5 : 0) + (inOpen ? 1.5 : 0) + (p.weight - 80) * 0.12;
+        }
+      });
+      const sumRaw = rawShares.reduce((a, b) => a + b, 0);
+      let mins = rawShares.map(x => Math.min(39, Math.max(isPlayoff ? 10 : 16, Math.round((x / sumRaw) * 200))));
+      let diff = 200 - mins.reduce((a, b) => a + b, 0);
+      let idx = 0;
+      while (diff !== 0 && idx < 40) {
+        const k = idx % n;
+        if (diff > 0 && mins[k] < 39) { mins[k]++; diff--; }
+        else if (diff < 0 && mins[k] > 12) { mins[k]--; diff++; }
+        idx++;
+      }
+
+      const unitBadges = (u) => {
+        const h = u.filter(p => p.handler >= 0.6).length;
+        const sh = u.filter(p => p.shooter).length;
+        const ns = u.filter(p => p.nonShooter).length;
+        const rb = u.filter(p => p.rimBig).length;
+        return [
+          h >= 2 ? `<span style="color:#4ade80;">✅ ${h} Handlers/Initiators</span>` : `<span style="color:#fbbf24;">⚠️ ${h} Handler (Watch Press)</span>`,
+          sh >= 3 ? `<span style="color:#38bdf8;">🎯 ${sh} Spacers</span>` : `<span style="color:#f87171;">⚠️ ${sh} Spacers (Tight Paint)</span>`,
+          ns <= 1 ? `<span style="color:#a7f3d0;">✅ &le;1 Non-Shooter</span>` : `<span style="color:#f87171;">🚫 ${ns} Non-Shooters (Stagger!)</span>`,
+          rb >= 1 ? `<span style="color:#c4b5fd;">🛡️ ${rb} Wall Big${rb > 1 ? 's' : ''}</span>` : `<span style="color:#fbbf24;">⚠️ Small-Ball Glass</span>`
+        ].join(' • ');
+      };
+
+      return { active, opener5, wave2, closing5, mins, benchCount: benchPool.length, isPlayoff, unitBadges };
+    }
+
+    function renderSundayPlanBodyHtml() {
+      const plan = computeSundayRotationPlan();
+      if (plan.error) {
+        return `<div style="padding:10px;background:#3f1d28;border:1px solid #f87171;border-radius:6px;color:#fecaca;font-size:0.82rem;font-weight:700;">⚠️ ${escapeHtml(plan.error)}</div>`;
+      }
+      const fmt5 = (u) => u.map(p => `<span style="display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:5px;padding:2px 7px;margin:2px;font-weight:800;color:#f8fafc;font-size:0.8rem;">${escapeHtml(p.label)}</span>`).join('');
+      const minPills = plan.active.map((p, i) => `
+        <span style="display:inline-flex;align-items:center;gap:4px;background:#0f172a;border:1px solid #26344d;border-radius:999px;padding:3px 9px;font-size:0.74rem;color:#e2e8f0;">
+          <strong>${escapeHtml(p.id)}</strong> <span style="color:#7dd3fc;font-weight:800;">~${plan.mins[i]}m</span>
+        </span>
+      `).join('');
+
+      const foulNote = plan.active.length <= 6
+        ? '🚨 6-Man Ironman Alert: Zero reach-ins! Keep 2H team fouls <7 and slow halfcourt tempo.'
+        : plan.isPlayoff
+          ? '🏆 Playoff / Crunch Mode: Shorten bench in final 6:00 around active rim wall + 2 handlers; sub offense/defense on dead balls.'
+          : `📅 Regular-Season Equity (${plan.active.length} Dressed): Sub 2–3 guys at ~13:30 & ~7:00 marks each half so everyone stays in rhythm without breaking spacing rules.`;
+
+      return `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:8px;">
+          <div style="background:#0b1322;border:1px solid #26344d;border-left:3px solid #38bdf8;border-radius:7px;padding:9px 11px;">
+            <div style="font-size:0.74rem;font-weight:900;color:#7dd3fc;text-transform:uppercase;margin-bottom:4px;">
+              1️⃣ Tip-Off / Wave 1 (Whoever Warmed Up Early)
+            </div>
+            <div style="margin-bottom:5px;">${fmt5(plan.opener5)}</div>
+            <div style="font-size:0.7rem;line-height:1.4;">${plan.unitBadges(plan.opener5)}</div>
+          </div>
+          <div style="background:#0b1322;border:1px solid #26344d;border-left:3px solid #a855f7;border-radius:7px;padding:9px 11px;">
+            <div style="font-size:0.74rem;font-weight:900;color:#d8b4fe;text-transform:uppercase;margin-bottom:4px;">
+              2️⃣ Staggered Sub Wave (~13:30 Mark • ${plan.benchCount} Bench In)
+            </div>
+            <div style="margin-bottom:5px;">${fmt5(plan.wave2)}</div>
+            <div style="font-size:0.7rem;line-height:1.4;">${plan.unitBadges(plan.wave2)}</div>
+          </div>
+          <div style="background:#0b1322;border:1px solid #26344d;border-left:3px solid #4ade80;border-radius:7px;padding:9px 11px;">
+            <div style="font-size:0.74rem;font-weight:900;color:#86efac;text-transform:uppercase;margin-bottom:4px;">
+              3️⃣ Final 6:00 Matchup Closer (Selected Look)
+            </div>
+            <div style="margin-bottom:5px;">${fmt5(plan.closing5)}</div>
+            <div style="font-size:0.7rem;line-height:1.4;">${plan.unitBadges(plan.closing5)}</div>
+          </div>
+        </div>
+        <div style="margin-top:9px;background:#090f1d;border:1px solid #1e293b;border-radius:6px;padding:8px 10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px;">
+            <span style="font-size:0.73rem;font-weight:800;color:#fde68a;">⏱️ Target 200-Min Sunday Distribution (${plan.active.length} Checked In):</span>
+            <span style="font-size:0.72rem;color:#94a3b8;">${escapeHtml(foulNote)}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">${minPills}</div>
+        </div>
+      `;
+    }
+
+    function renderSundayRollCallBuilderHtml() {
+      const chips = CU_ROSTER_ARCHETYPES.map(p => {
+        const on = sundayBuilderState.activeIds.includes(p.id);
+        const bg = on ? 'rgba(34,197,94,0.2)' : 'rgba(30,41,59,0.55)';
+        const bd = on ? '#22c55e' : '#334155';
+        const col = on ? '#f0fdf4' : '#64748b';
+        return `<button type="button" onclick="toggleSundayPlayer('${p.id}')" style="cursor:pointer;background:${bg};border:1px solid ${bd};color:${col};border-radius:999px;padding:4px 9px;font-size:0.74rem;font-weight:800;transition:all 0.12s;">${on ? '✓ ' : '+ '}${escapeHtml(p.label)}</button>`;
+      }).join('');
+
+      return `
+        <div id="sundayRollCallWidget" style="background:linear-gradient(180deg,#111a2e 0%,#0b1120 100%);border:1px solid rgba(56,189,248,0.45);border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+            <div>
+              <div style="font-family:var(--font-display);font-size:1.02rem;font-weight:900;color:#fde68a;letter-spacing:0.03em;text-transform:uppercase;">
+                🏀 Live Sunday Roll-Call, Season Mode &amp; Matchup Builder (No Static 90s Starting 5s!)
+              </div>
+              <div style="font-size:0.75rem;color:#94a3b8;">
+                Tap who's actually at The Grove on Sunday + choose Regular Season vs. Playoffs &amp; Latto's live lineup:
+              </div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+              <button type="button" onclick="applySundayPreset('all10')" style="cursor:pointer;background:#1e293b;border:1px solid #475569;color:#e2e8f0;border-radius:5px;padding:3px 7px;font-size:0.7rem;font-weight:700;">All 10</button>
+              <button type="button" onclick="applySundayPreset('g4_ot')" style="cursor:pointer;background:#1e293b;border:1px solid #475569;color:#e2e8f0;border-radius:5px;padding:3px 7px;font-size:0.7rem;font-weight:700;">Wk 4 OT Squad (8)</button>
+              <button type="button" onclick="applySundayPreset('g2_tmt')" style="cursor:pointer;background:#1e293b;border:1px solid #475569;color:#e2e8f0;border-radius:5px;padding:3px 7px;font-size:0.7rem;font-weight:700;">Wk 2 TMT Squad (8)</button>
+              <button type="button" onclick="applySundayPreset('g3_mis')" style="cursor:pointer;background:#1e293b;border:1px solid #475569;color:#e2e8f0;border-radius:5px;padding:3px 7px;font-size:0.7rem;font-weight:700;">Wk 3 Misfits Squad (8)</button>
+            </div>
+          </div>
+          <div id="sundayRollCallChips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+            ${chips}
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
+            <label style="font-size:0.74rem;color:#cbd5e1;font-weight:700;display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+              <span>Context:</span>
+              <select onchange="setSundayBuilderMode('season', this.value)" style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:5px;padding:4px 7px;font-size:0.75rem;font-weight:700;max-width:100%;">
+                <option value="reg" ${sundayBuilderState.seasonMode === 'reg' ? 'selected' : ''}>📅 Regular Season (Balanced Mins &amp; Waves)</option>
+                <option value="playoff" ${sundayBuilderState.seasonMode === 'playoff' ? 'selected' : ''}>🏆 Playoffs / Final 6:00 (Max Leverage)</option>
+              </select>
+            </label>
+            <label style="font-size:0.74rem;color:#cbd5e1;font-weight:700;display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+              <span>Matchup Counter:</span>
+              <select onchange="setSundayBuilderMode('matchup', this.value)" style="background:#0f172a;border:1px solid #334155;color:#f8fafc;border-radius:5px;padding:4px 7px;font-size:0.75rem;font-weight:700;max-width:100%;">
+                <option value="standard" ${sundayBuilderState.matchupMode === 'standard' ? 'selected' : ''}>⚖️ Standard LT (Diallo + Troy + Sean)</option>
+                <option value="poa_sean" ${sundayBuilderState.matchupMode === 'poa_sean' ? 'selected' : ''}>🔒 Clamp #1 Sean Drives / LT 4-Guard</option>
+                <option value="glass_troy" ${sundayBuilderState.matchupMode === 'glass_troy' ? 'selected' : ''}>💪 Heavy Glass (#2 Troy + #9 Diallo)</option>
+                <option value="zone_buster" ${sundayBuilderState.matchupMode === 'zone_buster' ? 'selected' : ''}>🎯 Zone-Buster (If LT Plays 2-3 Zone)</option>
+              </select>
+            </label>
+          </div>
+          <div id="sundayPlanOutput">
+            ${renderSundayPlanBodyHtml()}
+          </div>
+        </div>
+      `;
+    }
+
+    function refreshSundayBuilderDOM() {
+      const wrap = document.getElementById('sundayRollCallWidget');
+      if (wrap) {
+        wrap.outerHTML = renderSundayRollCallBuilderHtml();
+      }
+    }
+
+    function toggleSundayPlayer(id) {
+      const idx = sundayBuilderState.activeIds.indexOf(id);
+      if (idx >= 0) sundayBuilderState.activeIds.splice(idx, 1);
+      else sundayBuilderState.activeIds.push(id);
+      refreshSundayBuilderDOM();
+    }
+
+    function applySundayPreset(preset) {
+      if (preset === 'all10') sundayBuilderState.activeIds = CU_ROSTER_ARCHETYPES.map(p => p.id);
+      else if (preset === 'g4_ot') sundayBuilderState.activeIds = ['#44', '#16', '#4', '#20', '#9', '#24', '#12', '#22'];
+      else if (preset === 'g2_tmt') sundayBuilderState.activeIds = ['#44', '#16', '#4', '#31', '#20', '#9', '#24', '#22'];
+      else if (preset === 'g3_mis') sundayBuilderState.activeIds = ['#44', '#16', '#4', '#20', '#9', '#24', '#7', '#12'];
+      refreshSundayBuilderDOM();
+    }
+
+    function setSundayBuilderMode(kind, val) {
+      if (kind === 'season') sundayBuilderState.seasonMode = val;
+      else if (kind === 'matchup') sundayBuilderState.matchupMode = val;
+      const out = document.getElementById('sundayPlanOutput');
+      if (out) out.innerHTML = renderSundayPlanBodyHtml();
+    }
+
     function renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) {
       const ev = sr.evan_view || {};
       const reportParasHtml = (ev.team_report_paragraphs || []).map(p => `
@@ -3095,8 +3391,9 @@
             <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">201.0 Competitive Minutes Across 6 Wins (Strips 39.3m of &ge;18pt Blowout Noise)</span>
           </h3>
           <div style="font-size:0.79rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:12px;line-height:1.5;">
-            🔬 <strong>Expert Analytics Audit Methodology:</strong> ${escapeHtml(lu.methodology || '')}
+            🔬 <strong>Men's-League Rotation Reality:</strong> ${escapeHtml(lu.methodology || '')}
           </div>
+          ${renderSundayRollCallBuilderHtml()}
           ${archRowsHtml ? `
             <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;background:#0b1120;border:1px solid #26344d;border-radius:8px;margin-bottom:14px;">
               <table style="width:100%;border-collapse:collapse;min-width:520px;">
@@ -3118,7 +3415,7 @@
           <div class="scouting-grid-2col">
             <div>
               <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#4ade80;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">
-                🟢 Outperforming Lineups &amp; Suggested Nov 15 Rotations
+                🟢 Dynamic Slot Blueprints (Adapt to Turnout, Reg Season vs. Playoffs &amp; Matchups)
               </div>
               ${outLuHtml}
             </div>
@@ -5137,8 +5434,8 @@
           '• #2 Troy returned in Wk 4 (26.9 min) — sag off him (0 3PA) to wall #9 Diallo, then box him out!',
           '',
           '🧪 *CU LINEUP RULES:*',
-          '• *Best Closing/Starting Core:* #44 Christian + #16 Chris + #31 Evan + #4 Adam + #20 Shane / #7 Nick (+7.7/10m Comp in 45.3m w/ #44+#16+#31!)',
-          '• *Stagger Non-Shooters & Protect the Rock:* Never pair #24 George + #9 Aaron together alongside #16 Chris, and keep 2+ handlers/connectors ({#31, #4} + #44/#7) on the floor vs. Latto\'s ball pressure!'
+          '• *Dynamic Slot Rules (Adapt to Sunday Turnout & Matchups — No Static 5s!):* Always keep 1 Rim-Wall Big (#16/#9/#22) + 2+ Handlers ({#31,#4,#7}+#44) + 3+ Spacers (+6.0/10m Comp across 4 different weekly rosters!)',
+          '• *Stagger Non-Shooters:* Never pair #24 George + #9 Aaron together alongside #16 Chris (-3.8/10m), and use the live Sunday Roll-Call & Matchup Builder in the link above at tip-off!'
         ].join('\n');
       } else if (activeSessionId === 'scouting_nov15') {
         waText = [
