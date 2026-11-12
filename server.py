@@ -321,7 +321,11 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                             "Watch #4 Adam Fecteau's 3-Dunk 1st Half vs. Misfits 2 + Colab GPU Analytics across Campbell United's 4-0 streak!",
                         ),
                     }
-                    if game_val in game_og_map and not play_val:
+                    view_val = (qs.get("view") or [None])[0]
+                    if (game_val == "scouting_nov15_evan" or (game_val == "scouting_nov15" and view_val == "evan")) and not play_val:
+                        custom_title = "📝 Evan's Coach's Brief & Lineup Lab: CU (4-0) vs. Latto Talent (3-1) — Sun Nov 15 @ 5PM"
+                        custom_desc = "3-Paragraph Latto Talent Scouting Report, Expected Player Minutes (200m), CU Player Improvement Focus & Tracked Lineup +/- Synergy!"
+                    elif game_val in game_og_map and not play_val:
                         custom_title, custom_desc = game_og_map[game_val]
                     elif reel_val == "cu_g4":
                         custom_title = "🎬 Campbell United 66, Ricecookers 63 (OT) — 1080p Comeback & Game-Winner Reel (4-0 D2)"

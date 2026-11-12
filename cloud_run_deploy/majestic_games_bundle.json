@@ -111641,6 +111641,215 @@
         "url": "https://www.youtube.com/watch?v=VxsUFYxbics",
         "note": "Revenge tape! Watch #2 Troy's 23 PTS & 11 REB interior game alongside #1 Sean & #5 Brandon"
       }
-    ]
+    ],
+    "evan_view": {
+      "subtitle": "Coach's Narrative Brief, Expected Opponent Rotation Minutes (200-Min Budget), CU Player Improvement Focus & On-Court Lineup +/- Lab",
+      "team_report_paragraphs": [
+        {
+          "heading": "1. Play Style & Tempo Profile",
+          "body": "Latto Talent (3-1, 62.5 PPG / 61.5 OPP) operates a heliocentric grab-and-go and drive-and-kick offense orbiting point-forward #9 Diallo Holmes (37.1 MPG, 20.3 PPG, 10.0 RPG, 3.3 APG \u2014 32.4% of team scoring) and returning championship guard #1 Sean Steven (32.0 MPG, 11.5 PPG, 7 direct assists to Diallo). Off defensive rebounds and live-ball steals (5.3 SPG), Diallo pushes coast-to-coast himself rather than outlet-passing; in the halfcourt, they space 4-out around rim-running forward #2 Troy (26.9 min in his Week 4 return) and use #9/#1 middle penetration to collapse help and spray high-volume threes (8.3 3PM/G; 30.5 3PA/G over Weeks 3\u20134). Their game flow is sharply split by half: Latto Talent has trailed or been tied at halftime in all four games (-4.5 PPG in 1st Halves, 120\u2013138 total) before dialing up passing-lane ball pressure after halftime (+5.5 PPG in 2nd Halves, 130\u2013108)."
+        },
+        {
+          "heading": "2. Core Strengths & Late-Game Weapons",
+          "body": "Latto Talent is 3-0 in close games decided by 6 points or fewer (+4 vs. TMT, +5 vs. Ricecookers, +6 vs. Misfits 2) because of three reliable crunch-time levers. First, #9 Diallo Holmes is an elite foul magnet and free-throw closer (21/24 FT = 87.5%), single-handedly erasing a halftime deficit vs. Ricecookers by going 10/10 at the stripe (27 PTS, 16 REB). Second, they convert efficiently at the rim off straight-line drives and back-cuts: across Weeks 3\u20134 (full missed-shot tracking), #1 Sean Steven went a spotless 6/6 (100%) on 2PT drives, #4 Lazar shot 5/6 (83.3%) jumping passing lanes and cutting backdoor, and #2 Troy (23 PTS, 11 REB vs. CU in the Mar 1 Winter Final) restores their offensive rebounding and weak-side shot-blocking. Third, they rarely beat themselves with live-ball giveaways (just 5.5 TOV/G) while parking disciplined zero-mistake catch-and-shoot spacers in the corners \u2014 led by #5 Brandon Nguyen (14 PTS on 4/10 3PT in 16.6 min in Week 4, 0.5 TOPG) and #10 Ty (2/2 on corner 3s)."
+        },
+        {
+          "heading": "3. Exploitable Vulnerabilities (Sapa Boys & Sept 27 Blueprint)",
+          "body": "Both Sapa Boys' 68\u201357 Week 3 win (Latto Talent's lone loss) and Campbell United's 59\u201352 Sept 27 Fall Semifinal win over Diallo & Sean expose clear halfcourt cracks. Over Weeks 3\u20134 full shot tracking, Latto Talent shot just 38.7% FG (48/124) and 27.9% from three (17/61) when kept off the free-throw line. When Sapa Boys built an early 39\u201331 halftime lead and showed a disciplined vertical chest wall in the paint without swiping, #9 Diallo shot 1/6 on 2PTs (4/14 FG, only 4 FTA, 14 PTS), while #1 Sean Steven was baited into streaky pull-up threes (3/16 3PT = 18.8% over Weeks 3\u20134, including 1/9 vs. Misfits 2). Structurally, their interior bigs (#2 Troy, #6 Raj, #7 Tashi) are complete non-shooters (0/3 3PT combined) whom CU's frontcourt can sag off to clog driving lanes, wing connector #8 Radhir (2.7 PF/G) and backup big #6 Raj (fouled out w/ 6 PF vs. Ricecookers) are foul-prone against downhill physicality, and their chronic slow starts walk straight into CU's +12.8 PPG 1st-Half blitz."
+        }
+      ],
+      "lt_player_minutes": [
+        {
+          "player": "#9 Diallo Holmes",
+          "role": "Point-Forward / Primary Engine",
+          "expected_min": "35\u201338 min",
+          "expected_mid": 36.5,
+          "tracked_note": "37.1 MPG in 4 GP (39.5, 39.6, 36.6, 32.6m)",
+          "tape_sec": 0.0,
+          "summary": "Hardly leaves the floor and initiates half their offense off defensive rebounds (20.3 PPG, 10.0 RPG, 3.3 APG, 1.3 BPG). Dangerous pull-up 3PT shooter (10x 3PM; 37.5% in Wks 3\u20134) and automatic at the line (21/24 FT = 87.5%), but drops to 16.7% inside when met by a vertical two-man wall without reach-ins."
+        },
+        {
+          "player": "#1 Sean Steven",
+          "role": "Primary Ball-Handler & Slasher",
+          "expected_min": "28\u201332 min",
+          "expected_mid": 30.0,
+          "tracked_note": "32.0 MPG in 4 GP (28.5m & 26.9m last 2 wks)",
+          "tape_sec": 23.0,
+          "summary": "Returning championship guard who runs two-man action with #9 Diallo (7 direct assists to Diallo) and finishes right-hand paint drives at a 100% clip (6/6 2PT in Wks 3\u20134). High-volume but cold pull-up 3PT shooter (3/16 = 18.8% in Wks 3\u20134; 1/9 vs. Misfits 2) \u2014 prioritize walling off his right-hand middle lane."
+        },
+        {
+          "player": "#8 Radhir",
+          "role": "3-and-D Wing Connector",
+          "expected_min": "28\u201332 min",
+          "expected_mid": 30.0,
+          "tracked_note": "30.2 MPG in 3 GP (team-high 34.2m in Wk 4)",
+          "tape_sec": 51.5,
+          "summary": "Logged a team-high 34.2 minutes in Week 4 as their primary perimeter stopper, ball-mover (1.7 APG, 0.3 TOPG), and wing catch-and-shoot spacer (7.3 PPG, 4x 3PM, 2/8 3PT in Wk 4). Plays aggressive passing-lane defense (1.0 SPG) that gets him into foul trouble (2.7 PF/G) when attacked off the bounce."
+        },
+        {
+          "player": "#2 Troy",
+          "role": "Interior Finisher, Glass & Rim Protector",
+          "expected_min": "26\u201330 min",
+          "expected_mid": 28.0,
+          "tracked_note": "26.9 min in Wk 4 season debut (1 GP)",
+          "tape_sec": 64.5,
+          "summary": "The X-factor who wrecked CU for 23 PTS (10x 2PM) and 11 REB in the Mar 1 Winter Championship just made his season debut in Week 4 (26.9 min, 6 REB, 2 STL, 1 BLK). Pure rim-runner, lob/dump-off target, and offensive rebounder with zero outside jumper (0/2 3PT) \u2014 sag into the paint on help, then body-check box him out every shot."
+        },
+        {
+          "player": "#4 Lazar (or #23 Dilbar)",
+          "role": "Off-Ball Cutter & Transition Thief",
+          "expected_min": "22\u201326 min",
+          "expected_mid": 24.0,
+          "tracked_note": "#4 Lazar: 21.8 MPG (26.1m Wk 4) \u2022 #23 Dilbar: 26.8 MPG (Wks 1 & 3)",
+          "tape_sec": 58.5,
+          "summary": "#4 Lazar (6.5 PPG, 0 TOV) thrives sneaking behind ball-watching help defenders on 45/baseline cuts (5/6 2PT = 83.3%) and jumping lazy top-of-key passes, while offering no 3PT threat (0/2 3PT). Note: if #23 Dilbar suits up in this wing slot (DNP Wk 4, 14 PTS on 6/8 FG & 2/2 3PT vs. Sapa Boys), respect Dilbar's perimeter touch."
+        },
+        {
+          "player": "#3 Mahaan",
+          "role": "Physical Scoring Wing off Bench",
+          "expected_min": "18\u201322 min",
+          "expected_mid": 20.0,
+          "tracked_note": "20.8 MPG over active Wks 3\u20134 (22.0m & 19.5m)",
+          "tape_sec": 44.5,
+          "summary": "Mid-season wing addition (8.5 PPG in active games, 6/11 FG, 4/5 FT) who brings sturdy straight-line slashing (5/8 2PT) and late-game nerve, burying the go-ahead right-corner 3PT with 2:15 left vs. Misfits 2. Close out on balance to take away rhythm corner threes and absorb chest contact on drives."
+        },
+        {
+          "player": "#5 Brandon Nguyen",
+          "role": "Designated Corner 3PT Sniper",
+          "expected_min": "17\u201320 min",
+          "expected_mid": 18.5,
+          "tracked_note": "19.1 MPG across all 4 GP (16.6\u201321.5m every wk)",
+          "tape_sec": 37.0,
+          "summary": "Consistent 18\u201320 minute rotation sharpshooter (8.0 PPG) who just erupted for 14 PTS on 4/10 3PT in 16.6 minutes in Week 4, including the halftime buzzer-beater. Rarely dribbles inside the arc and has only 2 turnovers in 76 minutes all season \u2014 lock and trail him in the corners and never stunt off him to help."
+        },
+        {
+          "player": "#10 Ty (+ #6 Raj / #7 Tashi)",
+          "role": "Corner Spacer (#10) & Situational Bigs",
+          "expected_min": "11\u201315 min",
+          "expected_mid": 13.0,
+          "tracked_note": "#10 Ty: 20.1 MPG (Wks 3\u20134) \u2022 #6 Raj / #7 Tashi: DNP Wk 4 w/ Troy back",
+          "tape_sec": 70.5,
+          "summary": "#10 Ty absorbs 12\u201316 bench wing minutes spotting up strictly in the corners off #9 Diallo skip passes (2/5 3PT, 0 TOV, 0 PF). Reserve bigs #6 Raj (25.4 MPG Wks 1\u20133, 5/5 2PT, 6 PF foul-out vs. RC) and #7 Tashi (22.8 MPG Wks 1\u20133) were DNP in Week 4 once #2 Troy returned; if either checks in, sag all the way to the restricted area."
+        }
+      ],
+      "cu_player_improvements": [
+        {
+          "player": "#44 Christian Raslowsky",
+          "stats_line": "4 GP \u2022 34.7 MPG \u2022 18.8 PPG, 9.3 RPG, 3.0 APG, 1.5 BPG \u2022 Wks 3\u20134: 9/12 2PT (75%), 6/11 3PT (55%), 10/11 FT (91%)",
+          "focus_tag": "1st-Half Gather Security & 2nd-Half Foul Preservation",
+          "paragraph": "Christian is our undeniable MVP engine on both ends (40.2 min, 23 PTS, 14 REB, buzzer-tying 3PT vs. Ricecookers; 24 PTS, 13 REB, 0 PF in the Sept 27 win over Latto Talent). Two subtle splits stand out for Sunday: 5 of his 6 turnovers this season happened in the 1st Half when help defenders dug down on his gather in traffic, whereas 7 of his 9 fouls came in the 2nd Half/OT when contesting drives tired. Against Latto's passing-lane gamblers (#8 Radhir, #1 Sean) and 88% FT magnet #9 Diallo, hitting the quick early kickout on double-digs in the 1st Half and maintaining strict straight-up verticality (zero late swipes) keeps him clean to dominate crunch time."
+        },
+        {
+          "player": "#4 Adam Fecteau",
+          "stats_line": "3 GP \u2022 32.4 MPG \u2022 10.3 PPG, 4.3 RPG, 3.3 APG, 1.7 SPG \u2022 Team-Best +6.1/10m On/Off Swing",
+          "focus_tag": "Foul Discipline (3.3 PF/G), Rim-First Shot Diet & Free Throws",
+          "paragraph": "Campbell United plays +6.1 points per 10 minutes better with Adam on the floor thanks to his elite open-floor burst, rim pressure (7/11 2PT = 63.6% in Wks 3\u20134), and unselfish drive-and-kick passing (9 AST vs. 4 TOV last 2 games). His biggest growth levers for Sunday are foul preservation (team-high 10 fouls in 3 games = 3.3 PF/G, split 5 in 1H / 5 in 2H), trimming early-clock pull-up threes (2/8 3PT = 25% in Wks 3\u20134) in favor of downhill paint touches, and cashing in at the line (2/5 FT = 40%). Staying out of early reach-in trouble while hounding #9 Diallo/#1 Sean and living at the rim against Latto's smaller wings makes CU nearly unguardable in transition."
+        },
+        {
+          "player": "#16 Chris",
+          "stats_line": "4 GP \u2022 31.8 MPG \u2022 11.3 PPG, 7.3 RPG, 1.8 APG, 0.8 BPG \u2022 Wks 3\u20134: 7/11 2PT (64%), 5 AST / 2 TOV",
+          "focus_tag": "Free-Throw Conversion, Inside-Out Shot Selection & 2H Handle Security",
+          "paragraph": "Chris anchors our interior physicality, weak-side rim protection (huge OT block & go-ahead paint bucket vs. Ricecookers), and high-low passing (5 AST to just 2 TOV over Weeks 3\u20134). Where he can pick up 4\u20135 'free' points a night is at the charity stripe (2/6 FT overall, 0/4 FT in Wks 3\u20134) and by trading perimeter jumpers (1/6 3PT = 16.7% in Wks 3\u20134) for deep duck-in seals against Latto's single-big lineups. Also note that 4 of his 5 turnovers occurred in the 2nd Half/OT \u2014 keeping rebounds chin-high with quick outlets rather than putting the ball on the deck in traffic will neutralize Latto's second-half steal blitz."
+        },
+        {
+          "player": "#31 Evan Kovarik",
+          "stats_line": "2 GP (Hol) \u2022 31.7 MPG \u2022 9.5 PPG, 4.0 RPG, 3.0 APG, 1.0 TOPG, 0.5 PF/G \u2022 +4.8/10m On/Off (+18 PTS in Fall Final)",
+          "focus_tag": "Aggressive Scoring Assertiveness Alongside #44 & Gang-Rebounding",
+          "paragraph": "Evan is our ultimate lineup stabilizer: he owns a 3:1 assist-to-turnover ratio, commits almost zero fouls (0.5 PF/G), and anchors our #1 high-minute trio (+30 in 50.0 min alongside #44 Christian & #16 Chris). When Christian was out in the Fall Championship, Evan proved he can carry the scoring load (team-high 18 PTS on 7x 2PM & 4/4 FT in 23 min), whereas in Holiday Weeks 1\u20132 alongside #44 he occasionally deferred into a low-volume connector (~3.5 FGA/G). Against Latto Talent, hunting rhythm catch-and-shoot threes (3x 3PM in Wks 1\u20132) and middle floaters whenever defenders sag toward #44 \u2014 while crashing down from the guard spot to boost his 4.0 RPG against #9 Diallo and #2 Troy \u2014 unlocks our highest offensive ceiling."
+        },
+        {
+          "player": "#7 Nick Switzer",
+          "stats_line": "2 GP (Hol) \u2022 30.3 MPG \u2022 13.0 PPG, 5.0 RPG, 3.5 APG, 0.5 TOPG \u2022 Wk 3: 6/8 3PT (75%), 4 AST / 0 TOV",
+          "focus_tag": "Attacking Hard Closeouts Inside the Arc (2PT/FT Pressure vs. Ball Hawks)",
+          "paragraph": "Nick gives CU elite perimeter gravity and mistake-free point guard organization (+4.6/10m On-Court Net; 7 AST vs. 1 TOV in 60.5 min, highlighted by 18 PTS on 6/8 3PT vs. Misfits 2). Looking across his shot diet, 8 of his 9 Holiday field goals have been threes with zero free-throw attempts (0 FTA in 60.5 min, 0/1 2PT in Wk 3), and in the Sept 27 Semifinal vs. Latto Talent their top-locking ball pressure held him to 0 FGM in 20.5 min. Using his lethal shooting threat to shot-fake #1 Sean/#8 Radhir fly-bys, get two feet into the paint for floaters or kickouts, and draw fouls (5/5 FT in the Fall Final!) prevents Latto from taking him away with face-guarding."
+        },
+        {
+          "player": "#9 Aaron",
+          "stats_line": "4 GP \u2022 20.8 MPG \u2022 9.3 PPG, 3.0 RPG, 0.0 TOPG! \u2022 17x 2PM (14 PTS, 12 REB vs. Latto in Sept 27 Semi)",
+          "focus_tag": "Cutting Foul Rate (3.8 PF/G) & Kickout Passing Out of Crowds",
+          "paragraph": "Aaron brings instant interior toughness and remarkably clean hands (37 PTS on 17x 2PM with ZERO turnovers across 83 minutes!), and he already dominated Latto Talent on Sept 27 (14 PTS, 12 REB). His #1 constraint right now is foul trouble: a team-high 15 fouls in 83 minutes (3.8 PF/G \u2014 one foul every 5.5 minutes) limited him to 15.4 minutes in the Week 4 OT thriller. Against #9 Diallo (88% FT) and #2 Troy, showing high hands without hip/body bumps \u2014 plus kicking out to open shooters when Latto collapses two bodies in the post (8/17 2PT = 47% in Wks 3\u20134, 2 AST on 27 FGA) \u2014 will keep Aaron on the floor for 24+ dominant minutes."
+        },
+        {
+          "player": "#20 Shane Hoffman",
+          "stats_line": "3 GP \u2022 25.6 MPG \u2022 3.0 PPG, 2.7 RPG, 0.3 TOPG, 0.3 PF/G \u2022 +5.1/10m On/Off (Hit OT Game-Winner vs. RC!)",
+          "focus_tag": "3PT Volume Calibration & One-Dribble Closeout Attacks",
+          "paragraph": "Shane plays winning, ultra-disciplined positional basketball (just 1 turnover and 1 foul in 77 minutes; +4.0/10m On-Court Net) and delivered the biggest shot of the season with his OT game-winning 3PT vs. Ricecookers. Right now, 12 of his 13 tracked shots in Weeks 3\u20134 have been threes (3/12 3PT = 25%, 0/1 2PT, 0 FTA), allowing defenders to sell out hard to his release point. Adding a crisp pump-fake into a one-dribble pull-up or 45-cut to the rim \u2014 alongside pinching in from the weak-side wing to push his rebounding past 2.7 RPG \u2014 will turn his spacing gravity into higher-percentage buckets."
+        },
+        {
+          "player": "#24 George",
+          "stats_line": "4 GP \u2022 22.9 MPG \u2022 3.5 PPG, 2.3 RPG, 1.0 SPG \u2022 Wks 3\u20134: 4/7 2PT (57.1%), 4 STL",
+          "focus_tag": "Connector Passing (0 AST in 92 Min) & Dunker-Spot / Screen Spacing",
+          "paragraph": "George brings relentless point-of-attack perimeter defense (4 steals) and finishes opportunistic cuts efficiently (4/7 2PT = 57% in Wks 3\u20134), thriving when paired with two elite shooters (+26 in 38.7 min alongside #7 Nick & #44 Christian). The film and lineup numbers flag one clear offensive bottleneck: George has 0 assists vs. 3 turnovers in 92 Holiday minutes and 0 3PT attempts, which lets opponents park his defender in the paint whenever he shares the court with #9 Aaron or #16 Chris. Setting off-ball flare screens for our shooters, relocating sharply along the baseline dunker spot, and firing quick extra passes on catches will keep our halfcourt spacing wide open."
+        },
+        {
+          "player": "#12 Corey Randolph",
+          "stats_line": "2 GP \u2022 21.9 MPG \u2022 3.5 PPG, 2.5 RPG \u2022 Wks 3\u20134: 2/6 3PT (33.3%) \u2022 2x 3PM in Sept 27 Win vs. Latto",
+          "focus_tag": "2nd-Half Ball Security Under Pressure (4 TOV in 2H/OT) & Simple Reversals",
+          "paragraph": "Corey stepped into a gritty 30.8-minute role in our shorthanded Week 4 OT win over Ricecookers and hit two key triples in our Sept 27 Semifinal win over Latto Talent. His primary focus area for Sunday is late-game ball security and shot discipline inside the arc: across Weeks 3\u20134, he has 0 assists vs. 4 turnovers (all 4 turnovers came in the 2nd Half/OT against pressure!) and went 0/3 on contested 2PT drives. Keeping his offensive game crisp and simple \u2014 catch-and-shoot corner/wing threes (33%) or immediate two-hand ball reversals without dribbling into crowds \u2014 while locking & trailing #5 Brandon Nguyen in the corners makes his minutes super valuable."
+        },
+        {
+          "player": "#22 Matt Mocherman",
+          "stats_line": "2 GP \u2022 13.7 MPG \u2022 3.5 PPG, 3.0 RPG, 100% FT \u2022 7 PTS in 14m vs. Ricecookers (8 REB in 16m in Fall Final)",
+          "focus_tag": "Per-Minute Foul Control (1 Foul / 5.5 Min) & Corner Stretch Spacing",
+          "paragraph": "Matt gave CU a massive 1st-Half lift against Ricecookers (7 PTS on 1/2 3PT and 2/2 FT in 14.3 min) and rebounds at a high per-minute clip (8 REB in 15.7 min in the Fall Championship). Two areas to sharpen in his bench stints are foul rate (5 fouls in 27.4 Holiday minutes = 1 foul every 5.5 minutes) and second-half scoring/ball security (all 7 points came in 1H, 1 AST vs. 2 TOV). Against Latto Talent, leaning into that corner pick-and-pop/spot-up 3PT threat drags non-shooting shot-blocker #2 Troy away from the rim, while early lower-body box-outs keep him out of reach-in fouls."
+        }
+      ],
+      "cu_lineups": {
+        "methodology": "Reconstructed by fusing Majestic Hoops' official scorer-tracked court time (seconds_played) with chronological play-by-play event windows (statlog) across Campbell United's last 6 tracked wins (4-0 Holiday '26 + 2-0 Fall '26 Semifinal vs. Latto Talent & Championship vs. Mustangs \u2014 100% on-court event satisfaction).",
+        "outperforming": [
+          {
+            "name": "1. The 4-Out Spacing Blitz (Best Tempo & Transition Unit)",
+            "players": "#7 Nick + #20 Shane + #4 Adam + #24 George + #44 Christian",
+            "metrics": "+11 in 6.0 min (15\u20134 \u2022 +18.3 Net / 10m vs. Misfits 2) | Core Trio (#20 + #4 + #44): +25 in 45.7 min (+5.5/10m)",
+            "why_it_works": "Flanking #4 Adam and #44 Christian with two pure perimeter spacers (#7 Nick + #20 Shane) empties the paint completely for downhill dunks/layups, while #24 George hounds the opposing PG at the point of attack.",
+            "when_to_use": "Early 1st-Half or early 2nd-Half tempo unit to punish Latto Talent's slow starts (-4.5 PPG in 1H)."
+          },
+          {
+            "name": "2. Dual-Connector Twin Towers (Suggested Starting & Closing Core)",
+            "players": "#7 Nick + #31 Evan + (#4 Adam or #9/#24) + #16 Chris + #44 Christian",
+            "metrics": "+19 in 20.0 min w/ #7+#31+#16+#44 (40\u201321 \u2022 +9.5/10m) | +11 in 12.7 min w/ #31+#4+#16+#44 (17\u20136 in 52\u201350 TMT grinder!) | Core Trio (#31 + #16 + #44): +30 in 50.0 min (79\u201349 \u2022 +6.0/10m)",
+            "why_it_works": "Pairing low-turnover decision-makers/shooters (#7 Nick, #31 Evan, #4 Adam) with our #16 Chris + #44 Christian frontcourt delivers elite halfcourt ball security, defensive glass control, and two vertical rim protectors without sacrificing spacing.",
+            "when_to_use": "Primary Starting 5 & Crunch-Time Closing 5 (#7 Nick + #31 Evan + #4 Adam + #16 Chris + #44 Christian) to execute the vertical 'Sapa Boys Wall' on #9 Diallo and box out #2 Troy."
+          },
+          {
+            "name": "3. Double-Wing Spacer Unit (Best Rest-Stint for #7 Nick / #31 Evan)",
+            "players": "#12 Corey + #20 Shane + #4 Adam + #16 Chris + #44 Christian",
+            "metrics": "+5 in 5.7 min across Wks 3\u20134 (11\u20136 \u2022 +8.8 Net / 10m incl. Ricecookers OT)",
+            "why_it_works": "Whenever both #7 Nick and #31 Evan sit simultaneously, keeping TWO true perimeter wings (#12 Corey + #20 Shane) on the corners forces defenders to stay home so #4 Adam and #44 Christian can run two-man action cleanly.",
+            "when_to_use": "Mid-half breather for #7 Nick / #31 Evan so driving lanes never collapse."
+          },
+          {
+            "name": "4. Proven Small-Ball Latto-Counter (When #2 Troy Rests)",
+            "players": "#7 Nick + #12 Corey + #4 Adam + #9 Aaron + #44 Christian",
+            "metrics": "+4 in 11.0 min vs. Latto Talent in Sept 27 Semifinal (17\u201313 \u2022 +3.6/10m) | Core Trio (#7 + #4 + #9): +23 in 40.7 min (+5.7/10m)",
+            "why_it_works": "#9 Aaron thrives as the lone interior dive/post target when surrounded by three perimeter threats (#7, #12/#20, #44) and a slasher (#4), feasting inside without another non-shooter clogging his seal.",
+            "when_to_use": "Bench-big minutes when #16 Chris rests (especially if Latto goes small without #2 Troy)."
+          }
+        ],
+        "underperforming": [
+          {
+            "name": "1. The Multi-Big Clogged-Paint Lineup (#24 George + #9 Aaron Together)",
+            "players": "#31 Evan + #24 George + #9 Aaron + #16 Chris + #44 Christian (or #22 Matt + #24 George + #9 Aaron + #4 + #44)",
+            "metrics": "-6 in 7.3 min (3\u20139 \u2022 -8.2/10m in G1\u2013G2) & -5 in 5.3 min vs. Latto Talent on Sept 27 (4\u20139 \u2022 -9.4/10m) | Trio (#24 + #9 + #44): -8 in 50.0 min (66\u201374)",
+            "why_it_struggles": "Putting #24 George (0 3PA) and #9 Aaron (0/1 3PT) on the floor at the same time \u2014 especially alongside #16 Chris or #22 Matt \u2014 lets opponents park 3\u20134 defenders in the paint, choking off #44 Christian and #4 Adam's driving lanes (just 7 points scored across 12.6 combined minutes!).",
+            "fix": "ROTATION RULE #1: Strictly stagger #24 George and #9 Aaron \u2014 never play more than ONE pure non-shooter alongside #16 Chris."
+          },
+          {
+            "name": "2. Zero-Organizer Pressure Trap (Sitting #7 Nick, #31 Evan & #4 Adam Together)",
+            "players": "#12 Corey + #22 Matt + #24 George + #16 Chris + #44 Christian",
+            "metrics": "-4 in 5.0 min vs. Ricecookers (5\u20139 \u2022 -8.0 Net / 10m)",
+            "why_it_struggles": "Asking #44 Christian to bring the ball up against full-court/halfcourt digs with zero secondary ball-handler (#7, #31, and #4 all on the bench) and three interior grinders leads to stagnant possessions and live-ball steals.",
+            "fix": "ROTATION RULE #2: Keep at least TWO of {#7 Nick, #31 Evan, #4 Adam} on the floor at all times against Latto's 5.3 SPG ball-hawks (#8 Radhir, #1 Sean, #4 Lazar)."
+          },
+          {
+            "name": "3. Single-Spacer Slasher Jam (#12 Corey + #24 George + #4 Adam + #16 Chris + #44 Christian)",
+            "players": "#12 Corey + #24 George + #4 Adam + #16 Chris + #44 Christian",
+            "metrics": "-6 in 5.7 min vs. Ricecookers (7\u201313 \u2022 -10.6 Net / 10m) | Trio (#12 + #24 + #44): -19 in 39.0 min (47\u201366 \u2022 -4.9/10m)",
+            "why_it_struggles": "With only one spot-up shooter (#12 Corey) around four slasher/interior players, Latto's #2 Troy and #9 Diallo can camp at the nail/rim and wall off every drive.",
+            "fix": "ROTATION RULE #3: Maintain at least TWO credible 3PT threats from {#7 Nick, #31 Evan, #20 Shane, #12 Corey, #44 Christian} on the perimeter every single shift."
+          }
+        ]
+      }
+    }
   }
 }

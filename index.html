@@ -1649,6 +1649,7 @@
           <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20, 2026)</option>
           <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
           <option value="scouting_nov15">📋 NEW! Nov 15 Opponent Scouting Report: vs. Latto Talent (Sun 5:00 PM @ The Grove)</option>
+          <option value="scouting_nov15_evan">📝 NEW! Nov 15 — Evan's Coach's Brief, Expected Mins &amp; CU Lineup Lab</option>
           <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam 3× Dunk Lab (Colab AI)</option>
           <option value="scouting_nov8">📋 Archive: Nov 8 Scouting Report vs. Ricecookers (CU Won 66–63 OT!)</option>
           <option value="2026-02-15_CU_vs_PimpsDown">⚡ Winter '26 Wk 6: Campbell United 59, Pimps Down 51 (Feb 15, 2026)</option>
@@ -1714,6 +1715,7 @@
         <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
         <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15" onclick="switchGameSession('scouting_nov15')" style="border-color:#f472b6;color:#fef08a;background:linear-gradient(135deg,rgba(219,39,119,0.38) 0%,rgba(124,58,237,0.32) 100%);font-weight:900;box-shadow:0 2px 10px rgba(236,72,153,0.35);">📋 NEW! Nov 15 Scouting: vs. Latto Talent (Sun 5PM)</button>
+        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15_evan" onclick="switchGameSession('scouting_nov15_evan')" style="border-color:#38bdf8;color:#e0f2fe;background:linear-gradient(135deg,rgba(14,165,233,0.32) 0%,rgba(16,185,129,0.28) 100%);font-weight:900;box-shadow:0 2px 10px rgba(56,189,248,0.28);">📝 Evan's Coach's Brief &amp; Lineups (Nov 15)</button>
         <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; Adam 3× Dunk Lab</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')" style="opacity:0.86;">📋 Nov 8 Scouting (Ricecookers)</button>
       </div>
@@ -2666,6 +2668,201 @@
       }
     }
 
+    let activeScoutingViewMode = (new URLSearchParams(window.location.search).get('view') === 'evan') ? 'evan' : 'broadcast';
+
+    async function setScoutingViewMode(mode) {
+      activeScoutingViewMode = (mode === 'evan') ? 'evan' : 'broadcast';
+      if (window.history && window.history.replaceState) {
+        const u = new URL(window.location.href);
+        u.searchParams.set('game', 'scouting_nov15');
+        if (activeScoutingViewMode === 'evan') u.searchParams.set('view', 'evan');
+        else u.searchParams.delete('view');
+        window.history.replaceState({}, '', u.toString());
+      }
+      const picker = document.getElementById('sessionPicker');
+      const tabTarget = activeScoutingViewMode === 'evan' ? 'scouting_nov15_evan' : 'scouting_nov15';
+      if (picker && Array.from(picker.options).some(o => o.value === tabTarget)) picker.value = tabTarget;
+      document.querySelectorAll('#cuHubTabs .cu-tab-btn, #wtnHubTabs .cu-tab-btn').forEach(btn => {
+        if (btn.dataset.session) btn.classList.toggle('active', btn.dataset.session === tabTarget);
+      });
+      const bundle = await ensureMajesticBundleLoaded();
+      if (bundle && bundle.scouting_report_nov15_latto_talent) {
+        renderScoutingReport(bundle.scouting_report_nov15_latto_talent);
+      }
+    }
+
+    function renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) {
+      const ev = sr.evan_view || {};
+      const reportParasHtml = (ev.team_report_paragraphs || []).map(p => `
+        <div style="background:#0e1422;border:1px solid #26324b;border-left:4px solid #38bdf8;border-radius:8px;padding:14px 16px;margin-bottom:12px;">
+          <div style="font-family:var(--font-display);font-size:1.02rem;font-weight:900;color:#fde68a;letter-spacing:0.03em;text-transform:uppercase;margin-bottom:6px;">
+            ${escapeHtml(p.heading)}
+          </div>
+          <p style="margin:0;font-size:0.9rem;color:#e2e8f0;line-height:1.68;">
+            ${escapeHtml(p.body)}
+          </p>
+        </div>
+      `).join('');
+
+      const ltMinsHtml = (ev.lt_player_minutes || []).map(pm => {
+        const pct = Math.min(100, Math.max(8, Math.round(((Number(pm.expected_mid) || 15) / 40) * 100)));
+        return `
+          <div style="background:#0e131f;border:1px solid #263149;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <div>
+                <span style="font-family:var(--font-display);font-size:1.12rem;font-weight:900;color:#fff;">${escapeHtml(pm.player)}</span>
+                <span style="font-size:0.74rem;color:#f472b6;font-weight:700;margin-left:6px;">• ${escapeHtml(pm.role)}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="background:rgba(56,189,248,0.16);border:1px solid rgba(56,189,248,0.5);color:#7dd3fc;font-size:0.78rem;font-weight:900;padding:3px 9px;border-radius:999px;">
+                  ⏱️ Est. ${escapeHtml(pm.expected_min)}
+                </span>
+                ${pm.tape_sec !== undefined ? `
+                  <button class="blue-btn" onclick="seekScoutingTape(${Number(pm.tape_sec) || 0}, '${escapeHtml(pm.player)}')" style="font-size:0.72rem;padding:4px 9px;font-weight:800;">
+                    🎬 Clip
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="flex:1;height:7px;background:#1e293b;border-radius:999px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#ec4899 0%,#38bdf8 100%);border-radius:999px;"></div>
+              </div>
+              <span style="font-size:0.72rem;color:#94a3b8;font-weight:600;white-space:nowrap;">Tracked: ${escapeHtml(pm.tracked_note)}</span>
+            </div>
+            <p style="margin:0;font-size:0.84rem;color:#cbd5e1;line-height:1.56;">
+              ${escapeHtml(pm.summary)}
+            </p>
+          </div>
+        `;
+      }).join('');
+
+      const cuImpHtml = (ev.cu_player_improvements || []).map(cp => `
+        <div style="background:#0e1520;border:1px solid #24344d;border-top:3px solid #4ade80;border-radius:8px;padding:13px 15px;display:flex;flex-direction:column;gap:7px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:var(--font-display);font-size:1.14rem;font-weight:900;color:#fff;">
+              ${escapeHtml(cp.player)}
+            </span>
+            <span style="background:rgba(250,204,21,0.14);border:1px solid rgba(250,204,21,0.45);color:#fde047;font-size:0.72rem;font-weight:800;padding:3px 8px;border-radius:5px;">
+              🎯 Focus: ${escapeHtml(cp.focus_tag)}
+            </span>
+          </div>
+          <div style="font-size:0.74rem;color:#7dd3fc;font-weight:700;background:#131c2e;padding:5px 8px;border-radius:5px;">
+            📊 ${escapeHtml(cp.stats_line)}
+          </div>
+          <p style="margin:0;font-size:0.84rem;color:#e2e8f0;line-height:1.58;">
+            ${escapeHtml(cp.paragraph)}
+          </p>
+        </div>
+      `).join('');
+
+      const lu = ev.cu_lineups || {};
+      const outLuHtml = (lu.outperforming || []).map(item => `
+        <div style="background:#0c1915;border:1px solid rgba(74,222,128,0.38);border-left:4px solid #22c55e;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+          <div style="font-weight:900;color:#86efac;font-size:0.9rem;margin-bottom:4px;">${escapeHtml(item.name)}</div>
+          <div style="font-family:var(--font-display);font-size:0.96rem;font-weight:800;color:#fff;background:rgba(15,23,42,0.75);padding:5px 9px;border-radius:5px;border:1px solid #1e3a2f;margin-bottom:6px;">
+            🏀 ${escapeHtml(item.players)}
+          </div>
+          <div style="font-size:0.76rem;color:#fde68a;font-weight:800;margin-bottom:5px;">📈 ${escapeHtml(item.metrics)}</div>
+          <div style="font-size:0.82rem;color:#cbd5e1;line-height:1.5;margin-bottom:5px;"><strong>Why It Clicks:</strong> ${escapeHtml(item.why_it_works)}</div>
+          <div style="font-size:0.8rem;color:#bbf7d0;line-height:1.45;"><strong>⚡ Nov 15 Deployment:</strong> ${escapeHtml(item.when_to_use)}</div>
+        </div>
+      `).join('');
+
+      const underLuHtml = (lu.underperforming || []).map(item => `
+        <div style="background:#1b1016;border:1px solid rgba(248,113,113,0.38);border-left:4px solid #ef4444;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+          <div style="font-weight:900;color:#fca5a5;font-size:0.9rem;margin-bottom:4px;">${escapeHtml(item.name)}</div>
+          <div style="font-family:var(--font-display);font-size:0.94rem;font-weight:800;color:#fff;background:rgba(15,23,42,0.75);padding:5px 9px;border-radius:5px;border:1px solid #3f1d28;margin-bottom:6px;">
+            ⚠️ ${escapeHtml(item.players)}
+          </div>
+          <div style="font-size:0.76rem;color:#fda4af;font-weight:800;margin-bottom:5px;">📉 ${escapeHtml(item.metrics)}</div>
+          <div style="font-size:0.82rem;color:#cbd5e1;line-height:1.5;margin-bottom:5px;"><strong>Why It Bogged Down:</strong> ${escapeHtml(item.why_it_struggles)}</div>
+          <div style="font-size:0.8rem;color:#fde047;background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.3);padding:5px 8px;border-radius:5px;line-height:1.45;">
+            <strong>🛠️ ${escapeHtml(item.fix)}</strong>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="scouting-panel" style="border-color:rgba(56,189,248,0.45);">
+          <h3>
+            <span>📖 Latto Talent (3-1) — 3-Paragraph Opponent Team Report</span>
+            <span style="font-size:0.74rem;color:#94a3b8;font-weight:700;text-transform:none;">Play Style • Core Strengths • Exploitable Vulnerabilities</span>
+          </h3>
+          ${reportParasHtml}
+        </div>
+
+        <div class="scouting-panel">
+          <h3>
+            <span>⏱️ Latto Talent Player-by-Player Brief &amp; Expected Minutes</span>
+            <span style="font-size:0.74rem;color:#7dd3fc;font-weight:800;text-transform:none;">200.0 Team Player-Minutes Budget (40-Min Regulation Game • Scorer-Tracked MPG)</span>
+          </h3>
+          <div class="personnel-grid">
+            ${ltMinsHtml}
+          </div>
+        </div>
+
+        ${sr.scouting_tape_url ? `
+          <details id="evanTapeDetails" class="scouting-panel" style="border-color:rgba(56,189,248,0.45);background:linear-gradient(180deg,#0f172a 0%,#0b0f19 100%);">
+            <summary style="cursor:pointer;font-family:var(--font-display);font-size:1.08rem;font-weight:900;color:#7dd3fc;letter-spacing:0.03em;text-transform:uppercase;list-style:none;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+              <span>🎥 Optional Video Reference: ${escapeHtml(tapeHeader)} (Tap to Expand or Click Any 🎬 Clip Button Above)</span>
+              <span style="font-size:0.75rem;color:#fde68a;">11 Clips • 1:17 Total ▾</span>
+            </summary>
+            <div id="scoutingTapePanel" style="margin-top:12px;">
+              <div class="scouting-tape-grid">
+                <div>
+                  <video id="scoutingTapeVideo" src="${escapeHtml(sr.scouting_tape_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #334155;background:#000;aspect-ratio:16/9;display:block;"></video>
+                  <div id="scoutingTapeNowPlaying" style="margin-top:8px;font-size:0.84rem;font-weight:700;color:#7dd3fc;line-height:1.4;">
+                    ▶️ Tap any player's 🎬 Clip button above or a chapter on the right to jump straight to that play!
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;width:100%;">
+                  <div style="font-size:0.76rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
+                    ⏱️ ${escapeHtml(tapeSummaryLabel)}
+                  </div>
+                  ${tapeChaptersHtml}
+                </div>
+              </div>
+            </div>
+          </details>
+        ` : ''}
+
+        <div class="scouting-panel" style="border-color:rgba(74,222,128,0.42);">
+          <h3>
+            <span>🪞 Campbell United (4-0) Self-Scout — Player-by-Player Improvement Focus</span>
+            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">Holiday '26 Tracked Minutes + Verified Weeks 3–4 Shooting, FT, Foul &amp; Turnover Splits</span>
+          </h3>
+          <div class="personnel-grid">
+            ${cuImpHtml}
+          </div>
+        </div>
+
+        <div class="scouting-panel" style="border-color:rgba(168,85,247,0.45);">
+          <h3>
+            <span>🧪 Campbell United On-Court Lineup Synergy Lab (+/- Stint Reconstruction)</span>
+            <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">6-Game Tracked Sample (4-0 Holiday '26 + 2-0 Fall '26 Playoffs)</span>
+          </h3>
+          <div style="font-size:0.79rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:14px;line-height:1.5;">
+            🔬 <strong>How Lineups Were Measured:</strong> ${escapeHtml(lu.methodology || '')}
+          </div>
+          <div class="scouting-grid-2col">
+            <div>
+              <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#4ade80;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">
+                🟢 Outperforming Lineups &amp; Suggested Nov 15 Rotations
+              </div>
+              ${outLuHtml}
+            </div>
+            <div>
+              <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#f87171;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">
+                🔴 Underperforming Lineup Traps &amp; Rotation Rules
+              </div>
+              ${underLuHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderScoutingReport(sr) {
       const container = document.getElementById('scoutingViewContainer');
       if (!container || !sr) return;
@@ -2678,6 +2875,9 @@
       const tapeSummaryLabel = sr.tape_summary_label || `Player Scouting Tape Chapters (${(sr.scouting_tape_chapters || []).length} Clips):`;
       const quickFilmSession = sr.quick_film_session || '2026-11-08_CU_vs_Ricecookers_G4';
       const quickFilmLabel = sr.quick_film_label || '🎬 Watch CU 66–63 OT Win vs. Ricecookers';
+      const hasEvanView = !!sr.evan_view;
+      const isEvanMode = hasEvanView && activeScoutingViewMode === 'evan';
+
       const commonHtml = (sr.common_opponents || []).map(c => `
         <div style="background:#0e131f;border:1px solid #263149;border-radius:7px;padding:10px 12px;margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:4px;">
@@ -2728,7 +2928,7 @@
           </div>
           <div style="font-size:0.74rem;color:#94a3b8;font-weight:600;">📊 ${escapeHtml(p.splits)}</div>
           <div style="font-size:0.78rem;color:#e2e8f0;line-height:1.4;"><strong>Tendency:</strong> ${escapeHtml(p.tendency)}</div>
-          <div style="font-size:0.78rem;color:#86efac;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:5px;padding:6px 8px;line-height:1.4;">
+          <div style="display:block;font-size:0.78rem;color:#86efac;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:5px;padding:6px 8px;line-height:1.4;">
             <strong>🛡️ CU Assignment:</strong> ${escapeHtml(p.matchup_plan)}
           </div>
           ${p.tape_sec !== undefined ? `
@@ -2765,28 +2965,23 @@
         </a>
       `).join('');
 
-      container.innerHTML = `
-        <div class="scouting-hero">
-          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-            ${sr.logo_url ? `<img src="${escapeHtml(sr.logo_url)}" alt="${escapeHtml(oppName)} Logo" style="width:62px;height:62px;border-radius:10px;border:2px solid #38bdf8;background:#0f172a;object-fit:contain;padding:3px;" />` : ''}
-            <div>
-              <div style="font-family:var(--font-display);font-weight:800;font-size:0.85rem;letter-spacing:0.08em;color:#fde68a;text-transform:uppercase;">
-                📋 CPSN × CAMPBELL UNITED OFFICIAL SCOUTING REPORT • MAJESTIC HOOPS HOLIDAY '26 (DIV D2)
-              </div>
-              <h1 style="font-family:var(--font-display);font-size:2.1rem;font-weight:900;color:#fff;letter-spacing:0.02em;text-transform:uppercase;margin:2px 0 4px;">
-                ${escapeHtml(sr.matchup_title)}
-              </h1>
-              <div style="font-size:0.88rem;color:#cbd5e1;font-weight:600;">
-                📅 ${escapeHtml(sr.date_str)} &nbsp;•&nbsp; 📍 ${escapeHtml(sr.venue)} &nbsp;•&nbsp; 🔥 ${escapeHtml(cu.streak || 'Campbell United 4-0 in D2!')}
-              </div>
-            </div>
+      const viewToggleHtml = hasEvanView ? `
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:10px 14px;">
+          <div style="font-size:0.82rem;color:#cbd5e1;font-weight:700;">
+            🔀 <strong style="color:#fde68a;">Scouting Report Format:</strong> Switch between Broadcast Video Breakdown &amp; Evan's Written Coach's Brief + Lineup Lab
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="green-btn" onclick="shareToWhatsApp()" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">📲 Share Scouting Report to WhatsApp</button>
-            <button class="blue-btn" onclick="switchGameSession('${escapeHtml(quickFilmSession)}')" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">${escapeHtml(quickFilmLabel)}</button>
+            <button onclick="setScoutingViewMode('broadcast')" style="cursor:pointer;font-family:var(--font-display);font-size:0.86rem;font-weight:900;letter-spacing:0.03em;text-transform:uppercase;padding:8px 14px;border-radius:7px;border:1px solid ${!isEvanMode ? '#f472b6' : '#334155'};background:${!isEvanMode ? 'linear-gradient(135deg,#db2777 0%,#7c3aed 100%)' : '#161e31'};color:${!isEvanMode ? '#fff' : '#94a3b8'};">
+              🎬 Broadcast Tape &amp; Matchups View
+            </button>
+            <button onclick="setScoutingViewMode('evan')" style="cursor:pointer;font-family:var(--font-display);font-size:0.86rem;font-weight:900;letter-spacing:0.03em;text-transform:uppercase;padding:8px 14px;border-radius:7px;border:1px solid ${isEvanMode ? '#38bdf8' : '#334155'};background:${isEvanMode ? 'linear-gradient(135deg,#0284c7 0%,#059669 100%)' : '#161e31'};color:${isEvanMode ? '#fff' : '#94a3b8'};">
+              📝 Evan's Coach's Brief, Mins &amp; Lineups View
+            </button>
           </div>
         </div>
+      ` : '';
 
+      const broadcastBodyHtml = `
         ${sr.scouting_tape_url ? `
           <div class="scouting-panel" id="scoutingTapePanel" style="border-color:rgba(56,189,248,0.5);background:linear-gradient(180deg,#0f172a 0%,#0b0f19 100%);">
             <h3>
@@ -2854,9 +3049,40 @@
           </div>
         </div>
       `;
+
+      container.innerHTML = `
+        <div class="scouting-hero">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            ${sr.logo_url ? `<img src="${escapeHtml(sr.logo_url)}" alt="${escapeHtml(oppName)} Logo" style="width:62px;height:62px;border-radius:10px;border:2px solid #38bdf8;background:#0f172a;object-fit:contain;padding:3px;" />` : ''}
+            <div>
+              <div style="font-family:var(--font-display);font-weight:800;font-size:0.85rem;letter-spacing:0.08em;color:#fde68a;text-transform:uppercase;">
+                ${isEvanMode ? '📝 EVAN\'S ALTERNATIVE SCOUTING VIEW • TEAM NARRATIVE, EXPECTED MINUTES &amp; CU LINEUP LAB' : '📋 CPSN × CAMPBELL UNITED OFFICIAL SCOUTING REPORT • MAJESTIC HOOPS HOLIDAY \'26 (DIV D2)'}
+              </div>
+              <h1 style="font-family:var(--font-display);font-size:2.1rem;font-weight:900;color:#fff;letter-spacing:0.02em;text-transform:uppercase;margin:2px 0 4px;">
+                ${escapeHtml(sr.matchup_title)}
+              </h1>
+              <div style="font-size:0.88rem;color:#cbd5e1;font-weight:600;">
+                📅 ${escapeHtml(sr.date_str)} &nbsp;•&nbsp; 📍 ${escapeHtml(sr.venue)} &nbsp;•&nbsp; 🔥 ${escapeHtml(cu.streak || 'Campbell United 4-0 in D2!')}
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="green-btn" onclick="shareToWhatsApp()" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">
+              ${isEvanMode ? '📲 Share Evan\'s Brief to WhatsApp' : '📲 Share Scouting Report to WhatsApp'}
+            </button>
+            <button class="blue-btn" onclick="switchGameSession('${escapeHtml(quickFilmSession)}')" style="font-weight:800;padding:8px 14px;font-size:0.84rem;">${escapeHtml(quickFilmLabel)}</button>
+          </div>
+        </div>
+
+        ${viewToggleHtml}
+
+        ${isEvanMode ? renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) : broadcastBodyHtml}
+      `;
     }
 
     function seekScoutingTape(sec, label) {
+      const details = document.getElementById('evanTapeDetails');
+      if (details && !details.open) details.open = true;
       const sv = document.getElementById('scoutingTapeVideo');
       const panel = document.getElementById('scoutingTapePanel');
       const np = document.getElementById('scoutingTapeNowPlaying');
@@ -3160,13 +3386,22 @@
       stopAutoReel();
       const sv = document.getElementById('scoutingTapeVideo');
       if (sv && !sv.paused) sv.pause();
-      activeSessionId = sessionId || '2026-10-04_CU_vs_Mustangs_Champ';
+      if (sessionId === 'scouting_nov15_evan') {
+        activeScoutingViewMode = 'evan';
+        activeSessionId = 'scouting_nov15';
+      } else if (sessionId === 'scouting_nov15' && !skipUrlSync) {
+        activeScoutingViewMode = 'broadcast';
+        activeSessionId = 'scouting_nov15';
+      } else {
+        activeSessionId = sessionId || '2026-10-04_CU_vs_Mustangs_Champ';
+      }
+      const uiSessionKey = (activeSessionId === 'scouting_nov15' && activeScoutingViewMode === 'evan') ? 'scouting_nov15_evan' : activeSessionId;
       const picker = document.getElementById('sessionPicker');
-      if (picker && picker.value !== activeSessionId) picker.value = activeSessionId;
+      if (picker && picker.value !== uiSessionKey) picker.value = uiSessionKey;
 
       document.querySelectorAll('#cuHubTabs .cu-tab-btn, #wtnHubTabs .cu-tab-btn').forEach(btn => {
         if (btn.dataset.session) {
-          btn.classList.toggle('active', btn.dataset.session === activeSessionId);
+          btn.classList.toggle('active', btn.dataset.session === uiSessionKey);
         }
       });
 
@@ -3174,6 +3409,8 @@
         const u = new URL(window.location.href);
         if (activeSessionId === '2026-10-04_CU_vs_Mustangs_Champ') u.searchParams.delete('game');
         else u.searchParams.set('game', activeSessionId);
+        if (activeSessionId === 'scouting_nov15' && activeScoutingViewMode === 'evan') u.searchParams.set('view', 'evan');
+        else u.searchParams.delete('view');
         u.searchParams.delete('play');
         window.history.replaceState({}, '', u.toString());
       }
@@ -4536,6 +4773,20 @@
         } else {
           waText = `🏀 *CPSN Film Room Highlight*\n${deepLink}`;
         }
+      } else if (activeSessionId === 'scouting_nov15' && activeScoutingViewMode === 'evan') {
+        waText = [
+          '📝 *EVAN\'S COACH\'S BRIEF & LINEUP LAB: CU (4-0) VS. LATTO TALENT (3-1) — SUN NOV 15 @ 5PM*',
+          `👉 *Read Full Brief, Expected Mins & CU Lineups:* ${baseOrigin}/?game=scouting_nov15&view=evan`,
+          '',
+          '📖 *LATTO TALENT SNAPSHOT:*',
+          '• Heliocentric grab-and-go (#9 Diallo 37.1 MPG, 20.3 PPG, 87.5% FT + #1 Sean 32.0 MPG, 6/6 2PT)',
+          '• Slow starters (-4.5 PPG in 1H across all 4 games) who shoot 38.7% FG / 27.9% 3PT when walled off without fouling!',
+          '• #2 Troy returned in Wk 4 (26.9 min) — sag off him (0 3PA) to wall #9 Diallo, then box him out!',
+          '',
+          '🧪 *CU LINEUP RULES:*',
+          '• *Best Closing/Starting Core:* #7 Nick + #31 Evan + #4 Adam + #16 Chris + #44 Christian (+30 in 50m w/ #31+#16+#44!)',
+          '• *Stagger Non-Shooters:* Never pair #24 George + #9 Aaron together without shooters, and always keep 2 of {#7, #31, #4} on the floor vs. Latto\'s ball pressure!'
+        ].join('\n');
       } else if (activeSessionId === 'scouting_nov15') {
         waText = [
           '📋 *CAMPBELL UNITED SCOUTING REPORT: VS. LATTO TALENT (SUN NOV 15 @ 5:00 PM — THE GROVE CC)*',
@@ -4780,6 +5031,8 @@
     async function handleUrlDeepLinks() {
       const params = new URLSearchParams(window.location.search);
       const gameParam = params.get('game');
+      const viewParam = params.get('view');
+      if (viewParam === 'evan' || gameParam === 'scouting_nov15_evan') activeScoutingViewMode = 'evan';
       const playSec = params.get('play') || params.get('t');
       const reelParam = params.get('reel');
       const targetSession = gameParam || (reelParam === 'cu_g4' ? '2026-11-08_CU_vs_Ricecookers_G4' : reelParam === 'mo_c7' ? '2026-02-01_C7_vs_OutOfShape_W4' : reelParam === 'mo' ? '2026-11-01_WTN_vs_CrunchTime_G3' : '2026-10-04_CU_vs_Mustangs_Champ');
