@@ -3455,6 +3455,7 @@
               <div>
                 <span style="font-family:var(--font-display);font-size:1.12rem;font-weight:900;color:#fff;">${escapeHtml(pm.player)}</span>
                 <span style="font-size:0.74rem;color:#f472b6;font-weight:700;margin-left:6px;">• ${escapeHtml(pm.role)}</span>
+                ${pm.bio_tag ? `<div style="margin-top:4px;"><span style="display:inline-block;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.42);color:#fde68a;font-size:0.71rem;font-weight:800;padding:2px 8px;border-radius:999px;">📏 ${escapeHtml(pm.bio_tag)}</span></div>` : ''}
               </div>
               <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
                 <span style="background:rgba(56,189,248,0.16);border:1px solid rgba(56,189,248,0.5);color:#7dd3fc;font-size:0.78rem;font-weight:900;padding:3px 9px;border-radius:999px;">
@@ -3559,8 +3560,13 @@
         <div class="scouting-panel">
           <h3>
             <span>⏱️ Latto Talent Player-by-Player Brief &amp; Expected Minutes</span>
-            <span style="font-size:0.74rem;color:#7dd3fc;font-weight:800;text-transform:none;">40-Min Game Rotation (200 Total Player-Minutes)</span>
+            <span style="font-size:0.74rem;color:#7dd3fc;font-weight:800;text-transform:none;">40-Min Game Rotation • Hudl + 3D Film Heights &amp; Tenure</span>
           </h3>
+          ${ev.roster_turnover_note ? `
+            <div style="font-size:0.8rem;color:#e2e8f0;background:#111827;border:1px solid rgba(245,158,11,0.38);border-left:4px solid #f59e0b;border-radius:6px;padding:9px 12px;margin-bottom:12px;line-height:1.5;">
+              📏 <strong>${escapeHtml(ev.roster_turnover_note)}</strong>
+            </div>
+          ` : ''}
           <div class="personnel-grid">
             ${ltMinsHtml}
           </div>
@@ -3702,6 +3708,7 @@
             </span>
             <span class="tag special" style="font-size:0.68rem;">${escapeHtml(p.role)}</span>
           </div>
+          ${p.bio_tag ? `<div style="font-size:0.72rem;color:#fde68a;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);padding:3px 8px;border-radius:5px;font-weight:700;">📏 ${escapeHtml(p.bio_tag)}</div>` : ''}
           <div style="display:flex;gap:10px;font-size:0.8rem;font-weight:800;color:var(--accent);background:#141b2d;padding:5px 9px;border-radius:5px;flex-wrap:wrap;">
             <span>${p.ppg} PPG</span>
             <span>•</span>
