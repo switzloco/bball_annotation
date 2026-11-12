@@ -1826,7 +1826,7 @@
             💡 <strong>How Collab Training Works:</strong> Confirm scorers, reassign assists, nudge shot sync (<code>-2s</code> / <code>+2s</code>), or tag <strong>🛡️ Charges Drawn</strong> (which Majestic's scorer iPad logs only as generic opponent fouls — tagging a Charge Drawn auto-promotes it into Top 5 Highlights &amp; adds <strong>+2.5 PPR</strong>!).
           </div>
           <div class="collab-controls-grid">
-            <input type="text" id="collabContributorInput" placeholder="Your Name (e.g. Nick / Mo)" value="" style="max-width:145px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
+            <input type="text" id="collabContributorInput" placeholder="Reviewer Name / Jersey #" value="" style="max-width:145px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
             <select id="collabLivePlayerSelect" style="font-size:0.73rem;padding:4px 6px;max-width:175px;"></select>
             <select id="collabLiveActionSelect" style="font-size:0.73rem;padding:4px 6px;">
               <option value="Charge Drawn">🛡️ Charge Drawn (Elite Defense!)</option>
@@ -1899,15 +1899,15 @@
         <div class="espn-bottomline" id="espnBottomline">
           <div class="bottomline-badge">CPSN BOTTOMLINE</div>
           <div class="bottomline-track" id="bottomlineTrack">
-            <span class="ticker-item" onclick="seekTo(4641, true)"><strong>CHAMP DAGGER 3PT</strong> #7 Nick Switzer 3PT (Assist: #31 Evan Kovarik) @ 77:21 (65–60)</span>
+            <span class="ticker-item" onclick="seekTo(4557, true)"><strong>CHAMP MVP 18 PTS (7/7 FG)</strong> #31 Evan Kovarik late finish @ 75:57</span>
             <span class="ticker-sep">•</span>
-            <span class="ticker-item" onclick="seekTo(4429, true)"><strong>CLUTCH BUCKET</strong> #9 Aaron 2PT (Assist: #4 Adam Fecteau) @ 73:49 (60–56)</span>
-            <span class="ticker-sep">•</span>
-            <span class="ticker-item" onclick="seekTo(1377, true)"><strong>OPENING SPLASH</strong> #4 Adam Fecteau 3PT (Assist: #20 Shane Hoffman) @ 22:57</span>
+            <span class="ticker-item" onclick="seekTo(1377, true)"><strong>OPENING SPLASH</strong> #4 Adam Fecteau 3PT (15 PTS • Assist: #20 Shane Hoffman) @ 22:57</span>
             <span class="ticker-sep">•</span>
             <span class="ticker-item" onclick="seekTo(2436, true)"><strong>HALFTIME BUZZER 3PT</strong> #20 Shane Hoffman 3PT (Assist: #12 Corey Randolph) @ 40:36</span>
             <span class="ticker-sep">•</span>
-            <span class="ticker-item" onclick="seekTo(4557, true)"><strong>PERFECT 7/7 FG</strong> #31 Evan Kovarik (18 PTS, 5 REB) late finish @ 75:57</span>
+            <span class="ticker-item" onclick="seekTo(4429, true)"><strong>CLUTCH BUCKET</strong> #9 Aaron 2PT (12 PTS • Assist: #4 Adam Fecteau) @ 73:49 (60–56)</span>
+            <span class="ticker-sep">•</span>
+            <span class="ticker-item" onclick="seekTo(4641, true)"><strong>LATE DAGGER 3PT</strong> #7 Nick Switzer 3PT (Assist: #31 Evan Kovarik) @ 77:21 (65–60)</span>
           </div>
         </div>
       </div>
@@ -2019,7 +2019,7 @@
         <select id="crewRegularSelect" onchange="onSelectRegularCrew()" title="1-Click: Pick an existing Day-to-Day Crew Regular">
           <option value="">-- 1-Click: Pick Regular Crew Member (or type new) --</option>
         </select>
-        <input type="text" id="crewRealNameInput" placeholder="Real Name / Nickname (e.g. Josh, Kenny, Nick)..." />
+        <input type="text" id="crewRealNameInput" placeholder="Real Name / Nickname (e.g. Josh, Kenny, Damien)..." />
         <input type="text" id="crewTraitsInput" placeholder="Outfit-Invariant Biometrics (e.g. 'Curly brown hair, stocky, wing 3PT')..." />
         <input type="text" id="crewGearInput" placeholder="👟 Constant Shoes / Glasses / Brace (e.g. 'Teal shoes, glasses')..." />
         <button class="blue-btn" onclick="saveCrewMapping()">💾 Link Outfit to Crew Profile</button>
@@ -2157,16 +2157,15 @@
         cu_jersey: '#7',
         cu_team: 'Campbell United',
         biometric_confidence: '100% Ground-Truth Match (Verified in Nov 1 Misfits 2 s=1040s & s=3147s wearing Red #7 with blonde/reddish-brown top-knot/bun; confirmed NOT present at Oct 15 pickup run)',
-        permanent_traits: 'Elite 3PT sharpshooter (6-for-6 3PT in Nov 1 G3) & high-IQ playmaker, blonde/reddish-brown hair tied in top-knot/bun',
+        permanent_traits: 'Catch-and-shoot wing spacer (6-for-8 3PT in Nov 1 G3) & secondary ball-mover, blonde/reddish-brown hair tied in top-knot/bun',
         biometric_anchors: {
           hair_and_face: 'Blonde / reddish-brown hair tied in top-knot / man-bun, beard',
           footwear_and_gear: 'Campbell United Red #7 jersey, dark shorts, white crew socks, dark basketball shoes'
         },
-        default_team_role: 'Campbell United #7 / Wing Sharpshooter',
+        default_team_role: 'Campbell United #7 / Wing Spacer',
         outfit_history: {
           '2026-10-04_CU_vs_Mustangs_Champ': ['#7 Nick Switzer (CU Red #7)'],
           '2026-10-18_CU_vs_HalalHoopers_G1': ['#7 Nick Switzer (CU Red #7)'],
-          '2026-10-25_CU_vs_TMT_G2': ['#7 Nick Switzer (CU Red #7)'],
           '2026-11-01_CU_vs_Misfits2_G3': ['#7 Nick Switzer (CU Red #7)']
         }
       },
@@ -2603,7 +2602,7 @@
         } else if (/Steal|Block/i.test(lt.action_type || '')) {
           mappedTags.splice(0, mappedTags.length, 'DEF', 'SPECIAL');
         }
-        const pLabel = lt.player || '#7 Nick Switzer';
+        const pLabel = lt.player || 'Unassigned (Team)';
         const richDesc = isChargeTag
           ? `🛡️ ELITE DEFENSIVE STOP — ${pLabel} plants outside the restricted arc and DRAWS THE CHARGE${lt.opp_offender ? ' on ' + lt.opp_offender : ''}! (Offensive Foul Turnover${lt.note ? ' • ' + lt.note : ''})`
           : `${pLabel} — ${lt.action_type || 'Highlight'}${lt.note ? ': ' + lt.note : ''}`;
@@ -3083,7 +3082,7 @@
         <div class="scouting-panel" style="border-color:rgba(74,222,128,0.42);">
           <h3>
             <span>🪞 Campbell United (4-0) Self-Scout — Player-by-Player Improvement Focus</span>
-            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">Garbage-Time Filtered • Schedule-Adjusted On/Off + Verified Weeks 3–4 Splits</span>
+            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">👔 Team-Management Blinded Audit • Garbage-Time &amp; Schedule-Adjusted • Verified Wks 3–4 Splits</span>
           </h3>
           <div class="personnel-grid">
             ${cuImpHtml}
@@ -5138,8 +5137,8 @@
           '• #2 Troy returned in Wk 4 (26.9 min) — sag off him (0 3PA) to wall #9 Diallo, then box him out!',
           '',
           '🧪 *CU LINEUP RULES:*',
-          '• *Best Closing/Starting Core:* #7 Nick + #31 Evan + #4 Adam + #16 Chris + #44 Christian (+30 in 50m w/ #31+#16+#44!)',
-          '• *Stagger Non-Shooters:* Never pair #24 George + #9 Aaron together without shooters, and always keep 2 of {#7, #31, #4} on the floor vs. Latto\'s ball pressure!'
+          '• *Best Closing/Starting Core:* #44 Christian + #16 Chris + #31 Evan + #4 Adam + #20 Shane / #7 Nick (+7.7/10m Comp in 45.3m w/ #44+#16+#31!)',
+          '• *Stagger Non-Shooters & Protect the Rock:* Never pair #24 George + #9 Aaron together alongside #16 Chris, and keep 2+ handlers/connectors ({#31, #4} + #44/#7) on the floor vs. Latto\'s ball pressure!'
         ].join('\n');
       } else if (activeSessionId === 'scouting_nov15') {
         waText = [
@@ -5408,7 +5407,11 @@
       const playerSel = document.getElementById('collabLivePlayerSelect');
       const actSel = document.getElementById('collabLiveActionSelect');
       const noteEl = document.getElementById('collabLiveNoteInput');
-      const player = (playerSel && playerSel.value) || '#7 Nick Switzer';
+      const player = (playerSel && playerSel.value) ? playerSel.value.trim() : '';
+      if (!player) {
+        alert('Please select which player made the play before saving!');
+        return;
+      }
       const action_type = (actSel && actSel.value) || 'Charge Drawn';
       const note = (noteEl && noteEl.value.trim()) || '';
       if (noteEl) noteEl.value = '';

@@ -282,7 +282,7 @@ class RangeAndFeedbackHandler(SimpleHTTPRequestHandler):
                         ),
                         "2026-10-15_Pickup_G1": (
                             "🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4) | CPSN Film Room",
-                            "Cross-run biometric player ID connecting Campbell United (#44 Christian, #4 Adam, #31 Evan, #16 Chris, #7 Nick, #9 Aaron, #24 George) to the Oct 15 pickup run!",
+                            "Cross-run biometric player ID connecting Campbell United (#16 Chris, #31 Evan, #4 Adam, #20 Shane, #9 Aaron, #24 George) to the Oct 15 pickup run!",
                         ),
                         "2026-11-08_CU_vs_Ricecookers_G4": (
                             "🏆 Holiday '26 Game 4: Campbell United 66, Ricecookers 63 (OT) — 4-0 D2 1080p Film Room",
