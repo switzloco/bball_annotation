@@ -2691,6 +2691,178 @@
       }
     }
 
+    function inspectCvShot(readoutId, encodedJson, filmSessionId) {
+      const el = document.getElementById(readoutId);
+      if (!el) return;
+      try {
+        const s = JSON.parse(decodeURIComponent(encodedJson));
+        const resBadge = s.made
+          ? `<span style="color:#4ade80;font-weight:900;">✅ MADE ${s.is_3pt ? '3PT' : '2PT'}</span>`
+          : `<span style="color:#f87171;font-weight:900;">❌ MISSED ${s.is_3pt ? '3PT' : '2PT'}</span>`;
+        const filmBtn = filmSessionId
+          ? `<button class="blue-btn" style="font-size:0.72rem;padding:4px 9px;font-weight:800;margin-left:8px;" onclick="jumpFromAnalyticsToPlay('${escapeHtml(filmSessionId)}', ${Math.max(0, (Number(s.t_rel) || 2) - 2.0).toFixed(1)})">🎬 Watch Release in 1080p Film</button>`
+          : '';
+        el.innerHTML = `🎯 <strong>${escapeHtml(s.player)}</strong> (${escapeHtml(s.clk)}) • ${resBadge} • <strong>Hoop Dist:</strong> ${s.dist} ft • <strong>Nearest Defender:</strong> ${s.def_dist} ft (${escapeHtml(s.tier)}) • <strong>xFG%:</strong> ${s.xfg}% ${filmBtn}`;
+      } catch (_) {}
+    }
+
+    function renderTeamShotContestCard(tData, sideKey, filmSessionId) {
+      if (!tData) return '';
+      const readoutId = `cvShotReadout_${sideKey}`;
+      const f2x = yFt => Math.max(8, Math.min(452, 230 + Number(yFt) * 10)).toFixed(1);
+      const f2y = xFt => Math.max(8, Math.min(342, Number(xFt) * 10)).toFixed(1);
+      const tierHex = tier => {
+        if ((tier || '').startsWith('Tight')) return '#f87171';
+        if ((tier || '').startsWith('Open')) return '#fbbf24';
+        return '#4ade80';
+      };
+
+      const arcPts = [];
+      for (let i = -46; i <= 46; i++) {
+        const a = (i / 46) * (Math.PI * 0.48);
+        const ax = 5.25 + 19.75 * Math.cos(a);
+        const ay = 19.75 * Math.sin(a);
+        if (Math.abs(ay) <= 22.8 && ax >= 0) {
+          arcPts.push(`${(230 + ay * 10).toFixed(1)},${(ax * 10).toFixed(1)}`);
+        }
+      }
+      const arcPoly = arcPts.join(' ');
+
+      const raysSvg = (tData.shots || []).map(s => {
+        const sx = f2x(s.y), sy = f2y(s.x), dx = f2x(s.dy), dy = f2y(s.dx);
+        const col = tierHex(s.tier);
+        return `<line x1="${sx}" y1="${sy}" x2="${dx}" y2="${dy}" stroke="${col}" stroke-opacity="0.38" stroke-width="1.5" /><circle cx="${dx}" cy="${dy}" r="2.2" fill="#94a3b8" fill-opacity="0.68" />`;
+      }).join('');
+
+      const markersSvg = (tData.shots || []).map(s => {
+        const sx = Number(f2x(s.y)), sy = Number(f2y(s.x));
+        const col = tierHex(s.tier);
+        const enc = encodeURIComponent(JSON.stringify(s));
+        const fsArg = filmSessionId ? `'${escapeHtml(filmSessionId)}'` : `''`;
+        const handlers = `style="cursor:pointer;" onclick="inspectCvShot('${readoutId}', '${enc}', ${fsArg})" onmouseenter="inspectCvShot('${readoutId}', '${enc}', ${fsArg})"`;
+        const tip = `<title>${escapeHtml(s.player)} (${escapeHtml(s.clk)}): ${s.made ? 'MADE' : 'MISSED'} ${s.is_3pt ? '3PT' : '2PT'} | Dist ${s.dist} ft | Nearest Def ${s.def_dist} ft (${escapeHtml(s.tier)})</title>`;
+        if (s.made) {
+          return `<g ${handlers}>${tip}<circle cx="${sx}" cy="${sy}" r="6.4" fill="${col}" stroke="#ffffff" stroke-width="1.4" /></g>`;
+        }
+        const r = 5.2;
+        return `<g ${handlers}>${tip}<line x1="${sx-r}" y1="${sy-r}" x2="${sx+r}" y2="${sy+r}" stroke="${col}" stroke-width="2.4" stroke-linecap="round" /><line x1="${sx-r}" y1="${sy+r}" x2="${sx+r}" y2="${sy-r}" stroke="${col}" stroke-width="2.4" stroke-linecap="round" /></g>`;
+      }).join('');
+
+      const tiersHtml = (tData.tiers || []).map(t => {
+        const col = tierHex(t.tier);
+        const barW = Math.min(100, Math.max(0, Number(t.efg_pct) || 0));
+        const tickLeft = Math.min(100, Math.max(0, Number(t.xefg_pct) || 0));
+        return `
+          <div style="margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:800;margin-bottom:3px;gap:6px;flex-wrap:wrap;">
+              <span style="color:${col};">${escapeHtml(t.tier)} — ${t.fga} FGA (${t.share_pct}%) • ${escapeHtml(t.fg_str)} FG (${escapeHtml(t.three_str)})</span>
+              <span style="color:#f8fafc;">${t.efg_pct}% eFG <span style="color:#94a3b8;font-weight:600;">(xeFG ${t.xefg_pct}%)</span></span>
+            </div>
+            <div style="position:relative;height:10px;background:#1e293b;border-radius:999px;overflow:hidden;">
+              <div style="width:${barW}%;height:100%;background:${col};border-radius:999px;"></div>
+              <div style="position:absolute;left:${tickLeft}%;top:0;bottom:0;width:2px;background:#ffffff;" title="Expected xeFG%: ${t.xefg_pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const pRowsHtml = (tData.players || []).map(p => {
+        const diffCol = p.diff_pct >= 0 ? '#4ade80' : '#f87171';
+        const diffSign = p.diff_pct >= 0 ? `+${p.diff_pct}%` : `${p.diff_pct}%`;
+        return `
+          <tr style="border-bottom:1px solid #1e293b;font-size:0.75rem;">
+            <td style="padding:5px 6px;font-weight:800;color:#f8fafc;">${escapeHtml(p.player)}</td>
+            <td style="padding:5px 4px;text-align:center;color:#cbd5e1;">${escapeHtml(p.fg_str)}</td>
+            <td style="padding:5px 4px;text-align:center;color:#7dd3fc;">${p.avg_dist_ft} ft</td>
+            <td style="padding:5px 4px;text-align:center;color:#fde68a;">${p.avg_def_ft} ft</td>
+            <td style="padding:5px 6px;text-align:right;font-weight:800;color:${diffCol};">${p.efg_pct}% <span style="font-size:0.68rem;opacity:0.85;">(${diffSign})</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        <div style="background:#0c1322;border:1px solid #26354f;border-radius:9px;padding:12px 14px;min-width:0;">
+          <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#fff;text-transform:uppercase;">${escapeHtml(tData.team_name)}</div>
+          <div style="font-size:0.75rem;color:#7dd3fc;font-weight:700;margin-bottom:8px;">${escapeHtml(tData.opp_note)}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:0.73rem;font-weight:800;color:#e2e8f0;background:#131d31;padding:6px 9px;border-radius:6px;margin-bottom:8px;">
+            <span>FGA: ${tData.zone_verified_fga}</span>
+            <span>•</span>
+            <span>Avg 2PT: ${tData.avg_2pt_dist_ft} ft</span>
+            <span>•</span>
+            <span>Avg 3PT: ${tData.avg_3pt_dist_ft} ft</span>
+            <span>•</span>
+            <span>Avg Def: ${tData.avg_def_ft} ft</span>
+            <span>•</span>
+            <span style="color:#4ade80;">eFG: ${tData.efg_pct}%</span>
+          </div>
+          <svg viewBox="0 0 460 350" style="width:100%;height:auto;display:block;background:#141c2e;border:1px solid #334155;border-radius:7px;margin-bottom:8px;">
+            <rect x="170" y="0" width="120" height="190" fill="rgba(30,41,59,0.45)" stroke="#475569" stroke-width="1.5" />
+            <circle cx="230" cy="190" r="60" fill="none" stroke="#475569" stroke-width="1.3" stroke-dasharray="4,4" />
+            <polyline points="${arcPoly}" fill="none" stroke="#64748b" stroke-width="2" />
+            <line x1="200" y1="40" x2="260" y2="40" stroke="#cbd5e1" stroke-width="2.5" />
+            <circle cx="230" cy="52.5" r="9" fill="none" stroke="#f97316" stroke-width="2.5" />
+            ${raysSvg}
+            ${markersSvg}
+          </svg>
+          <div id="${readoutId}" style="font-size:0.76rem;color:#cbd5e1;background:#111827;border:1px solid #283548;border-radius:6px;padding:7px 9px;margin-bottom:10px;min-height:34px;line-height:1.45;">
+            👆 Tap or hover any shot marker (<strong style="color:#4ade80;">● Made</strong> / <strong style="color:#f87171;">✕ Miss</strong>; <span style="color:#f87171;">Red &lt;4ft</span> • <span style="color:#fbbf24;">Gold 4–6ft</span> • <span style="color:#4ade80;">Green 6+ft</span>) to inspect distance &amp; nearest defender!
+          </div>
+          <div style="margin-bottom:10px;">${tiersHtml}</div>
+          <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;">
+            <table style="width:100%;border-collapse:collapse;min-width:290px;">
+              <thead>
+                <tr style="border-bottom:1px solid #334155;font-size:0.68rem;color:#94a3b8;text-transform:uppercase;">
+                  <th style="padding:4px 6px;text-align:left;">Shooter</th>
+                  <th style="padding:4px 4px;text-align:center;">FG</th>
+                  <th style="padding:4px 4px;text-align:center;">Dist</th>
+                  <th style="padding:4px 4px;text-align:center;">Def</th>
+                  <th style="padding:4px 6px;text-align:right;">eFG (vs xeFG)</th>
+                </tr>
+              </thead>
+              <tbody>${pRowsHtml}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderShotContestLabPanel(scp) {
+      const insightsHtml = (scp.key_insights || []).map(ins => `
+        <div style="font-size:0.81rem;color:#e2e8f0;background:#111a2e;border-left:3px solid #38bdf8;padding:8px 11px;border-radius:5px;margin-bottom:7px;line-height:1.5;">
+          🎯 ${escapeHtml(ins)}
+        </div>
+      `).join('');
+
+      return `
+        <div class="scouting-panel" id="cvShotContestPanel" style="border-color:rgba(250,204,21,0.55);background:linear-gradient(180deg,#0f172a 0%,#090d16 100%);">
+          <h3>
+            <span>🎯 ${escapeHtml(scp.headline || 'Prototype CV Lab: Shot Distance & Nearest-Defender Contest')}</span>
+            <span style="font-size:0.73rem;color:#fde047;font-weight:800;text-transform:none;">3D BallerCam Court Homography + YOLOX-S + HSV Jersey Tracker</span>
+          </h3>
+          <div style="font-size:0.78rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:10px;line-height:1.5;">
+            🛰️ <strong>How It Works:</strong> ${escapeHtml(scp.methodology || '')}
+          </div>
+          <div style="margin-bottom:12px;">
+            ${insightsHtml}
+          </div>
+          <div class="scouting-grid-2col">
+            ${renderTeamShotContestCard(scp.cu, 'cu', '2026-11-08_CU_vs_Ricecookers_G4')}
+            ${renderTeamShotContestCard(scp.lt, 'lt', '')}
+          </div>
+          ${scp.proof_grid_url ? `
+            <details style="margin-top:12px;background:#0b1120;border:1px solid #334155;border-radius:8px;padding:10px 12px;">
+              <summary style="cursor:pointer;font-family:var(--font-display);font-size:0.96rem;font-weight:900;color:#7dd3fc;letter-spacing:0.03em;text-transform:uppercase;">
+                🖼️ View 1080p BallerCam 3D Court-Homography &amp; YOLOX-S Release Proof Grid (6 Annotated Shots ▾)
+              </summary>
+              <div style="margin-top:10px;">
+                <img src="${escapeHtml(scp.proof_grid_url)}" alt="3D BallerCam Court Homography and YOLOX Shot Contest Proof Grid" style="width:100%;height:auto;display:block;border-radius:7px;border:1px solid #334155;" loading="lazy" />
+              </div>
+            </details>
+          ` : ''}
+        </div>
+      `;
+    }
+
     function renderEvanScoutingBody(sr, tapeHeader, tapeDownload, tapeSummaryLabel, tapeChaptersHtml) {
       const ev = sr.evan_view || {};
       const reportParasHtml = (ev.team_report_paragraphs || []).map(p => `
@@ -2724,11 +2896,11 @@
                 ` : ''}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="flex:1;height:7px;background:#1e293b;border-radius:999px;overflow:hidden;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:120px;height:7px;background:#1e293b;border-radius:999px;overflow:hidden;">
                 <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#ec4899 0%,#38bdf8 100%);border-radius:999px;"></div>
               </div>
-              <span style="font-size:0.72rem;color:#94a3b8;font-weight:600;white-space:nowrap;">Tracked: ${escapeHtml(pm.tracked_note)}</span>
+              <span style="font-size:0.72rem;color:#94a3b8;font-weight:600;">Tracked: ${escapeHtml(pm.tracked_note)}</span>
             </div>
             <p style="margin:0;font-size:0.84rem;color:#cbd5e1;line-height:1.56;">
               ${escapeHtml(pm.summary)}
@@ -2757,6 +2929,24 @@
       `).join('');
 
       const lu = ev.cu_lineups || {};
+      const archRowsHtml = (lu.archetype_splits || []).map(a => {
+        const isGood = a.verdict === 'good';
+        const pillBg = isGood ? 'rgba(34,197,94,0.16)' : 'rgba(239,68,68,0.16)';
+        const pillBd = isGood ? 'rgba(74,222,128,0.5)' : 'rgba(248,113,113,0.5)';
+        const pillCol = isGood ? '#86efac' : '#fca5a5';
+        return `
+          <tr style="border-bottom:1px solid #1e293b;">
+            <td style="padding:8px 10px;font-weight:800;color:#f8fafc;font-size:0.8rem;">${isGood ? '🟢' : '🔴'} ${escapeHtml(a.archetype)}</td>
+            <td style="padding:8px 8px;text-align:center;color:#7dd3fc;font-weight:700;font-size:0.78rem;white-space:nowrap;">${escapeHtml(a.comp_min)}</td>
+            <td style="padding:8px 8px;text-align:center;color:#cbd5e1;font-size:0.78rem;white-space:nowrap;">${escapeHtml(a.score)}</td>
+            <td style="padding:8px 8px;text-align:center;white-space:nowrap;">
+              <span style="background:${pillBg};border:1px solid ${pillBd};color:${pillCol};font-weight:900;font-size:0.78rem;padding:2px 8px;border-radius:999px;">${escapeHtml(a.net_10m)}</span>
+            </td>
+            <td style="padding:8px 10px;text-align:right;color:#fde68a;font-size:0.75rem;font-weight:700;white-space:nowrap;">${escapeHtml(a.vs_base)}</td>
+          </tr>
+        `;
+      }).join('');
+
       const outLuHtml = (lu.outperforming || []).map(item => `
         <div style="background:#0c1915;border:1px solid rgba(74,222,128,0.38);border-left:4px solid #22c55e;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
           <div style="font-weight:900;color:#86efac;font-size:0.9rem;margin-bottom:4px;">${escapeHtml(item.name)}</div>
@@ -2783,11 +2973,14 @@
         </div>
       `).join('');
 
+      const scp = ev.shot_contest_prototype || null;
+      const cvLabHtml = scp ? renderShotContestLabPanel(scp) : '';
+
       return `
         <div class="scouting-panel" style="border-color:rgba(56,189,248,0.45);">
           <h3>
             <span>📖 Latto Talent (3-1) — 3-Paragraph Opponent Team Report</span>
-            <span style="font-size:0.74rem;color:#94a3b8;font-weight:700;text-transform:none;">Play Style • Core Strengths • Exploitable Vulnerabilities</span>
+            <span style="font-size:0.74rem;color:#94a3b8;font-weight:700;text-transform:none;">Expert-Audited • Sunday Turnout, Bonus Fouls &amp; CV Shot Profile</span>
           </h3>
           ${reportParasHtml}
         </div>
@@ -2830,7 +3023,7 @@
         <div class="scouting-panel" style="border-color:rgba(74,222,128,0.42);">
           <h3>
             <span>🪞 Campbell United (4-0) Self-Scout — Player-by-Player Improvement Focus</span>
-            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">Holiday '26 Tracked Minutes + Verified Weeks 3–4 Shooting, FT, Foul &amp; Turnover Splits</span>
+            <span style="font-size:0.74rem;color:#86efac;font-weight:700;text-transform:none;">Garbage-Time Filtered • Schedule-Adjusted On/Off + Verified Weeks 3–4 Splits</span>
           </h3>
           <div class="personnel-grid">
             ${cuImpHtml}
@@ -2839,12 +3032,30 @@
 
         <div class="scouting-panel" style="border-color:rgba(168,85,247,0.45);">
           <h3>
-            <span>🧪 Campbell United On-Court Lineup Synergy Lab (+/- Stint Reconstruction)</span>
-            <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">6-Game Tracked Sample (4-0 Holiday '26 + 2-0 Fall '26 Playoffs)</span>
+            <span>🧪 Campbell United On-Court Lineup Synergy Lab (Garbage-Time Filtered)</span>
+            <span style="font-size:0.74rem;color:#e9d5ff;font-weight:700;text-transform:none;">201.0 Competitive Minutes Across 6 Wins (Strips 39.3m of &ge;18pt Blowout Noise)</span>
           </h3>
-          <div style="font-size:0.79rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:14px;line-height:1.5;">
-            🔬 <strong>How Lineups Were Measured:</strong> ${escapeHtml(lu.methodology || '')}
+          <div style="font-size:0.79rem;color:#cbd5e1;background:#111827;border:1px solid #334155;border-radius:6px;padding:9px 12px;margin-bottom:12px;line-height:1.5;">
+            🔬 <strong>Expert Analytics Audit Methodology:</strong> ${escapeHtml(lu.methodology || '')}
           </div>
+          ${archRowsHtml ? `
+            <div style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;background:#0b1120;border:1px solid #26344d;border-radius:8px;margin-bottom:14px;">
+              <table style="width:100%;border-collapse:collapse;min-width:520px;">
+                <thead>
+                  <tr style="background:#141d30;border-bottom:1px solid #334155;font-size:0.72rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.04em;">
+                    <th style="padding:8px 10px;text-align:left;">High-Sample Competitive Lineup Archetype / Trio</th>
+                    <th style="padding:8px 8px;text-align:center;">Comp Min</th>
+                    <th style="padding:8px 8px;text-align:center;">Score</th>
+                    <th style="padding:8px 8px;text-align:center;">Net / 10m</th>
+                    <th style="padding:8px 10px;text-align:right;">vs. Game Baseline</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${archRowsHtml}
+                </tbody>
+              </table>
+            </div>
+          ` : ''}
           <div class="scouting-grid-2col">
             <div>
               <div style="font-family:var(--font-display);font-size:1.06rem;font-weight:900;color:#4ade80;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">
@@ -2860,6 +3071,8 @@
             </div>
           </div>
         </div>
+
+        ${cvLabHtml}
       `;
     }
 
