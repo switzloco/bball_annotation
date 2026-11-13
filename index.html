@@ -182,17 +182,17 @@
     /* Top Workspace: Video Left, Play-by-Play Review Right */
     .top-workspace {
       display: grid;
-      grid-template-columns: 1.34fr 1.06fr;
-      height: calc(100vh - 55px);
-      min-height: 720px;
+      grid-template-columns: 1.28fr 1.12fr;
+      height: calc(100vh - 114px);
+      min-height: 670px;
       border-bottom: 3px solid var(--border);
     }
     .left-video-col {
       display: flex;
       flex-direction: column;
       border-right: 1px solid var(--border);
-      padding: 12px 16px;
-      gap: 9px;
+      padding: 10px 14px;
+      gap: 8px;
       overflow-y: auto;
       background: linear-gradient(180deg, #0d1018 0%, #090b10 100%);
     }
@@ -523,12 +523,23 @@
     }
     .ticker-sep { color: var(--espn-red-bright); font-weight: 900; }
 
-    .chapter-bar { display: flex; gap: 5px; flex-wrap: wrap; }
+    .chapter-bar {
+      display: flex;
+      gap: 5px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+      scrollbar-color: #334155 transparent;
+      flex-shrink: 0;
+    }
+    .chapter-bar::-webkit-scrollbar { height: 4px; }
+    .chapter-bar::-webkit-scrollbar-thumb { background: #334155; border-radius: 999px; }
     .chapter-pill {
       font-family: var(--font-display);
       font-weight: 700;
       letter-spacing: 0.03em;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       padding: 4px 10px;
       border-radius: 4px;
       background: var(--panel);
@@ -536,28 +547,16 @@
       color: #cbd5e1;
       cursor: pointer;
       text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .chapter-pill:hover {
       color: #fff;
       border-color: var(--espn-red-bright);
       background: var(--espn-red-soft);
     }
-    .scroll-hint-banner {
-      margin-top: auto;
-      background: linear-gradient(90deg, rgba(208, 0, 0, 0.14), rgba(56, 189, 248, 0.1));
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 6px;
-      padding: 7px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: #e2e8f0;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
 
-    /* Right Column: SC Top 5 Plays + Play-by-Play Feed */
+    /* Right Column: Full Highlights & Play-by-Play Feed Front-and-Center */
     .right-pbp-col {
       display: flex;
       flex-direction: column;
@@ -565,15 +564,74 @@
       background: #0d111a;
     }
 
-    /* SportsCenter TOP 5 PLAYS Showcase at Very Top of Right Column */
+    .pbp-top-tabs-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 12px;
+      background: linear-gradient(180deg, #171d2c 0%, #111622 100%);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .pbp-view-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #090c14;
+      padding: 3px;
+      border-radius: 7px;
+      border: 1px solid #26314a;
+    }
+    .pbp-tab-btn {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pbp-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .pbp-tab-btn.active {
+      background: linear-gradient(135deg, var(--espn-red) 0%, #990000 100%);
+      border-color: #ff4d4d;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(208, 0, 0, 0.35);
+    }
+    .pbp-tab-btn.top5-toggle.active {
+      background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+      border-color: #fbbf24;
+      color: #fff;
+    }
+    .pbp-quick-tools {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    /* SportsCenter TOP 5 PLAYS Showcase Drawer (Toggled via 🔥 Top 5 Tab) */
     .top5-section {
       background: linear-gradient(180deg, rgba(208, 0, 0, 0.22) 0%, rgba(18, 22, 33, 0.98) 100%);
       border-bottom: 2px solid var(--espn-red);
       padding: 9px 14px;
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 6px;
       flex-shrink: 0;
+    }
+    .top5-section.open {
+      display: flex;
     }
     .top5-header {
       display: flex;
@@ -584,7 +642,7 @@
     .top5-title {
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: 1.02rem;
+      font-size: 0.98rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: #fff;
@@ -598,7 +656,7 @@
       font-family: var(--font-display);
       font-weight: 900;
       font-style: italic;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       padding: 1px 8px;
       border-radius: 3px;
       letter-spacing: 0.04em;
@@ -655,47 +713,56 @@
       align-items: center;
     }
 
-    .ai-warning-banner {
-      background: linear-gradient(90deg, rgba(208, 0, 0, 0.24), rgba(245, 158, 11, 0.14));
-      border-bottom: 1px solid rgba(239, 68, 68, 0.45);
-      padding: 6px 14px;
-      font-size: 0.73rem;
-      line-height: 1.35;
-      flex-shrink: 0;
-    }
-    .ai-warning-banner strong {
-      font-family: var(--font-display);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #fca5a5;
-      font-size: 0.85rem;
-    }
     .filters-bar {
-      padding: 8px 14px;
+      padding: 6px 12px;
       background: var(--panel);
       border-bottom: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
     .filter-row {
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+      gap: 5px;
+      flex-wrap: nowrap;
       align-items: center;
     }
-    .filter-row select, .filter-row input {
-      flex: 1;
-      min-width: 115px;
+    .filter-row select {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 5px 7px;
+      font-size: 0.74rem;
+    }
+    .filter-row input {
+      flex: 1.15 1 0;
+      min-width: 0;
+      padding: 5px 8px;
+      font-size: 0.74rem;
     }
     .play-list {
       flex: 1;
       overflow-y: auto;
-      padding: 10px 14px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
+    }
+
+    /* Progressive Disclosure for Per-Card Calibration Controls */
+    .play-calib-only {
+      display: none !important;
+    }
+    body.pbp-edit-mode .play-calib-only,
+    .play-card.card-edit-open .play-calib-only {
+      display: inline-flex !important;
+    }
+    .play-collab-inline.play-calib-row {
+      display: none !important;
+    }
+    body.pbp-edit-mode .play-collab-inline.play-calib-row,
+    .play-card.card-edit-open .play-collab-inline.play-calib-row {
+      display: flex !important;
     }
     .play-card {
       background: var(--panel);
@@ -1061,11 +1128,96 @@
     tr.player-row { cursor: pointer; }
     tr.player-row:hover { background: var(--panel-hover); }
 
-    .mobile-top-row,
-    .mobile-tools-drawer {
-      display: contents;
+    /* Broadcast App Shell: Clean Single-Row Header + Mode Tabs + Team Switcher */
+    .header-main-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      flex-wrap: wrap;
     }
-    .mobile-only-btn,
+    .header-left-group,
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-mode-tabs,
+    .team-switcher-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #0a0d15;
+      padding: 3px;
+      border-radius: 7px;
+      border: 1px solid #26314a;
+    }
+    .nav-mode-btn,
+    .team-pill-btn {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.83rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.14s ease;
+    }
+    .nav-mode-btn:hover,
+    .team-pill-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .nav-mode-btn.active {
+      background: linear-gradient(135deg, var(--espn-red) 0%, #990000 100%);
+      border-color: #ff4d4d;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(208, 0, 0, 0.35);
+    }
+    .nav-mode-btn.scouting-mode.active {
+      background: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
+      border-color: #f9a8d4;
+      color: #fff;
+    }
+    .nav-mode-btn.evan-mode.active {
+      background: linear-gradient(135deg, #0284c7 0%, #059669 100%);
+      border-color: #7dd3fc;
+      color: #fff;
+    }
+    .nav-mode-btn.analytics-mode.active {
+      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+      border-color: #c4b5fd;
+      color: #fff;
+    }
+    .team-pill-btn.active {
+      background: #1e293b;
+      border-color: var(--accent);
+      color: #fde68a;
+      box-shadow: 0 1px 6px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Studio & Admin Tools Slide-Down Drawer (Cleanly hidden by default on Desktop & Mobile) */
+    .mobile-tools-drawer {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      background: #0c101b;
+      border: 1px solid #283450;
+      border-radius: 8px;
+    }
+    .mobile-tools-drawer.open {
+      display: flex;
+    }
     .mobile-nav-tabs {
       display: none;
     }
@@ -1079,9 +1231,156 @@
       color: #fff;
     }
 
+    /* Horizontal ESPN Scoreboard Strip (Replaces 25-Item Dropdown & Stacked Pill Bars) */
+    .espn-score-strip-wrap {
+      background: linear-gradient(90deg, #121623 0%, #0d111b 65%, #111827 100%);
+      border-bottom: 1px solid #26314a;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .espn-score-strip-wrap.hidden-strip {
+      display: none !important;
+    }
+    .score-strip-arrow {
+      width: 26px;
+      height: 46px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 6px;
+      background: #161d2e;
+      border: 1px solid #2c3854;
+      color: #cbd5e1;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .score-strip-arrow:hover {
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .score-strip-track {
+      display: flex;
+      align-items: stretch;
+      gap: 7px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      flex: 1;
+      min-width: 0;
+      padding: 1px 0;
+    }
+    .score-strip-track::-webkit-scrollbar { display: none; }
+    .score-strip-card {
+      flex-shrink: 0;
+      min-width: 174px;
+      max-width: 225px;
+      background: #151b2b;
+      border: 1px solid #28344f;
+      border-radius: 7px;
+      padding: 5px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.14s ease;
+      position: relative;
+    }
+    .score-strip-card:hover {
+      background: #1c2438;
+      border-color: #64748b;
+    }
+    .score-strip-card.active {
+      background: linear-gradient(135deg, rgba(208, 0, 0, 0.28) 0%, #1a2134 100%);
+      border-color: var(--espn-red-bright);
+      box-shadow: 0 0 0 1px rgba(255, 30, 30, 0.5), 0 4px 12px rgba(0, 0, 0, 0.45);
+    }
+    .score-strip-card.reel-card {
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.28) 0%, rgba(180, 83, 9, 0.24) 100%);
+      border-color: rgba(251, 191, 36, 0.65);
+    }
+    .score-strip-card.reel-card:hover {
+      border-color: #fde047;
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.42) 0%, rgba(180, 83, 9, 0.35) 100%);
+    }
+    .score-strip-card.archive-toggle-card {
+      min-width: 118px;
+      background: rgba(15, 23, 42, 0.7);
+      border-style: dashed;
+      border-color: #3b4968;
+      align-items: center;
+      text-align: center;
+    }
+    .strip-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .strip-card-badge {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      padding: 0 5px;
+      border-radius: 3px;
+      background: rgba(34, 197, 94, 0.16);
+      color: #4ade80;
+      white-space: nowrap;
+    }
+    .strip-card-badge.gold {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fde047;
+    }
+    .strip-card-badge.neutral {
+      background: rgba(148, 163, 184, 0.16);
+      color: #cbd5e1;
+    }
+    .strip-card-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      color: #f8fafc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    .score-strip-next-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(219, 39, 119, 0.22), rgba(124, 58, 237, 0.2));
+      border: 1px solid rgba(244, 114, 182, 0.5);
+      font-size: 0.73rem;
+      color: #fdf2f8;
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .score-strip-next-pill:hover {
+      border-color: #fde047;
+      background: linear-gradient(135deg, rgba(219, 39, 119, 0.34), rgba(124, 58, 237, 0.3));
+    }
+
+    @media (max-width: 1080px) {
+      .score-strip-next-pill { display: none; }
+    }
+
     @media (max-width: 1024px) {
       .top-workspace { grid-template-columns: 1fr; height: auto; }
-      .play-list { max-height: 600px; }
+      .play-list { max-height: 620px; }
     }
 
     @media (max-width: 768px) {
@@ -1090,61 +1389,43 @@
         padding: 6px 8px;
         flex-direction: column;
         align-items: stretch;
-        gap: 0;
-      }
-      .brand {
-        display: contents;
+        gap: 5px;
       }
       .brand-full-name {
         display: none;
       }
-      .mobile-top-row {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        width: 100%;
-        flex-wrap: nowrap;
-        min-height: 40px;
+      .header-main-bar {
+        gap: 6px;
       }
+      .header-left-group,
+      .header-right-group {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+      }
+      .nav-mode-tabs,
+      .team-switcher-pills {
+        overflow-x: auto;
+        scrollbar-width: none;
+        flex: 1;
+        min-width: 0;
+      }
+      .nav-mode-tabs::-webkit-scrollbar,
+      .team-switcher-pills::-webkit-scrollbar { display: none; }
       .espn-logo-badge {
-        font-size: 0.95rem;
+        font-size: 0.92rem;
         padding: 4px 10px 4px 8px;
         flex-shrink: 0;
       }
-      #sessionPicker {
-        flex: 1;
-        min-width: 0;
-        width: 100%;
-        font-size: 16px;
-        padding: 4px 6px;
-        height: 34px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .espn-score-strip-wrap {
+        padding: 6px 8px;
       }
-      .mobile-only-btn {
-        display: inline-flex;
-        flex-shrink: 0;
-        padding: 5px 8px;
-        font-size: 0.74rem;
-        height: 34px;
-        white-space: nowrap;
-      }
-      .mobile-tools-drawer {
+      .score-strip-arrow {
         display: none;
-        flex-direction: column;
-        width: 100%;
-        gap: 6px;
-        padding-top: 8px;
-        margin-top: 6px;
-        border-top: 1px solid var(--border);
       }
-      .mobile-tools-drawer.open {
-        display: flex;
-      }
-      .header-controls {
-        width: 100%;
-        justify-content: flex-start;
+      .score-strip-card {
+        min-width: 156px;
+        padding: 5px 8px;
       }
 
       /* Sticky Video Dock + Full-Page Flow on Mobile */
@@ -1174,26 +1455,8 @@
         margin: 6px 8px 0;
         width: calc(100% - 16px);
       }
-      .mobile-nav-tabs {
-        order: 3;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 5px 8px 2px;
-        width: 100%;
-        flex-wrap: nowrap;
-      }
-      .mobile-nav-tabs button {
-        flex: 1 1 0;
-        min-width: 0;
-        justify-content: center;
-        padding: 5px 4px;
-        font-size: 0.68rem;
-        font-weight: 700;
-        white-space: nowrap;
-      }
       .chapter-bar {
-        order: 4;
+        order: 3;
         padding: 4px 8px;
         width: 100%;
         flex-wrap: nowrap;
@@ -1206,10 +1469,14 @@
         flex-shrink: 0;
         white-space: nowrap;
       }
-      .missing-play-bar {
+      .pbp-top-tabs-bar {
+        order: 4;
+        width: 100%;
+        padding: 6px 8px;
+      }
+      #autoReelBanner {
         order: 5;
-        margin: 4px 8px;
-        width: calc(100% - 16px);
+        width: 100%;
       }
       .top5-section {
         order: 6;
@@ -1217,49 +1484,31 @@
         padding: 8px 10px;
         scroll-margin-top: 225px;
       }
-      .ai-warning-banner {
+      .filters-bar {
         order: 7;
         width: 100%;
-        padding: 6px 10px;
+        padding: 6px 8px;
       }
-      .filters-bar {
-        order: 8;
-        width: 100%;
-        padding: 8px 10px;
+      .filter-row {
+        flex-wrap: wrap;
+      }
+      .filter-row select,
+      .filter-row input {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 130px;
       }
       .play-list {
-        order: 9;
+        order: 8;
         width: 100%;
         max-height: none !important;
         overflow-y: visible !important;
         padding: 8px 10px;
         scroll-margin-top: 225px;
       }
-      .scroll-hint-banner {
-        order: 10;
+      #collabStudioBar {
+        order: 9;
         margin: 6px 8px;
         width: calc(100% - 16px);
-      }
-
-      /* Compact Horizontal Scrollable Campbell United Hub Bar on Mobile */
-      .cu-hub-bar {
-        padding: 6px 8px !important;
-        gap: 4px !important;
-      }
-      .cu-hub-tabs {
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        width: 100%;
-        padding-bottom: 2px;
-      }
-      .cu-hub-tabs::-webkit-scrollbar { display: none; }
-      .cu-tab-btn {
-        flex-shrink: 0;
-        white-space: nowrap;
-        font-size: 0.75rem;
-        padding: 5px 9px;
       }
 
       /* Fix Crushed Mobile Scorebug */
@@ -1361,53 +1610,6 @@
         background: #141923;
         max-width: 145px;
       }
-    }
-
-    /* Campbell United Hub Bar & Nov 8 Opponent Scouting Report Styles */
-    .cu-hub-bar {
-      background: linear-gradient(90deg, #1b0508 0%, #121622 60%, #0f172a 100%);
-      border-bottom: 1px solid #334155;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .cu-hub-tabs {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .cu-tab-btn {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 0.84rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid #334155;
-      background: #161d2e;
-      color: #cbd5e1;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .cu-tab-btn:hover {
-      border-color: var(--accent);
-      color: #fff;
-    }
-    .cu-tab-btn.active {
-      background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
-      border-color: #f87171;
-      color: #fff;
-      box-shadow: 0 2px 10px rgba(220, 38, 38, 0.35);
-    }
-    .cu-tab-btn.scouting-tab.active {
-      background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
-      border-color: #fde68a;
-      color: #fff;
     }
     .scouting-view-container {
       display: none;
@@ -1638,45 +1840,92 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      <div class="mobile-top-row">
-        <div class="espn-logo-badge" title="Campbell United × Campbell Park Sports Network">
+    <div class="header-main-bar">
+      <div class="header-left-group">
+        <div class="espn-logo-badge" onclick="openFilmRoomMode()" style="cursor:pointer;" title="Campbell United × Campbell Park Sports Network — Return to Film Room">
           <span class="live-dot"></span>
-          <span>CPSN<span class="plus">+</span><span class="brand-full-name"> CAMPBELL UNITED FILM ROOM</span></span>
+          <span>CPSN<span class="plus">+</span><span class="brand-full-name"> FILM ROOM</span></span>
         </div>
-        <select id="sessionPicker" onchange="switchGameSession(this.value)" style="font-weight:700;border-color:var(--accent);max-width:460px;">
-          <option value="2026-10-04_CU_vs_Mustangs_Champ">🏆 Fall '26 Championship: Campbell United 76, Mustangs 66 (Oct 4, 2026)</option>
-          <option value="2026-10-18_CU_vs_HalalHoopers_G1">🏀 Game 1: Campbell United 69, Halal Hoopers 47 (Oct 18, 2026)</option>
-          <option value="2026-10-25_CU_vs_TMT_G2">🔥 Game 2: Campbell United 52, TMT 50 (Oct 25, 2026)</option>
-          <option value="2026-11-01_CU_vs_Misfits2_G3">🚀 Game 3: Campbell United 83, Misfits 2 66 (Nov 1, 2026)</option>
-          <option value="2026-11-08_CU_vs_Ricecookers_G4">🏆 Game 4: Campbell United 66, Ricecookers 63 [OT WIN! 4-0 D2] (Nov 8, 2026)</option>
-          <option value="2026-11-01_WTN_vs_CrunchTime_G3">🍁 WeTheNorth G3: #2 Mo 15 PTS (5× 3PM, 5 REB, 1 BLK) vs. Crunch Time (Nov 1, 2026)</option>
-          <option value="2026-10-25_WTN_vs_NewAvengers_G2">🍁 WeTheNorth G2: #2 Mo 7 PTS (3/3 FG, 7 REB, AST, STL) vs. New Avengers (Oct 25, 2026)</option>
-          <option value="2026-10-18_WTN_vs_OTFSelect_G1">🍁 WeTheNorth G1: vs. OTF Select (#2 Mo 3/3 FT, 4 REB — Oct 18, 2026)</option>
-          <option value="2026-11-08_WTN_vs_DomainExpansion_G4">🏆 WeTheNorth G4: WeTheNorth 55, Domain Expansion 53 [1080p WIN!] (Nov 8, 2026)</option>
-          <option value="2026-02-01_C7_vs_OutOfShape_W4">🔥 Crew 7 W4 (Winter '26): #2 Mohamed 25 PTS (11 FG, 3× 3PM, 9 REB) vs. Out Of Shape (Feb 1)</option>
-          <option value="2026-01-25_C7_vs_BTA_W3">⚡ Crew 7 W3 (Winter '26): #2 Mohamed 13 PTS, 11 REB, 5 AST Double-Double vs. BTA (Jan 25)</option>
-          <option value="2026-01-18_C7_vs_Breadwinners_W2">🎯 Crew 7 W2 (Winter '26): #2 Mohamed 14 PTS (4/4 3PT, 3 STL, BLK) vs. Breadwinners (Jan 18)</option>
-          <option value="2026-01-11_C7_vs_OutOfShape_W1">🏀 Crew 7 W1 (Winter '26): #2 Mohamed 6 PTS (1/1 3PT, 3/3 FT) vs. Out Of Shape (Jan 11)</option>
-          <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20, 2026)</option>
-          <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
-          <option value="scouting_nov15">📋 NEW! Nov 15 Opponent Scouting Report: vs. Latto Talent (Sun 5:00 PM @ The Grove)</option>
-          <option value="scouting_nov15_evan">📝 NEW! Nov 15 — Evan's Coach's Brief, Expected Mins &amp; CU Lineup Lab</option>
-          <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam Above-the-Rim ML Lab</option>
-          <option value="scouting_nov8">📋 Archive: Nov 8 Scouting Report vs. Ricecookers (CU Won 66–63 OT!)</option>
-          <option value="2026-02-15_CU_vs_PimpsDown">⚡ Winter '26 Wk 6: Campbell United 59, Pimps Down 51 (Feb 15, 2026)</option>
-          <option value="2026-02-08_CU_vs_Eagles">🏀 Majestic Archive: Campbell United 119, Eagles 69 (Feb 8, 2026)</option>
-          <option value="2026-03-01_CU_vs_LattoTalent_Champ">🏀 Majestic Archive: Campbell United 45, Latto Talent 73 (Mar 1, 2026)</option>
-          <option value="2025-11-09_CU_vs_Crew7">🏀 Majestic Archive: Campbell United 59, Crew 7 73 (Nov 9, 2025)</option>
-          <option value="2026-10-15_Pickup_G1">🏀 Pickup Run: Oct 15, 2026 Game 1 — Campbell United × Pickup Crew (9–4)</option>
-          <option value="2026-10-31">🌳 Pickup Run: Oct 31, 2026 (Campbell Park — Full Game + Game 2)</option>
-        </select>
-        <button class="blue-btn" id="scoutingQuickBtn" onclick="switchGameSession('scouting_nov15')" style="font-weight:800;border-color:#f472b6;color:#fde68a;background:linear-gradient(135deg,rgba(219,39,119,0.34),rgba(217,119,6,0.28));" title="Open Nov 15 Opponent Scouting Report vs. Latto Talent (Sun 5:00 PM @ The Grove)">📋 Nov 15 Scouting: vs. Latto Talent</button>
-        <button class="green-btn mobile-only-btn" onclick="shareToWhatsApp()" title="Share to WhatsApp">📲 WhatsApp</button>
-        <button class="mobile-only-btn" id="mobileToolsBtn" onclick="toggleMobileTools()" title="Toggle Tools &amp; Filters">⚙️ Tools</button>
+        <div class="nav-mode-tabs" id="primaryModeTabs">
+          <button class="nav-mode-btn active" id="navModeFilm" onclick="openFilmRoomMode()">🎬 Film Room</button>
+          <button class="nav-mode-btn scouting-mode" id="navModeScouting" onclick="switchGameSession('scouting_nov15')" title="Nov 15 Opponent Scouting Report vs. Latto Talent (Sun 5:00 PM @ The Grove)">📋 Nov 15 Scouting</button>
+          <button class="nav-mode-btn evan-mode" id="navModeEvan" onclick="switchGameSession('scouting_nov15_evan')" title="Evan's Coach's Brief, Expected Minutes &amp; CU Lineup Lab">📝 Coach's Brief</button>
+          <button class="nav-mode-btn analytics-mode" id="navModeAnalytics" onclick="switchGameSession('season_analytics')" title="Season Analytics &amp; Rim-Kinematics ML Audit">🧠 Analytics Lab</button>
+        </div>
       </div>
-      <div class="mobile-tools-drawer" id="mobileToolsDrawer">
-        <select id="formatPicker" onchange="updateSessionMetadata()" title="Game Format (5v5, 3v3 Half-Court, etc.)">
+
+      <div class="header-right-group">
+        <div class="team-switcher-pills" id="teamSwitcherBar" title="Filter scoreboard strip by team / showcase">
+          <button class="team-pill-btn active" data-team="cu" onclick="selectTeamGroup('cu')">🏀 Campbell United</button>
+          <button class="team-pill-btn" data-team="mo" onclick="selectTeamGroup('mo')">🍁 #2 Mo</button>
+          <button class="team-pill-btn" data-team="sb" onclick="selectTeamGroup('sb')">👑 Sapa Boys</button>
+          <button class="team-pill-btn" data-team="pickup" onclick="selectTeamGroup('pickup')">🌳 Pickup</button>
+        </div>
+        <button class="green-btn" onclick="shareToWhatsApp()" title="Share current game, highlight, or scouting report to WhatsApp">📲 Share</button>
+        <button id="mobileToolsBtn" onclick="toggleMobileTools()" title="Playback Settings, All Sessions Jump, Download &amp; Calibration Tools">⚙️ Tools</button>
+      </div>
+    </div>
+
+    <!-- Slide-Down Studio, Playback & Calibration Drawer (Hidden until ⚙️ Tools is clicked) -->
+    <div class="mobile-tools-drawer" id="mobileToolsDrawer">
+      <div class="header-controls" style="justify-content:space-between;width:100%;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1;min-width:240px;">
+          <span style="font-size:0.74rem;font-weight:700;color:var(--accent);">🗂️ Quick-Jump Any Session:</span>
+          <select id="sessionPicker" onchange="switchGameSession(this.value)" style="font-weight:700;border-color:var(--border);max-width:440px;flex:1;">
+            <optgroup label="🏀 Campbell United — Holiday '26 &amp; Fall Champ">
+              <option value="2026-11-08_CU_vs_Ricecookers_G4">🏆 Game 4: Campbell United 66, Ricecookers 63 [OT WIN! 4-0 D2] (Nov 8)</option>
+              <option value="2026-11-01_CU_vs_Misfits2_G3">🚀 Game 3: Campbell United 83, Misfits 2 66 (Nov 1)</option>
+              <option value="2026-10-25_CU_vs_TMT_G2">🔥 Game 2: Campbell United 52, TMT 50 (Oct 25)</option>
+              <option value="2026-10-18_CU_vs_HalalHoopers_G1">🏀 Game 1: Campbell United 69, Halal Hoopers 47 (Oct 18)</option>
+              <option value="2026-10-04_CU_vs_Mustangs_Champ">🏆 Fall '26 Champ: Campbell United 76, Mustangs 66 (Oct 4)</option>
+            </optgroup>
+            <optgroup label="📋 Scouting Reports &amp; Analytics Labs">
+              <option value="scouting_nov15">📋 Nov 15 Opponent Scouting: vs. Latto Talent (Sun 5:00 PM)</option>
+              <option value="scouting_nov15_evan">📝 Nov 15 — Evan's Coach's Brief &amp; CU Lineup Lab</option>
+              <option value="season_analytics">🧠 Season Analytics &amp; Rim-Kinematics ML Audit</option>
+              <option value="scouting_nov8">📋 Archive: Nov 8 Scouting vs. Ricecookers (CU Won 66–63 OT)</option>
+            </optgroup>
+            <optgroup label="🍁 #2 Mohamed — WeTheNorth &amp; Crew 7">
+              <option value="2026-11-08_WTN_vs_DomainExpansion_G4">🏆 WeTheNorth G4: WTN 55, Domain Expansion 53 (Nov 8)</option>
+              <option value="2026-11-01_WTN_vs_CrunchTime_G3">🍁 WeTheNorth G3: #2 Mo 15 PTS (5× 3PM) vs. Crunch Time (Nov 1)</option>
+              <option value="2026-10-25_WTN_vs_NewAvengers_G2">🍁 WeTheNorth G2: #2 Mo 7 PTS (3/3 FG, 7 REB) vs. New Avengers (Oct 25)</option>
+              <option value="2026-10-18_WTN_vs_OTFSelect_G1">🍁 WeTheNorth G1: vs. OTF Select (Oct 18)</option>
+              <option value="2026-02-01_C7_vs_OutOfShape_W4">🔥 Crew 7 W4: #2 Mohamed 25 PTS, 9 REB vs. Out Of Shape (Feb 1)</option>
+              <option value="2026-01-25_C7_vs_BTA_W3">⚡ Crew 7 W3: #2 Mohamed 13 PTS, 11 REB, 5 AST vs. BTA (Jan 25)</option>
+              <option value="2026-01-18_C7_vs_Breadwinners_W2">🎯 Crew 7 W2: #2 Mohamed 14 PTS (4/4 3PT) vs. Breadwinners (Jan 18)</option>
+              <option value="2026-01-11_C7_vs_OutOfShape_W1">🏀 Crew 7 W1: #2 Mohamed 6 PTS vs. Out Of Shape (Jan 11)</option>
+            </optgroup>
+            <optgroup label="👑 Sapa Boys Showcases (#99 Eugene Kim)">
+              <option value="2026-09-20_SB_vs_Mustangs_Eugene41">👑 Eugene Kim 41 PTS (11× 3PM): Sapa Boys 78, Mustangs 76 OT (Sep 20)</option>
+              <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM): Sapa Boys 83, Tandoori 73 (Oct 18)</option>
+            </optgroup>
+            <optgroup label="🗄️ Campbell United Archives &amp; Pickup Runs">
+              <option value="2026-03-01_CU_vs_LattoTalent_Champ">🏀 Winter '26 Final: Campbell United 45, Latto Talent 73 (Mar 1)</option>
+              <option value="2026-02-15_CU_vs_PimpsDown">⚡ Winter '26 Wk 6: Campbell United 59, Pimps Down 51 (Feb 15)</option>
+              <option value="2026-02-08_CU_vs_Eagles">🏀 Winter '26: Campbell United 119, Eagles 69 (Feb 8)</option>
+              <option value="2025-11-09_CU_vs_Crew7">🏀 Archive: Campbell United 59, Crew 7 73 (Nov 9, 2025)</option>
+              <option value="2026-10-15_Pickup_G1">🌳 Pickup Run: Oct 15, 2026 — CU × Pickup Crew (9–4)</option>
+              <option value="2026-10-31">🌳 Pickup Run: Oct 31, 2026 — Campbell Park Full Run</option>
+            </optgroup>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <label style="font-size:0.74rem;color:var(--muted);display:flex;align-items:center;gap:4px;" title="Starts playback 5s before the finish (~3s before the pass/gather) so you never miss the setup or assist!">
+            <input type="checkbox" id="prerollToggle" checked />
+            5.0s setup pre-roll
+          </label>
+          <label style="font-size:0.74rem;color:var(--muted);display:flex;align-items:center;gap:4px;">
+            <input type="checkbox" id="autoSkipShootaround" />
+            Auto-skip break
+          </label>
+          <a class="btn-link blue-btn" id="downloadFullGameBtn" href="https://storage.googleapis.com/basketball-highlights-store/runs/2026-10-31/20261031_full_game.mp4" download="20261031_full_game.mp4">⬇️ Download Game</a>
+          <a class="btn-link" id="watchYoutubeExtBtn" href="https://www.youtube.com/channel/UCI8v9R91lAVPvl4eWEQHksw" target="_blank" rel="noopener" style="display:none;background:#990000;color:#fff;font-weight:700;padding:5px 10px;border-radius:6px;text-decoration:none;font-size:0.75rem;">📺 YouTube</a>
+          <button onclick="switchGameSession('scouting_nov8')" title="View Nov 8 Ricecookers Scouting Report Archive">📋 Nov 8 Scouting Archive</button>
+        </div>
+      </div>
+      <div class="header-controls" style="border-top:1px solid #1e293b;padding-top:7px;">
+        <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">🎥 CV &amp; Export:</span>
+        <select id="formatPicker" onchange="updateSessionMetadata()" title="Game Format">
           <option value="5v5_full_court" selected>🏟️ 5v5 Full-Court</option>
           <option value="3v3_half_court">⚡ 3v3 Half-Court (Take-Back)</option>
           <option value="4v4_full_court">🏃 4v4 Full-Court</option>
@@ -1688,85 +1937,27 @@
           <option value="baseline_behind_hoop">🎥 Angle: Baseline / Under Hoop</option>
           <option value="half_court_single_hoop">🎥 Angle: Single-Hoop (3v3)</option>
         </select>
-        <button onclick="startHoopCalibration()" id="calibrateBtn" title="Click on the video to mark the hoop rim(s) for 4K AI zoom!">🎯 Set Hoops on Video</button>
-        <span class="badge">⚠️ AI DRAFT — CROWD TRAINING MODE</span>
-        <div class="header-controls">
-          <label style="font-size:0.74rem;color:var(--muted);display:flex;align-items:center;gap:4px;" title="Starts playback 5s before the finish (~3s before the pass/gather) so you never miss the setup or assist!">
-            <input type="checkbox" id="prerollToggle" checked />
-            5.0s setup pre-roll (catch the pass!)
-          </label>
-          <label style="font-size:0.74rem;color:var(--muted);display:flex;align-items:center;gap:4px;">
-            <input type="checkbox" id="autoSkipShootaround" />
-            Auto-skip shootaround (23:10→29:01)
-          </label>
-          <button class="green-btn" onclick="shareToWhatsApp()" title="Share CPSN Film Room to WhatsApp">📲 Share to WhatsApp</button>
-          <a class="btn-link blue-btn" id="downloadFullGameBtn" href="https://storage.googleapis.com/basketball-highlights-store/runs/2026-10-31/20261031_full_game.mp4" download="20261031_full_game.mp4">⬇️ Download Full Game</a>
-          <a class="btn-link" id="watchYoutubeExtBtn" href="https://www.youtube.com/channel/UCI8v9R91lAVPvl4eWEQHksw" target="_blank" rel="noopener" style="display:none;background:#990000;color:#fff;font-weight:700;padding:5px 10px;border-radius:6px;text-decoration:none;font-size:0.75rem;">📺 Watch on YouTube</a>
-          <button class="green-btn" onclick="exportTrainingJSON()">📥 Export Train/Eval Split</button>
-          <button class="primary" onclick="copyYouTubeDesc()" id="copyBtn">📋 Copy YouTube Desc</button>
-        </div>
+        <button onclick="startHoopCalibration()" id="calibrateBtn">🎯 Set Hoops on Video</button>
+        <button class="green-btn" onclick="exportTrainingJSON()">📥 Export Train/Eval Split</button>
+        <button class="primary" onclick="copyYouTubeDesc()" id="copyBtn">📋 Copy YouTube Desc</button>
       </div>
     </div>
   </header>
 
-  <!-- CAMPBELL UNITED SEASON QUICK-BAR (Oct–Nov 2026 Games + Nov 8 Scouting Report) -->
-  <div class="cu-hub-bar" id="cuHubBar">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#f87171;text-transform:uppercase;">
-        🏀 CAMPBELL UNITED HUB (FALL '26 CHAMPS 🏆 • 4-0 HOLIDAY '26 D2):
-      </span>
-      <div class="cu-hub-tabs" id="cuHubTabs">
-        <button class="cu-tab-btn active" data-session="2026-10-04_CU_vs_Mustangs_Champ" onclick="switchGameSession('2026-10-04_CU_vs_Mustangs_Champ')">🏆 Oct 4 Champ: CU 76, Mustangs 66</button>
-        <button class="cu-tab-btn" data-session="2026-10-18_CU_vs_HalalHoopers_G1" onclick="switchGameSession('2026-10-18_CU_vs_HalalHoopers_G1')">🏀 Oct 18 G1: CU 69, Halal Hoopers 47</button>
-        <button class="cu-tab-btn" data-session="2026-10-25_CU_vs_TMT_G2" onclick="switchGameSession('2026-10-25_CU_vs_TMT_G2')">🔥 Oct 25 G2: CU 52, TMT 50</button>
-        <button class="cu-tab-btn" data-session="2026-11-01_CU_vs_Misfits2_G3" onclick="switchGameSession('2026-11-01_CU_vs_Misfits2_G3')">🚀 Nov 1 G3: CU 83, Misfits 2 66</button>
-        <button class="cu-tab-btn" data-session="2026-11-08_CU_vs_Ricecookers_G4" onclick="switchGameSession('2026-11-08_CU_vs_Ricecookers_G4')" style="border-color:#fde047;color:#fef08a;background:rgba(234,179,8,0.22);font-weight:900;">🏆 NEW FILM! Nov 8 G4: CU 66, Ricecookers 63 (OT!)</button>
-        <button class="cu-tab-btn" onclick="playCuRicecookersOtReel()" style="background:linear-gradient(135deg,#dc2626 0%,#991b1b 100%);border-color:#fde047;color:#fff;font-weight:900;box-shadow:0 2px 10px rgba(220,38,38,0.45);">🎬 Watch Nov 8 OT Comeback Reel (14 Plays • 1080p HD)</button>
-        <button class="cu-tab-btn" data-session="2026-09-20_SB_vs_Mustangs_Eugene41" onclick="switchGameSession('2026-09-20_SB_vs_Mustangs_Eugene41')">👑 Eugene Kim 41 PTS (11× 3PM): SB 78, Mustangs 76 OT</button>
-        <button class="cu-tab-btn" data-session="2026-10-18_SB_vs_Tandoori_Eugene29" onclick="switchGameSession('2026-10-18_SB_vs_Tandoori_Eugene29')">🔥 Eugene Kim 29 PTS (5× 3PM): SB 83, Tandoori 73</button>
-        <button class="cu-tab-btn" data-session="2026-02-15_CU_vs_PimpsDown" onclick="switchGameSession('2026-02-15_CU_vs_PimpsDown')">⚡ Feb 15: CU 59, Pimps Down 51</button>
-        <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
-        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15" onclick="switchGameSession('scouting_nov15')" style="border-color:#f472b6;color:#fef08a;background:linear-gradient(135deg,rgba(219,39,119,0.38) 0%,rgba(124,58,237,0.32) 100%);font-weight:900;box-shadow:0 2px 10px rgba(236,72,153,0.35);">📋 NEW! Nov 15 Scouting: vs. Latto Talent (Sun 5PM)</button>
-        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15_evan" onclick="switchGameSession('scouting_nov15_evan')" style="border-color:#38bdf8;color:#e0f2fe;background:linear-gradient(135deg,rgba(14,165,233,0.32) 0%,rgba(16,185,129,0.28) 100%);font-weight:900;box-shadow:0 2px 10px rgba(56,189,248,0.28);">📝 Evan's Coach's Brief &amp; Lineups (Nov 15)</button>
-        <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; #4 Adam Above-the-Rim ML Lab</button>
-        <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')" style="opacity:0.86;">📋 Nov 8 Scouting (Ricecookers)</button>
-      </div>
-    </div>
-    <div style="font-size:0.75rem;color:#94a3b8;font-weight:600;">
-      Next Matchup: <strong style="color:#f472b6;">Sun Nov 15 @ 5:00 PM vs. Latto Talent (3-1 • #1 Seed &amp; Champ Rematch!)</strong> &nbsp;•&nbsp; Latest Win: <strong style="color:#4ade80;">CU 66, Ricecookers 63 (OT • 4-0 D2!)</strong>
+  <!-- SINGLE-ROW HORIZONTAL ESPN SCOREBOARD STRIP (Filtered by Selected Team) -->
+  <div class="espn-score-strip-wrap" id="espnScoreStripBar">
+    <button class="score-strip-arrow" onclick="scrollScoreStrip(-1)" title="Scroll Games Left">‹</button>
+    <div class="score-strip-track" id="scoreStripTrack"></div>
+    <button class="score-strip-arrow" onclick="scrollScoreStrip(1)" title="Scroll Games Right">›</button>
+    <div class="score-strip-next-pill" id="scoreStripNextPill" onclick="switchGameSession('scouting_nov15')" title="Open Nov 15 Opponent Scouting Report vs. Latto Talent">
+      <span>📋 <strong>Next: Sun 5PM vs. Latto Talent</strong> (3-1) →</span>
     </div>
   </div>
 
-  <!-- #2 MOHAMED (MO) MULTI-SEASON SHOWCASE HUB (CREW 7 WINTER '26 + WE THE NORTH HOLIDAY '26) -->
-  <div class="cu-hub-bar" id="wtnHubBar" style="background:linear-gradient(90deg, #1f0812 0%, #1c140d 48%, #0f172a 100%);border-bottom:1px solid rgba(251,146,60,0.45);">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <span style="font-family:var(--font-display);font-weight:900;font-size:0.95rem;letter-spacing:0.05em;color:#fb923c;text-transform:uppercase;">
-        🔥🍁 #2 MO 2026 MULTI-SEASON HUB (CREW 7 + WE THE NORTH):
-      </span>
-      <div class="cu-hub-tabs" id="wtnHubTabs">
-        <button class="cu-tab-btn" onclick="playMoCrew7Reel()" style="background:linear-gradient(135deg,#ea580c 0%,#b91c1c 100%);border-color:#fdba74;color:#fff;box-shadow:0 2px 10px rgba(234,88,12,0.45);">🎬 NEW! Crew 7 Winter '26 Reel (14 Plays • 58 PTS, 10× 3PM)</button>
-        <button class="cu-tab-btn" onclick="playMoHighlightReel()" style="background:linear-gradient(135deg,#e11d48 0%,#9f1239 100%);border-color:#fda4af;color:#fff;box-shadow:0 2px 10px rgba(225,29,72,0.38);">🎬 WeTheNorth Holiday '26 Reel (14 Plays • 5× 3PT + Wk 4 WIN!)</button>
-        <button class="cu-tab-btn" data-session="2026-02-01_C7_vs_OutOfShape_W4" onclick="switchGameSession('2026-02-01_C7_vs_OutOfShape_W4')" style="border-color:#fdba74;color:#ffedd5;">🔥 Feb 1 C7 W4: #2 Mo 25 PTS (11 FG, 3× 3PM, 9 REB)</button>
-        <button class="cu-tab-btn" data-session="2026-01-25_C7_vs_BTA_W3" onclick="switchGameSession('2026-01-25_C7_vs_BTA_W3')" style="border-color:#fdba74;color:#ffedd5;">⚡ Jan 25 C7 W3: #2 Mo 13 PTS, 11 REB, 5 AST Double-Double</button>
-        <button class="cu-tab-btn" data-session="2026-01-18_C7_vs_Breadwinners_W2" onclick="switchGameSession('2026-01-18_C7_vs_Breadwinners_W2')" style="border-color:#fdba74;color:#ffedd5;">🎯 Jan 18 C7 W2: #2 Mo 14 PTS (4/4 3PT, 3 STL, BLK)</button>
-        <button class="cu-tab-btn" data-session="2026-01-11_C7_vs_OutOfShape_W1" onclick="switchGameSession('2026-01-11_C7_vs_OutOfShape_W1')">🏀 Jan 11 C7 W1: #2 Mo 6 PTS (3/3 FT)</button>
-        <button class="cu-tab-btn" data-session="2026-11-01_WTN_vs_CrunchTime_G3" onclick="switchGameSession('2026-11-01_WTN_vs_CrunchTime_G3')" style="border-color:#fb7185;color:#fecdd3;">🍁 Nov 1 WTN G3: #2 Mo 15 PTS (5× 3PM)</button>
-        <button class="cu-tab-btn" data-session="2026-10-25_WTN_vs_NewAvengers_G2" onclick="switchGameSession('2026-10-25_WTN_vs_NewAvengers_G2')" style="border-color:#fb7185;color:#fecdd3;">🍁 Oct 25 WTN G2: #2 Mo 7 PTS (3/3 FG, 7 REB)</button>
-        <button class="cu-tab-btn" data-session="2026-11-08_WTN_vs_DomainExpansion_G4" onclick="switchGameSession('2026-11-08_WTN_vs_DomainExpansion_G4')" style="border-color:#4ade80;color:#bbf7d0;background:rgba(34,197,94,0.22);font-weight:900;">🏆 NEW FILM! Nov 8 WTN G4: 55–53 [1080p WIN!]</button>
-        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-02-01_C7_Mo_Winter26_Reel.mp4?v=1080p1" target="_blank" download="2026-02-01_C7_Mo_Winter26_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">⬇️ Download C7 Reel MP4</a>
-        <a class="cu-tab-btn" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_WTN_Mo_Highlight_Reel.mp4?v=1080p3" target="_blank" download="2026-11-01_WTN_Mo_Highlight_Reel.mp4" style="text-decoration:none;border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.12);">⬇️ Download WTN Reel MP4</a>
-      </div>
-    </div>
-    <div style="font-size:0.74rem;color:#fed7aa;font-weight:600;">
-      #2 Mohamed 2026 Majestic Career (19 GP): <strong style="color:#fff;">155 PTS • 29× 3PM • 89 REB • 29 AST • 9 STL • 8 BLK</strong>
-      <span style="color:#94a3b8;"> | Winter '26 Crew 7: 58 PTS (10× 3PM, 30 REB, 10 AST) • Fall '26 Crew 7: 45 PTS • Holiday '26 WTN: 28 PTS</span>
-    </div>
-  </div>
-
-  <!-- NOV 8 OPPONENT SCOUTING REPORT VIEW (Toggled when 'scouting_nov8' is selected) -->
+  <!-- SCOUTING REPORT & ANALYTICS VIEW CONTAINER -->
   <div class="scouting-view-container" id="scoutingViewContainer"></div>
 
-  <!-- TOP WORKSPACE: Video Player + SC Top 5 Plays & Play-by-Play Review -->
+  <!-- TOP WORKSPACE: Video Player + Full Play-by-Play & Highlights Feed -->
   <div class="top-workspace" id="mainFilmWorkspace">
     <div class="left-video-col">
       <div class="video-container" id="videoWrapper">
@@ -1791,7 +1982,7 @@
         <!-- Shootaround Skip Overlay (pops up during 23:10 - 29:00) -->
         <div class="shootaround-overlay" id="shootaroundBanner">
           <div>
-            <div style="font-weight:700;font-size:0.82rem;color:var(--accent);">⏸️ Mid-Session Shootaround & Break (23:10 – 29:00)</div>
+            <div style="font-weight:700;font-size:0.82rem;color:var(--accent);">⏸️ Mid-Session Shootaround &amp; Break (23:10 – 29:00)</div>
             <div style="font-size:0.72rem;color:var(--muted);">Full Game #1 just ended on Kenny's walk-off fast-break layup! Next game tips off at 29:01!</div>
           </div>
           <button class="primary" onclick="seekTo(1741, false)">⏭️ Skip to Next Game (29:01)</button>
@@ -1805,81 +1996,7 @@
         </div>
       </div>
 
-      <!-- Interactive 🤝 Collab Training Studio (Zero-Timestamp LED Calibration & Teammate Verification) -->
-      <div class="collab-studio-bar" id="collabStudioBar">
-        <div class="collab-studio-top">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <span style="font-family:var(--font-display);font-weight:900;font-size:0.9rem;color:#34d399;letter-spacing:0.04em;">
-              🤝 COLLAB TRAINING STUDIO
-            </span>
-            <span class="collab-progress-pill" id="collabProgressPill">Loading calibration stats...</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <button class="collab-chip-btn" id="quickTagChargeBtn" onclick="openChargeTagInCollab()" style="border-color:rgba(251,191,36,0.65);background:rgba(245,158,11,0.16);color:#fde047;font-weight:800;" title="Majestic's scorer tablet doesn't have a Charge Drawn button! Tag any charge drawn here to promote it to CPSN Top 5 Plays &amp; +2.5 PPR!">🛡️ + Tag Charge Drawn</button>
-            <button class="collab-chip-btn mo-live" id="quickTagMoBtn" onclick="quickTagMoAtCurrentTime()" title="One-tap tag a #2 Mo bucket, dime, steal, or block at the current video timestamp!">📍 + Tag #2 Mo Highlight Here</button>
-            <button class="collab-chip-btn verify-ok" onclick="jumpToNextUnverifiedBucket()" id="nextUnverifiedBtn" title="Jump straight to the next LED-detected bucket that needs scorer confirmation">🎯 Next Unverified Bucket</button>
-            <button class="collab-chip-btn" onclick="toggleCollabDrawer()" id="collabToggleBtn">🛠️ Calibration Controls ▾</button>
-          </div>
-        </div>
-        <div class="collab-drawer" id="collabStudioDrawer">
-          <div style="font-size:0.73rem;color:#cbd5e1;margin-bottom:5px;" id="collabContextNote">
-            💡 <strong>How Collab Training Works:</strong> Confirm scorers, reassign assists, nudge shot sync (<code>-2s</code> / <code>+2s</code>), or tag <strong>🛡️ Charges Drawn</strong> (which Majestic's scorer iPad logs only as generic opponent fouls — tagging a Charge Drawn auto-promotes it into Top 5 Highlights &amp; adds <strong>+2.5 PPR</strong>!).
-          </div>
-          <div class="collab-controls-grid">
-            <input type="text" id="collabContributorInput" placeholder="Reviewer Name / Jersey #" value="" style="max-width:145px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
-            <select id="collabLivePlayerSelect" style="font-size:0.73rem;padding:4px 6px;max-width:175px;"></select>
-            <select id="collabLiveActionSelect" style="font-size:0.73rem;padding:4px 6px;">
-              <option value="Charge Drawn">🛡️ Charge Drawn (Elite Defense!)</option>
-              <option value="3-pt FG Made">🎯 3-Pointer Made</option>
-              <option value="2-pt FG Made">🏀 2-PT Drive / Finish</option>
-              <option value="Assist">🤝 Assist / Dime</option>
-              <option value="Steal">🔒 Defensive Steal</option>
-              <option value="Block">🚫 Shot Block</option>
-            </select>
-            <input type="text" id="collabLiveNoteInput" placeholder="Optional note (e.g. corner 3, euro-step)..." style="flex:1;min-width:150px;font-size:0.73rem;padding:4px 7px;" />
-            <button class="collab-chip-btn verify-ok" onclick="submitCollabLiveTag()">➕ Save Live Tag @ Video Time</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Missing Play Quick-Logger -->
-      <div class="missing-play-bar">
-        <div class="missing-play-top">
-          <span style="font-size:0.76rem;color:#cbd5e1;">
-            🕵️ <strong>Did the scorer/AI miss your 🛡️ charge drawn, bucket, assist, steal, or block?</strong> Pause at the moment &amp; log it:
-          </span>
-          <div style="display:flex;gap:6px;">
-            <button class="blue-btn" onclick="openMissingPlayDrawer()">➕ Log Missing Play @ Current Time</button>
-            <button onclick="downloadCurrentMomentClip()">⬇️ Clip Current 9s (MP4)</button>
-          </div>
-        </div>
-        <div class="missing-play-drawer" id="missingPlayDrawer">
-          <div class="note-form-row">
-            <input type="text" id="mpTimeDisplay" readonly style="max-width:110px;color:var(--accent);font-weight:700;" />
-            <select id="mpHoop">
-              <option value="Far">Far Hoop</option>
-              <option value="Near">Near Hoop</option>
-              <option value="Single (3v3)">Single Hoop (3v3 Half-Court)</option>
-            </select>
-            <select id="mpType">
-              <option value="CHG">🛡️ Charge Drawn (Elite Defense!)</option>
-              <option value="MADE">Made Basket</option>
-              <option value="3PT">3-Pointer</option>
-              <option value="DEF">Steal / Block</option>
-              <option value="PUTBACK">OREB & Putback</option>
-              <option value="SPECIAL">Check-Ball / Take-Back (3v3) / Highlight</option>
-            </select>
-            <select id="mpPlayer"></select>
-          </div>
-          <div class="note-form-row">
-            <input type="text" id="mpAuthor" placeholder="Your Name..." style="max-width:160px;" />
-            <input type="text" id="mpDesc" placeholder="Describe what happened (e.g. 'Crossed defender and hit left-hand floater')..." />
-            <button class="primary" onclick="submitMissingPlay()">Add to Play-by-Play</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ESPN Broadcast Scorebug + BottomLine Live Ticker -->
+      <!-- ESPN Broadcast Scorebug + BottomLine Live Ticker (Directly under Video!) -->
       <div class="espn-scorebug-wrap" id="espnScorebug">
         <div class="scoreboard">
           <div class="team-box">
@@ -1912,19 +2029,11 @@
         </div>
       </div>
 
-      <!-- Mobile Quick-Jump Navigation Bar (<= 768px) -->
-      <div class="mobile-nav-tabs" id="mobileNavTabs">
-        <button onclick="scrollToMobileSection('.top5-section')">🔥 Top 5</button>
-        <button onclick="scrollToMobileSection('#playList')">📋 Plays</button>
-        <button onclick="scrollToMobileSection('#crewMasterRosterStrip')">👕 Crew</button>
-        <button onclick="scrollToMobileSection('.box-score-wrap')">📊 Box</button>
-        <button class="green-btn" onclick="shareToWhatsApp()">💬 Share</button>
-      </div>
-
+      <!-- Single-Line Horizontal Chapter & Reel Quick-Jump Rail -->
       <div class="chapter-bar" id="chapterBar">
         <span class="chapter-pill" onclick="seekTo(1, false)">00:01 Opening Layup</span>
         <span class="chapter-pill" onclick="seekTo(404, true)">06:44 Full Game Tip-Off</span>
-        <span class="chapter-pill" onclick="seekTo(539, true)">08:54 Damien Steal & Fast-Break</span>
+        <span class="chapter-pill" onclick="seekTo(539, true)">08:54 Damien Steal &amp; Fast-Break</span>
         <span class="chapter-pill" onclick="seekTo(975, false)">16:15 Mid-Game Check (13-8)</span>
         <span class="chapter-pill" onclick="seekTo(1355, true)">22:35 Rock → Timor Jumper</span>
         <span class="chapter-pill" onclick="seekTo(1385, true)">23:05 Kenny Game-Winner! 🔥</span>
@@ -1933,69 +2042,136 @@
         <span class="chapter-pill" onclick="seekTo(2238, true)">37:18 Brian Bounce Runner</span>
       </div>
 
-      <div class="scroll-hint-banner">
-        <span>👇 <strong>Day-to-Day Crew Roster ("Who wore what today?") & Provisional AI Box Score are below!</strong></span>
-        <button onclick="document.getElementById('lowerStatsSection').scrollIntoView({behavior:'smooth'})">Jump to Crew Roster & Box Score ↓</button>
+      <!-- Unified Tag, Charge & Missing-Play Drawer (Collapsed by default so Watch Mode stays clean) -->
+      <div class="collab-studio-bar" id="collabStudioBar" style="margin-top:2px;padding:7px 11px;">
+        <div class="collab-studio-top">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:var(--font-display);font-weight:900;font-size:0.84rem;color:#34d399;letter-spacing:0.04em;">
+              🤝 TAG &amp; SYNC STUDIO
+            </span>
+            <span class="collab-progress-pill" id="collabProgressPill">Synced</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+            <button class="collab-chip-btn" id="quickTagChargeBtn" onclick="openChargeTagInCollab()" style="border-color:rgba(251,191,36,0.65);background:rgba(245,158,11,0.16);color:#fde047;font-weight:800;" title="Tag a Charge Drawn (+2.5 PPR &amp; Top 5 Highlight)">🛡️ + Charge</button>
+            <button class="collab-chip-btn mo-live" id="quickTagMoBtn" onclick="quickTagMoAtCurrentTime()" style="display:none;" title="One-tap tag #2 Mo highlight">@ #2 Mo</button>
+            <button class="collab-chip-btn verify-ok" onclick="jumpToNextUnverifiedBucket()" id="nextUnverifiedBtn" style="display:none;">🎯 Next Unverified</button>
+            <button class="collab-chip-btn" onclick="downloadCurrentMomentClip()" title="Download 9s MP4 clip around current timestamp">⬇️ Clip 9s</button>
+            <button class="collab-chip-btn" onclick="toggleCollabDrawer()" id="collabToggleBtn">➕ Log / Calibrate ▾</button>
+          </div>
+        </div>
+        <div class="collab-drawer" id="collabStudioDrawer">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+            <span style="font-size:0.72rem;color:#cbd5e1;" id="collabContextNote">
+              Tag a <strong>🛡️ Charge Drawn</strong> (+2.5 PPR), bucket, assist, or steal at the current video timestamp:
+            </span>
+            <button class="mini-btn" onclick="openMissingPlayDrawer()">📝 Detailed Play Logger ▾</button>
+          </div>
+          <div class="collab-controls-grid">
+            <input type="text" id="collabContributorInput" placeholder="Your Name / #" value="" style="max-width:130px;font-size:0.73rem;padding:4px 7px;" onchange="localStorage.setItem('bball_collab_name', this.value)" />
+            <select id="collabLivePlayerSelect" style="font-size:0.73rem;padding:4px 6px;max-width:170px;"></select>
+            <select id="collabLiveActionSelect" style="font-size:0.73rem;padding:4px 6px;">
+              <option value="Charge Drawn">🛡️ Charge Drawn (+2.5 PPR)</option>
+              <option value="3-pt FG Made">🎯 3-Pointer Made</option>
+              <option value="2-pt FG Made">🏀 2-PT Drive / Finish</option>
+              <option value="Assist">🤝 Assist / Dime</option>
+              <option value="Steal">🔒 Defensive Steal</option>
+              <option value="Block">🚫 Shot Block</option>
+            </select>
+            <input type="text" id="collabLiveNoteInput" placeholder="Note (e.g. corner 3, euro-step)..." style="flex:1;min-width:140px;font-size:0.73rem;padding:4px 7px;" />
+            <button class="collab-chip-btn verify-ok" onclick="submitCollabLiveTag()">➕ Save @ Video Time</button>
+          </div>
+          <div class="missing-play-drawer" id="missingPlayDrawer" style="margin-top:8px;">
+            <div class="note-form-row">
+              <input type="text" id="mpTimeDisplay" readonly style="max-width:110px;color:var(--accent);font-weight:700;" />
+              <select id="mpHoop">
+                <option value="Far">Far Hoop</option>
+                <option value="Near">Near Hoop</option>
+                <option value="Single (3v3)">Single Hoop (3v3 Half-Court)</option>
+              </select>
+              <select id="mpType">
+                <option value="CHG">🛡️ Charge Drawn (Elite Defense!)</option>
+                <option value="MADE">Made Basket</option>
+                <option value="3PT">3-Pointer</option>
+                <option value="DEF">Steal / Block</option>
+                <option value="PUTBACK">OREB &amp; Putback</option>
+                <option value="SPECIAL">Check-Ball / Take-Back / Highlight</option>
+              </select>
+              <select id="mpPlayer"></select>
+            </div>
+            <div class="note-form-row">
+              <input type="text" id="mpAuthor" placeholder="Your Name..." style="max-width:160px;" />
+              <input type="text" id="mpDesc" placeholder="Describe what happened..." />
+              <button class="primary" onclick="submitMissingPlay()">Add to Play-by-Play</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Right Column: SC Top 5 Plays + Play-by-Play Feed -->
+    <!-- Right Column: Full Highlights & Play-by-Play Feed Front-and-Center -->
     <div class="right-pbp-col">
-      <!-- CPSN TOP 5 PLAYS AT THE VERY TOP OF ALL PLAYS -->
-      <div class="top5-section">
+      <!-- Sleek Right-Column View Tabs & Quick Actions -->
+      <div class="pbp-top-tabs-bar">
+        <div class="pbp-view-tabs">
+          <button class="pbp-tab-btn active" id="pbpTabAll" onclick="setPbpViewTab('ALL')">📋 All Plays</button>
+          <button class="pbp-tab-btn" id="pbpTabHighlights" onclick="setPbpViewTab('HIGHLIGHTS')">🏀 Highlights</button>
+          <button class="pbp-tab-btn top5-toggle" id="pbpTabTop5" onclick="setPbpViewTab('TOP5')">🔥 Top 5</button>
+        </div>
+        <div class="pbp-quick-tools">
+          <button class="mini-btn ok-btn" id="playTop5ReelBtn" onclick="startTop5Reel()" style="font-weight:700;" title="Auto-play Top 5 countdown">▶️ Top 5 Reel</button>
+          <button class="mini-btn" id="playTurnoverReelBtn" onclick="startTurnoverReel('CU')" style="display:none;font-weight:800;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.55);color:#fdba74;">🔄 TOVs</button>
+          <button class="mini-btn" id="pbpEditModeBtn" onclick="togglePbpEditMode()" title="Show timestamp nudge &amp; scorer calibration tools on every play">✏️ Sync / Fix</button>
+          <button class="mini-btn" onclick="document.getElementById('lowerStatsSection').scrollIntoView({behavior:'smooth'})" title="Jump to Shot Chart, Crew Roster &amp; Box Score">📊 Box ↓</button>
+        </div>
+      </div>
+
+      <!-- Always-Visible Active Auto-Reel Playback Banner -->
+      <div id="autoReelBanner" style="display:none;background:linear-gradient(90deg,#990000,#cc0000);color:#fff;padding:7px 12px;font-size:0.76rem;font-weight:700;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(255,255,255,0.2);flex-shrink:0;">
+        <span id="autoReelText" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">🎬 AUTO-REEL PLAYING...</span>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="mini-btn" onclick="nextReelItem()" style="background:#111;color:#fff;">⏭️ Next</button>
+          <button class="mini-btn" onclick="stopAutoReel()" style="background:#111;color:#ff8888;">⏹️ Stop</button>
+        </div>
+      </div>
+
+      <!-- Collapsible CPSN Top 5 Plays Panel (Opened when 🔥 Top 5 tab is clicked) -->
+      <div class="top5-section" id="top5SectionPanel">
         <div class="top5-header">
           <div class="top5-title">
             <span class="sc-badge">CPSN TOP 5</span>
             <span id="top5TitleLabel">CAMPBELL PARK PLAYS OF THE RUN</span>
           </div>
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-            <button class="mini-btn ok-btn" id="playTop5ReelBtn" onclick="startTop5Reel()" style="font-weight:700;">▶️ Auto-Play Top 5</button>
-            <button class="mini-btn" id="playTurnoverReelBtn" onclick="startTurnoverReel('CU')" style="display:none;font-weight:800;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.55);color:#fdba74;">🔄 Turnover Film</button>
-            <button class="mini-btn" onclick="toggleTop5()">Hide / Show</button>
-          </div>
-        </div>
-        <div id="autoReelBanner" style="display:none;background:linear-gradient(90deg,#990000,#cc0000);color:#fff;padding:7px 12px;font-size:0.78rem;font-weight:700;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.2);">
-          <span id="autoReelText">🎬 AUTO-REEL PLAYING...</span>
-          <div style="display:flex;gap:6px;">
-            <button class="mini-btn" onclick="nextReelItem()" style="background:#111;color:#fff;">⏭️ Next</button>
-            <button class="mini-btn" onclick="stopAutoReel()" style="background:#111;color:#ff8888;">⏹️ Stop Reel</button>
-          </div>
+          <button class="mini-btn" onclick="setPbpViewTab('ALL')">✕ Close Top 5</button>
         </div>
         <div class="top5-list" id="top5List"></div>
       </div>
 
-      <div class="ai-warning-banner">
-        <strong>⚠️ AI DRAFT PLAY-BY-PLAY — ASSUME IT'S WRONG & FIX YOUR STATS!</strong>
-        Click any play to watch, download a 9s MP4 clip (`⬇️ Clip`), vote <b>👍 Accurate</b>, or click <b>🚩 Wrong! Fix / Note</b>. Vote <b>🧢 Cap!</b> when a homie is lying!
-      </div>
-
+      <!-- Compact Single-Row Filter Bar -->
       <div class="filters-bar">
         <div class="filter-row">
-          <select id="gameFilter" onchange="renderPlays()">
-            <option value="ALL">All Segments (Full Video)</option>
-            <option value="G1">00:00–06:20 Game 1 (to 12 — Ends 9–12)</option>
-            <option value="G2">06:42–23:05 Game 2 (to 15 — Ends 15–14)</option>
-            <option value="G3">29:01–37:34 Game 3 (after Shootaround)</option>
+          <select id="gameFilter" onchange="onFilterControlChanged()">
+            <option value="ALL">All Segments</option>
+            <option value="G1">Game 1 (00:00–06:20)</option>
+            <option value="G2">Game 2 (06:42–23:05)</option>
+            <option value="G3">Game 3 (29:01–37:34)</option>
           </select>
-          <select id="typeFilter" onchange="renderPlays()">
-            <option value="ALL">All Event Types</option>
-            <option value="DISPUTED">🚨 Disputed / Has Player Notes</option>
-            <option value="MADE">✅ Made Baskets Only</option>
-            <option value="3PT">🎯 3-Point Attempts & Makes</option>
-            <option value="PUTBACK">💪 OREB & Putbacks</option>
-            <option value="CHG">🛡️ Charges Drawn (Elite Defense!)</option>
-            <option value="DEF">🔒 All Defensive Stops (Charges, Steals &amp; Blocks)</option>
-            <option value="TOV_CU">🔄 Team Turnovers (Film Study — Clean Up!)</option>
-            <option value="TOV_OPP">🦅 Forced Opponent Turnovers (Takeaways!)</option>
-            <option value="TOV_ALL">🔄 All Turnovers (Both Teams)</option>
+          <select id="typeFilter" onchange="onFilterControlChanged()">
+            <option value="ALL">All Events</option>
+            <option value="MADE">✅ Made Baskets</option>
+            <option value="3PT">🎯 3-Pointers</option>
+            <option value="CHG">🛡️ Charges Drawn</option>
+            <option value="DEF">🔒 All Stops (CHG/STL/BLK)</option>
+            <option value="PUTBACK">💪 Putbacks</option>
+            <option value="TOV_CU">🔄 Team TOVs</option>
+            <option value="TOV_OPP">🦅 Takeaways</option>
+            <option value="TOV_ALL">🔄 All TOVs</option>
+            <option value="DISPUTED">🚨 Notes / Disputed</option>
           </select>
-        </div>
-        <div class="filter-row">
-          <select id="playerFilter" onchange="renderPlays()">
-            <option value="ALL">Filter by Crew Member (All 14)</option>
+          <select id="playerFilter" onchange="onFilterControlChanged()">
+            <option value="ALL">All Players</option>
           </select>
-          <input type="text" id="searchFilter" placeholder="Search plays, players, or notes..." oninput="renderPlays()" />
-          <button onclick="resetFilters()">Reset</button>
+          <input type="text" id="searchFilter" placeholder="🔍 Search plays..." oninput="onFilterControlChanged()" />
+          <button class="mini-btn" onclick="resetFilters()" title="Reset all play filters" style="padding:5px 8px;flex-shrink:0;">↺</button>
         </div>
       </div>
 
@@ -2747,9 +2923,7 @@
       const picker = document.getElementById('sessionPicker');
       const tabTarget = activeScoutingViewMode === 'evan' ? 'scouting_nov15_evan' : 'scouting_nov15';
       if (picker && Array.from(picker.options).some(o => o.value === tabTarget)) picker.value = tabTarget;
-      document.querySelectorAll('#cuHubTabs .cu-tab-btn, #wtnHubTabs .cu-tab-btn').forEach(btn => {
-        if (btn.dataset.session) btn.classList.toggle('active', btn.dataset.session === tabTarget);
-      });
+      if (typeof syncNavigationChrome === 'function') syncNavigationChrome();
       const bundle = await ensureMajesticBundleLoaded();
       if (bundle && bundle.scouting_report_nov15_latto_talent) {
         renderScoutingReport(bundle.scouting_report_nov15_latto_talent);
@@ -4237,7 +4411,7 @@
                   <tbody>${mlModelRowsHtml}</tbody>
                 </table>
                 <div style="font-size:0.75rem;color:#94a3b8;margin-top:8px;line-height:1.45;">
-                  • <strong>Why Week 3 fooled naive motion heuristics:</strong> High-speed transition finger-rolls create net splash despite releasing 3.4&quot;–6.5&quot; below the rim with upward glass trajectory. Adding calibrated peak hand reach vs. the 10'0&quot; rim iron, ball vertical velocity at the cylinder, and rim-iron recoil eliminated all 24 transition false-positive dunk calls.
+                  • <strong>30-FPS Rim-Ruler QA Takeaway:</strong> Separating the basketball blob from the player's fingertips and anchoring 3D court rulers (<strong>10'0&quot; rim iron</strong>, <strong>9'0&quot; backboard bottom</strong>, <strong>8'6&quot; net bottom</strong>) prevents both fast-break glass layups and ball-above-rim rebounds/contests from registering as above-the-rim plays.
                 </div>
               </div>
               ${mlLab.diagnostics_img_url ? `
@@ -4367,6 +4541,8 @@
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
       if (txt) txt.textContent = '🎬 PLAYING CAMPBELL UNITED 66, RICECOOKERS 63 (OT) COMEBACK REEL (14 PLAYS • 1080p FULL HD • #44 CHRISTIAN 61-61 BUZZER 3PT + #20 SHANE OT WINNER!)';
+      activeReelCardKey = 'cu_ot_reel';
+      renderScoreboardStrip();
       const gSelect = document.getElementById('gameFilter');
       if (gSelect) {
         gSelect.value = 'CU_HIGHLIGHTS';
@@ -4397,6 +4573,8 @@
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
       if (txt) txt.textContent = '🎬 PLAYING #2 MOHAMED CREW 7 WINTER \'26 REEL (14 PLAYS • 1080p FULL HD • 58 PTS, 10× 3PM, 30 REB, 10 AST)';
+      activeReelCardKey = 'mo_c7_reel';
+      renderScoreboardStrip();
       const gSelect = document.getElementById('gameFilter');
       if (gSelect) {
         gSelect.value = 'CU_HIGHLIGHTS';
@@ -4427,6 +4605,8 @@
       const txt = document.getElementById('autoReelText');
       if (banner) banner.style.display = 'flex';
       if (txt) txt.textContent = '🎬 PLAYING #2 MO HOLIDAY \'26 HIGHLIGHT REEL (14 PLAYS • 1080p FULL HD • G2 100% FG, G3 5× 3PT & G4 55-53 WIN!)';
+      activeReelCardKey = 'mo_wtn_reel';
+      renderScoreboardStrip();
       const gSelect = document.getElementById('gameFilter');
       if (gSelect) {
         gSelect.value = 'CU_HIGHLIGHTS';
@@ -4436,7 +4616,175 @@
       if (videoWrap) videoWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    // --- ESPN SCOREBOARD STRIP, TEAM SWITCHER & MODE NAVIGATION ---
+    const CU_ARCHIVE_IDS = [
+      '2026-03-01_CU_vs_LattoTalent_Champ',
+      '2026-02-15_CU_vs_PimpsDown',
+      '2026-02-08_CU_vs_Eagles',
+      '2025-11-09_CU_vs_Crew7'
+    ];
+    const DEFAULT_TEAM_SESSION = {
+      cu: '2026-11-08_CU_vs_Ricecookers_G4',
+      mo: '2026-11-08_WTN_vs_DomainExpansion_G4',
+      sb: '2026-09-20_SB_vs_Mustangs_Eugene41',
+      pickup: '2026-10-15_Pickup_G1'
+    };
+    const SCORE_STRIP_SESSIONS = {
+      cu: [
+        { isReel: true, reelKey: 'cu_ot_reel', date: '1080p HD REEL', badge: '🎬 14 PLAYS', badgeCls: 'gold', title: 'Nov 8 OT Comeback Reel', onClick: 'playCuRicecookersOtReel()' },
+        { id: '2026-11-08_CU_vs_Ricecookers_G4', date: 'NOV 8 • G4', badge: '🏆 OT WIN 4-0', badgeCls: 'gold', title: 'CU 66, Ricecookers 63' },
+        { id: '2026-11-01_CU_vs_Misfits2_G3', date: 'NOV 1 • G3', badge: 'WIN 3-0', badgeCls: '', title: 'CU 83, Misfits 2 66' },
+        { id: '2026-10-25_CU_vs_TMT_G2', date: 'OCT 25 • G2', badge: 'WIN 2-0', badgeCls: '', title: 'CU 52, TMT 50' },
+        { id: '2026-10-18_CU_vs_HalalHoopers_G1', date: 'OCT 18 • G1', badge: 'WIN 1-0', badgeCls: '', title: 'CU 69, Halal Hoopers 47' },
+        { id: '2026-10-04_CU_vs_Mustangs_Champ', date: 'OCT 4 • FINAL', badge: '🏆 CHAMP', badgeCls: 'gold', title: 'CU 76, Mustangs 66' },
+        { id: '2026-03-01_CU_vs_LattoTalent_Champ', isArchive: true, date: 'MAR 1 • FINAL', badge: 'ARCHIVE', badgeCls: 'neutral', title: 'CU 45, Latto Talent 73' },
+        { id: '2026-02-15_CU_vs_PimpsDown', isArchive: true, date: 'FEB 15 • WK 6', badge: 'WIN', badgeCls: '', title: 'CU 59, Pimps Down 51' },
+        { id: '2026-02-08_CU_vs_Eagles', isArchive: true, date: 'FEB 8 • WK 5', badge: 'WIN +50', badgeCls: '', title: 'CU 119, Eagles 69' },
+        { id: '2025-11-09_CU_vs_Crew7', isArchive: true, date: 'NOV 9, 2025', badge: 'ARCHIVE', badgeCls: 'neutral', title: 'CU 59, Crew 7 73' }
+      ],
+      mo: [
+        { isReel: true, reelKey: 'mo_wtn_reel', date: '1080p HD REEL', badge: '🍁 14 PLAYS', badgeCls: 'gold', title: "WTN Holiday '26 Reel", onClick: 'playMoHighlightReel()' },
+        { isReel: true, reelKey: 'mo_c7_reel', date: '1080p HD REEL', badge: '🔥 58 PTS', badgeCls: 'gold', title: "Crew 7 Winter '26 Reel", onClick: 'playMoCrew7Reel()' },
+        { id: '2026-11-08_WTN_vs_DomainExpansion_G4', date: 'NOV 8 • WTN G4', badge: '🏆 WIN', badgeCls: '', title: 'WTN 55, Domain Exp. 53' },
+        { id: '2026-11-01_WTN_vs_CrunchTime_G3', date: 'NOV 1 • WTN G3', badge: '5× 3PM (15P)', badgeCls: 'gold', title: 'vs. Crunch Time' },
+        { id: '2026-10-25_WTN_vs_NewAvengers_G2', date: 'OCT 25 • WTN G2', badge: '3/3 FG (7R)', badgeCls: '', title: 'vs. New Avengers' },
+        { id: '2026-10-18_WTN_vs_OTFSelect_G1', date: 'OCT 18 • WTN G1', badge: 'GAME 1', badgeCls: 'neutral', title: 'vs. OTF Select' },
+        { id: '2026-02-01_C7_vs_OutOfShape_W4', date: 'FEB 1 • C7 W4', badge: '🔥 25P / 9R', badgeCls: 'gold', title: 'vs. Out Of Shape' },
+        { id: '2026-01-25_C7_vs_BTA_W3', date: 'JAN 25 • C7 W3', badge: '13P / 11R / 5A', badgeCls: '', title: 'vs. BTA' },
+        { id: '2026-01-18_C7_vs_Breadwinners_W2', date: 'JAN 18 • C7 W2', badge: '🎯 4/4 3PT', badgeCls: 'gold', title: 'vs. Breadwinners' },
+        { id: '2026-01-11_C7_vs_OutOfShape_W1', date: 'JAN 11 • C7 W1', badge: '6 PTS', badgeCls: 'neutral', title: 'vs. Out Of Shape' }
+      ],
+      sb: [
+        { id: '2026-09-20_SB_vs_Mustangs_Eugene41', date: 'SEP 20 • OT', badge: '👑 41P (11× 3P)', badgeCls: 'gold', title: 'SB 78, Mustangs 76 OT' },
+        { id: '2026-10-18_SB_vs_Tandoori_Eugene29', date: 'OCT 18 • WK 1', badge: '🔥 29P (5× 3P)', badgeCls: 'gold', title: 'SB 83, Tandoori 73' }
+      ],
+      pickup: [
+        { id: '2026-10-15_Pickup_G1', date: 'OCT 15, 2026', badge: 'RUN 9-4', badgeCls: '', title: 'CU × Pickup Crew G1' },
+        { id: '2026-10-31', date: 'OCT 31, 2026', badge: '3 GAMES', badgeCls: 'gold', title: 'Campbell Park Full Run' }
+      ]
+    };
+
+    let activeTeamGroup = 'cu';
+    let cuArchivesExpanded = false;
+    let lastFilmSessionId = '2026-11-08_CU_vs_Ricecookers_G4';
+    let activeReelCardKey = '';
+    let openCardEdits = {};
+
+    function isNonFilmModeSession(sid) {
+      return sid === 'scouting_nov15' || sid === 'scouting_nov8' || sid === 'season_analytics';
+    }
+
+    function inferTeamGroup(sid) {
+      if (!sid || isNonFilmModeSession(sid)) return activeTeamGroup || 'cu';
+      if (sid.includes('_WTN_') || sid.includes('_C7_')) return 'mo';
+      if (sid.includes('_SB_')) return 'sb';
+      if (sid.includes('Pickup') || sid === '2026-10-31') return 'pickup';
+      if (CU_ARCHIVE_IDS.includes(sid)) cuArchivesExpanded = true;
+      return 'cu';
+    }
+
+    function toggleCuArchives(e) {
+      if (e) e.stopPropagation();
+      cuArchivesExpanded = !cuArchivesExpanded;
+      renderScoreboardStrip();
+    }
+
+    function renderScoreboardStrip() {
+      const track = document.getElementById('scoreStripTrack');
+      if (!track) return;
+      const items = (SCORE_STRIP_SESSIONS[activeTeamGroup] || SCORE_STRIP_SESSIONS.cu).filter(item => !item.isArchive || cuArchivesExpanded);
+      const cardsHtml = items.map(item => {
+        if (item.isReel) {
+          const isActReel = activeReelCardKey === item.reelKey;
+          return `
+            <button type="button" class="score-strip-card reel-card ${isActReel ? 'active' : ''}" onclick="${item.onClick}">
+              <div class="strip-card-top">
+                <span>${escapeHtml(item.date)}</span>
+                <span class="strip-card-badge ${item.badgeCls || 'gold'}">${escapeHtml(item.badge)}</span>
+              </div>
+              <div class="strip-card-title">${escapeHtml(item.title)}</div>
+            </button>
+          `;
+        }
+        const isActive = !activeReelCardKey && !isNonFilmModeSession(activeSessionId) && activeSessionId === item.id;
+        return `
+          <button type="button" class="score-strip-card ${isActive ? 'active' : ''}" onclick="switchGameSession('${item.id}')">
+            <div class="strip-card-top">
+              <span>${escapeHtml(item.date)}</span>
+              <span class="strip-card-badge ${item.badgeCls || ''}">${escapeHtml(item.badge)}</span>
+            </div>
+            <div class="strip-card-title">${escapeHtml(item.title)}</div>
+          </button>
+        `;
+      }).join('');
+
+      const archiveToggleHtml = activeTeamGroup === 'cu'
+        ? `<button type="button" class="score-strip-card archive-toggle-card" onclick="toggleCuArchives(event)" title="${cuArchivesExpanded ? 'Collapse older archive games' : 'Show 4 Winter/Fall archive games'}">
+             <div class="strip-card-top" style="justify-content:center;"><span>${cuArchivesExpanded ? 'WINTER \'26' : 'ARCHIVES'}</span></div>
+             <div class="strip-card-title" style="font-size:0.82rem;color:#cbd5e1;">${cuArchivesExpanded ? '‹ Hide Archives' : '+ 4 Archives'}</div>
+           </button>`
+        : '';
+
+      track.innerHTML = cardsHtml + archiveToggleHtml;
+      requestAnimationFrame(() => {
+        const activeCard = track.querySelector('.score-strip-card.active');
+        if (activeCard && activeCard.scrollIntoView) {
+          activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        }
+      });
+    }
+
+    function syncNavigationChrome() {
+      const isEvan = activeSessionId === 'scouting_nov15' && activeScoutingViewMode === 'evan';
+      const isScout = (activeSessionId === 'scouting_nov15' && !isEvan) || activeSessionId === 'scouting_nov8';
+      const isAnalytics = activeSessionId === 'season_analytics';
+      const isFilm = !isEvan && !isScout && !isAnalytics;
+
+      const btnFilm = document.getElementById('navModeFilm');
+      const btnScout = document.getElementById('navModeScouting');
+      const btnEvan = document.getElementById('navModeEvan');
+      const btnAnalytics = document.getElementById('navModeAnalytics');
+      if (btnFilm) btnFilm.classList.toggle('active', isFilm);
+      if (btnScout) btnScout.classList.toggle('active', isScout);
+      if (btnEvan) btnEvan.classList.toggle('active', isEvan);
+      if (btnAnalytics) btnAnalytics.classList.toggle('active', isAnalytics);
+
+      const stripWrap = document.getElementById('espnScoreStripBar');
+      if (stripWrap) stripWrap.classList.toggle('hidden-strip', !isFilm);
+
+      document.querySelectorAll('#teamSwitcherBar .team-pill-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.team === activeTeamGroup);
+      });
+
+      renderScoreboardStrip();
+    }
+
+    function openFilmRoomMode() {
+      if (isNonFilmModeSession(activeSessionId)) {
+        switchGameSession(lastFilmSessionId || '2026-11-08_CU_vs_Ricecookers_G4');
+      } else {
+        const vw = document.getElementById('videoWrapper');
+        if (vw) vw.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function selectTeamGroup(teamKey) {
+      activeTeamGroup = teamKey || 'cu';
+      const currentBelongsToTeam = !isNonFilmModeSession(activeSessionId) && inferTeamGroup(activeSessionId) === activeTeamGroup;
+      if (!currentBelongsToTeam) {
+        switchGameSession(DEFAULT_TEAM_SESSION[activeTeamGroup] || '2026-11-08_CU_vs_Ricecookers_G4');
+      } else {
+        syncNavigationChrome();
+      }
+    }
+
+    function scrollScoreStrip(dir) {
+      const track = document.getElementById('scoreStripTrack');
+      if (track) track.scrollBy({ left: (Number(dir) || 1) * 380, behavior: 'smooth' });
+    }
+
     async function switchGameSession(sessionId, skipUrlSync) {
+      activeReelCardKey = '';
       stopAutoReel();
       const sv = document.getElementById('scoutingTapeVideo');
       if (sv && !sv.paused) sv.pause();
@@ -4449,15 +4797,20 @@
       } else {
         activeSessionId = sessionId || '2026-10-04_CU_vs_Mustangs_Champ';
       }
+
+      if (!isNonFilmModeSession(activeSessionId)) {
+        lastFilmSessionId = activeSessionId;
+        activeTeamGroup = inferTeamGroup(activeSessionId);
+        openCardEdits = {};
+        const top5Panel = document.getElementById('top5SectionPanel');
+        if (top5Panel) top5Panel.classList.remove('open');
+      }
+
       const uiSessionKey = (activeSessionId === 'scouting_nov15' && activeScoutingViewMode === 'evan') ? 'scouting_nov15_evan' : activeSessionId;
       const picker = document.getElementById('sessionPicker');
       if (picker && picker.value !== uiSessionKey) picker.value = uiSessionKey;
 
-      document.querySelectorAll('#cuHubTabs .cu-tab-btn, #wtnHubTabs .cu-tab-btn').forEach(btn => {
-        if (btn.dataset.session) {
-          btn.classList.toggle('active', btn.dataset.session === uiSessionKey);
-        }
-      });
+      syncNavigationChrome();
 
       if (!skipUrlSync && window.history && window.history.replaceState) {
         const u = new URL(window.location.href);
@@ -4744,7 +5097,7 @@
             ? `<span class="chapter-pill" onclick="playCuRicecookersOtReel()" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;font-weight:800;border-color:#fde047;">🎬 Watch CU 66–63 OT Comeback Reel (14 Plays • 1080p HD)</span>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1" target="_blank" download="2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download CU OT Win Reel MP4 (1080p)</a>`
           : activeSessionId === '2026-11-01_CU_vs_Misfits2_G3'
-            ? `<span class="chapter-pill" onclick="switchGameSession('season_analytics')" style="background:linear-gradient(135deg,#0d9488,#0369a1);color:#fff;font-weight:800;border-color:#5eead4;">🚀 #4 Adam Above-the-Rim ML Reel (1080p)</span>
+            ? `<span class="chapter-pill" onclick="switchGameSession('season_analytics')" style="background:linear-gradient(135deg,#0d9488,#0369a1);color:#fff;font-weight:800;border-color:#5eead4;">🔬 Rim-Ruler ML Audit Reel (1080p)</span>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Layup_Package.mp4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-weight:800;text-decoration:none;border-color:#c4b5fd;">🏀 Download #4 Adam Week 3 Layup Package MP4</a>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">🎯 Download Nov 1 CU vs. Misfits 2 Reel MP4</a>`
             : activeSessionId === '2026-09-20_SB_vs_Mustangs_Eugene41'
@@ -4831,6 +5184,7 @@
     function refreshUI() {
       updateTrainingSummaryCounters();
       if (typeof updateCollabStudioUI === 'function') updateCollabStudioUI();
+      if (typeof syncNavigationChrome === 'function') syncNavigationChrome();
       renderTop5();
       const blTrack = document.getElementById('bottomlineTrack');
       const effTop5 = getEffectiveTop5Plays();
@@ -4858,8 +5212,82 @@
       }
     }
 
+    function syncPbpTabState() {
+      const allPlays = getAllPlaysSorted();
+      const hlCount = activeMajesticGame
+        ? allPlays.filter(p => p.isCu && isHighlightEligiblePlay(p)).length
+        : allPlays.filter(p => p.tags && (p.tags.includes('MADE') || p.tags.includes('CHG') || p.tags.includes('DEF') || p.tags.includes('SPECIAL'))).length;
+
+      const tabAll = document.getElementById('pbpTabAll');
+      const tabHl = document.getElementById('pbpTabHighlights');
+      const tabTop5 = document.getElementById('pbpTabTop5');
+      const top5Panel = document.getElementById('top5SectionPanel');
+      const gVal = (document.getElementById('gameFilter') && document.getElementById('gameFilter').value) || 'ALL';
+      const tVal = (document.getElementById('typeFilter') && document.getElementById('typeFilter').value) || 'ALL';
+
+      if (tabAll) tabAll.textContent = `📋 All Plays (${allPlays.length})`;
+      if (tabHl) tabHl.textContent = `🏀 Highlights (${hlCount})`;
+
+      const isTop5Open = !!(top5Panel && top5Panel.classList.contains('open'));
+      const isHighlights = gVal === 'CU_HIGHLIGHTS' || (!activeMajesticGame && gVal === 'ALL' && tVal === 'MADE');
+      if (tabTop5) tabTop5.classList.toggle('active', isTop5Open);
+      if (tabHl) tabHl.classList.toggle('active', isHighlights);
+      if (tabAll) tabAll.classList.toggle('active', !isHighlights);
+    }
+
+    function setPbpViewTab(mode) {
+      const top5Panel = document.getElementById('top5SectionPanel');
+      const gSelect = document.getElementById('gameFilter');
+      const tSelect = document.getElementById('typeFilter');
+      if (mode === 'TOP5') {
+        if (top5Panel) top5Panel.classList.toggle('open');
+        const t5List = document.getElementById('top5List');
+        if (t5List) t5List.classList.remove('collapsed');
+        syncPbpTabState();
+        return;
+      }
+      if (top5Panel) top5Panel.classList.remove('open');
+      if (mode === 'HIGHLIGHTS') {
+        if (gSelect && Array.from(gSelect.options).some(o => o.value === 'CU_HIGHLIGHTS')) {
+          gSelect.value = 'CU_HIGHLIGHTS';
+          if (tSelect && tSelect.value.startsWith('TOV')) tSelect.value = 'ALL';
+        } else {
+          if (gSelect) gSelect.value = 'ALL';
+          if (tSelect) tSelect.value = 'MADE';
+        }
+        renderPlays();
+      } else {
+        if (gSelect) gSelect.value = 'ALL';
+        if (tSelect && !activeMajesticGame && tSelect.value === 'MADE') tSelect.value = 'ALL';
+        renderPlays();
+      }
+    }
+
+    function onFilterControlChanged() {
+      renderPlays();
+    }
+
+    function togglePbpEditMode(forceState) {
+      const on = typeof forceState === 'boolean'
+        ? document.body.classList.toggle('pbp-edit-mode', forceState)
+        : document.body.classList.toggle('pbp-edit-mode');
+      const btn = document.getElementById('pbpEditModeBtn');
+      if (btn) {
+        btn.textContent = on ? '✅ Done Sync' : '✏️ Sync / Fix';
+        btn.style.borderColor = on ? '#34d399' : '';
+        btn.style.color = on ? '#6ee7b7' : '';
+        btn.style.background = on ? 'rgba(16,185,129,0.18)' : '';
+      }
+    }
+
+    function toggleCardEditMode(playSec) {
+      openCardEdits[playSec] = !openCardEdits[playSec];
+      const card = document.getElementById(`play-s-${playSec}`);
+      if (card) card.classList.toggle('card-edit-open', !!openCardEdits[playSec]);
+    }
+
     function toggleTop5() {
-      document.getElementById('top5List').classList.toggle('collapsed');
+      setPbpViewTab('TOP5');
     }
 
     const SPECIAL_CLIP_SLUGS = {
@@ -5189,6 +5617,8 @@
     }
 
     function openMissingPlayDrawer() {
+      const collabDr = document.getElementById('collabStudioDrawer');
+      if (collabDr && !collabDr.classList.contains('open')) collabDr.classList.add('open');
       const drawer = document.getElementById('missingPlayDrawer');
       const isOpen = drawer.classList.toggle('open');
       if (isOpen) {
@@ -5430,7 +5860,7 @@
         const heroTeamShort = (activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.cu_team_name) || 'CU';
 
         return `
-          <div class="play-card ${hasChgTag ? 'charge-play' : p.isCustom ? 'custom-added-play' : isDisputed ? 'disputed-play' : isVerified ? 'verified-play' : ''}" id="play-s-${p.s}">
+          <div class="play-card ${hasChgTag ? 'charge-play' : p.isCustom ? 'custom-added-play' : isDisputed ? 'disputed-play' : isVerified ? 'verified-play' : ''} ${openCardEdits[p.s] ? 'card-edit-open' : ''}" id="play-s-${p.s}">
             <div class="play-main-row" onclick="seekTo(${p.s}, true)">
               <div class="play-time">${p.t}</div>
               <div class="play-body">
@@ -5450,19 +5880,20 @@
 
             <div class="play-actions-bar">
               <div class="action-btns">
-                <button class="mini-btn ok-btn" onclick="collabConfirmPlay('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, '${escapeHtml(p.player).replace(/'/g, "\'")}')">✅ Spot-On${p.isCollabGold ? ' ✓' : ''}</button>
-                <button class="mini-btn" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, -2)" title="Shift shot timestamp 2.0s earlier">⏪ -2s</button>
-                <button class="mini-btn" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, 2)" title="Shift shot timestamp 2.0s later">+2s ⏩</button>
-                <button class="mini-btn" onclick="collabSetCurrentVideoTime('${p.playKey || p.s}', ${p.origS !== undefined ? p.origS : p.s})" title="Set current paused video time as the exact bucket splash!">📍 Sync Here</button>
-                <button class="mini-btn flag-btn" onclick="toggleNoteForm(${p.s})">👕 Scorer / Note (${notes.length})</button>
                 <button class="mini-btn" onclick="votePlay(${p.s}, 'fire')">🔥 (${fb.fire_votes || 0})</button>
                 <button class="mini-btn wa-btn" onclick="shareToWhatsApp(${p.s}, this)" title="Share play to WhatsApp">📲 WhatsApp</button>
+                <button class="mini-btn" onclick="toggleCardEditMode(${p.s})" title="Sync shot timestamp, reassign scorer/assist, or log a note">✏️ Fix</button>
+                <button class="mini-btn ok-btn play-calib-only" onclick="collabConfirmPlay('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, '${escapeHtml(p.player).replace(/'/g, "\'")}')">✅ Spot-On${p.isCollabGold ? ' ✓' : ''}</button>
+                <button class="mini-btn play-calib-only" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, -2)" title="Shift shot timestamp 2.0s earlier">⏪ -2s</button>
+                <button class="mini-btn play-calib-only" onclick="collabNudgeTime('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, 2)" title="Shift shot timestamp 2.0s later">+2s ⏩</button>
+                <button class="mini-btn play-calib-only" onclick="collabSetCurrentVideoTime('${p.playKey || p.s}', ${p.origS !== undefined ? p.origS : p.s})" title="Set current paused video time as the exact bucket splash!">📍 Sync Here</button>
+                <button class="mini-btn flag-btn ${notes.length > 0 ? '' : 'play-calib-only'}" onclick="toggleNoteForm(${p.s})">👕 Scorer / Note (${notes.length})</button>
                 ${p.liveTagId ? `<button class="mini-btn flag-btn" onclick="removeCollabLiveTag('${escapeHtml(p.liveTagId)}')" title="Remove this live tag">✕ Undo Tag</button>` : ''}
               </div>
               <a class="mini-btn dl-btn" href="/api/clip?game=${encodeURIComponent(activeSessionId)}&s=${p.s}&dur=11&name=${encodeURIComponent(buildClipFilename(p, p.s))}" download="${buildClipFilename(p, p.s)}.mp4">⬇️ Clip MP4 (11s)</a>
             </div>
             ${isOppFoulOrTov ? `
-            <div class="play-collab-inline" style="background:rgba(245,158,11,0.08);border-top:1px dashed rgba(251,191,36,0.35);padding-top:5px;margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="play-collab-inline ${claimedChargeTag ? '' : 'play-calib-row'}" style="background:rgba(245,158,11,0.08);border-top:1px dashed rgba(251,191,36,0.35);padding-top:5px;margin-top:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
               ${claimedChargeTag
                 ? `<span style="font-size:0.72rem;color:#fde047;font-weight:800;">🛡️ Upgraded to ELITE CHARGE DRAWN (+2.5 PPR): <strong>${escapeHtml(claimedChargeTag.player)}</strong> took the charge on ${escapeHtml(p.player)}!</span>
                    <button class="mini-btn flag-btn" onclick="removeCollabLiveTag('${escapeHtml(claimedChargeTag.id)}')">✕ Undo</button>`
@@ -5474,7 +5905,7 @@
               }
             </div>` : ''}
             ${(p.collabNeedsVerify || activeSessionId.includes('_C7_')) ? `
-            <div class="play-collab-inline">
+            <div class="play-collab-inline play-calib-row">
               <span style="font-size:0.7rem;color:#6ee7b7;font-weight:700;">🤝 Who scored @ ${p.t}?</span>
               <select style="font-size:0.7rem;padding:2px 5px;max-width:165px;" onchange="if(this.value) collabReassignPlayer('${p.playKey || p.s}', ${p.s}, ${p.origS !== undefined ? p.origS : p.s}, this.value)">
                 <option value="">👕 Confirm / Switch Scorer...</option>
@@ -5511,6 +5942,7 @@
           </div>
         `;
       }).join('');
+      if (typeof syncPbpTabState === 'function') syncPbpTabState();
     }
 
     function escapeHtml(str) {
@@ -5768,7 +6200,7 @@
       renderPlays();
 
       if (matching.length === 0) return;
-      const vEl = document.getElementById('videoPlayer');
+      const vEl = document.getElementById('videoWrapper');
       if (vEl) vEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       autoReelQueue = matching.map(p => ({
         s: p.s,
@@ -5835,6 +6267,10 @@
       autoReelIdx = 0;
       const banner = document.getElementById('autoReelBanner');
       if (banner) banner.style.display = 'none';
+      if (activeReelCardKey) {
+        activeReelCardKey = '';
+        if (typeof renderScoreboardStrip === 'function') renderScoreboardStrip();
+      }
     }
 
     function toggleMobileTools() {
@@ -6099,10 +6535,6 @@
       if (moBtn) {
         moBtn.style.display = (activeSessionId && (activeSessionId.includes('_C7_') || activeSessionId.includes('_WTN_'))) ? 'inline-flex' : 'none';
       }
-      const collabDr = document.getElementById('collabStudioDrawer');
-      if (collabDr) {
-        collabDr.classList.toggle('open', needsCount > 0);
-      }
       if (sel) {
         const rosterList = (activeMajesticGame && activeMajesticGame.config && activeMajesticGame.config.active_roster && activeMajesticGame.config.active_roster.length)
           ? activeMajesticGame.config.active_roster
@@ -6123,6 +6555,7 @@
         alert('🎉 Every bucket in this game has been verified!');
         return;
       }
+      if (typeof togglePbpEditMode === 'function') togglePbpEditMode(true);
       const nextPlay = unv.find(p => p.s > curSec + 2) || unv[0];
       seekTo(nextPlay.s, true);
       const card = document.getElementById(`play-s-${nextPlay.s}`);

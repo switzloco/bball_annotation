@@ -68437,8 +68437,8 @@
     ]
   },
   "season_analytics": {
-    "title": "Campbell United — Season Analytics & #4 Adam Above-the-Rim ML Lab",
-    "subtitle": "20+ Game Rim-Kinematics ML Audit • Verified 10'1\"–10'4\" Above-the-Rim Package • Relabeled Week 3 Craft Layup Package • Full Shot Tracking",
+    "title": "Campbell United — Season Analytics & Rim-Kinematics ML Audit",
+    "subtitle": "20+ Game Rim-Plane QA • Relabeled Week 3 Craft Layup Package • Ball-Subtracted Rim-Ruler ML Audit vs. Crew 7 #4 Dunk Benchmark",
     "colab_url": "https://colab.research.google.com/github/switzloco/bball_annotation/blob/main/campbell_united_colab_pipeline.ipynb",
     "github_url": "https://github.com/switzloco/bball_annotation",
     "adam_dunk_reel": {
@@ -68696,7 +68696,7 @@
           "game_label": "Game 3",
           "desc": "🏀 CRAFT LAYUP #1: #7 Nick Switzer threads the pass inside to #4 Adam Fecteau for the interior scoop finish (15:15 1st Half) — 11-3"
         },
-        "above_rim_plays": 4
+        "above_rim_plays": 0
       },
       {
         "player": "#24 George",
@@ -82184,48 +82184,42 @@
       }
     },
     "adam_above_rim_ml_lab": {
-      "title": "🚀 #4 Adam Fecteau — Verified Above-the-Rim Package & ML Rim-Kinematics Lab (1080p HD)",
-      "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-12_Adam_Fecteau_Above_The_Rim_ML_Reel.mp4?v=1080p1",
-      "diagnostics_img_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/adam_above_the_rim_ml_diagnostics.jpg?v=1",
-      "duration_str": "0:42",
-      "size_mb_str": "30.9 MB",
-      "summary_callout": "Scanned 20+ full Campbell United games (2024–2026) with calibrated 10'0\" rim coordinates. #4 Adam Fecteau (6'3\") has 4 HD jersey-verified 10'1\"–10'4\" above-the-rim plays (three above-the-rim blocks peaking at 10'4\" plus a 10'2\" head-at-backboard-pad transition sky finish off the glass), while all 6 Week 3 Misfits 2 finishes are relabeled as below-the-rim craft layups.",
+      "title": "🔬 30-FPS Rim-Ruler QA & ML Dunk Audit — #4 Adam Max Reach (~9'1\") vs. Crew 7 #4 Real Dunk (1080p)",
+      "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-12_Adam_Fecteau_Above_The_Rim_ML_Reel.mp4?v=honest2",
+      "diagnostics_img_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/adam_5clips_forensic_qa.jpg?v=honest2",
+      "duration_str": "0:35",
+      "size_mb_str": "24.8 MB",
+      "summary_callout": "30-FPS Rim-Ruler QA across 20+ Campbell United games (2024–2026): #4 Adam Fecteau has 0 dunks and 0 plays above the 10'0\" rim — his highest game reach peaks at ~9'1\" (bottom edge of the glass backboard vs. Eagles). V1 false positives came from unmasked basketball blobs crossing 10'0\" and 5'5\" low-angle camera parallax; Crew 7 #4 Terrance (47:58) is the verified +5.5\" above-the-rim dunk control.",
       "chapters": [
         {
-          "reel_sec": 2.2,
-          "game_slug": "season_analytics",
-          "game_sec": 1038,
-          "label": "01 • #4 Adam Fecteau — 10'4\" Above-the-Rim Two-Foot Stuff (vs. Calabreezees, 17:18)"
-        },
-        {
-          "reel_sec": 9.0,
+          "reel_sec": 2.0,
           "game_slug": "2026-02-08_CU_vs_Eagles",
           "game_sec": 2034,
-          "label": "02 • #4 Adam Fecteau — 10'2\" Head-at-Backboard Transition Sky Finish (vs. Eagles, 33:58)"
+          "label": "01 • #4 Adam Highest Game Reach (~9'1\", -11\" Below Rim) — Transition Finger-Roll vs. Eagles"
         },
         {
-          "reel_sec": 15.83,
-          "game_slug": "season_analytics",
-          "game_sec": 418,
-          "label": "03 • #4 Adam Fecteau — 10'1\" Rim-Cylinder Pin on Post #32 (vs. Calabreezees, 06:58)"
-        },
-        {
-          "reel_sec": 22.4,
-          "game_slug": "2026-02-08_CU_vs_Eagles",
-          "game_sec": 612,
-          "label": "04 • #4 Adam Fecteau — 10'1\" Weak-Side Help Elevation Swat (vs. Eagles, 10:17)"
-        },
-        {
-          "reel_sec": 29.1,
+          "reel_sec": 8.83,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 2070,
-          "label": "05 • ML Relabel Proof — #4 Adam Week 3 Halftime Buzzer-Beater Layup (-3.4\" Below Rim, vs. Misfits 2)"
+          "label": "02 • #4 Adam Halftime Buzzer-Beater (~8'11\", -13\" Below Rim) — Coast-to-Coast Layup vs. Misfits 2"
         },
         {
-          "reel_sec": 35.07,
+          "reel_sec": 14.8,
+          "game_slug": "season_analytics",
+          "game_sec": 1038,
+          "label": "03 • QA Audit (vs. Calabreezees, 17:18) — Ball Crossed Rim, #4 Adam Hand Peaked at 8'9\" Net Bottom"
+        },
+        {
+          "reel_sec": 21.6,
+          "game_slug": "2026-02-08_CU_vs_Eagles",
+          "game_sec": 612,
+          "label": "04 • QA Audit (vs. Eagles, 10:17) — Low-Angle Parallax Check: Hand Peaked at 8'7\" Net Bottom"
+        },
+        {
+          "reel_sec": 28.3,
           "game_slug": "2025-11-09_CU_vs_Crew7",
           "game_sec": 2874,
-          "label": "06 • ML Positive-Control Benchmark — True Downward Slam Flush & Rim Recoil (vs. Crew 7, 47:58)"
+          "label": "05 • Verified True Dunk Benchmark — Crew 7 #4 Terrance (+5.5\" Wrist Above Rim & Iron Snap, 47:58)"
         }
       ],
       "dataset_audit": {
