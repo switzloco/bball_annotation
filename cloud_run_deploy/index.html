@@ -4387,7 +4387,7 @@
               </div>
               <div style="display:flex;flex-direction:column;gap:6px;max-height:390px;overflow-y:auto;width:100%;">
                 <div style="font-size:0.76rem;font-weight:800;color:#5eead4;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
-                  ⏱️ Calibrated 10'0&quot; Rim-Plane Chapters (6 Clips • ${escapeHtml(mlLab.duration_str || '0:42')}):
+                  ⏱️ Calibrated 10'0&quot; &amp; 9'6&quot; Rim-Plane Chapters (${(mlLab.chapters || []).length || 6} Clips • ${escapeHtml(mlLab.duration_str || '0:45')}):
                 </div>
                 ${aboveRimChaptersHtml}
               </div>
@@ -4396,7 +4396,7 @@
             <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;align-items:start;">
               <div style="overflow-x:auto;">
                 <div style="font-size:0.8rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">
-                  📊 Leak-Free 3-Class Rim-Kinematics ML Benchmark (N=104 Clean Rim Events • 8 Sideline Occlusions Filtered)
+                  📊 Leak-Free 3-Class Rim-Kinematics ML Benchmark (N=${mlLab.dataset_audit ? mlLab.dataset_audit.clean_on_court_rim_events : 106} Clean Rim Events • ${mlLab.dataset_audit ? mlLab.dataset_audit.dropped_foreground_occlusions : 8} Sideline Occlusions Filtered)
                 </div>
                 <table style="width:100%;border-collapse:collapse;font-size:0.76rem;background:#0b1120;border:1px solid #1e293b;border-radius:6px;">
                   <thead>
@@ -4411,7 +4411,7 @@
                   <tbody>${mlModelRowsHtml}</tbody>
                 </table>
                 <div style="font-size:0.75rem;color:#94a3b8;margin-top:8px;line-height:1.45;">
-                  • <strong>30-FPS Rim-Ruler QA Takeaway:</strong> Separating the basketball blob from the player's fingertips and anchoring 3D court rulers (<strong>10'0&quot; rim iron</strong>, <strong>9'0&quot; backboard bottom</strong>, <strong>8'6&quot; net bottom</strong>) prevents both fast-break glass layups and ball-above-rim rebounds/contests from registering as above-the-rim plays.
+                  • <strong>30-FPS Rim-Ruler Calibration Fix:</strong> Regulation <code>72&quot;×42&quot;</code> glass backboards sit at <strong>9'6&quot;</strong> (6&quot; below the <strong>10'0&quot; rim iron</strong>, 12&quot; above the <strong>8'6&quot; net bottom</strong>). Anchoring directly to pixel-verified hoop &amp; floor landmarks corrects Week 3 Misfits 2 (2072.9s) to <strong>~9'8.5&quot; peak hand</strong> (+2.5&quot; above 9'6&quot; glass bottom, 26.3&quot; vert) and validates <strong>#4 Adam Fecteau's 1080p ~10'4.5&quot; (+4.5&quot; above rim) breakaway dunk attempt vs. Treez</strong>.
                 </div>
               </div>
               ${mlLab.diagnostics_img_url ? `
