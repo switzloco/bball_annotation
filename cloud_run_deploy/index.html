@@ -1662,7 +1662,7 @@
           <option value="2026-10-18_SB_vs_Tandoori_Eugene29">🔥 Eugene Kim 29 PTS (5× 3PM, 6 AST): Sapa Boys 83, Tandoori Chicken 73 (Oct 18, 2026)</option>
           <option value="scouting_nov15">📋 NEW! Nov 15 Opponent Scouting Report: vs. Latto Talent (Sun 5:00 PM @ The Grove)</option>
           <option value="scouting_nov15_evan">📝 NEW! Nov 15 — Evan's Coach's Brief, Expected Mins &amp; CU Lineup Lab</option>
-          <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam 3× Dunk Lab (Colab AI)</option>
+          <option value="season_analytics">🧠 Season Analytics &amp; #4 Adam Above-the-Rim ML Lab</option>
           <option value="scouting_nov8">📋 Archive: Nov 8 Scouting Report vs. Ricecookers (CU Won 66–63 OT!)</option>
           <option value="2026-02-15_CU_vs_PimpsDown">⚡ Winter '26 Wk 6: Campbell United 59, Pimps Down 51 (Feb 15, 2026)</option>
           <option value="2026-02-08_CU_vs_Eagles">🏀 Majestic Archive: Campbell United 119, Eagles 69 (Feb 8, 2026)</option>
@@ -1728,7 +1728,7 @@
         <button class="cu-tab-btn" data-session="2026-10-15_Pickup_G1" onclick="switchGameSession('2026-10-15_Pickup_G1')" style="border-color:#38bdf8;color:#bae6fd;background:rgba(14,165,233,0.16);">🏀 Oct 15 Pickup G1 (CU × Pickup ID)</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15" onclick="switchGameSession('scouting_nov15')" style="border-color:#f472b6;color:#fef08a;background:linear-gradient(135deg,rgba(219,39,119,0.38) 0%,rgba(124,58,237,0.32) 100%);font-weight:900;box-shadow:0 2px 10px rgba(236,72,153,0.35);">📋 NEW! Nov 15 Scouting: vs. Latto Talent (Sun 5PM)</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov15_evan" onclick="switchGameSession('scouting_nov15_evan')" style="border-color:#38bdf8;color:#e0f2fe;background:linear-gradient(135deg,rgba(14,165,233,0.32) 0%,rgba(16,185,129,0.28) 100%);font-weight:900;box-shadow:0 2px 10px rgba(56,189,248,0.28);">📝 Evan's Coach's Brief &amp; Lineups (Nov 15)</button>
-        <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; Adam 3× Dunk Lab</button>
+        <button class="cu-tab-btn scouting-tab" data-session="season_analytics" onclick="switchGameSession('season_analytics')" style="border-color:#a855f7;color:#e9d5ff;background:rgba(147,51,234,0.18);">🧠 Season Analytics &amp; #4 Adam Above-the-Rim ML Lab</button>
         <button class="cu-tab-btn scouting-tab" data-session="scouting_nov8" onclick="switchGameSession('scouting_nov8')" style="opacity:0.86;">📋 Nov 8 Scouting (Ricecookers)</button>
       </div>
     </div>
@@ -4050,14 +4050,63 @@
       }, 280);
     }
 
+    function seekNamedReelTape(videoId, panelId, nowPlayingId, sec, label) {
+      const sv = document.getElementById(videoId);
+      const panel = document.getElementById(panelId);
+      const np = document.getElementById(nowPlayingId);
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (np && label) {
+        np.innerHTML = `🎬 <strong>Now Playing Clip:</strong> ${escapeHtml(label)}`;
+      }
+      if (sv) {
+        const rawSec = Number(sec) || 0;
+        const targetSec = rawSec > 0 ? rawSec + 0.08 : 0;
+        const applySeekAndPlay = () => {
+          const safeSec = (Number.isFinite(sv.duration) && sv.duration > 0.5)
+            ? Math.min(targetSec, Math.max(0, sv.duration - 0.25))
+            : targetSec;
+          try { sv.currentTime = safeSec; } catch (_) {}
+          sv.play().catch(err => {
+            if (err && err.name === 'NotAllowedError') {
+              sv.muted = true;
+              sv.play().catch(() => {});
+            }
+          });
+        };
+        if (sv.readyState === 0) {
+          sv.addEventListener('loadedmetadata', applySeekAndPlay, { once: true });
+          sv.load();
+        } else {
+          applySeekAndPlay();
+        }
+      }
+    }
+
     function renderSeasonAnalytics(sa) {
       const container = document.getElementById('scoutingViewContainer');
       if (!container || !sa) return;
       const ts = sa.team_splits || {};
+      const mlLab = sa.adam_above_rim_ml_lab || {};
       const dr = sa.adam_dunk_reel || {};
-      const dunkChaptersHtml = (dr.chapters || []).map(ch => `
+
+      const aboveRimChaptersHtml = (mlLab.chapters || []).map(ch => {
+        const isYtArchive = ch.game_slug === 'season_analytics';
+        const gameLinkHtml = isYtArchive
+          ? `<a href="https://www.youtube.com/watch?v=1Yjkv4XVFqc&amp;t=${Number(ch.game_sec) || 0}s" target="_blank" rel="noopener" class="btn-link blue-btn" style="font-size:0.7rem;padding:6px 8px;white-space:nowrap;text-decoration:none;" title="Open full Calabreezees archive game at exact timestamp on YouTube">📺 Full YT</a>`
+          : `<button class="blue-btn" style="font-size:0.7rem;padding:6px 8px;white-space:nowrap;" onclick="jumpFromAnalyticsToPlay('${escapeHtml(ch.game_slug)}', ${Number(ch.game_sec) || 0})" title="Jump to this exact play in full game film">🎬 Game Film</button>`;
+        return `
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="scouting-chapter-btn" style="flex:1;" onclick="seekScoutingTape(${Number(ch.reel_sec) || 0}, '${escapeHtml(ch.label)}')">
+              ${escapeHtml(ch.label)}
+            </button>
+            ${gameLinkHtml}
+          </div>
+        `;
+      }).join('');
+
+      const layupChaptersHtml = (dr.chapters || []).map(ch => `
         <div style="display:flex;gap:6px;align-items:center;">
-          <button class="scouting-chapter-btn" style="flex:1;" onclick="seekScoutingTape(${Number(ch.reel_sec) || 0}, '${escapeHtml(ch.label)}')">
+          <button class="scouting-chapter-btn" style="flex:1;" onclick="seekNamedReelTape('adamLayupTapeVideo', 'adamLayupTapePanel', 'adamLayupNowPlaying', ${Number(ch.reel_sec) || 0}, '${escapeHtml(ch.label)}')">
             ${escapeHtml(ch.label)}
           </button>
           <button class="blue-btn" style="font-size:0.7rem;padding:6px 8px;white-space:nowrap;" onclick="jumpFromAnalyticsToPlay('${escapeHtml(ch.game_slug)}', ${Number(ch.game_sec) || 0})" title="Jump to this exact play in full game film">
@@ -4066,6 +4115,22 @@
         </div>
       `).join('');
 
+      const mlModelRowsHtml = (mlLab.models || []).map(m => {
+        const isChamp = m.model === mlLab.champion_model;
+        const ciStr = Array.isArray(m.f1_ci_95) ? `[${m.f1_ci_95[0].toFixed(2)}–${m.f1_ci_95[1].toFixed(2)}]` : '';
+        return `
+          <tr style="border-bottom:1px solid #1e293b;${isChamp ? 'background:rgba(16,185,129,0.10);' : ''}">
+            <td style="padding:7px 8px;font-weight:800;color:${isChamp ? '#6ee7b7' : '#e2e8f0'};">
+              ${escapeHtml(m.model)} ${isChamp ? '<span class="tag special" style="background:#059669;color:#fff;font-size:0.62rem;margin-left:4px;">CHAMPION</span>' : ''}
+            </td>
+            <td style="padding:7px 6px;text-align:center;color:#94a3b8;font-size:0.74rem;">${escapeHtml(m.spec || '')}</td>
+            <td style="padding:7px 6px;text-align:center;color:#cbd5e1;font-weight:700;">${Number(m.cv_macro_f1_mean).toFixed(3)} ± ${Number(m.cv_macro_f1_sd).toFixed(3)}</td>
+            <td style="padding:7px 6px;text-align:center;color:#fde68a;font-weight:900;">${Number(m.test_macro_f1).toFixed(3)} <span style="font-size:0.7rem;color:#94a3b8;">${ciStr}</span></td>
+            <td style="padding:7px 6px;text-align:center;color:#38bdf8;font-weight:800;">${Number(m.above_rim_pr_auc).toFixed(3)}</td>
+          </tr>
+        `;
+      }).join('');
+
       const playerRowsHtml = (sa.players || []).map((p, idx) => {
         const bc = p.best_clip;
         return `
@@ -4073,6 +4138,7 @@
             <td style="padding:8px 10px;font-weight:800;color:#fff;">
               <span style="color:#94a3b8;font-size:0.74rem;margin-right:4px;">#${idx + 1}</span>
               ${escapeHtml(p.player)}
+              ${(p.above_rim_plays || 0) > 0 ? `<span class="tag special" style="margin-left:6px;background:#0d9488;color:#fff;font-size:0.65rem;">🚀 ${p.above_rim_plays}× ABOVE-RIM</span>` : ''}
               ${p.dunks > 0 ? `<span class="tag special" style="margin-left:6px;background:#7c3aed;color:#fff;font-size:0.65rem;">🔨 ${p.dunks}× DUNK</span>` : ''}
               ${(p.charges_drawn || 0) > 0 ? `<span class="tag chg" style="margin-left:6px;font-size:0.65rem;">🛡️ ${p.charges_drawn}× CHG</span>` : ''}
             </td>
@@ -4115,10 +4181,10 @@
         <div class="scouting-hero" style="border-color:rgba(168,85,247,0.5);background:linear-gradient(135deg,#1e1035 0%,#0f172a 100%);">
           <div>
             <div style="font-family:var(--font-display);font-weight:800;font-size:0.85rem;letter-spacing:0.08em;color:#e9d5ff;text-transform:uppercase;">
-              🧠 GOOGLE COLAB GPU VISION &amp; ADVANCED ANALYTICS PIPELINE • CAMPBELL UNITED (5-0 STREAK)
+              🧠 RIM-CALIBRATED COMPUTER VISION &amp; ADVANCED ANALYTICS • CAMPBELL UNITED (5-0 STREAK)
             </div>
             <h1 style="font-family:var(--font-display);font-size:2.05rem;font-weight:900;color:#fff;letter-spacing:0.02em;text-transform:uppercase;margin:2px 0 4px;">
-              ${escapeHtml(sa.title || 'Campbell United — Season Analytics & Shot Lab')}
+              ${escapeHtml(sa.title || 'Campbell United — Season Analytics & Above-the-Rim ML Lab')}
             </h1>
             <div style="font-size:0.86rem;color:#cbd5e1;font-weight:600;">
               ${escapeHtml(sa.subtitle || '')}
@@ -4132,24 +4198,77 @@
 
         ${sa.shot_chart_lab ? renderSeasonShotLabPanel(sa.shot_chart_lab) : ''}
 
-        ${dr.video_url ? `
-          <div class="scouting-panel" id="scoutingTapePanel" style="border-color:rgba(168,85,247,0.55);background:linear-gradient(180deg,#131129 0%,#0b0f19 100%);">
+        ${mlLab.video_url ? `
+          <div class="scouting-panel" id="scoutingTapePanel" style="border-color:rgba(16,185,129,0.55);background:linear-gradient(180deg,#0c1f24 0%,#0b0f19 100%);">
             <h3>
-              <span>${escapeHtml(dr.title)}</span>
-              <a href="${escapeHtml(dr.video_url)}" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" class="btn-link blue-btn" style="font-size:0.74rem;padding:5px 10px;">⬇️ Download Adam 3× Dunk Reel MP4 (14.6 MB)</a>
+              <span>${escapeHtml(mlLab.title)}</span>
+              <a href="${escapeHtml(mlLab.video_url)}" download="2026-11-12_Adam_Fecteau_Above_The_Rim_ML_Reel.mp4" class="btn-link green-btn" style="font-size:0.74rem;padding:5px 10px;">⬇️ Download 1080p Above-the-Rim Reel MP4 (${escapeHtml(mlLab.size_mb_str || '30.9 MB')})</a>
             </h3>
             <div class="scouting-tape-grid">
               <div>
-                <video id="scoutingTapeVideo" src="${escapeHtml(dr.video_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #4c1d95;background:#000;aspect-ratio:16/9;display:block;"></video>
-                <div id="scoutingTapeNowPlaying" style="margin-top:8px;font-size:0.84rem;font-weight:700;color:#e9d5ff;line-height:1.4;">
-                  🔨 Frame-verified with Dynamic S-Curve Pan-and-Scan: #4 Adam Fecteau threw down <strong>3 Slam Dunks in the 1st Half</strong> vs. Misfits 2 (including a Coast-to-Coast Halftime Buzzer-Beater Tomahawk!)
+                <video id="scoutingTapeVideo" src="${escapeHtml(mlLab.video_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #0d9488;background:#000;aspect-ratio:16/9;display:block;"></video>
+                <div id="scoutingTapeNowPlaying" style="margin-top:8px;font-size:0.82rem;font-weight:600;color:#ccfbf1;line-height:1.45;">
+                  🚀 ${escapeHtml(mlLab.summary_callout || '')}
                 </div>
               </div>
-              <div style="display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto;width:100%;">
-                <div style="font-size:0.76rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
-                  ⏱️ #4 Adam Fecteau Dunk &amp; Rim-Attack Chapters (6 Clips • 0:47):
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:390px;overflow-y:auto;width:100%;">
+                <div style="font-size:0.76rem;font-weight:800;color:#5eead4;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
+                  ⏱️ Calibrated 10'0&quot; Rim-Plane Chapters (6 Clips • ${escapeHtml(mlLab.duration_str || '0:42')}):
                 </div>
-                ${dunkChaptersHtml}
+                ${aboveRimChaptersHtml}
+              </div>
+            </div>
+
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e293b;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;align-items:start;">
+              <div style="overflow-x:auto;">
+                <div style="font-size:0.8rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;">
+                  📊 Leak-Free 3-Class Rim-Kinematics ML Benchmark (N=104 Clean Rim Events • 8 Sideline Occlusions Filtered)
+                </div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.76rem;background:#0b1120;border:1px solid #1e293b;border-radius:6px;">
+                  <thead>
+                    <tr style="background:#111827;color:#94a3b8;text-transform:uppercase;font-size:0.68rem;">
+                      <th style="padding:7px 8px;text-align:left;">Model</th>
+                      <th style="padding:7px 6px;text-align:center;">Architecture</th>
+                      <th style="padding:7px 6px;text-align:center;">5-Fold CV F1</th>
+                      <th style="padding:7px 6px;text-align:center;">Test F1 (95% CI)</th>
+                      <th style="padding:7px 6px;text-align:center;">Above-Rim PR-AUC</th>
+                    </tr>
+                  </thead>
+                  <tbody>${mlModelRowsHtml}</tbody>
+                </table>
+                <div style="font-size:0.75rem;color:#94a3b8;margin-top:8px;line-height:1.45;">
+                  • <strong>Why Week 3 fooled naive motion heuristics:</strong> High-speed transition finger-rolls create net splash despite releasing 3.4&quot;–6.5&quot; below the rim with upward glass trajectory. Adding calibrated peak hand reach vs. the 10'0&quot; rim iron, ball vertical velocity at the cylinder, and rim-iron recoil eliminated all 24 transition false-positive dunk calls.
+                </div>
+              </div>
+              ${mlLab.diagnostics_img_url ? `
+                <div>
+                  <a href="${escapeHtml(mlLab.diagnostics_img_url)}" target="_blank" rel="noopener" title="Open full-resolution 1800x1160 ML Diagnostics & Rim-Plane Proof Chart">
+                    <img src="${escapeHtml(mlLab.diagnostics_img_url)}" alt="Above-the-Rim ML Diagnostics" loading="lazy" style="width:100%;border-radius:8px;border:1px solid #334155;display:block;" />
+                  </a>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        ` : ''}
+
+        ${dr.video_url ? `
+          <div class="scouting-panel" id="adamLayupTapePanel" style="border-color:rgba(168,85,247,0.45);background:linear-gradient(180deg,#131129 0%,#0b0f19 100%);">
+            <h3>
+              <span>${escapeHtml(dr.title)}</span>
+              <a href="${escapeHtml(dr.video_url)}" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Layup_Package.mp4" class="btn-link blue-btn" style="font-size:0.74rem;padding:5px 10px;">⬇️ Download Week 3 Layup Package MP4 (14.6 MB)</a>
+            </h3>
+            <div class="scouting-tape-grid">
+              <div>
+                <video id="adamLayupTapeVideo" src="${escapeHtml(dr.video_url)}" controls playsinline preload="metadata" style="width:100%;border-radius:8px;border:1px solid #4c1d95;background:#000;aspect-ratio:16/9;display:block;"></video>
+                <div id="adamLayupNowPlaying" style="margin-top:8px;font-size:0.82rem;font-weight:700;color:#e9d5ff;line-height:1.4;">
+                  🏀 ${escapeHtml(dr.note || 'Relabeled honestly: 6 high-efficiency transition & putback craft layups from Week 3 vs. Misfits 2.')}
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;width:100%;">
+                <div style="font-size:0.76rem;font-weight:800;color:#fde68a;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px;">
+                  ⏱️ #4 Adam Fecteau Week 3 Craft Layup &amp; Putback Chapters (6 Clips • 0:47):
+                </div>
+                ${layupChaptersHtml}
               </div>
             </div>
           </div>
@@ -4625,7 +4744,8 @@
             ? `<span class="chapter-pill" onclick="playCuRicecookersOtReel()" style="background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;font-weight:800;border-color:#fde047;">🎬 Watch CU 66–63 OT Comeback Reel (14 Plays • 1080p HD)</span>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4?v=1080p1" target="_blank" download="2026-11-08_CU_vs_Ricecookers_G4_OT_Win_Reel.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">⬇️ Download CU OT Win Reel MP4 (1080p)</a>`
           : activeSessionId === '2026-11-01_CU_vs_Misfits2_G3'
-            ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-weight:800;text-decoration:none;border-color:#c4b5fd;">🔨 Download #4 Adam 3× Dunk Reel MP4</a>
+            ? `<span class="chapter-pill" onclick="switchGameSession('season_analytics')" style="background:linear-gradient(135deg,#0d9488,#0369a1);color:#fff;font-weight:800;border-color:#5eead4;">🚀 #4 Adam Above-the-Rim ML Reel (1080p)</span>
+               <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Adam_Layup_Package.mp4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-weight:800;text-decoration:none;border-color:#c4b5fd;">🏀 Download #4 Adam Week 3 Layup Package MP4</a>
                <a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" target="_blank" download="2026-11-01_CU_vs_Misfits2_G3_Nick_6x3PT_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">🎯 Download Nov 1 CU vs. Misfits 2 Reel MP4</a>`
             : activeSessionId === '2026-09-20_SB_vs_Mustangs_Eugene41'
               ? `<a class="chapter-pill" href="https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-09-20_SB_vs_Mustangs_Eugene41_Highlights.mp4" target="_blank" download="2026-09-20_SB_vs_Mustangs_Eugene41_Highlights.mp4" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;font-weight:800;text-decoration:none;border-color:#6ee7b7;">👑 Download #99 Eugene Kim 41-PT (11× 3PM) Reel MP4 (5 REB / 4 AST / 1 BLK)</a>`

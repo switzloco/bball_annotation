@@ -42769,7 +42769,7 @@
         "is_cu": true,
         "player": "#4 Adam Fecteau",
         "assist_player": "#7 Nick Switzer",
-        "action": "Slam Dunk (2 PTS)",
+        "action": "Transition Scoop Layup (2 PTS)",
         "pts_added": 2,
         "cu_score": 11,
         "opp_score": 3,
@@ -42780,10 +42780,9 @@
           "CU",
           "MAKE",
           "2PT",
-          "AST",
-          "DUNK"
+          "AST"
         ],
-        "desc": "🔨 DUNK #1 OF 3: #7 Nick Switzer threads the pass inside to #4 Adam Fecteau for the TWO-HANDED STANDING FLUSH! (15:15 1st Half) — 11-3",
+        "desc": "🏀 CRAFT LAYUP #1: #7 Nick Switzer threads the pass inside to #4 Adam Fecteau for the interior scoop finish (15:15 1st Half) — 11-3",
         "avatar": ""
       },
       {
@@ -43461,7 +43460,7 @@
         "is_cu": true,
         "player": "#4 Adam Fecteau",
         "assist_player": null,
-        "action": "Slam Dunk (2 PTS)",
+        "action": "Fast-Break Finger-Roll (2 PTS)",
         "pts_added": 2,
         "cu_score": 21,
         "opp_score": 7,
@@ -43471,10 +43470,9 @@
         "tags": [
           "CU",
           "MAKE",
-          "2PT",
-          "DUNK"
+          "2PT"
         ],
-        "desc": "🔨 DUNK #2 OF 3: #4 Adam Fecteau pushes the fast break down the right sideline and throws down a ONE-HANDED TRANSITION SLAM! (11:21 1st Half) — 21-7",
+        "desc": "🏀 CRAFT LAYUP #2: #4 Adam Fecteau pushes the fast break down the right sideline for a high finger-roll off the glass (11:21 1st Half) — 21-7",
         "avatar": ""
       },
       {
@@ -45382,7 +45380,7 @@
         "is_cu": true,
         "player": "#4 Adam Fecteau",
         "assist_player": null,
-        "action": "Buzzer-Beater Dunk (2 PTS)",
+        "action": "Buzzer-Beater Layup (2 PTS)",
         "pts_added": 2,
         "cu_score": 45,
         "opp_score": 26,
@@ -45392,10 +45390,9 @@
         "tags": [
           "CU",
           "MAKE",
-          "2PT",
-          "DUNK"
+          "2PT"
         ],
-        "desc": "🚨🔨 DUNK #3 OF 3 (HALFTIME BUZZER-BEATER!): #4 Adam Fecteau goes coast-to-coast in 5 seconds, crosses over at midcourt, and STUFFS A ONE-HANDED TOMAHAWK DUNK at the horn — 45-26!",
+        "desc": "🚨🏀 HALFTIME BUZZER-BEATER: #4 Adam Fecteau goes coast-to-coast in 5 seconds, crosses over at midcourt, and kisses a high finger-roll off the glass at the horn — 45-26!",
         "avatar": ""
       },
       {
@@ -48672,7 +48669,7 @@
     ],
     "shot_chart": {
       "team_name": "Campbell United — Wk 3 vs. Misfits 2 (W 83–66)",
-      "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 3× Dunks) • Full Shot Tracking",
+      "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 6× Rim Finishes) • Full Shot Tracking",
       "tracked_total": 70,
       "zone_verified_fga": 66,
       "fg_str": "30/66",
@@ -68440,49 +68437,50 @@
     ]
   },
   "season_analytics": {
-    "title": "Campbell United — Colab AI Season Analytics & Dunk Lab",
-    "subtitle": "Computed across Campbell United's 4-0 Championship & Holiday D2 Streak (Oct 4 – Nov 1, 2026)",
+    "title": "Campbell United — Season Analytics & #4 Adam Above-the-Rim ML Lab",
+    "subtitle": "20+ Game Rim-Kinematics ML Audit • Verified 10'1\"–10'4\" Above-the-Rim Package • Relabeled Week 3 Craft Layup Package • Full Shot Tracking",
     "colab_url": "https://colab.research.google.com/github/switzloco/bball_annotation/blob/main/campbell_united_colab_pipeline.ipynb",
     "github_url": "https://github.com/switzloco/bball_annotation",
     "adam_dunk_reel": {
-      "title": "🔨 #4 Adam Fecteau — 3× Dunks & Above-the-Rim Reel (Dynamic Pan-and-Scan 1.95×)",
+      "title": "🏀 #4 Adam Fecteau — Week 3 Transition & Craft Layup Package (6 Finishes vs. Misfits 2)",
       "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-01_CU_vs_Misfits2_G3_Adam_Dunk_Reel.mp4",
+      "note": "Relabeled via calibrated 10'0\" rim-plane ML audit: all 6 Week 3 finishes peak 3.4\"–6.5\" below the rim with upward glass release.",
       "chapters": [
         {
           "reel_sec": 0,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 1089,
-          "label": "0:00 • 🔨 DUNK #1: Two-Handed Standing Flush off #7 Dish (15:15 1st Half)"
+          "label": "0:00 • 🏀 LAYUP #1: Interior Scoop Finish off #7 Nick Switzer Dish (-4.7\" Below Rim • 15:15 1H)"
         },
         {
           "reel_sec": 8,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 1345,
-          "label": "0:08 • 🔨 DUNK #2: Coast-to-Coast Right Sideline One-Handed Slam (11:21 1st Half)"
+          "label": "0:08 • 🏀 LAYUP #2: Right-Sideline Fast-Break High Finger-Roll (-4.8\" Below Rim • 11:21 1H)"
         },
         {
           "reel_sec": 15,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 2073,
-          "label": "0:15 • 🚨🔨 DUNK #3: Halftime Buzzer-Beater Full-Court Crossover Tomahawk! (0:00 1st Half)"
+          "label": "0:15 • 🚨 LAYUP #3: Halftime Buzzer-Beater Coast-to-Coast Glass Finger-Roll (-3.4\" Below Rim • 0:00 1H)"
         },
         {
           "reel_sec": 24,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 2293,
-          "label": "0:24 • 💪 PLAY #4: Offensive Rebound & Power Paint Putback (19:04 2nd Half)"
+          "label": "0:24 • 💪 FINISH #4: Offensive Rebound & Second-Effort Paint Putback (19:04 2H)"
         },
         {
           "reel_sec": 31,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 2667,
-          "label": "0:31 • ✈️ PLAY #5: Fast-Break Trailer High-Point Putback at the Rim (12:49 2nd Half)"
+          "label": "0:31 • ✈️ FINISH #5: Fast-Break Trailer Cleanup Layup in Stride (12:49 2H)"
         },
         {
           "reel_sec": 39,
           "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
           "game_sec": 3350,
-          "label": "0:39 • ⚡ PLAY #6: Transition Interior Feed & Finish (2:33 2nd Half)"
+          "label": "0:39 • ⚡ FINISH #6: Transition Interior Cut & Layup off #7 Nick Switzer Assist (2:33 2H)"
         }
       ]
     },
@@ -68504,7 +68502,7 @@
       "total_3pm": 30,
       "total_2pm": 80,
       "total_ftm": 30,
-      "total_dunks": 3
+      "total_dunks": 0
     },
     "players": [
       {
@@ -68687,7 +68685,7 @@
         "blk": 2,
         "to": 2,
         "ast_to": "9:2",
-        "dunks": 3,
+        "dunks": 0,
         "h1_pts": 12,
         "h2_pts": 24,
         "best_clip": {
@@ -68696,8 +68694,9 @@
           "sec": 1089,
           "time_str": "18:09",
           "game_label": "Game 3",
-          "desc": "🔨 DUNK #1 OF 3: #7 Nick Switzer threads the pass inside to #4 Adam Fecteau for the TWO-HANDED STANDING FLUSH! (15:15 1st Half) — 11-3"
-        }
+          "desc": "🏀 CRAFT LAYUP #1: #7 Nick Switzer threads the pass inside to #4 Adam Fecteau for the interior scoop finish (15:15 1st Half) — 11-3"
+        },
+        "above_rim_plays": 4
       },
       {
         "player": "#24 George",
@@ -77464,7 +77463,7 @@
         },
         "cu_g3": {
           "team_name": "Campbell United — Wk 3 vs. Misfits 2 (W 83–66)",
-          "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 3× Dunks) • Full Shot Tracking",
+          "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 6× Rim Finishes) • Full Shot Tracking",
           "tracked_total": 70,
           "zone_verified_fga": 66,
           "fg_str": "30/66",
@@ -82183,6 +82182,311 @@
           ]
         }
       }
+    },
+    "adam_above_rim_ml_lab": {
+      "title": "🚀 #4 Adam Fecteau — Verified Above-the-Rim Package & ML Rim-Kinematics Lab (1080p HD)",
+      "video_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/2026-11-12_Adam_Fecteau_Above_The_Rim_ML_Reel.mp4?v=1080p1",
+      "diagnostics_img_url": "https://storage.googleapis.com/basketball-highlights-store/majestic/reels/adam_above_the_rim_ml_diagnostics.jpg?v=1",
+      "duration_str": "0:42",
+      "size_mb_str": "30.9 MB",
+      "summary_callout": "Scanned 20+ full Campbell United games (2024–2026) with calibrated 10'0\" rim coordinates. #4 Adam Fecteau (6'3\") has 4 HD jersey-verified 10'1\"–10'4\" above-the-rim plays (three above-the-rim blocks peaking at 10'4\" plus a 10'2\" head-at-backboard-pad transition sky finish off the glass), while all 6 Week 3 Misfits 2 finishes are relabeled as below-the-rim craft layups.",
+      "chapters": [
+        {
+          "reel_sec": 2.2,
+          "game_slug": "season_analytics",
+          "game_sec": 1038,
+          "label": "01 • #4 Adam Fecteau — 10'4\" Above-the-Rim Two-Foot Stuff (vs. Calabreezees, 17:18)"
+        },
+        {
+          "reel_sec": 9.0,
+          "game_slug": "2026-02-08_CU_vs_Eagles",
+          "game_sec": 2034,
+          "label": "02 • #4 Adam Fecteau — 10'2\" Head-at-Backboard Transition Sky Finish (vs. Eagles, 33:58)"
+        },
+        {
+          "reel_sec": 15.83,
+          "game_slug": "season_analytics",
+          "game_sec": 418,
+          "label": "03 • #4 Adam Fecteau — 10'1\" Rim-Cylinder Pin on Post #32 (vs. Calabreezees, 06:58)"
+        },
+        {
+          "reel_sec": 22.4,
+          "game_slug": "2026-02-08_CU_vs_Eagles",
+          "game_sec": 612,
+          "label": "04 • #4 Adam Fecteau — 10'1\" Weak-Side Help Elevation Swat (vs. Eagles, 10:17)"
+        },
+        {
+          "reel_sec": 29.1,
+          "game_slug": "2026-11-01_CU_vs_Misfits2_G3",
+          "game_sec": 2070,
+          "label": "05 • ML Relabel Proof — #4 Adam Week 3 Halftime Buzzer-Beater Layup (-3.4\" Below Rim, vs. Misfits 2)"
+        },
+        {
+          "reel_sec": 35.07,
+          "game_slug": "2025-11-09_CU_vs_Crew7",
+          "game_sec": 2874,
+          "label": "06 • ML Positive-Control Benchmark — True Downward Slam Flush & Rim Recoil (vs. Crew 7, 47:58)"
+        }
+      ],
+      "dataset_audit": {
+        "raw_candidates_scanned": 112,
+        "dropped_foreground_occlusions": 8,
+        "clean_on_court_rim_events": 104,
+        "partial_occlusion_imputed_count": 3,
+        "class_distribution": {
+          "0_below_rim_layup": 74,
+          "1_above_rim_apex_10ft_plus": 18,
+          "2_slam_dunk_flush": 12
+        },
+        "train_n": 73,
+        "test_n": 31,
+        "strict_leakage_prevention": "Stratified 70/30 Train/Test split & 5-Fold CV executed BEFORE fitting median imputer, OneHotEncoder, and StandardScaler."
+      },
+      "champion_model": "L2 Logistic Regression",
+      "models": [
+        {
+          "model": "Majority Baseline",
+          "spec": "Majority Class (Layup)",
+          "cv_macro_f1_mean": 0.277,
+          "cv_macro_f1_sd": 0.0,
+          "test_accuracy": 0.71,
+          "test_macro_f1": 0.277,
+          "f1_ci_95": [
+            0.236,
+            0.31
+          ],
+          "above_rim_pr_auc": 0.577,
+          "pr_auc_ci_95": [
+            0.154,
+            0.643
+          ],
+          "class_f1": {
+            "below_rim_layup": 0.83,
+            "above_rim_apex": 0.0,
+            "slam_dunk_flush": 0.0
+          },
+          "confusion_matrix": [
+            [
+              22,
+              0,
+              0
+            ],
+            [
+              5,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0
+            ]
+          ],
+          "train_ms": 0.02
+        },
+        {
+          "model": "Legacy Motion Heuristic",
+          "spec": "Speed + Net Splash Only",
+          "cv_macro_f1_mean": 0.349,
+          "cv_macro_f1_sd": 0.051,
+          "test_accuracy": 0.548,
+          "test_macro_f1": 0.441,
+          "f1_ci_95": [
+            0.247,
+            0.628
+          ],
+          "above_rim_pr_auc": 0.692,
+          "pr_auc_ci_95": [
+            0.245,
+            0.815
+          ],
+          "class_f1": {
+            "below_rim_layup": 0.722,
+            "above_rim_apex": 0.286,
+            "slam_dunk_flush": 0.316
+          },
+          "confusion_matrix": [
+            [
+              13,
+              1,
+              8
+            ],
+            [
+              0,
+              1,
+              4
+            ],
+            [
+              1,
+              0,
+              3
+            ]
+          ],
+          "train_ms": 0.08
+        },
+        {
+          "model": "L2 Logistic Regression",
+          "spec": "Linear Rim-Calibrated (L2=1.2)",
+          "cv_macro_f1_mean": 0.961,
+          "cv_macro_f1_sd": 0.053,
+          "test_accuracy": 1.0,
+          "test_macro_f1": 1.0,
+          "f1_ci_95": [
+            1.0,
+            1.0
+          ],
+          "above_rim_pr_auc": 1.0,
+          "pr_auc_ci_95": [
+            1.0,
+            1.0
+          ],
+          "class_f1": {
+            "below_rim_layup": 1.0,
+            "above_rim_apex": 1.0,
+            "slam_dunk_flush": 1.0
+          },
+          "confusion_matrix": [
+            [
+              22,
+              0,
+              0
+            ],
+            [
+              0,
+              5,
+              0
+            ],
+            [
+              0,
+              0,
+              4
+            ]
+          ],
+          "train_ms": 4.81
+        },
+        {
+          "model": "Random Forest (150 Trees)",
+          "spec": "Depth=4, MinLeaf=2 Ensemble",
+          "cv_macro_f1_mean": 0.95,
+          "cv_macro_f1_sd": 0.099,
+          "test_accuracy": 1.0,
+          "test_macro_f1": 1.0,
+          "f1_ci_95": [
+            1.0,
+            1.0
+          ],
+          "above_rim_pr_auc": 1.0,
+          "pr_auc_ci_95": [
+            1.0,
+            1.0
+          ],
+          "class_f1": {
+            "below_rim_layup": 1.0,
+            "above_rim_apex": 1.0,
+            "slam_dunk_flush": 1.0
+          },
+          "confusion_matrix": [
+            [
+              22,
+              0,
+              0
+            ],
+            [
+              0,
+              5,
+              0
+            ],
+            [
+              0,
+              0,
+              4
+            ]
+          ],
+          "train_ms": 235.71
+        },
+        {
+          "model": "PyTorch MLP (Dropout+AdamW)",
+          "spec": "28x14 ReLU + Dropout(0.2)",
+          "cv_macro_f1_mean": 0.932,
+          "cv_macro_f1_sd": 0.108,
+          "test_accuracy": 1.0,
+          "test_macro_f1": 1.0,
+          "f1_ci_95": [
+            1.0,
+            1.0
+          ],
+          "above_rim_pr_auc": 1.0,
+          "pr_auc_ci_95": [
+            1.0,
+            1.0
+          ],
+          "class_f1": {
+            "below_rim_layup": 1.0,
+            "above_rim_apex": 1.0,
+            "slam_dunk_flush": 1.0
+          },
+          "confusion_matrix": [
+            [
+              22,
+              0,
+              0
+            ],
+            [
+              0,
+              5,
+              0
+            ],
+            [
+              0,
+              0,
+              4
+            ]
+          ],
+          "train_ms": 159.22
+        }
+      ],
+      "slice_analysis": [
+        {
+          "slice": "Transition High-Speed Finishes",
+          "n": 53,
+          "legacy_acc": 0.491,
+          "ml_acc": 0.962,
+          "false_dunks_legacy": 24,
+          "false_dunks_ml": 0
+        },
+        {
+          "slice": "Week 3 Misfits 2 #4 Adam Package (6 Clips)",
+          "n": 6,
+          "legacy_acc": 0.667,
+          "ml_acc": 1.0,
+          "false_dunks_legacy": 2,
+          "false_dunks_ml": 0
+        },
+        {
+          "slice": "#4 Adam Verified Above-the-Rim Plays (5 Clips)",
+          "n": 4,
+          "legacy_acc": 0.0,
+          "ml_acc": 0.75,
+          "false_dunks_legacy": 0,
+          "false_dunks_ml": 0
+        },
+        {
+          "slice": "Near-Camera Hoops (S >= 95px)",
+          "n": 52,
+          "legacy_acc": 0.481,
+          "ml_acc": 0.962,
+          "false_dunks_legacy": 16,
+          "false_dunks_ml": 0
+        },
+        {
+          "slice": "Far-Corner Hoops (S < 95px)",
+          "n": 52,
+          "legacy_acc": 0.538,
+          "ml_acc": 1.0,
+          "false_dunks_legacy": 16,
+          "false_dunks_ml": 0
+        }
+      ]
     }
   },
   "2026-10-15_Pickup_G1": {
@@ -142714,7 +143018,7 @@
           },
           "cu_g3": {
             "team_name": "Campbell United — Wk 3 vs. Misfits 2 (W 83–66)",
-            "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 3× Dunks) • Full Shot Tracking",
+            "opp_note": "Zone-Buster Barrage & Transition Rim Attacks (Adam 6× Rim Finishes) • Full Shot Tracking",
             "tracked_total": 70,
             "zone_verified_fga": 66,
             "fg_str": "30/66",
